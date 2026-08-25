@@ -1,0 +1,43 @@
+name: Kurosuke Weekly Tips
+
+on:
+  schedule:
+    # 23:00 UTC（日曜）= 08:00 JST（月曜）。collector.py/poster.pyとは別の、
+    # 週1回だけの軽いバッチ（相場振り返り・注目シグナル・シグナル成績・投資理論TIPS）。
+    - cron: '0 23 * * 0'
+  workflow_dispatch: {}
+
+jobs:
+  weekly_tips:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+      # data/latest_scan.json・data/trade_log.json は collect_data.yml が
+      # 直近にコミットしたものを、そのままcheckoutで取得する。
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+
+    - name: Post weekly tips to Discord
+      env:
+        DISCORD_WEBHOOK_URL_TIPS_TEST: ${{ secrets.DISCORD_WEBHOOK_URL_TIPS_TEST }}
+        DISCORD_WEBHOOK_URL_TIPS_PROD: ${{ secrets.DISCORD_WEBHOOK_URL_TIPS_PROD }}
+      run: python weekly_tips.py
+
+    - name: Success notification
+      if: success()
+      run: echo "✅ Kurosuke weekly tips posted successfully at $(date)"
+
+    - name: Failure notification
+      if: failure()
+      run: echo "❌ Kurosuke weekly tips failed at $(date)"
