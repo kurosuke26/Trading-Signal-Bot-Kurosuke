@@ -191,3 +191,341 @@ def fetch_price_histories(tickers, period=HISTORY_PERIOD, chunk_size=HISTORY_CHU
                     time.sleep(3 * (attempt + 1))
 
         if data is None:
+            failed.extend([(t, '株価データ取得失敗（チャンク単位）') for t in chunk])
+        else:
+            for t in chunk:
+                try:
+                    if isinstance(data.columns, pd.MultiIndex):
+                        top_level = data.columns.get_level_values(0)
+                        if t not in top_level:
+                            failed.append((t, '株価データなし'))
+                            continue
+                        df_t = data[t].dropna(how='all')
+                    else:
+                        df_t = data.dropna(how='all')
+
+                    if df_t is None or df_t.empty or 'Close' not in df_t.columns:
+                        failed.append((t, '株価データなし'))
+                        continue
+                    histories[t] = df_t
+                except Exception as e:
+                    failed.append((t, f'株価データ処理エラー: {e}'))
+
+        print(f'[history] 進捗 {min((ci + 1) * chunk_size, len(tickers))}/{len(tickers)}'
+              f'（成功{len(histories)}／失敗{len(failed)}） 経過時間 {_elapsed_minutes():.1f}分')
+
+        pace_to_target(ci, total_chunks, phase_start, target_seconds)
+
+    return histories, failed
+
+
+def _fetch_one_fundamental(ticker, max_retries=2):
+    for attempt in range(max_retries):
+        try:
+            stock = yf.Ticker(ticker)
+            info = stock.info or {}
+            current_price = info.get('currentPrice') or info.get('regularMarketPrice') or 0
+            return ticker, {
+                'name': info.get('longName') or info.get('shortName') or ticker,
+                'current_price': current_price or 0,
+                # 【Phase1の修正を踏襲】yfinanceのdividendYieldはパーセント値そのもの
+                # （3.5のような値）として返るため *100 しない。
+                'dividend_yield': info.get('dividendYield', 0) or 0,
+                'pbr': info.get('priceToBook', 0) or 0,
+                'per': info.get('trailingPE', 0) or 0,
+                'growth_raw': info.get('earningsQuarterlyGrowth', None),
+                'sector': info.get('sector'),
+            }, None
+        except Exception as e:
+            if attempt == max_retries - 1:
+                return ticker, None, str(e)
+            time.sleep(1 + attempt)
+    return ticker, None, '不明なエラー'
+
+
+def fetch_fundamentals(tickers, workers=FETCH_WORKERS, chunk_size=INFO_CHUNK_SIZE,
+                        window_minutes=FUNDAMENTALS_WINDOW_MINUTES):
+    """配当利回り・PER・PBR等をticker.info経由で取得する（並列・チャンク処理・ペーシングあり）。"""
+    fundamentals = {}
+    failed = []
+    total_chunks = (len(tickers) + chunk_size - 1) // chunk_size
+    phase_start = time.time()
+    target_seconds = window_minutes * 60
+
+    for ci in range(total_chunks):
+        if _over_budget():
+            remaining = tickers[ci * chunk_size:]
+            print(f'[fundamentals] 時間予算（{TIME_BUDGET_MINUTES}分）超過のため残り{len(remaining)}銘柄をスキップします')
+            failed.extend([(t, '時間予算超過によりスキップ') for t in remaining])
+            break
+
+        chunk = tickers[ci * chunk_size:(ci + 1) * chunk_size]
+        with concurrent.futures.ThreadPoolExecutor(max_workers=workers) as ex:
+            futures = [ex.submit(_fetch_one_fundamental, t) for t in chunk]
+            for fut in concurrent.futures.as_completed(futures):
+                ticker, data, err = fut.result()
+                if data is not None:
+                    fundamentals[ticker] = data
+                else:
+                    failed.append((ticker, err or '取得失敗'))
+
+        done = min((ci + 1) * chunk_size, len(tickers))
+        print(f'[fundamentals] 進捗 {done}/{len(tickers)}（成功{len(fundamentals)}／失敗{len(failed)}）'
+              f' 経過時間 {_elapsed_minutes():.1f}分')
+
+        pace_to_target(ci, total_chunks, phase_start, target_seconds)
+
+    return fundamentals, failed
+
+
+# ---------------------------------------------------------------------------
+# 銘柄ごとの判定ロジック（ファンダメンタルズ＋テクニカル＋酒田五法）
+# ---------------------------------------------------------------------------
+def analyze_ticker(ticker, fund, price_df):
+    """
+    1銘柄分の判定を行う。
+
+    LONG/SHORTの一次振り分け条件（kurosuke割安チェッカーの根幹）は変更していない:
+      LONG  : 配当利回り 3.5〜5.8% かつ PER×PBR ≦ 22.5
+      SHORT : PER×PBR > 30（割高の目安）、または
+              MA配列が弱気かつ精度70%以上の弱気酒田五法パターンを検出
+    """
+    per = fund.get('per', 0) or 0
+    pbr = fund.get('pbr', 0) or 0
+    div = fund.get('dividend_yield', 0) or 0
+    per_pbr = per * pbr if per and pbr else None
+
+    dividend_ok = bool(div) and 3.5 <= div <= 5.8
+    per_pbr_ok = per_pbr is not None and per_pbr <= 22.5
+    super_cheap = per_pbr is not None and per_pbr < 15
+
+    tech_snapshot = compute_technical_snapshot(price_df)
+    tech_score_val, tech_reasons = technical_score(tech_snapshot)
+
+    patterns = detect_all_patterns(price_df)
+    sak_score_val, sak_reasons = sakata_score(patterns)
+
+    score, breakdown, avail_ratio = composite_score(
+        dividend_yield=div if div else None,
+        per_pbr=per_pbr,
+        eps_trend=None,
+        technical_score_val=tech_score_val,
+        sakata_score_val=sak_score_val,
+        growth_value=fund.get('growth_raw'),
+    )
+
+    ma_trend = (tech_snapshot.get('ma') or {}).get('trend')
+    bearish_pattern_strong = any(
+        p['detected'] and p['direction'] == 'bearish' and (p['reference_accuracy'] or 0) >= 70
+        for p in patterns
+    )
+    bullish_pattern_strong = any(
+        p['detected'] and p['direction'] == 'bullish' and (p['reference_accuracy'] or 0) >= 70
+        for p in patterns
+    )
+
+    if dividend_ok and per_pbr_ok:
+        signal = 'LONG'
+    elif (per_pbr is not None and per_pbr > 30) or (ma_trend == 'bearish' and bearish_pattern_strong):
+        signal = 'SHORT'
+    else:
+        signal = 'NEUTRAL'
+
+    entry_timing = None
+    if signal == 'LONG':
+        good_timing = (tech_score_val or 0) >= 0.5 and not bearish_pattern_strong
+        entry_timing = 'good' if good_timing else 'wait'
+
+    return {
+        'ticker': ticker,
+        'name': fund.get('name'),
+        'current_price': fund.get('current_price'),
+        'dividend_yield': div,
+        'per_pbr': per_pbr,
+        'super_cheap': super_cheap,
+        'dividend_ok': dividend_ok,
+        'per_pbr_ok': per_pbr_ok,
+        'tech_snapshot': tech_snapshot,
+        'tech_reasons': tech_reasons,
+        'patterns': patterns,
+        'sakata_reasons': sak_reasons,
+        'bullish_pattern_strong': bullish_pattern_strong,
+        'bearish_pattern_strong': bearish_pattern_strong,
+        'score': score,
+        'score_breakdown': breakdown,
+        'score_available_ratio': avail_ratio,
+        'signal': signal,
+        'entry_timing': entry_timing,
+        'growth_raw': fund.get('growth_raw'),
+        'eps_trend': None,
+    }
+
+
+def run_eps_deepdive(results):
+    """LONG候補についてのみ income_stmt を追加取得し、EPS3期推移をスコアに反映する。"""
+    long_tickers = [r['ticker'] for r in results.values() if r['signal'] == 'LONG']
+    if not long_tickers:
+        return
+
+    print(f'[eps-deepdive] LONG候補{len(long_tickers)}銘柄についてEPS3期推移を追加取得します')
+    for ticker in long_tickers:
+        if _over_budget():
+            print('[eps-deepdive] 時間予算超過のため以降のEPS取得を打ち切ります')
+            break
+        try:
+            stock = yf.Ticker(ticker)
+            eps_trend = get_eps_trend(stock)
+        except Exception as e:
+            print(f'[eps-deepdive] {ticker} のEPS取得に失敗: {e}')
+            eps_trend = None
+        time.sleep(0.3)  # LONG候補は数十〜数百件程度のはずなので、軽く間隔を空ける程度で十分
+
+        r = results[ticker]
+        r['eps_trend'] = eps_trend
+        score, breakdown, avail_ratio = composite_score(
+            dividend_yield=r['dividend_yield'] if r['dividend_yield'] else None,
+            per_pbr=r['per_pbr'],
+            eps_trend=eps_trend,
+            technical_score_val=r['score_breakdown'].get('technical'),
+            sakata_score_val=r['score_breakdown'].get('sakata'),
+            growth_value=r['growth_raw'],
+        )
+        r['score'] = score
+        r['score_breakdown'] = breakdown
+        r['score_available_ratio'] = avail_ratio
+
+
+# ---------------------------------------------------------------------------
+# 結果の保存（LONG/SHORT/上位ニュートラルのみ詳細を残し、それ以外は要約のみにして
+# JSONファイルのサイズを抑える）
+# ---------------------------------------------------------------------------
+def serialize_results(results):
+    neutrals = sorted(
+        [r for r in results.values() if r['signal'] == 'NEUTRAL'],
+        key=lambda r: (r['score'] if r['score'] is not None else -1), reverse=True,
+    )
+    top_neutral_tickers = {r['ticker'] for r in neutrals[:TOP_NEUTRAL_KEEP]}
+
+    out = {}
+    for ticker, r in results.items():
+        if r['signal'] in ('LONG', 'SHORT') or ticker in top_neutral_tickers:
+            entry = dict(r)
+            entry['detail'] = 'full'
+        else:
+            entry = {
+                'ticker': r['ticker'], 'name': r['name'], 'current_price': r['current_price'],
+                'dividend_yield': r['dividend_yield'], 'per_pbr': r['per_pbr'],
+                'score': r['score'], 'signal': r['signal'], 'detail': 'slim',
+            }
+        out[ticker] = entry
+    return out
+
+
+def build_snapshot(results, fund_failed, hist_failed, tickers, used_fallback, started_at_utc):
+    counts = {'LONG': 0, 'SHORT': 0, 'NEUTRAL': 0}
+    for r in results.values():
+        counts[r['signal']] = counts.get(r['signal'], 0) + 1
+    counts['analyzed'] = len(results)
+
+    now_utc = datetime.now(timezone.utc)
+    return {
+        'schema_version': 1,
+        'generated_at_utc': now_utc.isoformat(),
+        'started_at_utc': started_at_utc.isoformat(),
+        'universe_size': len(tickers),
+        'used_fallback': used_fallback,
+        'elapsed_minutes': round(_elapsed_minutes(), 1),
+        'counts': counts,
+        'fund_failed': fund_failed,
+        'hist_failed': hist_failed,
+        'results': serialize_results(results),
+    }
+
+
+def write_snapshot(snapshot, path=None):
+    """
+    【注意】デフォルト引数を path=OUTPUT_PATH とすると関数定義時点の値に固定され、
+    モジュール属性 collector.OUTPUT_PATH を後から書き換えても反映されない
+    （テストでのmock.patch.object等）。呼び出し時に毎回モジュールグローバルを
+    参照する形にしている。
+    """
+    if path is None:
+        path = OUTPUT_PATH
+    out_dir = os.path.dirname(path)
+    if out_dir:
+        os.makedirs(out_dir, exist_ok=True)
+    # 書き込み途中でジョブが落ちても壊れたJSONを残さないよう、一時ファイル経由でrenameする
+    tmp_path = path + '.tmp'
+    with open(tmp_path, 'w', encoding='utf-8') as f:
+        json.dump(snapshot, f, ensure_ascii=False, default=json_default)
+    os.replace(tmp_path, path)
+    print(f'[collector] 結果を書き込みました: {path}')
+
+
+# ---------------------------------------------------------------------------
+# メイン処理
+# ---------------------------------------------------------------------------
+def collect():
+    started_at_utc = datetime.now(timezone.utc)
+    print("=" * 80)
+    print("Kurosuke データ収集バッチ（collector.py）")
+    print(f"開始時刻（UTC）：{started_at_utc.isoformat()}")
+    print(f"非常停止ライン：{TIME_BUDGET_MINUTES}分／"
+          f"ファンダメンタルズ目標配分：{FUNDAMENTALS_WINDOW_MINUTES}分／"
+          f"株価履歴目標配分：{HISTORY_WINDOW_MINUTES}分")
+    print("=" * 80)
+
+    tickers, meta_df, used_fallback = resolve_universe()
+    print(f"対象銘柄数：{len(tickers)}" + ("（フォールバック銘柄）" if used_fallback else ""))
+
+    if not tickers:
+        print("対象銘柄が0件のため処理を中断します")
+        return False
+
+    fund_window = scaled_window_minutes(FUNDAMENTALS_WINDOW_MINUTES, len(tickers))
+    print(f"\n--- ファンダメンタルズ取得（ペーシングあり、目標配分 {fund_window:.1f}分） ---")
+    fundamentals, fund_failed = fetch_fundamentals(tickers, window_minutes=fund_window)
+
+    ok_tickers = list(fundamentals.keys())
+    hist_window = scaled_window_minutes(HISTORY_WINDOW_MINUTES, len(ok_tickers))
+    print(f"\n--- 株価履歴取得（テクニカル・酒田五法用、ペーシングあり、目標配分 {hist_window:.1f}分） ---")
+    histories, hist_failed = fetch_price_histories(ok_tickers, window_minutes=hist_window)
+
+    if not fundamentals:
+        print("全銘柄のファンダメンタルズ取得に失敗しました。空の結果を保存して終了します。")
+        snapshot = build_snapshot({}, fund_failed, hist_failed, tickers, used_fallback, started_at_utc)
+        write_snapshot(snapshot)
+        return False
+
+    print("\n--- 銘柄ごとの判定（ファンダメンタルズ＋テクニカル＋酒田五法） ---")
+    results = {}
+    for ticker, fund in fundamentals.items():
+        try:
+            results[ticker] = analyze_ticker(ticker, fund, histories.get(ticker))
+        except Exception as e:
+            print(f"[analyze] {ticker} の判定でエラー: {e}")
+            fund_failed.append((ticker, f'判定処理エラー: {e}'))
+
+    print("\n--- LONG候補のEPS3期推移 深掘り取得 ---")
+    run_eps_deepdive(results)
+
+    snapshot = build_snapshot(results, fund_failed, hist_failed, tickers, used_fallback, started_at_utc)
+    write_snapshot(snapshot)
+
+    print(f"\n総実行時間：{_elapsed_minutes():.1f}分")
+    print(f"内訳：LONG {snapshot['counts'].get('LONG', 0)} ／ "
+          f"SHORT {snapshot['counts'].get('SHORT', 0)} ／ "
+          f"NEUTRAL {snapshot['counts'].get('NEUTRAL', 0)}")
+    print("収集完了。Discordへの投稿は poster.py が別途行います。")
+    return True
+
+
+if __name__ == "__main__":
+    try:
+        success = collect()
+        sys.exit(0 if success else 1)
+    except Exception as e:
+        print(f"Error: {str(e)}")
+        import traceback
+        traceback.print_exc()
+        sys.exit(1)
