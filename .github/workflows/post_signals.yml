@@ -1,0 +1,47 @@
+name: Kurosuke Discord Posting
+
+on:
+  schedule:
+    - cron: '0 23 * * *'
+  workflow_dispatch: {}
+
+jobs:
+  post:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+
+    - name: Post signals to Discord
+      env:
+        DISCORD_WEBHOOK_URL_LONG_TEST: ${{ secrets.DISCORD_WEBHOOK_URL_LONG_TEST }}
+        DISCORD_WEBHOOK_URL_SHORT_TEST: ${{ secrets.DISCORD_WEBHOOK_URL_SHORT_TEST }}
+        DISCORD_WEBHOOK_URL_WARNING_TEST: ${{ secrets.DISCORD_WEBHOOK_URL_WARNING_TEST }}
+        DISCORD_WEBHOOK_URL_PERFORMANCE_TEST: ${{ secrets.DISCORD_WEBHOOK_URL_PERFORMANCE_TEST }}
+        DISCORD_WEBHOOK_URL_SAKATA_TEST: ${{ secrets.DISCORD_WEBHOOK_URL_SAKATA_TEST }}
+        DISCORD_WEBHOOK_URL_LONG_PROD: ${{ secrets.DISCORD_WEBHOOK_URL_LONG_PROD }}
+        DISCORD_WEBHOOK_URL_SHORT_PROD: ${{ secrets.DISCORD_WEBHOOK_URL_SHORT_PROD }}
+        DISCORD_WEBHOOK_URL_WARNING_PROD: ${{ secrets.DISCORD_WEBHOOK_URL_WARNING_PROD }}
+        DISCORD_WEBHOOK_URL_PERFORMANCE_PROD: ${{ secrets.DISCORD_WEBHOOK_URL_PERFORMANCE_PROD }}
+        DISCORD_WEBHOOK_URL_SAKATA_PROD: ${{ secrets.DISCORD_WEBHOOK_URL_SAKATA_PROD }}
+      run: python poster.py
+
+    - name: Success notification
+      if: success()
+      run: echo "✅ Kurosuke posting completed successfully at $(date)"
+
+    - name: Failure notification
+      if: failure()
+      run: echo "❌ Kurosuke posting failed at $(date)"
