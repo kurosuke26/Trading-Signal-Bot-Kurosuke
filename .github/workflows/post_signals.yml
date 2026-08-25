@@ -2,6 +2,8 @@ name: Kurosuke Discord Posting
 
 on:
   schedule:
+    # 23:00 UTC = 08:00 JST（同日）。collect_data.yml（02:00 JST開始・約4時間）が
+    # 終わった後に、保存済みのデータを読み込んでDiscordへ投稿するだけの軽い処理。
     - cron: '0 23 * * *'
   workflow_dispatch: {}
 
@@ -13,6 +15,8 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
+      # data/latest_scan.json は collect_data.yml がリポジトリにコミットしたものを
+      # そのままcheckoutで取得する。
 
     - name: Set up Python
       uses: actions/setup-python@v4
@@ -36,6 +40,8 @@ jobs:
         DISCORD_WEBHOOK_URL_WARNING_PROD: ${{ secrets.DISCORD_WEBHOOK_URL_WARNING_PROD }}
         DISCORD_WEBHOOK_URL_PERFORMANCE_PROD: ${{ secrets.DISCORD_WEBHOOK_URL_PERFORMANCE_PROD }}
         DISCORD_WEBHOOK_URL_SAKATA_PROD: ${{ secrets.DISCORD_WEBHOOK_URL_SAKATA_PROD }}
+        DISCORD_WEBHOOK_URL_BACKTEST_TEST: ${{ secrets.DISCORD_WEBHOOK_URL_BACKTEST_TEST }}
+        DISCORD_WEBHOOK_URL_BACKTEST_PROD: ${{ secrets.DISCORD_WEBHOOK_URL_BACKTEST_PROD }}
       run: python poster.py
 
     - name: Success notification
