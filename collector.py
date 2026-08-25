@@ -32,10 +32,6 @@ HISTORY_WINDOW_MINUTES で指定した時間（既定：150分 + 70分 ＝ 220�
 として TIME_BUDGET_MINUTES（既定230分）を設けており、超過分は打ち切って
 そこまでの結果を保存する。
 
-なお、この目標時間（150分・65分）は「全銘柄（約3900銘柄）を対象にした本番実行」を
-想定したものであり、MAX_TICKERSで対象銘柄数を絞ったテスト実行では
-scaled_window_minutes() により対象銘柄数に比例して自動的に短縮される。
-
 【正直な注意点】
 このスクリプトを開発したサンドボックス環境はネットワークが制限されており、
 Yahoo! Finance にも JPX にも直接アクセスできなかったため、実データに対して
@@ -58,6 +54,8 @@ from sakata import detect_all_patterns, sakata_score
 from scoring import composite_score
 from universe import get_all_tse_tickers, FALLBACK_TICKERS
 from util import env_int, env_float, json_default, pace_to_target
+from tracking import (load_trade_log, save_trade_log, open_new_positions,
+                       update_open_positions, compute_performance_stats)
 
 # ---------------------------------------------------------------------------
 # 実行パラメータ（環境変数で調整可能）
@@ -421,7 +419,8 @@ def serialize_results(results):
     return out
 
 
-def build_snapshot(results, fund_failed, hist_failed, tickers, used_fallback, started_at_utc):
+def build_snapshot(results, fund_failed, hist_failed, tickers, used_fallback, started_at_utc,
+                    performance_stats=None):
     counts = {'LONG': 0, 'SHORT': 0, 'NEUTRAL': 0}
     for r in results.values():
         counts[r['signal']] = counts.get(r['signal'], 0) + 1
@@ -439,6 +438,7 @@ def build_snapshot(results, fund_failed, hist_failed, tickers, used_fallback, st
         'fund_failed': fund_failed,
         'hist_failed': hist_failed,
         'results': serialize_results(results),
+        'performance_stats': performance_stats,
     }
 
 
@@ -509,7 +509,25 @@ def collect():
     print("\n--- LONG候補のEPS3期推移 深掘り取得 ---")
     run_eps_deepdive(results)
 
-    snapshot = build_snapshot(results, fund_failed, hist_failed, tickers, used_fallback, started_at_utc)
+    # MAX_TICKERSを絞ったテスト実行では、対象銘柄が本番と異なる一部分になり、
+    # 本番用の勝率・ペイオフレシオ集計（data/trade_log.json）にノイズが混ざって
+    # しまうため、テスト実行時は追跡をスキップする（画面表示は「集計対象外」とする）。
+    is_test_run = bool(MAX_TICKERS and MAX_TICKERS > 0)
+    if is_test_run:
+        print("\n--- 仮想ポジション追跡：テスト実行（MAX_TICKERS指定）のためスキップします ---")
+        performance_stats = None
+    else:
+        print("\n--- 仮想ポジション追跡（勝率・ペイオフレシオ集計用、実際の取引ではありません） ---")
+        today_str = started_at_utc.strftime('%Y-%m-%d')
+        trade_log = load_trade_log()
+        closed_n = update_open_positions(trade_log, results, today_str)
+        opened_n = open_new_positions(trade_log, results, today_str)
+        save_trade_log(trade_log)
+        performance_stats = compute_performance_stats(trade_log)
+        print(f"[tracking] 新規建玉{opened_n}件／決済{closed_n}件／保有中{performance_stats['open_positions']}件")
+
+    snapshot = build_snapshot(results, fund_failed, hist_failed, tickers, used_fallback, started_at_utc,
+                               performance_stats=performance_stats)
     write_snapshot(snapshot)
 
     print(f"\n総実行時間：{_elapsed_minutes():.1f}分")
