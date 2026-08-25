@@ -35,7 +35,7 @@ MAX_SNAPSHOT_AGE_HOURS = env_float('MAX_SNAPSHOT_AGE_HOURS', 12)
 # ---------------------------------------------------------------------------
 # Webhook設定（従来から変更なし）
 # ---------------------------------------------------------------------------
-CHANNELS = ['LONG', 'SHORT', 'WARNING', 'PERFORMANCE', 'STRATEGY']
+CHANNELS = ['LONG', 'SHORT', 'WARNING', 'PERFORMANCE', 'STRATEGY', 'BACKTEST', 'TIPS']
 ENVIRONMENTS = ['TEST', 'PROD']
 
 CHANNEL_LABELS = {
@@ -44,6 +44,8 @@ CHANNEL_LABELS = {
     'WARNING': 'マーケット警告',
     'PERFORMANCE': 'パフォーマンス',
     'STRATEGY': '戦略通知',
+    'BACKTEST': 'バックテスト結果',  # 勝率・ペイオフレシオ（tracking.py）専用チャンネル
+    'TIPS': '週次tips',              # weekly_tips.py がここに投稿（poster.py本体は使わない）
 }
 
 WEBHOOKS = {}
@@ -241,6 +243,7 @@ def build_payloads(snapshot, stale, age_hours):
     used_fallback = snapshot.get('used_fallback', False)
     elapsed_minutes = snapshot.get('elapsed_minutes', 0)
     generated_at = snapshot.get('generated_at_utc', '')
+    performance_stats = snapshot.get('performance_stats')
 
     full_results = [r for r in results.values() if r.get('detail') == 'full']
     long_results = sorted([r for r in full_results if r['signal'] == 'LONG'],
@@ -327,22 +330,62 @@ def build_payloads(snapshot, stale, age_hours):
             )
 
     # ---- PERFORMANCE ----
-    performance_payload = {
-        'embeds': [{
-            'title': '📊 本日の分析サマリー',
-            'color': 0x3498DB,
+    perf_embeds = [{
+        'title': '📊 本日の分析サマリー',
+        'color': 0x3498DB,
+        'fields': [
+            {'name': '対象銘柄数', 'value': f"{universe_size}", 'inline': True},
+            {'name': '分析成功', 'value': f"{analyzed}", 'inline': True},
+            {'name': '取得失敗', 'value': f"{total_failed}", 'inline': True},
+            {'name': 'ロングシグナル', 'value': f"{total_long}銘柄", 'inline': True},
+            {'name': 'ショートシグナル', 'value': f"{total_short}銘柄", 'inline': True},
+            {'name': 'ニュートラル', 'value': f"{total_neutral}銘柄", 'inline': True},
+            {'name': 'データ収集時間', 'value': f"{elapsed_minutes}分", 'inline': True},
+        ],
+        'footer': {'text': footer_text},
+    }]
+
+    def _fmt_perf_stats(s):
+        if not s or not s.get('closed_count'):
+            return '決済済みの仮想取引がまだありません（集計中。数週間ほどお待ちください）'
+        parts = [f"決済数：{s['closed_count']}件", f"勝率：{s['win_rate']}%"]
+        if s.get('payoff_ratio') is not None:
+            parts.append(f"ペイオフレシオ：{s['payoff_ratio']}")
+        if s.get('avg_win_pct') is not None:
+            parts.append(f"平均利益：+{s['avg_win_pct']}%")
+        if s.get('avg_loss_pct') is not None:
+            parts.append(f"平均損失：{s['avg_loss_pct']}%")
+        return " ／ ".join(parts)
+
+    backtest_embed = None
+    if performance_stats:
+        backtest_embed = {
+            'title': '🎯 シグナル成績（仮想シミュレーション）',
+            'description': (
+                'LONG／SHORTシグナル通りにエントリーし、ATR×1.5のトレーリングストップ'
+                'ルールで決済していたと仮定した場合の成績です。実際の取引成績ではなく、'
+                'シグナルそのものの参考成績である点にご注意ください。'
+            ),
+            'color': 0x9B59B6,
             'fields': [
-                {'name': '対象銘柄数', 'value': f"{universe_size}", 'inline': True},
-                {'name': '分析成功', 'value': f"{analyzed}", 'inline': True},
-                {'name': '取得失敗', 'value': f"{total_failed}", 'inline': True},
-                {'name': 'ロングシグナル', 'value': f"{total_long}銘柄", 'inline': True},
-                {'name': 'ショートシグナル', 'value': f"{total_short}銘柄", 'inline': True},
-                {'name': 'ニュートラル', 'value': f"{total_neutral}銘柄", 'inline': True},
-                {'name': 'データ収集時間', 'value': f"{elapsed_minutes}分", 'inline': True},
+                {'name': 'LONG＋SHORT合算', 'value': _fmt_perf_stats(performance_stats.get('long_short')), 'inline': False},
+                {'name': 'LONGのみ', 'value': _fmt_perf_stats(performance_stats.get('long_only')), 'inline': False},
+                {'name': '現在保有中（未決済）', 'value': f"{performance_stats.get('open_positions', 0)}件", 'inline': True},
             ],
             'footer': {'text': footer_text},
-        }],
-    }
+        }
+        # パフォーマンスチャンネルにも引き続き表示（ユーザー希望：「今後のためのシグナルなので残しておいて」）
+        perf_embeds.append(backtest_embed)
+
+    performance_payload = {'embeds': perf_embeds[:10]}
+
+    # ---- BACKTEST（勝率・ペイオフレシオ専用チャンネル） ----
+    backtest_payload = None
+    if backtest_embed is not None:
+        backtest_payload = {
+            'content': '🎯 Kurosuke割安チェッカー - バックテスト結果',
+            'embeds': [backtest_embed],
+        }
 
     # ---- STRATEGY ----
     top_long_note = ''
@@ -372,6 +415,7 @@ def build_payloads(snapshot, stale, age_hours):
         'WARNING': (warning_payload, warning_csv, 'fetch_errors.csv'),
         'PERFORMANCE': (performance_payload, None, None),
         'STRATEGY': (strategy_payload, None, None),
+        'BACKTEST': (backtest_payload, None, None),
     }
 
 
