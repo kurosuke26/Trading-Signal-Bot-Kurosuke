@@ -1,8 +1,11 @@
-﻿.env
-.env.local
+# 環境変数（Webhook URL等の秘密情報）
+.env
+
+# Python
 __pycache__/
-*.py[cod]
-*.egg-info/
-.vscode/
-.idea/
+*.pyc
+.venv/
+venv/
+
+# OS
 .DS_Store

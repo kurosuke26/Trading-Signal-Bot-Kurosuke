@@ -1,0 +1,139 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+universe.py — 東証全銘柄（プライム・スタンダード・グロースの内国株式）のティッカー一覧取得（Phase 3）
+
+日本取引所グループ（JPX）が毎月更新して公開している「東証上場銘柄一覧」
+（https://www.jpx.co.jp/markets/statistics-equities/misc/01.html 内の data_j.xls）
+を実行時にダウンロードし、市場区分でフィルタしてyfinance用ティッカー（例: 7203.T）の
+一覧を作る。
+
+【このセッションでの制約について】
+開発を行ったサンドボックス環境はネットワークが制限されており、jpx.co.jp や
+Yahoo Finance に直接アクセスできないため、この関数自体を実データに対して
+実行して動作確認することができていない。列名（コード／市場・商品区分）や
+区分値（「プライム（内国株式）」等）は公開されている解説記事を基に実装しているが、
+GitHub Actions上での初回実行時に必ずログ（取得件数・区分ごとの内訳）を確認すること。
+
+【運用上の注意】
+- data_j.xls のURL（ファイル名部分のハッシュ）はJPXが月次更新のたびに変更するため、
+  一覧ページのHTMLから最新のリンクを都度取得する。何らかの理由でHTML構造が変わり
+  リンクが取得できない場合は、フォールバックとして本ファイル作成時点のURLを使う
+  （こちらも数ヶ月で無効化される可能性がある）。
+- 対象は「プライム（内国株式）」「スタンダード（内国株式）」「グロース（内国株式）」の
+  3区分のみ。ETF/ETN、REIT、PRO Market、外国株式、出資証券は対象外。
+- 約3,900銘柄を毎回スクレイピングするため、JPX側に過度な負荷をかけないよう
+  1回のGitHub Actions実行につき1回だけ取得しキャッシュする設計にしている。
+"""
+
+import re
+import sys
+
+import pandas as pd
+import requests
+
+JPX_LIST_PAGE = 'https://www.jpx.co.jp/markets/statistics-equities/misc/01.html'
+# 2026年8月時点で確認できたURL。一覧ページからの動的取得が失敗した場合のみ使用。
+JPX_FALLBACK_XLS = 'https://www.jpx.co.jp/markets/statistics-equities/misc/tvdivq0000001vg2-att/data_j.xls'
+
+TARGET_MARKET_SEGMENTS = [
+    'プライム（内国株式）',
+    'スタンダード（内国株式）',
+    'グロース（内国株式）',
+]
+
+# JPXからの取得が完全に失敗した場合に最低限の分析を継続するためのフォールバック銘柄
+# （引き継ぎ資料に記載されていた当初の5銘柄）。
+FALLBACK_TICKERS = ['6758.T', '7203.T', '9984.T', '6861.T', '8306.T']
+
+
+def _resolve_xls_url(timeout=20):
+    """一覧ページのHTMLから最新のdata_j.xlsリンクを取得する。失敗時はフォールバックURL。"""
+    try:
+        resp = requests.get(JPX_LIST_PAGE, timeout=timeout,
+                             headers={'User-Agent': 'Mozilla/5.0 (KurosukeBot)'})
+        resp.raise_for_status()
+        m = re.search(r'href="([^"]+data_j\.xls)"', resp.text)
+        if m:
+            url = m.group(1)
+            if url.startswith('/'):
+                url = 'https://www.jpx.co.jp' + url
+            return url
+    except Exception as e:
+        print(f'[universe] 一覧ページからのURL取得に失敗（フォールバックURLを使用）: {e}', file=sys.stderr)
+    return JPX_FALLBACK_XLS
+
+
+def fetch_jpx_listed_df(timeout=60):
+    """
+    JPXのdata_j.xlsを取得してDataFrameで返す。
+    列: 'コード', '銘柄名', '市場・商品区分', ... （JPX公開ファイルの原本の列構成のまま）
+    取得・パース失敗時は例外を送出する（呼び出し側でフォールバック処理をすること）。
+    """
+    xls_url = _resolve_xls_url()
+    print(f'[universe] data_j.xls 取得元: {xls_url}')
+
+    resp = requests.get(xls_url, timeout=timeout, headers={'User-Agent': 'Mozilla/5.0 (KurosukeBot)'})
+    resp.raise_for_status()
+
+    from io import BytesIO
+    # data_j.xls は旧形式(.xls)。読み込みには xlrd (>=2.0.1) が必要。
+    df = pd.read_excel(BytesIO(resp.content))
+    return df
+
+
+def get_all_tse_tickers(market_segments=None, exclude_codes=None):
+    """
+    プライム・スタンダード・グロースの内国株式ティッカー一覧（'XXXX.T'形式）を返す。
+
+    戻り値: (tickers: list[str], meta_df: pandas.DataFrame or None)
+      meta_df は 'code', 'name', 'market' 列を持つ絞り込み後のDataFrame（銘柄名表示用）。
+      JPXからの取得に失敗した場合は (FALLBACK_TICKERS, None) を返し、標準エラー出力に警告を出す。
+    """
+    segments = market_segments or TARGET_MARKET_SEGMENTS
+    try:
+        raw = fetch_jpx_listed_df()
+    except Exception as e:
+        print(f'[universe] JPX銘柄一覧の取得に失敗しました。フォールバック銘柄で継続します: {e}',
+              file=sys.stderr)
+        return list(FALLBACK_TICKERS), None
+
+    code_col = None
+    market_col = None
+    name_col = None
+    for col in raw.columns:
+        col_str = str(col)
+        if code_col is None and 'コード' in col_str:
+            code_col = col
+        if market_col is None and '市場' in col_str and '区分' in col_str:
+            market_col = col
+        if name_col is None and '銘柄名' in col_str:
+            name_col = col
+
+    if code_col is None or market_col is None:
+        print(f'[universe] 想定した列（コード／市場・商品区分）が見つかりません。列一覧: {list(raw.columns)}',
+              file=sys.stderr)
+        return list(FALLBACK_TICKERS), None
+
+    df = raw[raw[market_col].isin(segments)].copy()
+    if df.empty:
+        print(f'[universe] 市場区分フィルタ後の該当銘柄が0件でした（区分値の想定違いの可能性）。'
+              f'実際の値: {raw[market_col].unique().tolist()[:20]}', file=sys.stderr)
+        return list(FALLBACK_TICKERS), None
+
+    df['code'] = df[code_col].astype(str).str.strip()
+    if exclude_codes:
+        df = df[~df['code'].isin(exclude_codes)]
+
+    df['ticker'] = df['code'] + '.T'
+    if name_col is not None:
+        df = df.rename(columns={name_col: 'name'})
+    else:
+        df['name'] = None
+    df = df.rename(columns={market_col: 'market'})
+
+    tickers = df['ticker'].tolist()
+    print(f'[universe] JPX銘柄一覧を取得: 対象{len(tickers)}銘柄 '
+          f'(区分内訳: {df["market"].value_counts().to_dict()})')
+
+    return tickers, df[['code', 'name', 'market', 'ticker']].reset_index(drop=True)
