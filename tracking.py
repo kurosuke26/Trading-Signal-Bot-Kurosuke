@@ -21,8 +21,20 @@ tracking.py — LONG/SHORTシグナルの「シグナル通りに売買してい
   シミュレーションになっている（intraday（日中）の実際のストップ注文約定とは
   異なり、ギャップ（窓開け）が大きい日は損益が理論上のストップ幅より
   大きくぶれ得る）。
-- 集計は「LONG＋SHORT合算」と「LONGのみ」の2系統を別々に算出する
+- 集計は「LONG＋SHORT合算」「LONGのみ」「SHORTのみ」の3系統を別々に算出する
   （ユーザーの要望：今回の集大成として両方のケースを見たいとのこと）。
+
+【2026-08-26変更：追跡対象を上位10銘柄に絞り込み】
+以前はLONG/SHORT判定された銘柄を無条件ですべて追跡していたが、シグナル数が
+多いと成績が薄まってしまうため、「自信度が高い」上位TOP_N_TRACKED銘柄
+（LONG・SHORTそれぞれ別に選定）だけを新規追跡対象にするよう変更した。
+  - LONG: 複合スコア（score）が高い順 = 割安の自信度が高い順
+  - SHORT: PER×PBR（per_pbr）が高い順 = 割高度合いが強い順
+    （複合スコアはLONG候補の「割安さ」を測るために設計された指標であり、
+    SHORT側の確信度としてはper_pbrの方が素直に対応するため）
+既に建玉中（open）のポジションは、ランキング圏外に落ちても引き続き
+update_open_positions()で決済判定される（絞り込みは「新規に建てるかどうか」
+のみに影響し、既存ポジションの追跡は継続する）。
 
 【正直な注意点】
 これは実際の売買記録ではなく、シグナル通りに機械的に売買した場合の
@@ -36,11 +48,12 @@ tracking.py — LONG/SHORTシグナルの「シグナル通りに売買してい
 import json
 import os
 
-from util import json_default
+from util import env_int, json_default
 
 TRADE_LOG_PATH = os.getenv('TRADE_LOG_PATH') or 'data/trade_log.json'
 ATR_MULTIPLIER = 1.5
 FALLBACK_STOP_PCT = 0.03  # ATRが算出できない銘柄向けの簡易フォールバック（±3%）
+TOP_N_TRACKED = env_int('TOP_N_TRACKED', 10)  # 新規追跡対象とする「自信度上位」銘柄数（LONG/SHORT別）
 
 
 def load_trade_log(path=None):
@@ -86,16 +99,30 @@ def _initial_stop(entry_price, atr_value, signal, multiplier=ATR_MULTIPLIER):
     return entry_price + atr_value * multiplier  # SHORT
 
 
-def open_new_positions(trade_log, results, today_str):
+def _select_top_candidates(results, signal, top_n=TOP_N_TRACKED):
     """
-    今回の収集でLONG/SHORT判定になった銘柄のうち、まだ建玉中(open)のものが
-    無い銘柄について、新規の仮想ポジションを1件開く。戻り値は新規開設件数。
+    その日の判定結果から、指定したシグナル（LONG/SHORT）のうち「自信度が高い」
+    上位top_n銘柄だけを選ぶ。基準はモジュールdocstring【2026-08-26変更】を参照。
+    """
+    candidates = [r for r in results.values() if r.get('signal') == signal]
+    if signal == 'LONG':
+        candidates.sort(key=lambda r: (r.get('score') if r.get('score') is not None else -1), reverse=True)
+    else:  # SHORT
+        candidates.sort(key=lambda r: (r.get('per_pbr') if r.get('per_pbr') is not None else 0), reverse=True)
+    return candidates[:top_n]
+
+
+def open_new_positions(trade_log, results, today_str, top_n=TOP_N_TRACKED):
+    """
+    今回の収集でLONG/SHORT判定になった銘柄のうち、「自信度が高い」上位top_n銘柄
+    （LONG・SHORTそれぞれ別に選定）だけを対象に、まだ建玉中(open)のものが無い
+    銘柄について新規の仮想ポジションを1件開く。戻り値は新規開設件数。
     """
     opened = 0
-    for ticker, r in results.items():
+    top_candidates = _select_top_candidates(results, 'LONG', top_n) + _select_top_candidates(results, 'SHORT', top_n)
+    for r in top_candidates:
+        ticker = r['ticker']
         signal = r.get('signal')
-        if signal not in ('LONG', 'SHORT'):
-            continue
         if _has_open(trade_log, ticker, signal):
             continue
         entry_price = r.get('current_price')
@@ -188,13 +215,15 @@ def _stats_for(closed_trades):
 
 
 def compute_performance_stats(trade_log):
-    """勝率・ペイオフレシオを「LONG＋SHORT合算」「LONGのみ」の2系統で算出する。"""
+    """勝率・ペイオフレシオを「LONG＋SHORT合算」「LONGのみ」「SHORTのみ」の3系統で算出する。"""
     closed_all = [p for p in trade_log if p['status'] == 'closed']
     closed_long = [p for p in closed_all if p['signal'] == 'LONG']
+    closed_short = [p for p in closed_all if p['signal'] == 'SHORT']
     open_count = len([p for p in trade_log if p['status'] == 'open'])
 
     return {
         'long_short': _stats_for(closed_all),
         'long_only': _stats_for(closed_long),
+        'short_only': _stats_for(closed_short),
         'open_positions': open_count,
     }
