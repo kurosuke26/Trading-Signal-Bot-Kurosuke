@@ -359,6 +359,24 @@ def build_payloads(snapshot, stale, age_hours):
             parts.append(f"平均損失：{s['avg_loss_pct']}%")
         return " ／ ".join(parts)
 
+    def _fmt_atr_variants(atr_variants):
+        # 【2026-08-26追加】トレーリングストップ幅（ATR×1.5／2.0／2.5）を変えた
+        # 場合の比較。tracking.pyのATR_MULTIPLIER_VARIANTSと表示順を揃える。
+        if not atr_variants:
+            return 'データがありません'
+        lines = []
+        for key in ('1.5', '2.0', '2.5'):
+            s = atr_variants.get(key)
+            label = f'ATR×{key}' + ('（現行）' if key == '1.5' else '')
+            if not s or not s.get('closed_count'):
+                lines.append(f"{label}：決済済みデータがまだありません（集計中）")
+                continue
+            parts = [f"決済{s['closed_count']}件", f"勝率{s['win_rate']}%"]
+            if s.get('payoff_ratio') is not None:
+                parts.append(f"ペイオフ{s['payoff_ratio']}")
+            lines.append(f"{label}：" + "／".join(parts))
+        return "\n".join(lines)
+
     backtest_embed = None
     if performance_stats:
         backtest_embed = {
@@ -368,6 +386,9 @@ def build_payloads(snapshot, stale, age_hours):
                 'スコア上位、SHORTはPER×PBR上位。それぞれ別枠）にエントリーし、ATR×1.5の'
                 'トレーリングストップルールで決済していたと仮定した場合の成績です。'
                 '実際の取引成績ではなく、シグナルそのものの参考成績である点にご注意ください。'
+                '\n下部の「ATR倍率比較」は、同じエントリーに対してストップ幅を1.5／2.0／'
+                '2.5倍に変えていたらどうなっていたかの比較です（2026-08-26より前に開始した'
+                'ポジションは1.5倍のみのデータのため、2.0／2.5倍の比較には含まれません）。'
             ),
             'color': 0x9B59B6,
             'fields': [
@@ -375,6 +396,8 @@ def build_payloads(snapshot, stale, age_hours):
                 {'name': 'LONGのみ（上位10銘柄）', 'value': _fmt_perf_stats(performance_stats.get('long_only')), 'inline': False},
                 {'name': 'SHORTのみ（上位10銘柄）', 'value': _fmt_perf_stats(performance_stats.get('short_only')), 'inline': False},
                 {'name': '現在保有中（未決済）', 'value': f"{performance_stats.get('open_positions', 0)}件", 'inline': True},
+                {'name': '🔬 ATR倍率比較（ストップ幅、LONG+SHORT合算）',
+                 'value': _fmt_atr_variants(performance_stats.get('atr_variants')), 'inline': False},
             ],
             'footer': {'text': footer_text},
         }
