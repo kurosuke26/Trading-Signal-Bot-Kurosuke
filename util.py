@@ -43,6 +43,21 @@ def env_float(name, default):
         return default
 
 
+def safe_num(value):
+    """
+    yfinanceのinfo辞書は、特定の銘柄（優先株・ETN・新しい英数字ティッカーコード等）で
+    まれに本来float/intのはずのフィールドがリストなど数値以外の型で返ってくることが
+    ある（2026-08-26の本番実行で407A.T等6銘柄が該当）。「数値×リスト」のような
+    TypeErrorで銘柄1件の判定処理全体が落ちてしまうのを防ぐため、int/float以外は
+    None（未取得扱い）として安全に丸める。
+    """
+    if isinstance(value, bool):
+        return None
+    if isinstance(value, (int, float)):
+        return value
+    return None
+
+
 def json_default(obj):
     """
     json.dump(s)用のフォールバック変換。pandas/numpy由来の値（np.bool_・np.int64等）が
