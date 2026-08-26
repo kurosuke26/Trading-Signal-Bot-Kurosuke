@@ -257,6 +257,7 @@ def build_payloads(snapshot, stale, age_hours):
     total_long = counts.get('LONG', len(long_results))
     total_short = counts.get('SHORT', len(short_results))
     total_neutral = counts.get('NEUTRAL', len(neutral_results))
+    liquidity_excluded = counts.get('liquidity_excluded', 0)
 
     stale_note = ''
     if stale:
@@ -340,6 +341,7 @@ def build_payloads(snapshot, stale, age_hours):
             {'name': 'ロングシグナル', 'value': f"{total_long}銘柄", 'inline': True},
             {'name': 'ショートシグナル', 'value': f"{total_short}銘柄", 'inline': True},
             {'name': 'ニュートラル', 'value': f"{total_neutral}銘柄", 'inline': True},
+            {'name': '流動性フィルタ除外', 'value': f"{liquidity_excluded}銘柄", 'inline': True},
             {'name': 'データ収集時間', 'value': f"{elapsed_minutes}分", 'inline': True},
         ],
         'footer': {'text': footer_text},
@@ -362,14 +364,16 @@ def build_payloads(snapshot, stale, age_hours):
         backtest_embed = {
             'title': '🎯 シグナル成績（仮想シミュレーション）',
             'description': (
-                'LONG／SHORTシグナル通りにエントリーし、ATR×1.5のトレーリングストップ'
-                'ルールで決済していたと仮定した場合の成績です。実際の取引成績ではなく、'
-                'シグナルそのものの参考成績である点にご注意ください。'
+                '毎日のLONG／SHORTシグナルのうち「自信度が高い」上位10銘柄（LONGは複合'
+                'スコア上位、SHORTはPER×PBR上位。それぞれ別枠）にエントリーし、ATR×1.5の'
+                'トレーリングストップルールで決済していたと仮定した場合の成績です。'
+                '実際の取引成績ではなく、シグナルそのものの参考成績である点にご注意ください。'
             ),
             'color': 0x9B59B6,
             'fields': [
                 {'name': 'LONG＋SHORT合算', 'value': _fmt_perf_stats(performance_stats.get('long_short')), 'inline': False},
-                {'name': 'LONGのみ', 'value': _fmt_perf_stats(performance_stats.get('long_only')), 'inline': False},
+                {'name': 'LONGのみ（上位10銘柄）', 'value': _fmt_perf_stats(performance_stats.get('long_only')), 'inline': False},
+                {'name': 'SHORTのみ（上位10銘柄）', 'value': _fmt_perf_stats(performance_stats.get('short_only')), 'inline': False},
                 {'name': '現在保有中（未決済）', 'value': f"{performance_stats.get('open_positions', 0)}件", 'inline': True},
             ],
             'footer': {'text': footer_text},
