@@ -21,7 +21,10 @@ collector.py / poster.py（毎日実行）とは独立した、週1回だけ動�
      基づく紹介である点に注意（正直な制約として明記）
   3. シグナル成績（累計）：data/trade_log.json（tracking.py）に基づく、
      LONG＋SHORT合算／LONGのみ／SHORTのみ（自信度上位10銘柄）の勝率・
-     ペイオフレシオの週次チェックポイント
+     ペイオフレシオの週次チェックポイント。あわせて、トレーリングストップ幅を
+     ATR×1.5（現行）／2.0／2.5で変えた場合の比較も表示する（2026-08-26より
+     前に開始したポジションは1.5倍のみのデータのため、2.0／2.5倍の比較には
+     含まれない）
   4. 投資理論・スクリーニング手法の一言解説（週替わりで固定トピックを順番に紹介）
 """
 
@@ -236,12 +239,23 @@ def build_performance_recap_text():
             parts.append(f"ペイオフレシオ{s['payoff_ratio']}")
         return f"{label}：" + "／".join(parts)
 
-    return "\n".join([
+    lines = [
         _fmt('LONG＋SHORT合算（上位10銘柄・累計）', stats['long_short']),
         _fmt('LONGのみ（上位10銘柄・累計）', stats['long_only']),
         _fmt('SHORTのみ（上位10銘柄・累計）', stats['short_only']),
         f"現在保有中（未決済）：{stats['open_positions']}件",
-    ])
+    ]
+
+    # 【2026-08-26追加】トレーリングストップ幅（ATR×1.5／2.0／2.5）を変えた
+    # 場合の比較。tracking.pyのATR_MULTIPLIER_VARIANTSと表示順を揃える。
+    atr_variants = stats.get('atr_variants') or {}
+    if atr_variants:
+        lines.append('― ATR倍率比較（ストップ幅1.5／2.0／2.5倍・LONG+SHORT合算） ―')
+        for key in ('1.5', '2.0', '2.5'):
+            label = f'ATR×{key}' + ('（現行）' if key == '1.5' else '')
+            lines.append(_fmt(label, atr_variants.get(key)))
+
+    return "\n".join(lines)
 
 
 def pick_weekly_tip():
