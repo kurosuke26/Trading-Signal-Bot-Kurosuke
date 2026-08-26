@@ -2,9 +2,12 @@ name: Kurosuke Discord Posting
 
 on:
   schedule:
-    # 23:00 UTC = 08:00 JST（同日）。collect_data.yml（02:00 JST開始・約4時間）が
-    # 終わった後に、保存済みのデータを読み込んでDiscordへ投稿するだけの軽い処理。
-    - cron: '0 23 * * *'
+    # 23:00 UTC（前日）= 08:00 JST（当日）。月〜土曜朝に投稿し、日曜朝は投稿しない
+    # （day-of-weekは0=日曜〜5=金曜のUTC値。この時刻はJST日付が翌日にずれるため、
+    # UTC日曜〜金曜＝JST月曜〜土曜に対応する）。collect_data.yml（23:00 JST開始・
+    # 約4時間）が終わった後に、保存済みのデータを読み込んでDiscordへ投稿するだけの
+    # 軽い処理。
+    - cron: '0 23 * * 0-5'
   workflow_dispatch: {}
 
 jobs:
