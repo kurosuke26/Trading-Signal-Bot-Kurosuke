@@ -53,7 +53,7 @@ from indicators import compute_technical_snapshot, technical_score
 from sakata import detect_all_patterns, sakata_score
 from scoring import composite_score
 from universe import get_all_tse_tickers, FALLBACK_TICKERS
-from util import env_int, env_float, json_default, pace_to_target
+from util import env_int, env_float, json_default, pace_to_target, safe_num
 from tracking import (load_trade_log, save_trade_log, open_new_positions,
                        update_open_positions, compute_performance_stats)
 
@@ -223,15 +223,22 @@ def _fetch_one_fundamental(ticker, max_retries=2):
             stock = yf.Ticker(ticker)
             info = stock.info or {}
             current_price = info.get('currentPrice') or info.get('regularMarketPrice') or 0
+            # 【2026-08-26の本番実行で判明した不具合への対応】特定の銘柄（優先株・ETN・
+            # 新しい英数字ティッカーコード等）では、yfinanceのinfoが本来float/intのはず
+            # の項目をリスト等で返すことがあり、後段の「PER×PBR」等の掛け算で
+            # 「can't multiply sequence by non-int of type 'float'」というTypeErrorに
+            # なり該当銘柄の判定処理全体が失敗していた。safe_num()で数値以外はNone
+            # （未取得扱い）に丸めてから使うことで、その銘柄だけ判定不能・0点扱いに
+            # 留め、収集処理全体は継続できるようにする。
             return ticker, {
                 'name': info.get('longName') or info.get('shortName') or ticker,
-                'current_price': current_price or 0,
+                'current_price': safe_num(current_price) or 0,
                 # 【Phase1の修正を踏襲】yfinanceのdividendYieldはパーセント値そのもの
                 # （3.5のような値）として返るため *100 しない。
-                'dividend_yield': info.get('dividendYield', 0) or 0,
-                'pbr': info.get('priceToBook', 0) or 0,
-                'per': info.get('trailingPE', 0) or 0,
-                'growth_raw': info.get('earningsQuarterlyGrowth', None),
+                'dividend_yield': safe_num(info.get('dividendYield', 0)) or 0,
+                'pbr': safe_num(info.get('priceToBook', 0)) or 0,
+                'per': safe_num(info.get('trailingPE', 0)) or 0,
+                'growth_raw': safe_num(info.get('earningsQuarterlyGrowth', None)),
                 'sector': info.get('sector'),
             }, None
         except Exception as e:
