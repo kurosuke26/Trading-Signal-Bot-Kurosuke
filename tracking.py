@@ -12,12 +12,13 @@ tracking.py — LONG/SHORTシグナルの「シグナル通りに売買してい
 
 - 同一銘柄・同一方向（LONG/SHORT）で既に建玉中（open）のポジションがあれば、
   新規シグナルが出ても二重にエントリーしない（既存ポジションのトレーリング
-  ストップ更新のみ行う）。
-- 決済（close）は、その日の終値がATR×1.5のトレーリングストップに抵触した
-  ものとして扱う（シャンデリア・ストップ方式。LONGは切り上げのみ、
-  SHORTは切り下げのみ）。この処理は1日1回（deep collectorの実行時）しか
-  行われないため、「ストップ価格ちょうどで約定した」のではなく「抵触を検知した
-  その日の終値で手仕舞いした」という、日次バッチとしての実態に即した保守的な
+  ストップ更新のみ行う）。「建玉中」の判定は下記のATR×1.5（プライマリ）の
+  状態のみを見る。
+- 決済（close）は、その日の終値がトレーリングストップに抵触したものとして
+  扱う（シャンデリア・ストップ方式。LONGは切り上げのみ、SHORTは切り下げの
+  み）。この処理は1日1回（deep collectorの実行時）しか行われないため、
+  「ストップ価格ちょうどで約定した」のではなく「抵触を検知したその日の
+  終値で手仕舞いした」という、日次バッチとしての実態に即した保守的な
   シミュレーションになっている（intraday（日中）の実際のストップ注文約定とは
   異なり、ギャップ（窓開け）が大きい日は損益が理論上のストップ幅より
   大きくぶれ得る）。
@@ -36,7 +37,30 @@ tracking.py — LONG/SHORTシグナルの「シグナル通りに売買してい
 update_open_positions()で決済判定される（絞り込みは「新規に建てるかどうか」
 のみに影響し、既存ポジションの追跡は継続する）。
 
-【正直な注意点】
+【2026-08-26変更：ATR倍率バリエーションのバックテスト比較を追加】
+トレーリングストップの幅（ATRの何倍を損切りラインにするか）を1.5倍・2.0倍・
+2.5倍の3パターンで、同じエントリー（同じ銘柄・同じ日・同じ価格・同じATR値）
+に対して並行シミュレーションし、勝率・ペイオフレシオを比較できるようにした。
+  - 1.5倍（PRIMARY_VARIANT_KEY）＝正式なプライマリ扱い。Discordの
+    「エントリー・ストップ目安」欄（scoring.suggested_trade_levels）が
+    案内している幅と一致させており、「建玉中かどうか」「新規に追跡対象へ
+    入れるかどうか」の判定もこの1.5倍の状態だけを見る。
+  - 2.0倍・2.5倍はプライマリと同じエントリーに対する「もしストップ幅を
+    広げていたら」の比較用シミュレーションで、1.5倍が決済された後も
+    それぞれ自分自身のストップに抵触するまで独立して追跡を続ける。
+各ポジションは 'variants' 辞書に倍率ごとの stop/status/close_date/
+close_price/return_pct を保持する（1エントリーにつき3バリエーション）。
+
+【正直な注意点：過去データとの互換性】
+2026-08-26のこの変更より前に開始したポジションは、エントリー時点のATR値を
+保存しておらず、2.0倍・2.5倍のストップを後から正確に再現できない。そのため
+_ensure_variants() での読み込み時マイグレーションでは、既存ポジションは
+1.5倍（プライマリ）のみを引き継ぎ、2.0倍・2.5倍は 'not_tracked'（比較対象
+外）として扱う。この変更以降に新規開設されたポジションから、3倍率すべての
+比較データが蓄積されていく（統計として意味のある比較ができるまでには数週間
+〜数ヶ月かかる見込み）。
+
+【正直な注意点：シミュレーションそのものについて】
 これは実際の売買記録ではなく、シグナル通りに機械的に売買した場合の
 シミュレーションです。実際にどの銘柄を選んで取引するかはユーザー次第
 であり、この勝率・ペイオフレシオはあくまで「シグナルそのものの成績」の
@@ -51,9 +75,22 @@ import os
 from util import env_int, json_default
 
 TRADE_LOG_PATH = os.getenv('TRADE_LOG_PATH') or 'data/trade_log.json'
-ATR_MULTIPLIER = 1.5
-FALLBACK_STOP_PCT = 0.03  # ATRが算出できない銘柄向けの簡易フォールバック（±3%）
+FALLBACK_STOP_PCT = 0.03  # ATRが算出できない銘柄向けの簡易フォールバック（±3%相当）
 TOP_N_TRACKED = env_int('TOP_N_TRACKED', 10)  # 新規追跡対象とする「自信度上位」銘柄数（LONG/SHORT別）
+
+# 【2026-08-26追加】トレーリングストップの倍率バリエーション（比較バックテスト用）。
+# 1.5倍がプライマリ（Discordの「エントリー・ストップ目安」欄と一致させる正式な幅）。
+# 複数の倍率を扱うため、他の実行パラメータと違って環境変数では変更できない
+# （変更したい場合はこのリスト自体を編集する）。
+ATR_MULTIPLIER = 1.5
+ATR_MULTIPLIER_VARIANTS = [1.5, 2.0, 2.5]
+
+
+def _variant_key(multiplier):
+    return f'{multiplier:.1f}'
+
+
+PRIMARY_VARIANT_KEY = _variant_key(ATR_MULTIPLIER)
 
 
 def load_trade_log(path=None):
@@ -69,10 +106,16 @@ def load_trade_log(path=None):
     try:
         with open(path, encoding='utf-8') as f:
             data = json.load(f)
-        return data if isinstance(data, list) else []
+        trade_log = data if isinstance(data, list) else []
     except Exception:
         # 壊れたファイルで全処理が止まらないよう、空リストから再出発する
         return []
+
+    # 2026-08-26のATR倍率バリエーション追加より前の旧形式ポジションを、
+    # 新形式（'variants'辞書を持つ形式）へ読み込み時に変換する。
+    for p in trade_log:
+        _ensure_variants(p)
+    return trade_log
 
 
 def save_trade_log(trade_log, path=None):
@@ -87,11 +130,52 @@ def save_trade_log(trade_log, path=None):
     os.replace(tmp_path, path)
 
 
+def _ensure_variants(p):
+    """
+    2026-08-26のATR倍率バリエーション追加より前の旧形式ポジション
+    （'variants'キーが無く、フラットな'stop'/'close_date'等でATR×1.5のみを
+    保持していた形式）を、新形式（倍率ごとに'variants'辞書で保持する形式）に
+    その場（in-place）で変換する。既に新形式のポジションはそのまま返す
+    （何度呼んでも安全＝冪等）。
+
+    旧形式はエントリー時点のATR値を保存していなかったため、2.0倍・2.5倍の
+    初期ストップを後から正確に再現することはできない。そのため旧形式の
+    ポジションは1.5倍（プライマリ）のみを引き継ぎ、2.0倍・2.5倍は
+    'not_tracked'（比較対象外。update_open_positions()でも二度と'open'には
+    ならない）として扱う。
+    """
+    if 'variants' in p:
+        return p
+
+    p['variants'] = {
+        PRIMARY_VARIANT_KEY: {
+            'stop': p.pop('stop', None),
+            'status': p.get('status', 'open'),
+            'close_date': p.pop('close_date', None),
+            'close_price': p.pop('close_price', None),
+            'return_pct': p.pop('return_pct', None),
+        },
+    }
+    for m in ATR_MULTIPLIER_VARIANTS:
+        key = _variant_key(m)
+        if key not in p['variants']:
+            p['variants'][key] = {
+                'stop': None, 'status': 'not_tracked',
+                'close_date': None, 'close_price': None, 'return_pct': None,
+            }
+    return p
+
+
 def _has_open(trade_log, ticker, signal):
+    """
+    「建玉中かどうか」はプライマリ（ATR×1.5）の状態だけで判定する
+    （2.0倍・2.5倍は比較用の並行シミュレーションであり、新規追跡対象に
+    入れるかどうかの判定には使わない）。
+    """
     return any(p['ticker'] == ticker and p['signal'] == signal and p['status'] == 'open' for p in trade_log)
 
 
-def _initial_stop(entry_price, atr_value, signal, multiplier=ATR_MULTIPLIER):
+def _initial_stop(entry_price, atr_value, signal, multiplier):
     if atr_value is None or atr_value <= 0:
         atr_value = entry_price * FALLBACK_STOP_PCT
     if signal == 'LONG':
@@ -117,6 +201,10 @@ def open_new_positions(trade_log, results, today_str, top_n=TOP_N_TRACKED):
     今回の収集でLONG/SHORT判定になった銘柄のうち、「自信度が高い」上位top_n銘柄
     （LONG・SHORTそれぞれ別に選定）だけを対象に、まだ建玉中(open)のものが無い
     銘柄について新規の仮想ポジションを1件開く。戻り値は新規開設件数。
+
+    1件のポジションにつき、同じエントリー価格・同じATR値に対してATR×1.5
+    （プライマリ）／×2.0／×2.5の3バリエーションのストップを同時に設定する
+    （ATR_MULTIPLIER_VARIANTS参照）。
     """
     opened = 0
     top_candidates = _select_top_candidates(results, 'LONG', top_n) + _select_top_candidates(results, 'SHORT', top_n)
@@ -129,18 +217,27 @@ def open_new_positions(trade_log, results, today_str, top_n=TOP_N_TRACKED):
         if not entry_price or entry_price <= 0:
             continue
         atr_value = (r.get('tech_snapshot') or {}).get('atr')
-        stop = _initial_stop(entry_price, atr_value, signal)
+
+        variants = {}
+        for m in ATR_MULTIPLIER_VARIANTS:
+            stop = _initial_stop(entry_price, atr_value, signal, m)
+            variants[_variant_key(m)] = {
+                'stop': round(stop, 2),
+                'status': 'open',
+                'close_date': None,
+                'close_price': None,
+                'return_pct': None,
+            }
+
         trade_log.append({
             'ticker': ticker,
             'name': r.get('name'),
             'signal': signal,
             'entry_date': today_str,
             'entry_price': round(entry_price, 2),
-            'stop': round(stop, 2),
-            'status': 'open',
-            'close_date': None,
-            'close_price': None,
-            'return_pct': None,
+            'atr_at_entry': round(atr_value, 4) if atr_value else None,
+            'status': 'open',  # プライマリ（ATR×1.5）が決済されるまで'open'
+            'variants': variants,
         })
         opened += 1
     return opened
@@ -148,49 +245,66 @@ def open_new_positions(trade_log, results, today_str, top_n=TOP_N_TRACKED):
 
 def update_open_positions(trade_log, results, today_str):
     """
-    建玉中の全ポジションについて、今回取得できた最新価格・ATRでトレーリング
-    ストップを更新し、抵触していれば決済（close）する。戻り値は決済件数。
+    建玉中の全ポジションについて、ATR×1.5／×2.0／×2.5それぞれのバリエーション
+    ごとに、今回取得できた最新価格・ATRでトレーリングストップを更新し、抵触して
+    いれば決済（close）する。倍率が異なれば決済タイミングも異なるため、
+    プライマリ（1.5倍）が先に決済されても、2.0倍・2.5倍はそれぞれ自分自身の
+    ストップに抵触するまで独立して追跡を継続する（'not_tracked'のバリエー
+    ションは対象外のまま）。
 
     今回データ取得に失敗した銘柄（resultsに存在しない）は判定をスキップし、
     次回の収集時にあらためて判定する（データ欠損による誤決済を避けるため）。
+
+    戻り値は「プライマリ（ATR×1.5）」が決済された件数（従来の意味と同じ。
+    collector.pyの実行ログ表示に使われる）。
     """
-    closed = 0
+    closed_primary = 0
     for p in trade_log:
-        if p['status'] != 'open':
+        variants = p.get('variants') or {}
+        if not any(v.get('status') == 'open' for v in variants.values()):
             continue
+
         r = results.get(p['ticker'])
-        if r is None:
-            continue
-        current_price = r.get('current_price')
-        if not current_price or current_price <= 0:
-            continue
-        atr_value = (r.get('tech_snapshot') or {}).get('atr')
-        if atr_value is None or atr_value <= 0:
-            atr_value = current_price * FALLBACK_STOP_PCT
+        current_price = r.get('current_price') if r else None
+        raw_atr = (r.get('tech_snapshot') or {}).get('atr') if r else None
+        if r is None or not current_price or current_price <= 0:
+            continue  # 今回データ欠損。全バリエーションとも次回まで持ち越す
 
-        if p['signal'] == 'LONG':
-            candidate_stop = current_price - atr_value * ATR_MULTIPLIER
-            new_stop = max(p['stop'], candidate_stop)  # 切り上げのみ
-            hit = current_price <= new_stop
-        else:  # SHORT
-            candidate_stop = current_price + atr_value * ATR_MULTIPLIER
-            new_stop = min(p['stop'], candidate_stop)  # 切り下げのみ
-            hit = current_price >= new_stop
+        for m in ATR_MULTIPLIER_VARIANTS:
+            key = _variant_key(m)
+            v = variants.get(key)
+            if not v or v.get('status') != 'open':
+                continue
 
-        p['stop'] = round(new_stop, 2)
+            atr_value = raw_atr
+            if atr_value is None or atr_value <= 0:
+                atr_value = current_price * FALLBACK_STOP_PCT
 
-        if hit:
-            entry = p['entry_price']
             if p['signal'] == 'LONG':
-                ret_pct = (current_price - entry) / entry * 100
-            else:
-                ret_pct = (entry - current_price) / entry * 100
-            p['status'] = 'closed'
-            p['close_date'] = today_str
-            p['close_price'] = round(current_price, 2)
-            p['return_pct'] = round(ret_pct, 2)
-            closed += 1
-    return closed
+                candidate_stop = current_price - atr_value * m
+                new_stop = max(v['stop'], candidate_stop) if v.get('stop') is not None else candidate_stop
+                hit = current_price <= new_stop
+            else:  # SHORT
+                candidate_stop = current_price + atr_value * m
+                new_stop = min(v['stop'], candidate_stop) if v.get('stop') is not None else candidate_stop
+                hit = current_price >= new_stop
+
+            v['stop'] = round(new_stop, 2)
+
+            if hit:
+                entry = p['entry_price']
+                if p['signal'] == 'LONG':
+                    ret_pct = (current_price - entry) / entry * 100
+                else:
+                    ret_pct = (entry - current_price) / entry * 100
+                v['status'] = 'closed'
+                v['close_date'] = today_str
+                v['close_price'] = round(current_price, 2)
+                v['return_pct'] = round(ret_pct, 2)
+                if key == PRIMARY_VARIANT_KEY:
+                    p['status'] = 'closed'
+                    closed_primary += 1
+    return closed_primary
 
 
 def _stats_for(closed_trades):
@@ -214,16 +328,44 @@ def _stats_for(closed_trades):
     }
 
 
+def _closed_variant_trades(trade_log, variant_key, signal=None):
+    """指定した倍率バリエーション（variant_key）について、決済済みのものだけを集める。"""
+    out = []
+    for p in trade_log:
+        if signal is not None and p.get('signal') != signal:
+            continue
+        v = (p.get('variants') or {}).get(variant_key)
+        if v and v.get('status') == 'closed':
+            out.append(v)
+    return out
+
+
 def compute_performance_stats(trade_log):
-    """勝率・ペイオフレシオを「LONG＋SHORT合算」「LONGのみ」「SHORTのみ」の3系統で算出する。"""
-    closed_all = [p for p in trade_log if p['status'] == 'closed']
-    closed_long = [p for p in closed_all if p['signal'] == 'LONG']
-    closed_short = [p for p in closed_all if p['signal'] == 'SHORT']
-    open_count = len([p for p in trade_log if p['status'] == 'open'])
+    """
+    勝率・ペイオフレシオを算出する。
+
+    - 'long_short' / 'long_only' / 'short_only'：従来通り、プライマリ
+      （ATR×1.5）のトレーリングストップでの決済結果を「LONG＋SHORT合算」
+      「LONGのみ」「SHORTのみ」の3系統で集計したもの。
+    - 'atr_variants'：ATR×1.5／×2.0／×2.5、それぞれのストップ幅で決済して
+      いたと仮定した場合の比較集計（LONG＋SHORT合算）。2026-08-26より前に
+      開始したポジションは1.5倍のデータしか無いため、2.0倍・2.5倍の比較
+      対象には含まれない点に注意（_ensure_variants()参照）。
+    """
+    closed_primary_all = _closed_variant_trades(trade_log, PRIMARY_VARIANT_KEY)
+    closed_primary_long = _closed_variant_trades(trade_log, PRIMARY_VARIANT_KEY, 'LONG')
+    closed_primary_short = _closed_variant_trades(trade_log, PRIMARY_VARIANT_KEY, 'SHORT')
+    open_count = len([p for p in trade_log if p.get('status') == 'open'])
+
+    atr_variants = {
+        _variant_key(m): _stats_for(_closed_variant_trades(trade_log, _variant_key(m)))
+        for m in ATR_MULTIPLIER_VARIANTS
+    }
 
     return {
-        'long_short': _stats_for(closed_all),
-        'long_only': _stats_for(closed_long),
-        'short_only': _stats_for(closed_short),
+        'long_short': _stats_for(closed_primary_all),
+        'long_only': _stats_for(closed_primary_long),
+        'short_only': _stats_for(closed_primary_short),
         'open_positions': open_count,
+        'atr_variants': atr_variants,
     }
