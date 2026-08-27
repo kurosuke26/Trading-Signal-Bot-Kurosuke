@@ -1,41 +1,117 @@
 name: Kurosuke Discord Posting
 
 on:
-  schedule:
-    # 22:55 UTC（前日）= 07:55 JST（当日）。月〜土曜朝に投稿し、日曜朝は投稿しない
-    # （day-of-weekは0=日曜〜5=金曜のUTC値。この時刻はJST日付が翌日にずれるため、
-    # UTC日曜〜金曜＝JST月曜〜土曜に対応する）。collect_data.yml（23:00 JST開始・
-    # 約4時間）が終わった後に、保存済みのデータを読み込んでDiscordへ投稿するだけの
-    # 軽い処理。
-    # 【2026-08-27変更】8:00ちょうどではなく7:55にしたのは、投稿を5分早めたい
-    # というユーザー希望に加えて、GitHub Actionsの仕様上「正時（0分）ジャストの
-    # スケジュールは実行が混雑しやすく遅延しやすい」ため、あえて0分から外して
-    # 遅延リスクを下げる狙いも兼ねている。
-    - cron: '55 22 * * 0-5'
+  # 【2026-08-27変更】固定時刻のcron（旧: 22:55 UTC=07:55 JST）をやめ、
+  # 「Kurosuke Data Collection」ワークフローの完了をトリガーにする方式に変更。
+  # 背景：collect_data.ymlは23:00 JST開始・所要約4時間の想定だが、GitHub
+  # Actionsのscheduleトリガーは「正確な時刻を保証しない」仕様であり、実際に
+  # 2026-08-27朝、収集が約2時間半遅延して開始した回でpost側のscheduleが
+  # 発火せず投稿が飛んだ（収集は完走していたのに、投稿だけが起きなかった）。
+  # collect_data.ymlの完了をworkflow_runで直接受けることで、収集が何時に
+  # 終わろうと「終わった直後に必ず投稿が走る」ようにし、2つの独立した時刻
+  # 予想への依存をなくす。
+  workflow_run:
+    workflows: ["Kurosuke Data Collection"]
+    types: [completed]
   workflow_dispatch: {}
+
+permissions:
+  contents: write  # data/_last_posted_date.txt をリポジトリにコミットするために必要
+                   # （2026-08-27追加：投稿済みマーカーの記録を始めたため）
+
+# 【2026-08-27追加】見張り役ワークフロー（watch_and_post.yml）と同じグループ名で
+# concurrencyを設定し、両者が同時に走らないようにする（片方が実行中はもう片方は
+# 待機してからdata/_last_posted_date.txtを見るため、ごく短い時間帯に両方が
+# 起動した場合でも二重投稿を防げる）。
+concurrency:
+  group: kurosuke-discord-posting
+  cancel-in-progress: false
 
 jobs:
   post:
     runs-on: ubuntu-latest
     timeout-minutes: 15
+    # collect_data.ymlの自動実行（scheduleトリガー、日〜金曜の夜）が完了した時だけ
+    # 自動投稿の判定対象にする。同ワークフローをworkflow_dispatchで手動・テスト実行
+    # （銘柄数を絞った動作確認など）した場合はここではじいて、テストデータが本番
+    # Discordに誤投稿されるのを防ぐ。post_signals.yml自体をworkflow_dispatchで
+    # 手動実行した場合は、下のeligibility判定で常に投稿される。
+    # collect_data.yml側は収集が時間予算超過や一部エラーで打ち切られても
+    # 「if: always()」でそこまでの結果をコミットする設計なので、conclusionが
+    # success以外（failure/cancelled等）でも投稿自体は止めない（旧・固定時刻cron
+    # 方式でも収集の成否に関わらず投稿していたため、その挙動を踏襲）。
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      github.event.workflow_run.event == 'schedule'
 
     steps:
+    - name: Log upstream collection run
+      if: github.event_name == 'workflow_run'
+      run: |
+        echo "収集ワークフローの結果: ${{ github.event.workflow_run.conclusion }}（トリガー: ${{ github.event.workflow_run.event }}）"
+
     - name: Checkout code
       uses: actions/checkout@v3
       # data/latest_scan.json は collect_data.yml がリポジトリにコミットしたものを
-      # そのままcheckoutで取得する。
+      # そのままcheckoutで取得する。workflow_runイベントでは既定のref/shaが
+      # デフォルトブランチの最新コミット（＝収集がpushした直後のコミット）になる
+      # ため、追加のref指定は不要。
+
+    # 【2026-08-27追加】収集開始を21:00 JSTに前倒ししたことで、収集が早く終わった
+    # 日はworkflow_run発火時点でまだ07:45 JST前になる。GitHub Actionsの1ジョブは
+    # 最大6時間という上限があり、ここでsleepして07:45まで待つと（収集完了が
+    # 01:00台の場合で待機だけで6時間超）その上限に抵触しかねないため、待たずに
+    # スキップし、07:00〜07:50 JSTを5分おきに巡回するwatch_and_post.yml側に
+    # 投稿を委ねる。収集が遅延して07:45 JSTを過ぎてから完了した日は、ここで
+    # 即座に投稿するので待ち時間は発生しない。
+    - name: Determine posting eligibility
+      id: check
+      run: |
+        today_jst=$(TZ='Asia/Tokyo' date +%Y-%m-%d)
+        hour=$(TZ='Asia/Tokyo' date +%-H)
+        min=$(TZ='Asia/Tokyo' date +%-M)
+        now_minutes=$((hour * 60 + min))
+        target_minutes=$((7 * 60 + 45))
+
+        already_posted=false
+        if [ -f data/_last_posted_date.txt ]; then
+          last=$(tr -d '[:space:]' < data/_last_posted_date.txt)
+          if [ "$last" = "$today_jst" ]; then
+            already_posted=true
+          fi
+        fi
+
+        should_post=false
+        if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+          should_post=true
+          reason="手動実行のため無条件に投稿します"
+        elif [ "$already_posted" = "true" ]; then
+          reason="本日（${today_jst} JST）分は投稿済みのためスキップします"
+        elif [ "$now_minutes" -ge "$target_minutes" ]; then
+          should_post=true
+          reason="収集完了検知時点で既に07:45 JSTを過ぎている（現在${hour}時$(printf '%02d' "$min")分）ため即時投稿します"
+        else
+          reason="まだ07:45 JST前（現在${hour}時$(printf '%02d' "$min")分）のため見張り役ワークフローに委ねてスキップします"
+        fi
+
+        echo "should_post=$should_post" >> "$GITHUB_OUTPUT"
+        echo "today_jst=$today_jst" >> "$GITHUB_OUTPUT"
+        echo "[eligibility] $reason"
 
     - name: Set up Python
+      if: steps.check.outputs.should_post == 'true'
       uses: actions/setup-python@v4
       with:
         python-version: '3.11'
 
     - name: Install dependencies
+      if: steps.check.outputs.should_post == 'true'
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
 
     - name: Post signals to Discord
+      if: steps.check.outputs.should_post == 'true'
       env:
         DISCORD_WEBHOOK_URL_LONG_TEST: ${{ secrets.DISCORD_WEBHOOK_URL_LONG_TEST }}
         DISCORD_WEBHOOK_URL_SHORT_TEST: ${{ secrets.DISCORD_WEBHOOK_URL_SHORT_TEST }}
@@ -51,8 +127,30 @@ jobs:
         DISCORD_WEBHOOK_URL_BACKTEST_PROD: ${{ secrets.DISCORD_WEBHOOK_URL_BACKTEST_PROD }}
       run: python poster.py
 
+    # 【2026-08-27追加】投稿成功後に「本日はもう投稿済み」の目印をコミットする。
+    # これをwatch_and_post.yml側でも参照することで、片方が投稿した後にもう片方が
+    # 同じ日に重ねて投稿してしまう二重投稿を防ぐ。
+    - name: Record posted date
+      if: steps.check.outputs.should_post == 'true'
+      run: |
+        git config user.name "kurosuke-bot"
+        git config user.email "kurosuke-bot@users.noreply.github.com"
+        mkdir -p data
+        echo "${{ steps.check.outputs.today_jst }}" > data/_last_posted_date.txt
+        git add data/_last_posted_date.txt
+        if git diff --cached --quiet; then
+          echo "変更なしのためコミットをスキップします"
+        else
+          git commit -m "chore: record Discord posting for ${{ steps.check.outputs.today_jst }} (post_signals)"
+          git push
+        fi
+
+    - name: Skipped notification
+      if: steps.check.outputs.should_post != 'true'
+      run: echo "ℹ️ 今回は投稿条件を満たさなかったためスキップしました（詳細は上のeligibilityログ参照）"
+
     - name: Success notification
-      if: success()
+      if: success() && steps.check.outputs.should_post == 'true'
       run: echo "✅ Kurosuke posting completed successfully at $(date)"
 
     - name: Failure notification

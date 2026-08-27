@@ -1,0 +1,131 @@
+name: Kurosuke Post Watcher
+
+# 【2026-08-27追加】post_signals.yml（workflow_run方式）は、収集
+# （collect_data.yml、21:00 JST開始）の完了を検知した時点で「もう07:45 JSTを
+# 過ぎているか」を見て、過ぎていればその場で即時投稿する。しかし収集が予定どおり
+# 早く終わった日は、その時点でまだ07:45 JST前のことが多く、post_signals.yml側は
+# あえて投稿を見送る（1ジョブでsleepして07:45まで待つと、GitHub Actionsの
+# 「1ジョブ最大6時間」という上限に抵触しかねないため）。
+# 本ワークフローはその「07:45 JST前に収集が終わっていた日」の投稿を拾うための
+# 見張り役。07:00〜07:50 JSTの間、5分おきに「今日はまだ投稿していないか」
+# 「07:45 JSTを過ぎたか」を確認し、条件が揃った回でpost.pyを実行する。
+# 1回きりの正確な時刻指定（旧方式）だと、GitHub Actions側の事情でその1回が
+# 丸ごと発火しないリスクがあったが、1時間の間に11回チャンスを設けることで、
+# 全回が発火しない確率を実質無視できる水準まで下げる狙い。
+on:
+  schedule:
+    # 22:00〜22:50 UTC（前日）を5分おき = 07:00〜07:50 JST（当日）。
+    # day-of-week 0-5 = UTC日曜〜金曜。この時刻はJST日付が翌日にずれるため、
+    # UTC日曜〜金曜＝JST月曜〜土曜の朝に対応する（collect_data.ymlが土曜夜
+    # （＝日曜朝投稿用）を対象外にしているのと合わせて、日曜朝は自然に投稿されない）。
+    - cron: '*/5 22 * * 0-5'
+  workflow_dispatch: {}
+
+permissions:
+  contents: write  # data/_last_posted_date.txt をリポジトリにコミットするために必要
+
+# post_signals.yml（workflow_run方式の即時投稿）と同じグループ名のconcurrency。
+# どちらかが実行中はもう片方を待機させることで、ごく短い時間帯に両方が起動して
+# しまった場合でも、後から動く側が data/_last_posted_date.txt を見て
+# 「既に投稿済み」と正しく判断できるようにする（二重投稿防止）。
+concurrency:
+  group: kurosuke-discord-posting
+  cancel-in-progress: false
+
+jobs:
+  watch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Determine posting eligibility
+      id: check
+      run: |
+        today_jst=$(TZ='Asia/Tokyo' date +%Y-%m-%d)
+        hour=$(TZ='Asia/Tokyo' date +%-H)
+        min=$(TZ='Asia/Tokyo' date +%-M)
+        now_minutes=$((hour * 60 + min))
+        target_minutes=$((7 * 60 + 45))
+
+        already_posted=false
+        if [ -f data/_last_posted_date.txt ]; then
+          last=$(tr -d '[:space:]' < data/_last_posted_date.txt)
+          if [ "$last" = "$today_jst" ]; then
+            already_posted=true
+          fi
+        fi
+
+        should_post=false
+        if [ "$already_posted" = "true" ]; then
+          reason="本日（${today_jst} JST）分は投稿済みのためスキップします"
+        elif [ "$now_minutes" -lt "$target_minutes" ]; then
+          reason="まだ07:45 JST前（現在${hour}時$(printf '%02d' "$min")分）のためスキップします"
+        elif [ ! -f data/latest_scan.json ]; then
+          reason="data/latest_scan.jsonが見つからないためスキップします（収集が完走していない可能性）"
+        else
+          should_post=true
+          reason="07:45 JSTを過ぎており本日分が未投稿のため投稿します（現在${hour}時$(printf '%02d' "$min")分）"
+        fi
+
+        echo "should_post=$should_post" >> "$GITHUB_OUTPUT"
+        echo "today_jst=$today_jst" >> "$GITHUB_OUTPUT"
+        echo "[watcher] $reason"
+
+    - name: Set up Python
+      if: steps.check.outputs.should_post == 'true'
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+
+    - name: Install dependencies
+      if: steps.check.outputs.should_post == 'true'
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+
+    - name: Post signals to Discord
+      if: steps.check.outputs.should_post == 'true'
+      env:
+        DISCORD_WEBHOOK_URL_LONG_TEST: ${{ secrets.DISCORD_WEBHOOK_URL_LONG_TEST }}
+        DISCORD_WEBHOOK_URL_SHORT_TEST: ${{ secrets.DISCORD_WEBHOOK_URL_SHORT_TEST }}
+        DISCORD_WEBHOOK_URL_WARNING_TEST: ${{ secrets.DISCORD_WEBHOOK_URL_WARNING_TEST }}
+        DISCORD_WEBHOOK_URL_PERFORMANCE_TEST: ${{ secrets.DISCORD_WEBHOOK_URL_PERFORMANCE_TEST }}
+        DISCORD_WEBHOOK_URL_SAKATA_TEST: ${{ secrets.DISCORD_WEBHOOK_URL_SAKATA_TEST }}
+        DISCORD_WEBHOOK_URL_LONG_PROD: ${{ secrets.DISCORD_WEBHOOK_URL_LONG_PROD }}
+        DISCORD_WEBHOOK_URL_SHORT_PROD: ${{ secrets.DISCORD_WEBHOOK_URL_SHORT_PROD }}
+        DISCORD_WEBHOOK_URL_WARNING_PROD: ${{ secrets.DISCORD_WEBHOOK_URL_WARNING_PROD }}
+        DISCORD_WEBHOOK_URL_PERFORMANCE_PROD: ${{ secrets.DISCORD_WEBHOOK_URL_PERFORMANCE_PROD }}
+        DISCORD_WEBHOOK_URL_SAKATA_PROD: ${{ secrets.DISCORD_WEBHOOK_URL_SAKATA_PROD }}
+        DISCORD_WEBHOOK_URL_BACKTEST_TEST: ${{ secrets.DISCORD_WEBHOOK_URL_BACKTEST_TEST }}
+        DISCORD_WEBHOOK_URL_BACKTEST_PROD: ${{ secrets.DISCORD_WEBHOOK_URL_BACKTEST_PROD }}
+      run: python poster.py
+
+    - name: Record posted date
+      if: steps.check.outputs.should_post == 'true'
+      run: |
+        git config user.name "kurosuke-bot"
+        git config user.email "kurosuke-bot@users.noreply.github.com"
+        mkdir -p data
+        echo "${{ steps.check.outputs.today_jst }}" > data/_last_posted_date.txt
+        git add data/_last_posted_date.txt
+        if git diff --cached --quiet; then
+          echo "変更なしのためコミットをスキップします"
+        else
+          git commit -m "chore: record Discord posting for ${{ steps.check.outputs.today_jst }} (watcher)"
+          git push
+        fi
+
+    - name: Skipped notification
+      if: steps.check.outputs.should_post != 'true'
+      run: echo "ℹ️ 今回は投稿条件を満たさなかったためスキップしました（詳細は上のeligibilityログ参照）"
+
+    - name: Success notification
+      if: success() && steps.check.outputs.should_post == 'true'
+      run: echo "✅ Kurosuke posting (watcher) completed successfully at $(date)"
+
+    - name: Failure notification
+      if: failure()
+      run: echo "❌ Kurosuke posting (watcher) failed at $(date)"
