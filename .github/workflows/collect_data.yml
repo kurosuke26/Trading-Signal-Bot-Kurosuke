@@ -1,4 +1,3 @@
-$yamlContent = @'
 name: Kurosuke Data Collection
 
 on:
@@ -108,6 +107,3 @@ jobs:
     - name: Failure notification
       if: failure()
       run: echo "❌ Kurosuke data collection failed at $(date)"
-'@
-[System.IO.File]::WriteAllText("$PWD\.github\workflows\collect_data.yml", $yamlContent, [System.Text.UTF8Encoding]::new($false))
-Write-Host "書き込み完了"
