@@ -71,7 +71,33 @@ jobs:
           echo "変更なし（データは前回と同一）のためコミットをスキップします"
         else
           git commit -m "chore: update daily scan data ($(date -u +'%Y-%m-%d %H:%M UTC'))"
-          git push
+
+          # 【2026-08-29追加】このジョブはcheckoutしてから収集完了まで数時間かかるため、
+          # その間にpost_signals.yml／watch_and_post.yml側の投稿済みマーカー
+          # （data/_last_posted_date.txt）のpush等でmainが先に進んでいると、
+          # 単純なgit pushは「fetch first」で拒否されてしまう（2026-08-29実際に発生し、
+          # その回の収集データがGitHub側に反映されないまま失敗した）。
+          # 触っているファイルが競合先と重ならない限りrebaseは機械的に成功するはずなので、
+          # 拒否された場合はfetch→rebaseしてから再試行する（最大5回、間隔を空けながら）。
+          max_attempts=5
+          attempt=1
+          until git push; do
+            if [ "$attempt" -ge "$max_attempts" ]; then
+              echo "[collect] push が${max_attempts}回失敗しました。競合を解消できないため断念します"
+              exit 1
+            fi
+            wait_seconds=$((10 * attempt))
+            echo "[collect] push が拒否されました（試行${attempt}/${max_attempts}）。${wait_seconds}秒待ってrebaseの上、再試行します"
+            sleep "$wait_seconds"
+            git fetch origin main
+            if ! git rebase origin/main; then
+              echo "[collect] rebase中にコンフリクトが発生しました。自動解決できないため中断します"
+              git rebase --abort
+              exit 1
+            fi
+            attempt=$((attempt + 1))
+          done
+          echo "[collect] push成功（試行${attempt}回目）"
         fi
 
     - name: Success notification
