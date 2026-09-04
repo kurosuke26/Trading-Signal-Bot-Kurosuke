@@ -493,6 +493,28 @@ def collect():
     print(f"\n--- ファンダメンタルズ取得（ペーシングあり、目標配分 {fund_window:.1f}分） ---")
     fundamentals, fund_failed = fetch_fundamentals(tickers, window_minutes=fund_window)
 
+    # 【2026-09-04】従来はyfinanceのinfo['longName']（英語社名）で'name'を常に
+    # 上書きしていたため、universe.py がJPXの銘柄一覧から取得済みの日本語社名
+    # （meta_df の'name'列）が使われず捨てられていた。ここでmeta_df の日本語社名が
+    # あれば優先的に採用し、取得できていない銘柄のみyfinanceの英語名のまま残す。
+    if meta_df is not None:
+        jp_name_by_ticker = {
+            row['ticker']: str(row['name']).strip()
+            for row in meta_df.to_dict('records')
+            # meta_df由来の欠損値はNoneではなくpandasのNaN(float)で来るため、
+            # 単純なtruthy判定だと文字列"nan"がそのまま社名として採用されてしまう。
+            # pd.notna()で明示的に弾く。
+            if pd.notna(row.get('name')) and str(row['name']).strip()
+        }
+        overridden = 0
+        for ticker, fund in fundamentals.items():
+            jp_name = jp_name_by_ticker.get(ticker)
+            if jp_name:
+                fund['name'] = jp_name
+                overridden += 1
+        print(f"[universe] 日本語社名を{overridden}/{len(fundamentals)}銘柄に反映"
+              f"（残りはJPX一覧に社名が無くyfinanceの英語名のまま）")
+
     ok_tickers = list(fundamentals.keys())
     hist_window = scaled_window_minutes(HISTORY_WINDOW_MINUTES, len(ok_tickers))
     print(f"\n--- 株価履歴取得（テクニカル・酒田五法用、ペーシングあり、目標配分 {hist_window:.1f}分） ---")
