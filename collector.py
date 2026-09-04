@@ -25,26 +25,54 @@ collector.py — データ収集・判定バッチ（2:00〜6:00 JST頃に実行
 デメリットは実質的に生じない。
 
 【ペーシングの考え方】
-一気に全銘柄を並列で叩くのではなく、FUNDAMENTALS_WINDOW_MINUTES /
-HISTORY_WINDOW_MINUTES で指定した時間（既定：150分 + 70分 ＝ 220分、
-2:00開始なら5:40頃に終わる想定）に均等に引き延ばしながら取得する
-（util.pace_to_target）。これとは別に、想定外に遅れた場合の非常停止ライン
-として TIME_BUDGET_MINUTES（既定230分）を設けており、超過分は打ち切って
-そこまでの結果を保存する。
+【2026-09-04変更】ファンダメンタルズ取得（PER/PBR/配当利回り等）は、1銘柄ずつ
+順番に取得し、間にFETCH_DELAY_MIN/MAX_SECONDS（既定1.5〜2.5秒）のランダムな
+待機を挟む方式にした。3,900銘柄・平均2秒/銘柄なら理論値で約130分。以前の
+「30銘柄を4並列で取得→チャンクごとにまとめてsleep」という方式は、チャンクの
+境目でバースト的なアクセスになりやすく、ランダムな間隔で1件ずつ問い合わせる
+方が人間の操作に近く、機械的な連続アクセスとして検知されにくいと考えられる
+（yfinanceコミュニティで一般的に推奨される方法）。ただしYahoo! Finance側は
+制限値を公表していないため、これが「絶対安全」という保証はない。
+株価履歴取得（fetch_price_histories）は引き続きHISTORY_WINDOW_MINUTES（既定65分）
+に均等に引き延ばす方式のまま（util.pace_to_target、複数銘柄をyf.download()で
+バッチ取得するため性質が異なる）。
+これとは別に、想定外に遅れた場合の非常停止ラインとして TIME_BUDGET_MINUTES
+（既定230分）を設けており、超過分は打ち切ってそこまでの結果を保存する。
+
+【2026-09-04追加：対象銘柄を絞ることによる時間短縮】
+上記のペーシング調整に加え、対象銘柄そのものを絞ることでも所要時間・
+リクエスト数を削減する。
+  ・時価総額フィルタ：日曜（FULL_UNIVERSE_WEEKDAY、既定=6）は全銘柄を対象に
+    取得し、その結果から時価総額の下位MARKETCAP_EXCLUDE_BOTTOM_PCT%（既定25%）
+    と上位MARKETCAP_EXCLUDE_TOP_PCT%（既定10%）を除外リストとして
+    data/marketcap_exclusion.json に保存する。月〜土曜はこのリストを使って
+    対象銘柄を先に絞り込む（＝中間65%のみを対象にする）。時価総額は取得済み
+    fundamentals情報の一部（marketCap）であり、これを取るための追加リクエストは
+    発生しない。除外は「前回の日曜時点の時価総額」に基づく1週間遅れの判定である点、
+    上位10%除外は大型・高配当の安定株を意図せず除くトレードオフがある点に注意。
+  ・株価フィルタ：1株あたりの現在値がMAX_SHARE_PRICE（既定20,000円）以上の
+    銘柄は、値がさ株で個人が買いにくいという実務上の理由から除外する。
+    時価総額フィルタと違い、当日の取得結果からその場で判定できるため
+    翌週を待たずこの実行から即座に反映される。
+  ・いずれの除外リストも読み込みに失敗した場合（未作成・壊れている）は
+    安全側に倒して「除外なし＝全銘柄を対象」にフォールバックする。
 
 【正直な注意点】
 このスクリプトを開発したサンドボックス環境はネットワークが制限されており、
 Yahoo! Finance にも JPX にも直接アクセスできなかったため、実データに対して
 通しで動作確認ができていません。必ずテスト用サーバー・MAX_TICKERSを絞った状態
 で一度動かし、ログとdata/latest_scan.jsonの中身を確認してください。
+特に2026-09-04のペーシング変更は「Yahoo側の制限値が非公開」という前提の上での
+経験的な調整のため、MAX_TICKERSを絞った実行で失敗件数（429エラー等）が
+増えていないかを必ず確認すること。
 """
 
-import concurrent.futures
 import json
 import os
+import random
 import sys
 import time
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 
 import pandas as pd
 import yfinance as yf
@@ -66,22 +94,45 @@ HISTORY_PERIOD = os.getenv('HISTORY_PERIOD') or '9mo'         # MA75/MACDに必�
 # 非常停止ライン（想定外に処理が遅れた場合、ここで強制的に打ち切る）
 TIME_BUDGET_MINUTES = env_float('TIME_BUDGET_MINUTES', 230)
 
-# 意図的にゆっくり進めるためのペーシング目標時間（合計が概ねTIME_BUDGET_MINUTES以下になるように）
-# ※ これは「全銘柄（約3900銘柄）を対象にした本番実行」を想定した時間。MAX_TICKERSで
-#   件数を絞ったテスト実行では、下の scaled_window_minutes() で対象銘柄数に比例して
-#   自動的に短縮する（さもないと50銘柄のテストでも数時間かかってしまうため）。
-FUNDAMENTALS_WINDOW_MINUTES = env_float('FUNDAMENTALS_WINDOW_MINUTES', 150)
+# 【2026-09-04変更】ファンダメンタルズ取得（fetch_fundamentals）は「チャンク単位で
+# まとめて待機」する方式から「1銘柄ずつ、ランダムな間隔で待機」する方式に変更した。
+# 詳細はfetch_fundamentals()のdocstring参照。FETCH_DELAY_MIN/MAX_SECONDSがその間隔。
+FETCH_DELAY_MIN_SECONDS = env_float('FETCH_DELAY_MIN_SECONDS', 1.5)
+FETCH_DELAY_MAX_SECONDS = env_float('FETCH_DELAY_MAX_SECONDS', 2.5)
+PROGRESS_LOG_INTERVAL = env_int('PROGRESS_LOG_INTERVAL', 100)  # 何銘柄ごとに進捗ログを出すか
+
+# 株価履歴（fetch_price_histories）は引き続き「チャンク単位でまとめて待機」方式のまま
+# （yf.download()で複数銘柄をバッチ取得するため、fetch_fundamentalsとは性質が異なる）。
 HISTORY_WINDOW_MINUTES = env_float('HISTORY_WINDOW_MINUTES', 65)
 
 # 上のペーシング時間が「本番実行」として想定している銘柄数の目安（東証全体・約3900銘柄）。
 # テスト実行などで対象銘柄数がこれより少ない場合、ペーシング時間を比例配分で短縮する。
 REFERENCE_UNIVERSE_SIZE = env_int('REFERENCE_UNIVERSE_SIZE', 3900)
 
-FETCH_WORKERS = env_int('FETCH_WORKERS', 4)                   # 同時並列数（控えめに）
 HISTORY_CHUNK_SIZE = env_int('HISTORY_CHUNK_SIZE', 100)
-INFO_CHUNK_SIZE = env_int('INFO_CHUNK_SIZE', 30)
 TOP_NEUTRAL_KEEP = env_int('TOP_NEUTRAL_KEEP', 20)             # ニュートラルのうち詳細を残す上位件数
 OUTPUT_PATH = os.getenv('SCAN_OUTPUT_PATH') or 'data/latest_scan.json'
+
+# 【2026-09-04追加】時価総額の上下極端な銘柄を除外（GitHub Actions実行時間・リクエスト数
+# 削減のため）。下位MARKETCAP_EXCLUDE_BOTTOM_PCT%（小型・薄商い銘柄）と、
+# 上位MARKETCAP_EXCLUDE_TOP_PCT%（超大型株、競合が多く情報が出尽くしている領域）の
+# 両方を除外し、中間層だけを対象にする。
+# 除外リストは「全銘柄を対象にした実行」の結果からのみ更新する（そうでないと、既に絞られた
+# 母集団の中だけでパーセンタイルを計算することになり、ランキングが歪む）。
+# FULL_UNIVERSE_WEEKDAYの曜日（Python の datetime.weekday() 基準：0=月〜6=日、既定6=日曜）
+# だけは除外リストを使わず全銘柄を対象にし、そこで得た時価総額でリストを更新する。
+# 初回（除外リストがまだ存在しない場合）も安全側に倒して全銘柄を対象にする。
+MARKETCAP_EXCLUSION_PATH = os.getenv('MARKETCAP_EXCLUSION_PATH') or 'data/marketcap_exclusion.json'
+MARKETCAP_EXCLUDE_BOTTOM_PCT = env_float('MARKETCAP_EXCLUDE_BOTTOM_PCT', 25.0)  # 下位何%を除外するか
+MARKETCAP_EXCLUDE_TOP_PCT = env_float('MARKETCAP_EXCLUDE_TOP_PCT', 10.0)       # 上位何%を除外するか
+FULL_UNIVERSE_WEEKDAY = env_int('FULL_UNIVERSE_WEEKDAY', 6)  # 6=日曜（datetime.weekday()基準）
+
+# 【2026-09-04追加】1株あたり株価が高すぎる銘柄の除外（買いにくい・値がさ株を除く実務的な
+# フィルタ）。こちらは時価総額と違い、当日の取得結果からその場で判定できるため、
+# 除外リストを介さず毎晩即座に反映される。
+MAX_SHARE_PRICE = env_float('MAX_SHARE_PRICE', 20000.0)
+
+JST = timezone(timedelta(hours=9))
 
 _START_TIME = time.time()
 
@@ -148,15 +199,89 @@ def get_eps_trend(stock):
 
 
 # ---------------------------------------------------------------------------
+# 時価総額による除外リスト（GitHub Actions実行時間・リクエスト数削減のため）
+# ---------------------------------------------------------------------------
+def is_full_universe_day(now=None):
+    """今日がFULL_UNIVERSE_WEEKDAY（既定：日曜）かどうかをJST基準で判定する。"""
+    now = (now or datetime.now(timezone.utc)).astimezone(JST)
+    return now.weekday() == FULL_UNIVERSE_WEEKDAY
+
+
+def load_marketcap_exclusion():
+    """除外リストを読み込む。存在しない・壊れている場合は空集合を返す（＝除外なし＝安全側）。"""
+    if not os.path.exists(MARKETCAP_EXCLUSION_PATH):
+        return set()
+    try:
+        with open(MARKETCAP_EXCLUSION_PATH, encoding='utf-8') as f:
+            data = json.load(f)
+        return set(data.get('excluded_tickers', []))
+    except Exception as e:
+        print(f'[marketcap] 除外リストの読み込みに失敗したため、除外なしで続行します: {e}')
+        return set()
+
+
+def compute_and_save_marketcap_exclusion(fundamentals):
+    """
+    全銘柄を対象にした実行（既定：日曜）の結果から、時価総額の下位
+    MARKETCAP_EXCLUDE_BOTTOM_PCT%・上位MARKETCAP_EXCLUDE_TOP_PCT%に該当する銘柄を
+    除外リストとして保存する。次回以降の非全銘柄実行（月〜土想定）は、このリストを
+    使って対象銘柄を先に絞り込む。
+    """
+    caps = [(t, f.get('market_cap')) for t, f in fundamentals.items() if f.get('market_cap')]
+    if len(caps) < 10:  # サンプルが少なすぎる場合は信頼できないため更新しない（テスト実行等）
+        print(f'[marketcap] 時価総額が取得できた銘柄が{len(caps)}件と少なすぎるため、除外リストを更新しません')
+        return
+
+    caps.sort(key=lambda x: x[1])
+    n = len(caps)
+    bottom_cut = int(n * MARKETCAP_EXCLUDE_BOTTOM_PCT / 100)
+    top_cut = int(n * MARKETCAP_EXCLUDE_TOP_PCT / 100)
+    bottom_tickers = [t for t, _ in caps[:bottom_cut]]
+    top_tickers = [t for t, _ in caps[n - top_cut:]] if top_cut > 0 else []
+    excluded = bottom_tickers + top_tickers
+
+    out = {
+        'computed_at_utc': datetime.now(timezone.utc).isoformat(),
+        'universe_size': n,
+        'exclude_bottom_pct': MARKETCAP_EXCLUDE_BOTTOM_PCT,
+        'exclude_top_pct': MARKETCAP_EXCLUDE_TOP_PCT,
+        'excluded_count': len(excluded),
+        'excluded_tickers': excluded,
+    }
+    out_dir = os.path.dirname(MARKETCAP_EXCLUSION_PATH)
+    if out_dir:
+        os.makedirs(out_dir, exist_ok=True)
+    tmp_path = MARKETCAP_EXCLUSION_PATH + '.tmp'
+    with open(tmp_path, 'w', encoding='utf-8') as f:
+        json.dump(out, f, ensure_ascii=False, indent=2)
+    os.replace(tmp_path, MARKETCAP_EXCLUSION_PATH)
+    print(f'[marketcap] 除外リストを更新しました：{len(excluded)}/{n}銘柄を除外'
+          f'（下位{MARKETCAP_EXCLUDE_BOTTOM_PCT}% + 上位{MARKETCAP_EXCLUDE_TOP_PCT}%）')
+
+
+# ---------------------------------------------------------------------------
 # 銘柄ユニバース・株価履歴・ファンダメンタルズの取得
 # ---------------------------------------------------------------------------
 def resolve_universe():
     tickers, meta_df = get_all_tse_tickers()
     used_fallback = (meta_df is None and tickers == FALLBACK_TICKERS)
+
+    full_universe_today = is_full_universe_day()
+    if full_universe_today:
+        print('[marketcap] 本日は全銘柄対象日のため、除外リストを使わず時価総額ランキングを更新します')
+    else:
+        excluded = load_marketcap_exclusion()
+        if excluded:
+            before = len(tickers)
+            tickers = [t for t in tickers if t not in excluded]
+            print(f'[marketcap] 時価総額の除外リストにより対象銘柄を{before}→{len(tickers)}件に絞り込みました')
+        else:
+            print('[marketcap] 除外リストが未作成のため、本日は全銘柄を対象にします')
+
     if MAX_TICKERS and MAX_TICKERS > 0 and len(tickers) > MAX_TICKERS:
         print(f'[universe] MAX_TICKERS={MAX_TICKERS} が設定されているため先頭{MAX_TICKERS}銘柄に絞り込みます（テスト用）')
         tickers = tickers[:MAX_TICKERS]
-    return tickers, meta_df, used_fallback
+    return tickers, meta_df, used_fallback, full_universe_today
 
 
 def fetch_price_histories(tickers, period=HISTORY_PERIOD, chunk_size=HISTORY_CHUNK_SIZE,
@@ -240,6 +365,9 @@ def _fetch_one_fundamental(ticker, max_retries=2):
                 'per': safe_num(info.get('trailingPE', 0)) or 0,
                 'growth_raw': safe_num(info.get('earningsQuarterlyGrowth', None)),
                 'sector': info.get('sector'),
+                # 【2026-09-04追加】時価総額下位銘柄の除外判定に使う。.info呼び出しに
+                # 元々含まれているフィールドなので、追加のリクエストは発生しない。
+                'market_cap': safe_num(info.get('marketCap')),
             }, None
         except Exception as e:
             if attempt == max_retries - 1:
@@ -248,37 +376,50 @@ def _fetch_one_fundamental(ticker, max_retries=2):
     return ticker, None, '不明なエラー'
 
 
-def fetch_fundamentals(tickers, workers=FETCH_WORKERS, chunk_size=INFO_CHUNK_SIZE,
-                        window_minutes=FUNDAMENTALS_WINDOW_MINUTES):
-    """配当利回り・PER・PBR等をticker.info経由で取得する（並列・チャンク処理・ペーシングあり）。"""
+def fetch_fundamentals(tickers, delay_min=FETCH_DELAY_MIN_SECONDS, delay_max=FETCH_DELAY_MAX_SECONDS,
+                        log_interval=PROGRESS_LOG_INTERVAL):
+    """
+    配当利回り・PER・PBR等をticker.info経由で取得する。
+
+    【2026-09-04変更の背景】以前は「30銘柄を4並列で取得→チャンク完了ごとに
+    まとめてsleep」という設計だった。これはチャンクの境目でバースト的な
+    アクセス（短時間に複数リクエストが集中）が発生しやすく、Yahoo! Finance側の
+    レート制限（非公式・仕様非公開）に対してはむしろ不利な可能性がある。
+
+    そこで「1銘柄ずつ順番に取得し、間に1.5〜2.5秒程度のランダムな待機を挟む」
+    方式に変更した。一定間隔ではなくランダムにばらつかせることで、人間が
+    1件ずつ確認しているようなアクセスパターンに近づけ、機械的な連続アクセスとして
+    検知されにくくすることを狙っている（yfinanceコミュニティで一般的に推奨される
+    「リクエスト間に1〜3秒のランダムな待機を入れる」という方法に準拠）。
+
+    3,900銘柄・平均2秒/銘柄なら理論値で約130分（実際の通信時間も乗るため、
+    実測ではこれより長くなる）。この理論値には根拠となる「絶対安全な数値」は
+    存在しない（Yahoo側が制限値を公表していないため）ので、必ずMAX_TICKERSを
+    絞った小規模テストで失敗件数を確認してから本番投入すること。
+    """
     fundamentals = {}
     failed = []
-    total_chunks = (len(tickers) + chunk_size - 1) // chunk_size
-    phase_start = time.time()
-    target_seconds = window_minutes * 60
+    total = len(tickers)
 
-    for ci in range(total_chunks):
+    for i, ticker in enumerate(tickers):
         if _over_budget():
-            remaining = tickers[ci * chunk_size:]
+            remaining = tickers[i:]
             print(f'[fundamentals] 時間予算（{TIME_BUDGET_MINUTES}分）超過のため残り{len(remaining)}銘柄をスキップします')
             failed.extend([(t, '時間予算超過によりスキップ') for t in remaining])
             break
 
-        chunk = tickers[ci * chunk_size:(ci + 1) * chunk_size]
-        with concurrent.futures.ThreadPoolExecutor(max_workers=workers) as ex:
-            futures = [ex.submit(_fetch_one_fundamental, t) for t in chunk]
-            for fut in concurrent.futures.as_completed(futures):
-                ticker, data, err = fut.result()
-                if data is not None:
-                    fundamentals[ticker] = data
-                else:
-                    failed.append((ticker, err or '取得失敗'))
+        _, data, err = _fetch_one_fundamental(ticker)
+        if data is not None:
+            fundamentals[ticker] = data
+        else:
+            failed.append((ticker, err or '取得失敗'))
 
-        done = min((ci + 1) * chunk_size, len(tickers))
-        print(f'[fundamentals] 進捗 {done}/{len(tickers)}（成功{len(fundamentals)}／失敗{len(failed)}）'
-              f' 経過時間 {_elapsed_minutes():.1f}分')
+        if (i + 1) % log_interval == 0 or (i + 1) == total:
+            print(f'[fundamentals] 進捗 {i + 1}/{total}（成功{len(fundamentals)}／失敗{len(failed)}）'
+                  f' 経過時間 {_elapsed_minutes():.1f}分')
 
-        pace_to_target(ci, total_chunks, phase_start, target_seconds)
+        if i < total - 1:  # 最後の1件の後は待つ必要が無い
+            time.sleep(random.uniform(delay_min, delay_max))
 
     return fundamentals, failed
 
@@ -345,6 +486,7 @@ def analyze_ticker(ticker, fund, price_df):
         'ticker': ticker,
         'name': fund.get('name'),
         'current_price': fund.get('current_price'),
+        'market_cap': fund.get('market_cap'),
         'dividend_yield': div,
         'per_pbr': per_pbr,
         'super_cheap': super_cheap,
@@ -478,20 +620,23 @@ def collect():
     print("Kurosuke データ収集バッチ（collector.py）")
     print(f"開始時刻（UTC）：{started_at_utc.isoformat()}")
     print(f"非常停止ライン：{TIME_BUDGET_MINUTES}分／"
-          f"ファンダメンタルズ目標配分：{FUNDAMENTALS_WINDOW_MINUTES}分／"
           f"株価履歴目標配分：{HISTORY_WINDOW_MINUTES}分")
     print("=" * 80)
 
-    tickers, meta_df, used_fallback = resolve_universe()
+    tickers, meta_df, used_fallback, full_universe_today = resolve_universe()
     print(f"対象銘柄数：{len(tickers)}" + ("（フォールバック銘柄）" if used_fallback else ""))
 
     if not tickers:
         print("対象銘柄が0件のため処理を中断します")
         return False
 
-    fund_window = scaled_window_minutes(FUNDAMENTALS_WINDOW_MINUTES, len(tickers))
-    print(f"\n--- ファンダメンタルズ取得（ペーシングあり、目標配分 {fund_window:.1f}分） ---")
-    fundamentals, fund_failed = fetch_fundamentals(tickers, window_minutes=fund_window)
+    # 【2026-09-04変更】ファンダメンタルズは銘柄数に応じたペーシング配分（旧scaled_window_minutes）
+    # ではなく、1銘柄あたり固定のランダム待機（FETCH_DELAY_MIN/MAX_SECONDS）に変更したため、
+    # ここでの所要時間見積もりは概算（平均待機時間×銘柄数）で表示する。
+    fund_estimate_minutes = len(tickers) * (FETCH_DELAY_MIN_SECONDS + FETCH_DELAY_MAX_SECONDS) / 2 / 60
+    print(f"\n--- ファンダメンタルズ取得（1銘柄ずつ{FETCH_DELAY_MIN_SECONDS}〜{FETCH_DELAY_MAX_SECONDS}秒のランダム待機、"
+          f"所要時間の目安 約{fund_estimate_minutes:.1f}分） ---")
+    fundamentals, fund_failed = fetch_fundamentals(tickers)
 
     # 【2026-09-04】従来はyfinanceのinfo['longName']（英語社名）で'name'を常に
     # 上書きしていたため、universe.py がJPXの銘柄一覧から取得済みの日本語社名
@@ -514,6 +659,24 @@ def collect():
                 overridden += 1
         print(f"[universe] 日本語社名を{overridden}/{len(fundamentals)}銘柄に反映"
               f"（残りはJPX一覧に社名が無くyfinanceの英語名のまま）")
+
+    # 【2026-09-04追加】1株あたり株価が高すぎる銘柄を除外する（買いにくい値がさ株を除く
+    # 実務的フィルタ。時価総額の除外と違い、当日の取得結果からその場で判定できるため
+    # 即座に反映される＝この実行のok_tickers/後続処理から即座に除かれる）。
+    high_price_tickers = [
+        t for t, f in fundamentals.items()
+        if f.get('current_price') and f['current_price'] >= MAX_SHARE_PRICE
+    ]
+    for t in high_price_tickers:
+        fundamentals.pop(t)
+        fund_failed.append((t, f'株価が{MAX_SHARE_PRICE:,.0f}円以上のため除外'))
+    if high_price_tickers:
+        print(f"[filter] 1株{MAX_SHARE_PRICE:,.0f}円以上のため{len(high_price_tickers)}銘柄を除外しました")
+
+    # 【2026-09-04追加】全銘柄対象日（既定：日曜）なら、ここで得た時価総額を使って
+    # 除外リストを更新する（次回以降の非全銘柄実行で使われる）。
+    if full_universe_today:
+        compute_and_save_marketcap_exclusion(fundamentals)
 
     ok_tickers = list(fundamentals.keys())
     hist_window = scaled_window_minutes(HISTORY_WINDOW_MINUTES, len(ok_tickers))
