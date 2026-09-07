@@ -1,0 +1,81 @@
+name: Kurosuke Sector Stats
+
+on:
+  schedule:
+    # 03:00 UTC（土曜）= 12:00 JST（土曜）。collect_data.yml（日〜金曜の夜）とは
+    # 重ならない曜日を選び、業種平均（PER/PBR/ROE）は日次で動かす必要が無いため
+    # 週1回の更新にしている（設計書 docs/2026-09-07-investor-lens-phase2-design.md §6）。
+    - cron: '0 3 * * 6'
+  workflow_dispatch: {}
+
+permissions:
+  contents: write  # data/sector_stats.json をリポジトリにコミットするために必要
+
+jobs:
+  compute:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+      # data/jquants_cache/ はリポジトリにコミット済みのものをそのままcheckoutで取得する
+      # （追加のバックフィル実行はしない。キャッシュの鮮度についてはREADME/設計書の
+      # 既知の課題を参照）。
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+
+    - name: Compute sector stats
+      run: python compute_sector_stats.py
+
+    - name: Commit and push sector stats
+      run: |
+        if [ ! -f data/sector_stats.json ]; then
+          echo "data/sector_stats.json が生成されていないため、コミットをスキップします"
+          exit 0
+        fi
+        git config user.name "kurosuke-bot"
+        git config user.email "kurosuke-bot@users.noreply.github.com"
+        git add data/sector_stats.json
+        if git diff --cached --quiet; then
+          echo "変更なし（業種平均は前回と同一）のためコミットをスキップします"
+        else
+          git commit -m "chore: update sector stats ($(date -u +'%Y-%m-%d %H:%M UTC'))"
+
+          # collect_data.ymlと同じ理由（他ワークフローのpushとの衝突回避）でリトライする
+          max_attempts=5
+          attempt=1
+          until git push; do
+            if [ "$attempt" -ge "$max_attempts" ]; then
+              echo "[compute_sector_stats] push が${max_attempts}回失敗しました。断念します"
+              exit 1
+            fi
+            wait_seconds=$((10 * attempt))
+            echo "[compute_sector_stats] push が拒否されました（試行${attempt}/${max_attempts}）。${wait_seconds}秒待ってrebaseの上、再試行します"
+            sleep "$wait_seconds"
+            git fetch origin main
+            if ! git rebase origin/main; then
+              echo "[compute_sector_stats] rebase中にコンフリクトが発生しました。自動解決できないため中断します"
+              git rebase --abort
+              exit 1
+            fi
+            attempt=$((attempt + 1))
+          done
+          echo "[compute_sector_stats] push成功（試行${attempt}回目）"
+        fi
+
+    - name: Success notification
+      if: success()
+      run: echo "✅ Kurosuke sector stats computed successfully at $(date)"
+
+    - name: Failure notification
+      if: failure()
+      run: echo "❌ Kurosuke sector stats computation failed at $(date)"
