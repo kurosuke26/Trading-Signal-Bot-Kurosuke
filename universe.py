@@ -4,22 +4,25 @@
 universe.py — 東証全銘柄（プライム・スタンダード・グロースの内国株式）のティッカー一覧取得（Phase 3）
 
 日本取引所グループ（JPX）が毎月更新して公開している「東証上場銘柄一覧」
-（https://www.jpx.co.jp/markets/statistics-equities/misc/01.html 内の data_j.xls）
+（https://www.jpx.co.jp/markets/statistics-equities/misc/01.html 内の data_j.xls(x)）
 を実行時にダウンロードし、市場区分でフィルタしてyfinance用ティッカー（例: 7203.T）の
 一覧を作る。
 
-【このセッションでの制約について】
-開発を行ったサンドボックス環境はネットワークが制限されており、jpx.co.jp や
-Yahoo Finance に直接アクセスできないため、この関数自体を実データに対して
-実行して動作確認することができていない。列名（コード／市場・商品区分）や
-区分値（「プライム（内国株式）」等）は公開されている解説記事を基に実装しているが、
-GitHub Actions上での初回実行時に必ずログ（取得件数・区分ごとの内訳）を確認すること。
+【2026-09-07：実データで確認・修正】
+実際にJPXの一覧ページを取得したところ、配布ファイルが `data_j.xls`（旧形式）から
+`data_j.xlsx`（新形式）に変わっていたことが判明した。以前の正規表現
+（`data_j\.xls"` で終端を要求）は `data_j.xlsx"` にマッチせず、一覧ページからの
+動的取得が常に失敗してハードコードのフォールバックURL（これも`.xls`のまま＝404）に
+落ちる状態になっていた。拡張子を `.xlsx?` に緩めて対応済み（`pd.read_excel`は
+拡張子ではなくファイル内容から自動でopenpyxl/xlrdを使い分けるため、URLの拡張子が
+どちらでも読み込み自体は問題ない）。
 
 【運用上の注意】
-- data_j.xls のURL（ファイル名部分のハッシュ）はJPXが月次更新のたびに変更するため、
+- data_j.xls(x) のURL（ファイル名部分のハッシュ）はJPXが月次更新のたびに変更するため、
   一覧ページのHTMLから最新のリンクを都度取得する。何らかの理由でHTML構造が変わり
-  リンクが取得できない場合は、フォールバックとして本ファイル作成時点のURLを使う
-  （こちらも数ヶ月で無効化される可能性がある）。
+  リンクが取得できない場合は、フォールバックとして本ファイル修正時点のURLを使う
+  （こちらも数ヶ月で無効化される可能性がある。またJPXが将来再び拡張子を変更した
+  場合は、この正規表現・フォールバックURLの見直しが必要）。
 - 対象は「プライム（内国株式）」「スタンダード（内国株式）」「グロース（内国株式）」の
   3区分のみ。ETF/ETN、REIT、PRO Market、外国株式、出資証券は対象外。
 - 約3,900銘柄を毎回スクレイピングするため、JPX側に過度な負荷をかけないよう
@@ -33,8 +36,9 @@ import pandas as pd
 import requests
 
 JPX_LIST_PAGE = 'https://www.jpx.co.jp/markets/statistics-equities/misc/01.html'
-# 2026年8月時点で確認できたURL。一覧ページからの動的取得が失敗した場合のみ使用。
-JPX_FALLBACK_XLS = 'https://www.jpx.co.jp/markets/statistics-equities/misc/tvdivq0000001vg2-att/data_j.xls'
+# 2026-09-07に実データで確認したURL（拡張子が.xlsxに変更されていた）。
+# 一覧ページからの動的取得が失敗した場合のみ使用。
+JPX_FALLBACK_XLS = 'https://www.jpx.co.jp/markets/statistics-equities/misc/tvdivq0000001vg2-att/data_j.xlsx'
 
 TARGET_MARKET_SEGMENTS = [
     'プライム（内国株式）',
@@ -48,12 +52,13 @@ FALLBACK_TICKERS = ['6758.T', '7203.T', '9984.T', '6861.T', '8306.T']
 
 
 def _resolve_xls_url(timeout=20):
-    """一覧ページのHTMLから最新のdata_j.xlsリンクを取得する。失敗時はフォールバックURL。"""
+    """一覧ページのHTMLから最新のdata_j.xls(x)リンクを取得する。失敗時はフォールバックURL。"""
     try:
         resp = requests.get(JPX_LIST_PAGE, timeout=timeout,
                              headers={'User-Agent': 'Mozilla/5.0 (KurosukeBot)'})
         resp.raise_for_status()
-        m = re.search(r'href="([^"]+data_j\.xls)"', resp.text)
+        # 【2026-09-07修正】JPXが配布形式を.xls→.xlsxに変更したため、両方にマッチするようにする
+        m = re.search(r'href="([^"]+data_j\.xlsx?)"', resp.text)
         if m:
             url = m.group(1)
             if url.startswith('/'):
@@ -66,18 +71,20 @@ def _resolve_xls_url(timeout=20):
 
 def fetch_jpx_listed_df(timeout=60):
     """
-    JPXのdata_j.xlsを取得してDataFrameで返す。
+    JPXのdata_j.xls(x)を取得してDataFrameで返す。
     列: 'コード', '銘柄名', '市場・商品区分', ... （JPX公開ファイルの原本の列構成のまま）
     取得・パース失敗時は例外を送出する（呼び出し側でフォールバック処理をすること）。
     """
     xls_url = _resolve_xls_url()
-    print(f'[universe] data_j.xls 取得元: {xls_url}')
+    print(f'[universe] data_j.xls(x) 取得元: {xls_url}')
 
     resp = requests.get(xls_url, timeout=timeout, headers={'User-Agent': 'Mozilla/5.0 (KurosukeBot)'})
     resp.raise_for_status()
 
     from io import BytesIO
-    # data_j.xls は旧形式(.xls)。読み込みには xlrd (>=2.0.1) が必要。
+    # pd.read_excel はURLの拡張子ではなくファイル内容（マジックバイト）から
+    # 自動でエンジンを選ぶため、.xls(xlrd)でも.xlsx(openpyxl)でも明示指定は不要
+    # （両パッケージともrequirements.txtに含まれている）。
     df = pd.read_excel(BytesIO(resp.content))
     return df
 
