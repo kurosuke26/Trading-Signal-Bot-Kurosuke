@@ -7,6 +7,12 @@ on:
     - cron: '0 23 * * 0'
   workflow_dispatch: {}
 
+# 【2026-09-07追加】このワークフローはリポジトリへの書き込みを行わないため、
+# 公開リポジトリ化に備えて明示的に読み取り専用にする（他ワークフローとの権限の
+# 非対称性を無くし、暗黙のデフォルト権限に頼らない）。
+permissions:
+  contents: read
+
 jobs:
   weekly_tips:
     runs-on: ubuntu-latest

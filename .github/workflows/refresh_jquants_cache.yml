@@ -2,24 +2,25 @@ name: Kurosuke J-Quants Cache Refresh
 
 on:
   schedule:
-    # 【2026-09-07変更】collect_data.yml自体が設計上230分×週6日≒月5,900分規模で
-    # 無料枠（非公開リポジトリ月2,000分）を単独で超えうる状態のため、この追加分は
-    # できる限り小さくする。火・金 06:00 UTC（15:00 JST）の週2回・1回30分予算に縮小
-    # （月間 約30分×2回×4.3週 ≒ 260分の追加見込み）。全銘柄（約3,900件）を一巡させる
-    # のに数ヶ月かかる計算になるが、新規上場銘柄は毎回最優先されるため実害は小さいと判断。
-    # 実際の残り予算はGitHubの Settings > Billing で確認の上、必要に応じて
-    # budget_minutes（workflow_dispatch）やこのcronを調整すること。
-    - cron: '0 6 * * 2,5'
+    # 【2026-09-07変更】このリポジトリを公開（public）化する前提に変更したため、
+    # GitHub Actions無料枠（標準ランナーはpublicリポジトリで無料・無制限）の制約が
+    # 無くなった。J-Quants Freeプラン側のレート制限（5回/分）はリポジトリの公開/非公開に
+    # 関係なく変わらないため、そちらを律速に「1ジョブでどこまで進められるか」を最大化する
+    # 方針にする。GitHub-hostedランナーは1ジョブ最大6時間（360分）のハード上限があるため、
+    # budget_minutes=300（実処理5時間）+ チェックアウト等のオーバーヘッド分を見て
+    # timeout-minutes=340に設定。毎日06:00 UTC（15:00 JST）実行、
+    # 全銘柄（約3,900件）を約5〜6日で一巡できる計算。
+    - cron: '0 6 * * *'
   workflow_dispatch:
     inputs:
       budget_minutes:
-        description: '1回の実行での処理時間の目安（分）'
+        description: '1回の実行での処理時間の目安（分）。GitHub-hostedランナーの1ジョブ上限（6時間）を超えないよう340分未満にすること'
         required: false
-        default: '30'
+        default: '300'
       stale_after_days:
-        description: 'この日数を超えて未更新の銘柄だけを更新対象にする'
+        description: 'この日数を超えて未更新の銘柄だけを更新対象にする（小さいほど「最も古いものから常に更新」に近づく）'
         required: false
-        default: '30'
+        default: '3'
 
 permissions:
   contents: write  # data/jquants_cache/ をリポジトリにコミットするために必要
@@ -27,7 +28,7 @@ permissions:
 jobs:
   refresh:
     runs-on: ubuntu-latest
-    timeout-minutes: 45
+    timeout-minutes: 340
 
     steps:
     - name: Checkout code
@@ -46,8 +47,8 @@ jobs:
     - name: Refresh J-Quants cache
       env:
         JQUANTS_API_KEY: ${{ secrets.JQUANTS_API_KEY }}
-        JQUANTS_REFRESH_BUDGET_MINUTES: ${{ github.event.inputs.budget_minutes || '30' }}
-        JQUANTS_REFRESH_STALE_AFTER_DAYS: ${{ github.event.inputs.stale_after_days || '30' }}
+        JQUANTS_REFRESH_BUDGET_MINUTES: ${{ github.event.inputs.budget_minutes || '300' }}
+        JQUANTS_REFRESH_STALE_AFTER_DAYS: ${{ github.event.inputs.stale_after_days || '3' }}
       run: python refresh_jquants_cache.py
 
     - name: Commit and push cache updates

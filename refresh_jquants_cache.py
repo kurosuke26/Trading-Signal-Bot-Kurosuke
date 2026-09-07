@@ -20,19 +20,20 @@ J-Quants Freeプランは5回/分（jquants_client.pyは安全マージンを見
   2. 既存銘柄のうち、最終更新（fins.jsonのmtime）が最も古いもの
 の順。処理しきれなかった分は次回実行時に続きから優先的に処理される。
 
-【2026-09-07追記：GitHub Actions無料枠への配慮】
-collect_data.yml自体が設計上230分×週6日≒月5,900分規模でGitHub Actions無料枠
-（非公開リポジトリ月2,000分）を単独で超えうるため、本バッチの既定値は小さめ
-（1回30分・週2回想定）にしてある。全銘柄を一巡させるのに数ヶ月かかる計算になるが、
-新規上場銘柄は毎回最優先されるため実害は小さいと判断した。実際に使える予算は
-GitHubのBilling画面で確認し、必要に応じて環境変数で調整すること。
+【2026-09-07追記：公開（public）リポジトリ前提でのチューニング】
+このリポジトリはpublicリポジトリとして運用する前提のため、GitHub Actions標準
+ランナーの利用は無料・無制限（GitHub公式ドキュメント確認済み）。したがって律速するのは
+J-Quants Freeプラン側のレート制限（5回/分）のみで、GitHub-hostedランナーの1ジョブ
+上限（6時間）いっぱいまで処理時間を確保するのが最も効率が良い。既定値は1回300分
+（実処理5時間）・日次実行で、全銘柄（約3,900件）を約5〜6日で一巡する計算。
 
 使い方:
     python refresh_jquants_cache.py
 環境変数:
-    JQUANTS_REFRESH_BUDGET_MINUTES（既定30）… 1回の実行での処理時間の目安
-    JQUANTS_REFRESH_STALE_AFTER_DAYS（既定30）… この日数を超えて更新されていない
-        銘柄だけを「更新対象」とみなす（鮮度内の銘柄まで毎回舐めて時間を浪費しないため）
+    JQUANTS_REFRESH_BUDGET_MINUTES（既定300）… 1回の実行での処理時間の目安
+        （GitHub Actionsから実行する場合、1ジョブ最大6時間=360分のハード上限に注意）
+    JQUANTS_REFRESH_STALE_AFTER_DAYS（既定3）… この日数を超えて更新されていない
+        銘柄だけを「更新対象」とみなす（値が小さいほど「常に最も古いものから更新」に近づく）
 """
 
 import os
@@ -41,8 +42,8 @@ import time
 
 from backfill_jquants import backfill_one, resolve_universe, resolve_free_plan_window, CACHE_DIR
 
-BUDGET_MINUTES = float(os.getenv('JQUANTS_REFRESH_BUDGET_MINUTES', '30'))
-STALE_AFTER_DAYS = float(os.getenv('JQUANTS_REFRESH_STALE_AFTER_DAYS', '30'))
+BUDGET_MINUTES = float(os.getenv('JQUANTS_REFRESH_BUDGET_MINUTES', '300'))
+STALE_AFTER_DAYS = float(os.getenv('JQUANTS_REFRESH_STALE_AFTER_DAYS', '3'))
 
 
 def _cache_age_days(ticker4):
