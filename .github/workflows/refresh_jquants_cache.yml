@@ -2,20 +2,24 @@ name: Kurosuke J-Quants Cache Refresh
 
 on:
   schedule:
-    # 06:00 UTC = 15:00 JST（毎日）。collect_data.yml（日〜金曜21:00 JST開始）・
-    # compute_sector_stats.yml（土曜12:00 JST）・weekly_tips.yml（月曜08:00 JST）と
-    # 重ならない時間帯を選んでいる。
-    - cron: '0 6 * * *'
+    # 【2026-09-07変更】collect_data.yml自体が設計上230分×週6日≒月5,900分規模で
+    # 無料枠（非公開リポジトリ月2,000分）を単独で超えうる状態のため、この追加分は
+    # できる限り小さくする。火・金 06:00 UTC（15:00 JST）の週2回・1回30分予算に縮小
+    # （月間 約30分×2回×4.3週 ≒ 260分の追加見込み）。全銘柄（約3,900件）を一巡させる
+    # のに数ヶ月かかる計算になるが、新規上場銘柄は毎回最優先されるため実害は小さいと判断。
+    # 実際の残り予算はGitHubの Settings > Billing で確認の上、必要に応じて
+    # budget_minutes（workflow_dispatch）やこのcronを調整すること。
+    - cron: '0 6 * * 2,5'
   workflow_dispatch:
     inputs:
       budget_minutes:
         description: '1回の実行での処理時間の目安（分）'
         required: false
-        default: '90'
+        default: '30'
       stale_after_days:
         description: 'この日数を超えて未更新の銘柄だけを更新対象にする'
         required: false
-        default: '7'
+        default: '30'
 
 permissions:
   contents: write  # data/jquants_cache/ をリポジトリにコミットするために必要
@@ -23,7 +27,7 @@ permissions:
 jobs:
   refresh:
     runs-on: ubuntu-latest
-    timeout-minutes: 120
+    timeout-minutes: 45
 
     steps:
     - name: Checkout code
@@ -42,8 +46,8 @@ jobs:
     - name: Refresh J-Quants cache
       env:
         JQUANTS_API_KEY: ${{ secrets.JQUANTS_API_KEY }}
-        JQUANTS_REFRESH_BUDGET_MINUTES: ${{ github.event.inputs.budget_minutes || '90' }}
-        JQUANTS_REFRESH_STALE_AFTER_DAYS: ${{ github.event.inputs.stale_after_days || '7' }}
+        JQUANTS_REFRESH_BUDGET_MINUTES: ${{ github.event.inputs.budget_minutes || '30' }}
+        JQUANTS_REFRESH_STALE_AFTER_DAYS: ${{ github.event.inputs.stale_after_days || '30' }}
       run: python refresh_jquants_cache.py
 
     - name: Commit and push cache updates

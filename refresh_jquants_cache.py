@@ -20,11 +20,18 @@ J-Quants Freeプランは5回/分（jquants_client.pyは安全マージンを見
   2. 既存銘柄のうち、最終更新（fins.jsonのmtime）が最も古いもの
 の順。処理しきれなかった分は次回実行時に続きから優先的に処理される。
 
+【2026-09-07追記：GitHub Actions無料枠への配慮】
+collect_data.yml自体が設計上230分×週6日≒月5,900分規模でGitHub Actions無料枠
+（非公開リポジトリ月2,000分）を単独で超えうるため、本バッチの既定値は小さめ
+（1回30分・週2回想定）にしてある。全銘柄を一巡させるのに数ヶ月かかる計算になるが、
+新規上場銘柄は毎回最優先されるため実害は小さいと判断した。実際に使える予算は
+GitHubのBilling画面で確認し、必要に応じて環境変数で調整すること。
+
 使い方:
     python refresh_jquants_cache.py
 環境変数:
-    JQUANTS_REFRESH_BUDGET_MINUTES（既定90）… 1回の実行での処理時間の目安
-    JQUANTS_REFRESH_STALE_AFTER_DAYS（既定7）… この日数を超えて更新されていない
+    JQUANTS_REFRESH_BUDGET_MINUTES（既定30）… 1回の実行での処理時間の目安
+    JQUANTS_REFRESH_STALE_AFTER_DAYS（既定30）… この日数を超えて更新されていない
         銘柄だけを「更新対象」とみなす（鮮度内の銘柄まで毎回舐めて時間を浪費しないため）
 """
 
@@ -34,8 +41,8 @@ import time
 
 from backfill_jquants import backfill_one, resolve_universe, resolve_free_plan_window, CACHE_DIR
 
-BUDGET_MINUTES = float(os.getenv('JQUANTS_REFRESH_BUDGET_MINUTES', '90'))
-STALE_AFTER_DAYS = float(os.getenv('JQUANTS_REFRESH_STALE_AFTER_DAYS', '7'))
+BUDGET_MINUTES = float(os.getenv('JQUANTS_REFRESH_BUDGET_MINUTES', '30'))
+STALE_AFTER_DAYS = float(os.getenv('JQUANTS_REFRESH_STALE_AFTER_DAYS', '30'))
 
 
 def _cache_age_days(ticker4):
