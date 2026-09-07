@@ -82,8 +82,20 @@ TOP_N_TRACKED = env_int('TOP_N_TRACKED', 10)  # 新規追跡対象とする「�
 # 1.5倍がプライマリ（Discordの「エントリー・ストップ目安」欄と一致させる正式な幅）。
 # 複数の倍率を扱うため、他の実行パラメータと違って環境変数では変更できない
 # （変更したい場合はこのリスト自体を編集する）。
+#
+# 【2026-09-06追加】J-Quantsバックテスト(backtest.py)でLONG/SHORTとも1.5/2.0/2.5倍を
+# 比較した結果、LONGは倍率を上げるほど勝率・期待値とも改善する一方、SHORTは2.0倍付近が
+# ピークで2.5倍にすると急激に悪化するという非対称な傾向が判明した。そこで、SHORTの
+# 最適値をピンポイントで特定するため1.5〜2.5の間を細かく刻み、LONGは改善傾向がどこで
+# 頭打ちになるか確認するため2.5より先も伸ばして、1回の再実行でまとめて比較できるよう
+# 候補を追加した。
+#
+# 【2026-09-07追加】上記の再実行で、SHORTは1.8倍でピーク（期待値+0.77%）を打ち
+# 2.7倍以降は期待値がマイナスに転落することが判明。一方LONGは3.5倍まで見ても
+# まだ期待値が伸び続けており頭打ちが確認できなかったため、真の最適値を探すべく
+# さらに広い倍率（4.0〜6.0）を追加する。
 ATR_MULTIPLIER = 1.5
-ATR_MULTIPLIER_VARIANTS = [1.5, 2.0, 2.5]
+ATR_MULTIPLIER_VARIANTS = [1.5, 1.8, 2.0, 2.2, 2.5, 2.7, 3.0, 3.5, 4.0, 4.5, 5.0, 6.0]
 
 
 def _variant_key(multiplier):
@@ -236,6 +248,10 @@ def open_new_positions(trade_log, results, today_str, top_n=TOP_N_TRACKED):
             'entry_date': today_str,
             'entry_price': round(entry_price, 2),
             'atr_at_entry': round(atr_value, 4) if atr_value else None,
+            # 【2026-09-07追加】ATR倍率の業種別最適化分析（backtest.py参照）用に、
+            # エントリー時点の業種コードを記録しておく。fundamental_snapshotが
+            # 無い（Phase2未対応データ）場合はNoneのまま。
+            'sector_code': (r.get('fundamental_snapshot') or {}).get('sector_code'),
             'status': 'open',  # プライマリ（ATR×1.5）が決済されるまで'open'
             'variants': variants,
         })
