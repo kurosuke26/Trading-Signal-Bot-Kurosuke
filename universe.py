@@ -87,7 +87,10 @@ def get_all_tse_tickers(market_segments=None, exclude_codes=None):
     プライム・スタンダード・グロースの内国株式ティッカー一覧（'XXXX.T'形式）を返す。
 
     戻り値: (tickers: list[str], meta_df: pandas.DataFrame or None)
-      meta_df は 'code', 'name', 'market' 列を持つ絞り込み後のDataFrame（銘柄名表示用）。
+      meta_df は 'code', 'name', 'market', 'sector_code', 'sector_name' 列を持つ
+      絞り込み後のDataFrame（銘柄名表示・セクターレンズ用）。33業種コード列が
+      見つからない場合、sector_code/sector_nameはNoneで埋められる（呼び出し側は
+      「データ不足」として扱うこと。列名の想定違いは初回実行時のログで確認する）。
       JPXからの取得に失敗した場合は (FALLBACK_TICKERS, None) を返し、標準エラー出力に警告を出す。
     """
     segments = market_segments or TARGET_MARKET_SEGMENTS
@@ -101,19 +104,30 @@ def get_all_tse_tickers(market_segments=None, exclude_codes=None):
     code_col = None
     market_col = None
     name_col = None
+    sector_code_col = None
+    sector_name_col = None
     for col in raw.columns:
         col_str = str(col)
-        if code_col is None and 'コード' in col_str:
+        if code_col is None and 'コード' in col_str and '業種' not in col_str:
             code_col = col
         if market_col is None and '市場' in col_str and '区分' in col_str:
             market_col = col
         if name_col is None and '銘柄名' in col_str:
             name_col = col
+        # 17業種コード/区分と区別するため「33」を含む列のみを対象にする
+        if sector_code_col is None and '33業種' in col_str and 'コード' in col_str:
+            sector_code_col = col
+        if sector_name_col is None and '33業種' in col_str and '区分' in col_str:
+            sector_name_col = col
 
     if code_col is None or market_col is None:
         print(f'[universe] 想定した列（コード／市場・商品区分）が見つかりません。列一覧: {list(raw.columns)}',
               file=sys.stderr)
         return list(FALLBACK_TICKERS), None
+
+    if sector_code_col is None or sector_name_col is None:
+        print(f'[universe] 33業種コード／33業種区分の列が見つかりません（セクターレンズは'
+              f'データ不足扱いになります）。列一覧: {list(raw.columns)}', file=sys.stderr)
 
     df = raw[raw[market_col].isin(segments)].copy()
     if df.empty:
@@ -132,8 +146,17 @@ def get_all_tse_tickers(market_segments=None, exclude_codes=None):
         df['name'] = None
     df = df.rename(columns={market_col: 'market'})
 
+    if sector_code_col is not None:
+        df['sector_code'] = df[sector_code_col].astype(str).str.strip()
+    else:
+        df['sector_code'] = None
+    if sector_name_col is not None:
+        df['sector_name'] = df[sector_name_col]
+    else:
+        df['sector_name'] = None
+
     tickers = df['ticker'].tolist()
     print(f'[universe] JPX銘柄一覧を取得: 対象{len(tickers)}銘柄 '
           f'(区分内訳: {df["market"].value_counts().to_dict()})')
 
-    return tickers, df[['code', 'name', 'market', 'ticker']].reset_index(drop=True)
+    return tickers, df[['code', 'name', 'market', 'sector_code', 'sector_name', 'ticker']].reset_index(drop=True)

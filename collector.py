@@ -81,6 +81,7 @@ from indicators import compute_technical_snapshot, technical_score
 from sakata import detect_all_patterns, sakata_score
 from scoring import composite_score
 from universe import get_all_tse_tickers, FALLBACK_TICKERS
+from fundamentals_jquants import build_fundamental_snapshot
 from util import env_int, env_float, json_default, pace_to_target, safe_num
 from tracking import (load_trade_log, save_trade_log, open_new_positions,
                        update_open_positions, compute_performance_stats)
@@ -482,6 +483,14 @@ def analyze_ticker(ticker, fund, price_df):
         good_timing = (tech_score_val or 0) >= 0.5 and not bearish_pattern_strong
         entry_timing = 'good' if good_timing else 'wait'
 
+    # 【Phase2追加】PER/PBR分離・ROE・自己資本比率・成長率などをJ-Quantsキャッシュから
+    # 算出する。追加のAPI呼び出しは発生しない（ローカルキャッシュ読み込みのみ）。
+    fundamental_snapshot = build_fundamental_snapshot(
+        ticker, fund.get('current_price'),
+        sector_code=fund.get('sector_code'), sector_name=fund.get('sector_name'),
+        dividend_yield=div,
+    )
+
     return {
         'ticker': ticker,
         'name': fund.get('name'),
@@ -493,6 +502,7 @@ def analyze_ticker(ticker, fund, price_df):
         'dividend_ok': dividend_ok,
         'per_pbr_ok': per_pbr_ok,
         'tech_snapshot': tech_snapshot,
+        'fundamental_snapshot': fundamental_snapshot,
         'tech_reasons': tech_reasons,
         'patterns': patterns,
         'sakata_reasons': sak_reasons,
@@ -659,6 +669,22 @@ def collect():
                 overridden += 1
         print(f"[universe] 日本語社名を{overridden}/{len(fundamentals)}銘柄に反映"
               f"（残りはJPX一覧に社名が無くyfinanceの英語名のまま）")
+
+        # 【Phase2追加】33業種コード／区分をmeta_dfから各fundに反映する。
+        # universe.py側の列名想定が外れている場合、sector_code列がmeta_dfに無い
+        # （全てNone）ため、ここでは単純にget()で拾い、無ければNoneのまま進める。
+        sector_by_ticker = {
+            row['ticker']: (row.get('sector_code'), row.get('sector_name'))
+            for row in meta_df.to_dict('records')
+        }
+        sector_matched = 0
+        for ticker, fund in fundamentals.items():
+            sector_code, sector_name = sector_by_ticker.get(ticker, (None, None))
+            if pd.notna(sector_code) and str(sector_code).strip() and str(sector_code) != 'None':
+                fund['sector_code'] = str(sector_code).strip()
+                fund['sector_name'] = sector_name if pd.notna(sector_name) else None
+                sector_matched += 1
+        print(f"[universe] 33業種コードを{sector_matched}/{len(fundamentals)}銘柄に反映")
 
     # 【2026-09-04追加】1株あたり株価が高すぎる銘柄を除外する（買いにくい値がさ株を除く
     # 実務的フィルタ。時価総額の除外と違い、当日の取得結果からその場で判定できるため
