@@ -485,10 +485,12 @@ def analyze_ticker(ticker, fund, price_df):
 
     # 【Phase2追加】PER/PBR分離・ROE・自己資本比率・成長率などをJ-Quantsキャッシュから
     # 算出する。追加のAPI呼び出しは発生しない（ローカルキャッシュ読み込みのみ）。
+    # 【2026-09-07追加】GROWTHシグナルのPSR算出にmarket_capが必要なため渡す
+    # （yfinance取得時に既にfund['market_cap']として保持済みのものを再利用、追加取得なし）。
     fundamental_snapshot = build_fundamental_snapshot(
         ticker, fund.get('current_price'),
         sector_code=fund.get('sector_code'), sector_name=fund.get('sector_name'),
-        dividend_yield=div,
+        dividend_yield=div, market_cap=fund.get('market_cap'),
     )
 
     return {

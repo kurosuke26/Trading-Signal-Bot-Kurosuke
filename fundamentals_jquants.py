@@ -118,15 +118,19 @@ def _eps_trend(records):
 
 
 def build_fundamental_snapshot(ticker, current_price, sector_code=None, sector_name=None,
-                                dividend_yield=None, cache_dir=None):
+                                dividend_yield=None, market_cap=None, cache_dir=None):
     """
     1銘柄分の`fundamental_snapshot`を組み立てる。J-Quantsキャッシュが無い／financial
     データが無い銘柄では、取得できた項目だけを埋めたdictを返す（全項目Noneでも可、
     呼び出し側のレンズ関数が個別に「データ不足」判定する設計のため例外は投げない）。
 
-    dividend_yieldは既存のyfinance経由の値（collector.pyのfund['dividend_yield']）を
+    dividend_yield・market_capは既存のyfinance経由の値（collector.pyのfund辞書）を
     そのまま受け取って埋め込む。J-Quantsの開示データから独自に再計算はしない
     （既存の判定ロジック・レンズが参照する値と食い違わないようにするため）。
+
+    【2026-09-07追加（GROWTHシグナル用）】経常利益成長率・ROA・PSRを追加。
+    いずれも既にバックフィル済みのfins.jsonキャッシュ内のフィールドから算出でき、
+    追加のAPI呼び出しは発生しない。
     """
     ticker4 = _ticker_to_code4(ticker)
     records = load_fins_records(ticker4, cache_dir=cache_dir)
@@ -135,6 +139,7 @@ def build_fundamental_snapshot(ticker, current_price, sector_code=None, sector_n
         'per': None, 'pbr': None, 'roe': None, 'equity_ratio': None,
         'dividend_yield': dividend_yield if dividend_yield else None, 'payout_ratio': None,
         'sales_growth_yoy': None, 'sales_growth_3y_avg': None, 'op_growth_yoy': None,
+        'ordinary_profit_growth_yoy': None, 'roa': None, 'psr': None,
         'eps_trend': None,
         'sector_code': sector_code, 'sector_name': sector_name,
         'data_asof_doctype': None,
@@ -161,6 +166,21 @@ def build_fundamental_snapshot(ticker, current_price, sector_code=None, sector_n
         if payout is not None:
             snapshot['payout_ratio'] = round(payout * 100, 1)
 
+        # 【2026-09-07追加】ROA＝当期純利益÷総資産。ROE同様、貸借対照表の値（総資産）は
+        # 期末時点でしか意味を持たないため、四半期の中間開示ではなくFYレコードのみを使う
+        # （ROEと同じ割り切り）。
+        net_profit = parse_num(fy, 'NP', 'NCNP')
+        total_assets = parse_num(fy, 'TA', 'NCTA')
+        if net_profit is not None and total_assets and total_assets > 0:
+            snapshot['roa'] = round(net_profit / total_assets * 100, 1)
+
+        # 【2026-09-07追加】PSR＝時価総額÷売上高。売上高はROE/PBRと同様、直近FYの値を使う
+        # （四半期の累積売上高を使うと期の進み具合で歪むため）。時価総額はyfinance経由の
+        # marketCapをそのまま使う（J-Quants側で時価総額そのものは取得できないため）。
+        fy_sales = parse_num(fy, 'Sales', 'NCSales')
+        if fy_sales and fy_sales > 0 and market_cap:
+            snapshot['psr'] = round(market_cap / fy_sales, 2)
+
     equity_ratio = parse_num(latest, 'EqAR', 'NCEqAR')
     if equity_ratio is not None:
         snapshot['equity_ratio'] = round(equity_ratio * 100, 1)
@@ -174,6 +194,12 @@ def build_fundamental_snapshot(ticker, current_price, sector_code=None, sector_n
         latest_op = parse_num(latest, 'OP', 'NCOP')
         prior_op = parse_num(yoy_ref, 'OP', 'NCOP')
         snapshot['op_growth_yoy'] = _growth_pct(latest_op, prior_op)
+
+        # 【2026-09-07追加】経常利益成長率。営業利益成長率と全く同じYoYロジックを
+        # OdP（経常利益）フィールドに対して適用するだけ。
+        latest_odp = parse_num(latest, 'OdP', 'NCOdP')
+        prior_odp = parse_num(yoy_ref, 'OdP', 'NCOdP')
+        snapshot['ordinary_profit_growth_yoy'] = _growth_pct(latest_odp, prior_odp)
 
     snapshot['sales_growth_3y_avg'] = _sales_growth_3y_avg(records)
     snapshot['eps_trend'] = _eps_trend(records)

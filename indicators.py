@@ -223,6 +223,30 @@ def compute_technical_snapshot(df):
     }
 
 
+def compute_trading_value_momentum(df, recent_window=20, baseline_window=60):
+    """
+    【2026-09-07追加（GROWTHシグナル用）】売買代金（Close×Volume）の直近盛り上がり具合。
+
+    直近recent_window営業日の1日あたり平均売買代金 ÷ その直前baseline_window営業日の
+    平均売買代金、という比率を返す。theme_news.pyのニュース・モメンタム算出と同じ
+    「直近 vs その前の平常」という考え方を、売買代金という別の切り口に適用したもの。
+
+    データがrecent_window+baseline_window分に満たない場合はNone（判定不能）を返す。
+    baseline側の平均売買代金が0（値がつかない日ばかり等）の場合もNoneを返す
+    （0除算を避けるため。無理に極端な比率にしない）。
+    """
+    if df is None or 'Volume' not in df.columns or len(df) < recent_window + baseline_window:
+        return None
+
+    trading_value = df['Close'] * df['Volume']
+    recent_avg = trading_value.iloc[-recent_window:].mean()
+    baseline_avg = trading_value.iloc[-(recent_window + baseline_window):-recent_window].mean()
+
+    if pd.isna(recent_avg) or pd.isna(baseline_avg) or baseline_avg <= 0:
+        return None
+    return round(float(recent_avg / baseline_avg), 2)
+
+
 def technical_score(snapshot):
     """
     テクニカル指標から0〜1のスコア（README仕様の「テクニカル：25%」に対応する係数）を算出する。
