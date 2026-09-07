@@ -177,7 +177,15 @@ def run_backtest():
           f'（{all_dates[0].date()} 〜 {all_dates[-1].date()}）')
 
     os.makedirs(OUT_DIR, exist_ok=True)
-    trade_log = tracking.load_trade_log(path=BACKTEST_TRADE_LOG_PATH)
+    # 【2026-09-07修正】以前はtracking.load_trade_log()で前回実行分を読み込んで
+    # 引き継いでいたが、本関数は毎回all_dates[0]（=ユニバースの最古データ）から
+    # 全期間を再シミュレートするため「途中から再開する」という状況が存在しない。
+    # 前回分を引き継ぐと同一銘柄・同一日・同一シグナルのエントリーが重複記録される
+    # 不具合になる（実際に2026-09-07、ATR_MULTIPLIER_VARIANTS拡張後の再実行で
+    # 2,348件の重複が発生し発覚した）。常に空リストから開始するようにする。
+    if os.path.exists(BACKTEST_TRADE_LOG_PATH):
+        print(f'[backtest] 既存の{BACKTEST_TRADE_LOG_PATH}は上書きします（毎回全期間を再シミュレートするため）')
+    trade_log = []
 
     for di, date in enumerate(all_dates):
         results = {}
