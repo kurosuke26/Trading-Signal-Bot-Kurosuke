@@ -97,8 +97,13 @@ def format_stock_embed(r):
     """
     per_pbr = r.get('per_pbr')
     per_pbr_str = f"{per_pbr:.2f}" if per_pbr is not None else "N/A"
-    title = f"{'🔥 ' if r.get('super_cheap') else ''}{r['ticker']}（{r.get('name')}）"
     score = r.get('score')
+    # 【2026-09-11追加】LONGで複合スコアがLONG_ENTRY_SCORE_THRESHOLD以上＝
+    # 「買いシグナル点灯（実際に仮想エントリーしてトレーリングストップをかける対象）」
+    # であることを、日々のロング一覧の中でも目立つようにする。
+    is_buy_signal = r.get('signal') == 'LONG' and score is not None and score >= LONG_ENTRY_SCORE_THRESHOLD
+    title_prefix = '🎯買いシグナル点灯！ ' if is_buy_signal else ('🔥 ' if r.get('super_cheap') else '')
+    title = f"{title_prefix}{r['ticker']}（{r.get('name')}）"
     band = score_band_label(score)
     score_str = f"{score:.1f}/100（{band}）" if score is not None else '判定不能'
     current_price = r.get('current_price') or 0
@@ -133,10 +138,17 @@ def format_stock_embed(r):
             trade_lines.append(trade['trailing_rule'])
         fields.append({'name': 'エントリー・ストップ目安', 'value': '\n'.join(trade_lines)[:1000], 'inline': False})
 
+    description = SIGNAL_LABEL.get(r.get('signal'), r.get('signal'))
+    color = SIGNAL_COLOR.get(r.get('signal'), 0x95A5A6)
+    if is_buy_signal:
+        description = (f"🎯 買いシグナル点灯（複合スコア{LONG_ENTRY_SCORE_THRESHOLD}点以上）／"
+                        f"実際に仮想エントリーしトレーリングストップを適用中")
+        color = 0xF1C40F  # 金色：通常のLONG（緑）と区別して目立たせる
+
     return {
         'title': title,
-        'description': SIGNAL_LABEL.get(r.get('signal'), r.get('signal')),
-        'color': SIGNAL_COLOR.get(r.get('signal'), 0x95A5A6),
+        'description': description,
+        'color': color,
         'fields': fields,
     }
 
@@ -272,23 +284,25 @@ def build_payloads(snapshot, stale, age_hours):
         footer_text += "（JPX銘柄一覧の取得に失敗したためフォールバック銘柄で実行）"
 
     # ---- LONG ----
-    # 【2026-09-11変更】無条件の上位10銘柄表示をやめ、tracking.pyの仮想エントリーと
-    # 同じ基準（複合スコアLONG_ENTRY_SCORE_THRESHOLD以上）を満たす「買いシグナル」
-    # だけを表示するようにした。バックテストでこの絞り込みにより勝率50.6%→64.5%・
-    # ペイオフ2.23→2.20に改善することを確認済み（該当が無い日は投稿しない）。
+    # 【2026-09-11変更、同日再変更】ロングチャンネルは原則どおり日々の上位候補を
+    # 一覧表示し続ける（該当が無い日でも一覧自体は投稿する）。そのうち複合スコアが
+    # LONG_ENTRY_SCORE_THRESHOLD以上の銘柄だけが「実際に仮想エントリーしトレーリング
+    # ストップをかける買いシグナル」であり、format_stock_embed()側で金色・
+    # 🎯マーク付きの見た目にして一覧の中で目立たせる（バックテストでの効果は
+    # Claude outputs/2026-09-11-long-entry-score-gate.md参照）。
     long_buy_signals = [r for r in long_results
                          if (r['score'] if r['score'] is not None else -1) >= LONG_ENTRY_SCORE_THRESHOLD]
     long_payload = None
     long_csv = None
-    if long_buy_signals:
-        embeds = [format_stock_embed(r) for r in long_buy_signals[:LONG_TOP_N]]
-        content = (f"🟢 Kurosuke割安チェッカー - ロング買いシグナル"
-                   f"（複合スコア{LONG_ENTRY_SCORE_THRESHOLD}点以上、該当{len(long_buy_signals)}銘柄）")
+    if long_results:
+        embeds = [format_stock_embed(r) for r in long_results[:10]]
+        buy_note = f"／🎯買いシグナル点灯{len(long_buy_signals)}銘柄" if long_buy_signals else "／本日は買いシグナルなし"
+        content = (f"🟢 Kurosuke割安チェッカー - ロングシグナル"
+                   f"（該当{total_long}銘柄／上位10件を表示{buy_note}）")
         if stale_note:
             content = stale_note + " " + content
         long_payload = {'content': content[:2000], 'embeds': embeds}
-        if len(long_buy_signals) > LONG_TOP_N:
-            # CSVは絞り込み前のLONG候補全件を添付する（広く見たい場合の参考用）
+        if total_long > 10 or len(long_results) > 10:
             long_csv = build_csv_bytes(long_results, CSV_COLUMNS)
 
     # ---- SHORT ----
