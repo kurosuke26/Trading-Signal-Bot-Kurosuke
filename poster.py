@@ -27,6 +27,7 @@ from datetime import datetime, timezone
 import requests
 
 from scoring import score_band_label, suggested_trade_levels
+from tracking import ATR_MULTIPLIER_BY_SIGNAL, ATR_MULTIPLIER_VARIANTS, _variant_key
 from util import env_float, json_default
 
 SNAPSHOT_PATH = os.getenv('SCAN_OUTPUT_PATH') or 'data/latest_scan.json'
@@ -120,7 +121,7 @@ def format_stock_embed(r):
 
     if r.get('signal') == 'LONG':
         atr = (r.get('tech_snapshot') or {}).get('atr')
-        trade = suggested_trade_levels(current_price, atr)
+        trade = suggested_trade_levels(current_price, atr, atr_multiplier=ATR_MULTIPLIER_BY_SIGNAL['LONG'])
         entry_label = '🟢 エントリー好機' if r.get('entry_timing') == 'good' else '🟡 条件達成・タイミング待ち'
         trade_lines = [entry_label]
         if trade.get('initial_stop') is not None:
@@ -360,14 +361,24 @@ def build_payloads(snapshot, stale, age_hours):
         return " ／ ".join(parts)
 
     def _fmt_atr_variants(atr_variants):
-        # 【2026-08-26追加】トレーリングストップ幅（ATR×1.5／2.0／2.5）を変えた
-        # 場合の比較。tracking.pyのATR_MULTIPLIER_VARIANTSと表示順を揃える。
+        # 【2026-08-26追加、2026-09-11更新】トレーリングストップ幅を変えた場合の
+        # 比較。tracking.pyのATR_MULTIPLIER_VARIANTSと表示順を揃える。
+        # LONG/SHORTで採用倍率が異なるため（ATR_MULTIPLIER_BY_SIGNAL）、
+        # 該当するキーにそれぞれ「現行」ラベルを付ける。
         if not atr_variants:
             return 'データがありません'
+        long_key = _variant_key(ATR_MULTIPLIER_BY_SIGNAL['LONG'])
+        short_key = _variant_key(ATR_MULTIPLIER_BY_SIGNAL['SHORT'])
         lines = []
-        for key in ('1.5', '2.0', '2.5'):
+        for m in ATR_MULTIPLIER_VARIANTS:
+            key = _variant_key(m)
             s = atr_variants.get(key)
-            label = f'ATR×{key}' + ('（現行）' if key == '1.5' else '')
+            tags = []
+            if key == long_key:
+                tags.append('LONG現行')
+            if key == short_key:
+                tags.append('SHORT現行')
+            label = f'ATR×{key}' + (f'（{"／".join(tags)}）' if tags else '')
             if not s or not s.get('closed_count'):
                 lines.append(f"{label}：決済済みデータがまだありません（集計中）")
                 continue
@@ -383,12 +394,15 @@ def build_payloads(snapshot, stale, age_hours):
             'title': '🎯 シグナル成績（仮想シミュレーション）',
             'description': (
                 '毎日のLONG／SHORTシグナルのうち「自信度が高い」上位10銘柄（LONGは複合'
-                'スコア上位、SHORTはPER×PBR上位。それぞれ別枠）にエントリーし、ATR×1.5の'
-                'トレーリングストップルールで決済していたと仮定した場合の成績です。'
+                f'スコア上位、SHORTはPER×PBR上位。それぞれ別枠）にエントリーし、LONGはATR×'
+                f'{ATR_MULTIPLIER_BY_SIGNAL["LONG"]}、SHORTはATR×{ATR_MULTIPLIER_BY_SIGNAL["SHORT"]}の'
+                'トレーリングストップルールで決済していたと仮定した場合の成績です'
+                '（バックテストで倍率がシグナルごとに異なる方が期待値が高いことを'
+                '確認し、2026-09-11に変更）。'
                 '実際の取引成績ではなく、シグナルそのものの参考成績である点にご注意ください。'
-                '\n下部の「ATR倍率比較」は、同じエントリーに対してストップ幅を1.5／2.0／'
-                '2.5倍に変えていたらどうなっていたかの比較です（2026-08-26より前に開始した'
-                'ポジションは1.5倍のみのデータのため、2.0／2.5倍の比較には含まれません）。'
+                '\n下部の「ATR倍率比較」は、同じエントリーに対してストップ幅を変えていたら'
+                'どうなっていたかの比較です（各倍率が追加された時期より前に開始した'
+                'ポジションはその倍率の比較データに含まれません）。'
             ),
             'color': 0x9B59B6,
             'fields': [
