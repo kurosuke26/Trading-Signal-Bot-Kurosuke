@@ -82,7 +82,7 @@ def main():
         r = analyze_ticker(ticker4, fund, df_upto)
         timing = r.get('entry_timing')
 
-        primary = (p.get('variants') or {}).get(tracking.PRIMARY_VARIANT_KEY) or {}
+        primary = (p.get('variants') or {}).get(tracking.PRIMARY_VARIANT_KEY_BY_SIGNAL['LONG']) or {}
         if primary.get('status') != 'closed':
             continue  # 決済済みのものだけを集計対象にする（保有中は損益未確定のため除外）
 

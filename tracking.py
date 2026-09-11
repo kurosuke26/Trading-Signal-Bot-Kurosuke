@@ -67,6 +67,21 @@ _ensure_variants() での読み込み時マイグレーションでは、既存�
 目安であって、ユーザー個人の実績ではありません。また、収集開始直後は
 決済済みの取引が無いため「集計中」と表示されます。統計として意味のある
 件数が貯まるまでには数週間程度かかる見込みです。
+
+【2026-09-11変更：プライマリ倍率をLONG/SHORTで分離】
+J-Quantsバックテスト（全3,735銘柄・482営業日、1.5〜6.0倍で比較）の結果、
+LONGは4.5〜5.0倍で期待値がピークに達し6.0倍で低下すること、SHORTは1.8倍で
+明確にピークを打つことを確認した（詳細: Claude outputs/の分析メモ）。
+これによりATR_MULTIPLIER（旧: 両シグナル共通1.5倍）を廃止し、
+ATR_MULTIPLIER_BY_SIGNAL（LONG=5.0倍／SHORT=1.8倍）に分離した。上記の
+「1.5倍がプライマリ」等の記述は歴史的経緯として残しているが、現在の
+プライマリ判定はATR_MULTIPLIER_BY_SIGNAL／PRIMARY_VARIANT_KEY_BY_SIGNAL
+（シグナルごとに参照）で行う。なお業種別の最適化は、1業種あたりの
+サンプル数不足（16〜128件）のため見送っている。
+
+Discord投稿の「エントリー・ストップ目安」欄（scoring.suggested_trade_levels、
+discord-ai-team側の_format_candidate）は、本変更時点ではまだATR×1.5固定の
+ままで、この変更を反映していない（表示の見直しは別途要検討・要合意）。
 """
 
 import json
@@ -94,7 +109,18 @@ TOP_N_TRACKED = env_int('TOP_N_TRACKED', 10)  # 新規追跡対象とする「�
 # 2.7倍以降は期待値がマイナスに転落することが判明。一方LONGは3.5倍まで見ても
 # まだ期待値が伸び続けており頭打ちが確認できなかったため、真の最適値を探すべく
 # さらに広い倍率（4.0〜6.0）を追加する。
-ATR_MULTIPLIER = 1.5
+#
+# 【2026-09-11追加：本番採用】4.0〜6.0倍を含めた完全な再バックテスト（全3,735銘柄・
+# 482営業日・重複記録バグ修正後のクリーンな結果）で、LONGは4.5〜5.0倍で期待値が
+# ピーク（+5.07%/+5.08%）に達し6.0倍で低下に転じること、SHORTは1.8倍でピーク
+# （+0.77%）のまま変わらないことを確認した。これにより、LONG/SHORTで異なる
+# プライマリ倍率を採用する（ATR_MULTIPLIER_BY_SIGNAL参照）。
+# なお業種別の内訳も分析したが、1業種あたりの決済件数が16〜128件と少なく
+# 「最適倍率」が業種ごとに1.8〜6.0倍までばらつくなど、ノイズの域を出ない
+# （J-Quants Freeプランのデータ期間制約＝2年3ヶ月では時期尚早と判断し、
+# 業種別の倍率分けは見送る）。
+ATR_MULTIPLIER = 1.5  # 過去形式ポジションのマイグレーション専用（下記_ensure_variants参照）
+ATR_MULTIPLIER_BY_SIGNAL = {'LONG': 5.0, 'SHORT': 1.8}  # 本番のプライマリ倍率（シグナル別）
 ATR_MULTIPLIER_VARIANTS = [1.5, 1.8, 2.0, 2.2, 2.5, 2.7, 3.0, 3.5, 4.0, 4.5, 5.0, 6.0]
 
 
@@ -102,7 +128,12 @@ def _variant_key(multiplier):
     return f'{multiplier:.1f}'
 
 
-PRIMARY_VARIANT_KEY = _variant_key(ATR_MULTIPLIER)
+# 2026-08-26以前の旧形式ポジション（'variants'辞書を持たない）をマイグレーションする際、
+# 唯一保持していた倍率がどのキーだったかを示す（_ensure_variants参照）。本番の新規判定には使わない。
+LEGACY_PRIMARY_VARIANT_KEY = _variant_key(ATR_MULTIPLIER)
+# 【2026-09-11追加】シグナル別の本番プライマリ倍率キー。「建玉中かどうか」「決済判定」は
+# このキーで行う（_has_open/update_open_positions/compute_performance_stats参照）。
+PRIMARY_VARIANT_KEY_BY_SIGNAL = {sig: _variant_key(m) for sig, m in ATR_MULTIPLIER_BY_SIGNAL.items()}
 
 
 def load_trade_log(path=None):
@@ -144,33 +175,46 @@ def save_trade_log(trade_log, path=None):
 
 def _ensure_variants(p):
     """
-    2026-08-26のATR倍率バリエーション追加より前の旧形式ポジション
+    (a) 2026-08-26のATR倍率バリエーション追加より前の旧形式ポジション
     （'variants'キーが無く、フラットな'stop'/'close_date'等でATR×1.5のみを
     保持していた形式）を、新形式（倍率ごとに'variants'辞書で保持する形式）に
-    その場（in-place）で変換する。既に新形式のポジションはそのまま返す
-    （何度呼んでも安全＝冪等）。
+    その場（in-place）で変換する。旧形式はエントリー時点のATR値を保存していない
+    ため、初期ストップを後から再現できる倍率が無く、レガシープライマリ（1.5倍）
+    のみを引き継ぐ。
 
-    旧形式はエントリー時点のATR値を保存していなかったため、2.0倍・2.5倍の
-    初期ストップを後から正確に再現することはできない。そのため旧形式の
-    ポジションは1.5倍（プライマリ）のみを引き継ぎ、2.0倍・2.5倍は
-    'not_tracked'（比較対象外。update_open_positions()でも二度と'open'には
-    ならない）として扱う。
+    (b) ATR_MULTIPLIER_VARIANTSは運用中に随時拡張されてきた
+    （2026-08-26: 1.5/2.0/2.5 → 2026-09-07: 〜3.5 → 2026-09-11: 〜6.0）ため、
+    'variants'辞書は既にあっても、拡張後に追加された倍率のキーが無いポジションが
+    ある。entry_price・atr_at_entryが分かっていれば、その時点で建てていたと
+    みなして初期ストップを計算し'open'として追跡を始める（無ければ'not_tracked'）。
+
+    どちらのケースも何度呼んでも安全（冪等）。
     """
-    if 'variants' in p:
-        return p
+    if 'variants' not in p:
+        p['variants'] = {
+            LEGACY_PRIMARY_VARIANT_KEY: {
+                'stop': p.pop('stop', None),
+                'status': p.get('status', 'open'),
+                'close_date': p.pop('close_date', None),
+                'close_price': p.pop('close_price', None),
+                'return_pct': p.pop('return_pct', None),
+            },
+        }
 
-    p['variants'] = {
-        PRIMARY_VARIANT_KEY: {
-            'stop': p.pop('stop', None),
-            'status': p.get('status', 'open'),
-            'close_date': p.pop('close_date', None),
-            'close_price': p.pop('close_price', None),
-            'return_pct': p.pop('return_pct', None),
-        },
-    }
+    entry_price = p.get('entry_price')
+    atr_at_entry = p.get('atr_at_entry')
+    signal = p.get('signal')
     for m in ATR_MULTIPLIER_VARIANTS:
         key = _variant_key(m)
-        if key not in p['variants']:
+        if key in p['variants']:
+            continue
+        if entry_price and signal:
+            stop = _initial_stop(entry_price, atr_at_entry, signal, m)
+            p['variants'][key] = {
+                'stop': round(stop, 2), 'status': 'open',
+                'close_date': None, 'close_price': None, 'return_pct': None,
+            }
+        else:
             p['variants'][key] = {
                 'stop': None, 'status': 'not_tracked',
                 'close_date': None, 'close_price': None, 'return_pct': None,
@@ -180,9 +224,9 @@ def _ensure_variants(p):
 
 def _has_open(trade_log, ticker, signal):
     """
-    「建玉中かどうか」はプライマリ（ATR×1.5）の状態だけで判定する
-    （2.0倍・2.5倍は比較用の並行シミュレーションであり、新規追跡対象に
-    入れるかどうかの判定には使わない）。
+    「建玉中かどうか」はプライマリ（シグナル別。PRIMARY_VARIANT_KEY_BY_SIGNAL参照）
+    の状態だけで判定する（他の倍率は比較用の並行シミュレーションであり、
+    新規追跡対象に入れるかどうかの判定には使わない）。
     """
     return any(p['ticker'] == ticker and p['signal'] == signal and p['status'] == 'open' for p in trade_log)
 
@@ -214,9 +258,9 @@ def open_new_positions(trade_log, results, today_str, top_n=TOP_N_TRACKED):
     （LONG・SHORTそれぞれ別に選定）だけを対象に、まだ建玉中(open)のものが無い
     銘柄について新規の仮想ポジションを1件開く。戻り値は新規開設件数。
 
-    1件のポジションにつき、同じエントリー価格・同じATR値に対してATR×1.5
-    （プライマリ）／×2.0／×2.5の3バリエーションのストップを同時に設定する
-    （ATR_MULTIPLIER_VARIANTS参照）。
+    1件のポジションにつき、同じエントリー価格・同じATR値に対してATR_MULTIPLIER_VARIANTS
+    の全倍率のストップを同時に設定する。「建玉中かどうか」「決済判定」は
+    シグナル別のプライマリ倍率（ATR_MULTIPLIER_BY_SIGNAL）のみで行う。
     """
     opened = 0
     top_candidates = _select_top_candidates(results, 'LONG', top_n) + _select_top_candidates(results, 'SHORT', top_n)
@@ -252,7 +296,8 @@ def open_new_positions(trade_log, results, today_str, top_n=TOP_N_TRACKED):
             # エントリー時点の業種コードを記録しておく。fundamental_snapshotが
             # 無い（Phase2未対応データ）場合はNoneのまま。
             'sector_code': (r.get('fundamental_snapshot') or {}).get('sector_code'),
-            'status': 'open',  # プライマリ（ATR×1.5）が決済されるまで'open'
+            'sector_name': (r.get('fundamental_snapshot') or {}).get('sector_name'),
+            'status': 'open',  # プライマリ（シグナル別。ATR_MULTIPLIER_BY_SIGNAL）が決済されるまで'open'
             'variants': variants,
         })
         opened += 1
@@ -261,17 +306,16 @@ def open_new_positions(trade_log, results, today_str, top_n=TOP_N_TRACKED):
 
 def update_open_positions(trade_log, results, today_str):
     """
-    建玉中の全ポジションについて、ATR×1.5／×2.0／×2.5それぞれのバリエーション
-    ごとに、今回取得できた最新価格・ATRでトレーリングストップを更新し、抵触して
-    いれば決済（close）する。倍率が異なれば決済タイミングも異なるため、
-    プライマリ（1.5倍）が先に決済されても、2.0倍・2.5倍はそれぞれ自分自身の
-    ストップに抵触するまで独立して追跡を継続する（'not_tracked'のバリエー
-    ションは対象外のまま）。
+    建玉中の全ポジションについて、ATR_MULTIPLIER_VARIANTSの倍率ごとに、今回取得
+    できた最新価格・ATRでトレーリングストップを更新し、抵触していれば決済
+    （close）する。プライマリ倍率（シグナル別。ATR_MULTIPLIER_BY_SIGNAL）が
+    先に決済されても、他の倍率はそれぞれ自分自身のストップに抵触するまで独立して
+    追跡を継続する（'not_tracked'のバリエーションは対象外のまま）。
 
     今回データ取得に失敗した銘柄（resultsに存在しない）は判定をスキップし、
     次回の収集時にあらためて判定する（データ欠損による誤決済を避けるため）。
 
-    戻り値は「プライマリ（ATR×1.5）」が決済された件数（従来の意味と同じ。
+    戻り値は「プライマリ」が決済された件数（従来の意味と同じ。
     collector.pyの実行ログ表示に使われる）。
     """
     closed_primary = 0
@@ -317,7 +361,7 @@ def update_open_positions(trade_log, results, today_str):
                 v['close_date'] = today_str
                 v['close_price'] = round(current_price, 2)
                 v['return_pct'] = round(ret_pct, 2)
-                if key == PRIMARY_VARIANT_KEY:
+                if key == PRIMARY_VARIANT_KEY_BY_SIGNAL.get(p['signal']):
                     p['status'] = 'closed'
                     closed_primary += 1
     return closed_primary
@@ -360,17 +404,19 @@ def compute_performance_stats(trade_log):
     """
     勝率・ペイオフレシオを算出する。
 
-    - 'long_short' / 'long_only' / 'short_only'：従来通り、プライマリ
-      （ATR×1.5）のトレーリングストップでの決済結果を「LONG＋SHORT合算」
-      「LONGのみ」「SHORTのみ」の3系統で集計したもの。
-    - 'atr_variants'：ATR×1.5／×2.0／×2.5、それぞれのストップ幅で決済して
-      いたと仮定した場合の比較集計（LONG＋SHORT合算）。2026-08-26より前に
-      開始したポジションは1.5倍のデータしか無いため、2.0倍・2.5倍の比較
-      対象には含まれない点に注意（_ensure_variants()参照）。
+    - 'long_short' / 'long_only' / 'short_only'：プライマリ（シグナル別。
+      ATR_MULTIPLIER_BY_SIGNAL＝LONG5.0倍／SHORT1.8倍）のトレーリングストップ
+      での決済結果を「LONG＋SHORT合算」「LONGのみ」「SHORTのみ」の3系統で
+      集計したもの。合算はLONG側のプライマリ決済とSHORT側のプライマリ決済を
+      単純に足し合わせる（倍率が異なる決済同士を混ぜる形になる点に注意）。
+    - 'atr_variants'：ATR_MULTIPLIER_VARIANTSの各倍率で決済していたと仮定した
+      場合の比較集計（LONG＋SHORT合算）。倍率が拡張される前に開始した
+      ポジションはその倍率のデータが無いため、比較対象には含まれない点に
+      注意（_ensure_variants()参照）。
     """
-    closed_primary_all = _closed_variant_trades(trade_log, PRIMARY_VARIANT_KEY)
-    closed_primary_long = _closed_variant_trades(trade_log, PRIMARY_VARIANT_KEY, 'LONG')
-    closed_primary_short = _closed_variant_trades(trade_log, PRIMARY_VARIANT_KEY, 'SHORT')
+    closed_primary_long = _closed_variant_trades(trade_log, PRIMARY_VARIANT_KEY_BY_SIGNAL['LONG'], 'LONG')
+    closed_primary_short = _closed_variant_trades(trade_log, PRIMARY_VARIANT_KEY_BY_SIGNAL['SHORT'], 'SHORT')
+    closed_primary_all = closed_primary_long + closed_primary_short
     open_count = len([p for p in trade_log if p.get('status') == 'open'])
 
     atr_variants = {
