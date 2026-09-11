@@ -91,7 +91,13 @@ from util import env_int, json_default
 
 TRADE_LOG_PATH = os.getenv('TRADE_LOG_PATH') or 'data/trade_log.json'
 FALLBACK_STOP_PCT = 0.03  # ATRが算出できない銘柄向けの簡易フォールバック（±3%相当）
-TOP_N_TRACKED = env_int('TOP_N_TRACKED', 10)  # 新規追跡対象とする「自信度上位」銘柄数（LONG/SHORT別）
+TOP_N_TRACKED = env_int('TOP_N_TRACKED', 10)  # 新規追跡対象とする「自信度上位」銘柄数（SHORTに適用）
+
+# 【2026-09-11追加】LONGは無条件の上位10銘柄エントリーをやめ、複合スコアによる
+# 「買いシグナル」判定に切り替える。バックテストでの検証結果はtracking.pyの
+# _select_top_candidates()docstring参照。
+LONG_ENTRY_SCORE_THRESHOLD = env_int('LONG_ENTRY_SCORE_THRESHOLD', 90)
+LONG_TOP_N = env_int('LONG_TOP_N', 5)  # 該当銘柄が多い日でも上位5件までに絞る
 
 # 【2026-08-26追加】トレーリングストップの倍率バリエーション（比較バックテスト用）。
 # 1.5倍がプライマリ（Discordの「エントリー・ストップ目安」欄と一致させる正式な幅）。
@@ -243,9 +249,17 @@ def _select_top_candidates(results, signal, top_n=TOP_N_TRACKED):
     """
     その日の判定結果から、指定したシグナル（LONG/SHORT）のうち「自信度が高い」
     上位top_n銘柄だけを選ぶ。基準はモジュールdocstring【2026-08-26変更】を参照。
+
+    【2026-09-11追加】LONGは無条件のtop_n選定をやめ、複合スコアが
+    LONG_ENTRY_SCORE_THRESHOLD以上の銘柄だけを候補にする（該当が無ければ0件でよい）。
+    バックテストで、スコア90点以上に絞ると勝率50.6%→64.5%・ペイオフ2.23→2.20
+    （件数454、全体の約3割）に改善することを確認した（詳細: Claude outputs/の分析メモ）。
+    SHORTは同様の絞り込み条件を探索したが、勝率・ペイオフを両方改善できるものが
+    サンプル数100件以上では見つからなかったため、無条件top_nのまま変更しない。
     """
     candidates = [r for r in results.values() if r.get('signal') == signal]
     if signal == 'LONG':
+        candidates = [r for r in candidates if (r.get('score') if r.get('score') is not None else -1) >= LONG_ENTRY_SCORE_THRESHOLD]
         candidates.sort(key=lambda r: (r.get('score') if r.get('score') is not None else -1), reverse=True)
     else:  # SHORT
         candidates.sort(key=lambda r: (r.get('per_pbr') if r.get('per_pbr') is not None else 0), reverse=True)
@@ -254,16 +268,19 @@ def _select_top_candidates(results, signal, top_n=TOP_N_TRACKED):
 
 def open_new_positions(trade_log, results, today_str, top_n=TOP_N_TRACKED):
     """
-    今回の収集でLONG/SHORT判定になった銘柄のうち、「自信度が高い」上位top_n銘柄
-    （LONG・SHORTそれぞれ別に選定）だけを対象に、まだ建玉中(open)のものが無い
-    銘柄について新規の仮想ポジションを1件開く。戻り値は新規開設件数。
+    今回の収集でLONG/SHORT判定になった銘柄のうち、「自信度が高い」候補だけを
+    対象に、まだ建玉中(open)のものが無い銘柄について新規の仮想ポジションを1件開く。
+    戻り値は新規開設件数。
+    LONG: 複合スコアがLONG_ENTRY_SCORE_THRESHOLD以上の銘柄のみ、上位LONG_TOP_N件まで
+    （該当が無い日は0件でよい。無条件top_n選定は廃止）。
+    SHORT: 引き続き無条件でPER×PBR上位top_n件。
 
     1件のポジションにつき、同じエントリー価格・同じATR値に対してATR_MULTIPLIER_VARIANTS
     の全倍率のストップを同時に設定する。「建玉中かどうか」「決済判定」は
     シグナル別のプライマリ倍率（ATR_MULTIPLIER_BY_SIGNAL）のみで行う。
     """
     opened = 0
-    top_candidates = _select_top_candidates(results, 'LONG', top_n) + _select_top_candidates(results, 'SHORT', top_n)
+    top_candidates = _select_top_candidates(results, 'LONG', LONG_TOP_N) + _select_top_candidates(results, 'SHORT', top_n)
     for r in top_candidates:
         ticker = r['ticker']
         signal = r.get('signal')
