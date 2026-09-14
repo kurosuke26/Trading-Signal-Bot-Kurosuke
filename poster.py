@@ -39,7 +39,7 @@ MAX_SNAPSHOT_AGE_HOURS = env_float('MAX_SNAPSHOT_AGE_HOURS', 12)
 # ---------------------------------------------------------------------------
 # Webhook設定（従来から変更なし）
 # ---------------------------------------------------------------------------
-CHANNELS = ['LONG', 'SHORT', 'WARNING', 'PERFORMANCE', 'STRATEGY', 'BACKTEST', 'TIPS']
+CHANNELS = ['LONG', 'SHORT', 'WARNING', 'PERFORMANCE', 'STRATEGY', 'BACKTEST', 'TIPS', 'BREAKING']
 ENVIRONMENTS = ['TEST', 'PROD']
 
 CHANNEL_LABELS = {
@@ -50,6 +50,7 @@ CHANNEL_LABELS = {
     'STRATEGY': '戦略通知',
     'BACKTEST': 'バックテスト結果',  # 勝率・ペイオフレシオ（tracking.py）専用チャンネル
     'TIPS': '週次tips',              # weekly_tips.py がここに投稿（poster.py本体は使わない）
+    'BREAKING': '速報',              # breaking_alerts.py がここに投稿（poster.py本体は使わない）
 }
 
 WEBHOOKS = {}

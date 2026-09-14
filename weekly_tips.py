@@ -31,7 +31,7 @@ collector.py / poster.py（毎日実行）とは独立した、週1回だけ動�
 import json
 import os
 import sys
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 
 import yfinance as yf
 
@@ -39,6 +39,7 @@ import poster
 from tracking import load_trade_log, compute_performance_stats
 
 SNAPSHOT_PATH = os.getenv('SCAN_OUTPUT_PATH') or 'data/latest_scan.json'
+BREAKING_LOG_PATH = os.getenv('BREAKING_ALERT_LOG_PATH') or 'data/breaking_alert_log.json'
 
 NIKKEI_TICKER = '^N225'
 # TOPIX指数そのもの(998405.T)が取得できない環境向けに、連動ETF(1306.T)へ
@@ -258,6 +259,48 @@ def build_performance_recap_text():
     return "\n".join(lines)
 
 
+def build_breaking_recap_text():
+    """
+    breaking_alerts.py（速報チャンネル）が今週(直近7日)投稿したアラートを、
+    短文の振り返りとしてまとめる。ログが無い・0件の場合はその旨を正直に返す。
+    """
+    if not os.path.exists(BREAKING_LOG_PATH):
+        return '今週は速報の記録がありませんでした（breaking_alerts.py未実行の可能性）。'
+    try:
+        with open(BREAKING_LOG_PATH, encoding='utf-8') as f:
+            log = json.load(f)
+    except (json.JSONDecodeError, OSError):
+        return '速報ログの読み込みに失敗したため、今回は振り返りを省略します。'
+
+    cutoff = (datetime.now(timezone.utc) - timedelta(days=7)).isoformat()
+    recent = [e for e in log if e.get('at_utc', '') >= cutoff]
+    if not recent:
+        return '今週は為替・日経平均の急変動や日銀/FRB発表の速報はありませんでした。'
+
+    CATEGORY_LABELS = {
+        'usdjpy_rapid': '為替急変動', 'usdjpy_daily': '為替（本日大幅変動）',
+        'nikkei_rapid': '日経急変動', 'nikkei_daily': '日経（本日大幅変動）',
+        'policy': '日銀/FRB発表', 'us_morning': '米国市場サマリー',
+    }
+    counts = {}
+    for e in recent:
+        label = CATEGORY_LABELS.get(e.get('category'), e.get('category', '不明'))
+        counts[label] = counts.get(label, 0) + 1
+
+    summary_line = '、'.join(f'{label}{n}件' for label, n in counts.items())
+    lines = [f'今週の速報は合計{len(recent)}件（{summary_line}）でした。']
+
+    # 為替・日経の急変動系だけ、直近3件の見出しを短く添える（政策発表・朝の市場サマリーは
+    # 件数が把握できれば十分なため、本文の再掲はしない）
+    highlight_categories = {'usdjpy_rapid', 'usdjpy_daily', 'nikkei_rapid', 'nikkei_daily'}
+    highlights = [e for e in recent if e.get('category') in highlight_categories][-3:]
+    for e in highlights:
+        first_line = e.get('text', '').split('\n')[0]
+        lines.append(f'・{first_line}')
+
+    return "\n".join(lines)
+
+
 def pick_weekly_tip():
     week_number = datetime.now(timezone.utc).isocalendar()[1]
     return TIPS[week_number % len(TIPS)]
@@ -270,6 +313,7 @@ def build_payload():
     snapshot = load_latest_snapshot()
     embeds = [
         {'title': '📰 今週の市場サマリー', 'description': build_market_narrative_text(nikkei_change, topix_change, snapshot), 'color': 0x2ECC71},
+        {'title': '⚡ 今週あった速報', 'description': build_breaking_recap_text(), 'color': 0xE67E22},
         {'title': '👀 直近の注目シグナル', 'description': build_signal_highlight_text(snapshot), 'color': 0x3498DB},
         {'title': '🎯 シグナル成績（累計）', 'description': build_performance_recap_text(), 'color': 0x9B59B6},
         {'title': tip['title'], 'description': tip['body'], 'color': 0x95A5A6},

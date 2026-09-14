@@ -1,0 +1,85 @@
+name: Kurosuke Breaking Alerts
+
+on:
+  schedule:
+    # 15分おき（終日）。為替/日経平均の急変動チェック・日銀/FRB発表の監視・
+    # 米国主要指数の朝の速報（JST 7時台の回で1日1回だけ）をまとめて行う軽量バッチ。
+    - cron: '*/15 * * * *'
+  workflow_dispatch: {}
+
+permissions:
+  contents: write  # data/breaking_alert_state.json をリポジトリにコミットするために必要
+
+# 15分間隔に対して前回の実行が終わっていない場合は、古い方を打ち切って
+# 常に最新の1本だけを走らせる（状態ファイルの競合・二重投稿を避けるため）。
+concurrency:
+  group: kurosuke-breaking-alerts
+  cancel-in-progress: true
+
+jobs:
+  breaking_alerts:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+
+    - name: Check for breaking alerts and post to Discord
+      env:
+        DISCORD_WEBHOOK_URL_BREAKING_TEST: ${{ secrets.DISCORD_WEBHOOK_URL_BREAKING_TEST }}
+        DISCORD_WEBHOOK_URL_BREAKING_PROD: ${{ secrets.DISCORD_WEBHOOK_URL_BREAKING_PROD }}
+      run: python breaking_alerts.py
+
+    - name: Commit and push state
+      if: always()
+      run: |
+        if [ ! -f data/breaking_alert_state.json ]; then
+          echo "状態ファイルが生成されていないため、コミットをスキップします"
+          exit 0
+        fi
+        git config user.name "kurosuke-bot"
+        git config user.email "kurosuke-bot@users.noreply.github.com"
+        git add data/breaking_alert_state.json
+        if [ -f data/breaking_alert_log.json ]; then
+          git add data/breaking_alert_log.json
+        fi
+        if git diff --cached --quiet; then
+          echo "変更なしのためコミットをスキップします"
+        else
+          git commit -m "chore: update breaking alert state ($(date -u +'%Y-%m-%d %H:%M UTC'))"
+
+          # collect_data.ymlと同様、他ワークフローのpushと競合した場合はrebaseして再試行する
+          max_attempts=5
+          attempt=1
+          until git push; do
+            if [ "$attempt" -ge "$max_attempts" ]; then
+              echo "[breaking_alerts] pushが${max_attempts}回失敗しました。断念します"
+              exit 1
+            fi
+            wait_seconds=$((5 * attempt))
+            echo "[breaking_alerts] pushが拒否されました（試行${attempt}/${max_attempts}）。${wait_seconds}秒待ってrebaseの上、再試行します"
+            sleep "$wait_seconds"
+            git fetch origin main
+            if ! git rebase origin/main; then
+              echo "[breaking_alerts] rebase中にコンフリクトが発生しました。中断します"
+              git rebase --abort
+              exit 1
+            fi
+            attempt=$((attempt + 1))
+          done
+        fi
+
+    - name: Failure notification
+      if: failure()
+      run: echo "❌ Kurosuke breaking alerts failed at $(date)"
