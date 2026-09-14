@@ -210,14 +210,18 @@ def check_policy_feeds(state):
             e for e in entries
             if (e['link'] or e['title']) and (e['link'] or e['title']) not in seen
         ]
-        if is_first_run:
-            # 初回実行時はRSS全件が「未読」になってしまうため、過去分を大量通知
-            # しないよう最新1件（フィード先頭）だけに絞る
-            new_entries = new_entries[:1]
+        # 初回実行時はRSS全件が「未読」になってしまうため、投稿は最新1件（フィード
+        # 先頭）だけに絞る。ただし「未投稿=未読のまま」にすると、次回実行時に
+        # 残り全件がまとめて「新着」扱いされ大量投稿されてしまう
+        # （2026-09-14に実際に発生した不具合）。そのため、投稿しない分も含めて
+        # 今回取得できた全件を必ずseenへ登録する。
+        to_post = new_entries[:1] if is_first_run else new_entries
 
         for entry in new_entries:
             link = entry['link'] or entry['title']
             seen.add(link)
+
+        for entry in to_post:
             results.append(('policy',
                 f'📜 **{source}発表**：{entry["title"]}\n{entry["link"]}'
             ))
