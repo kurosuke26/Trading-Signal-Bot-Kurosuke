@@ -2,9 +2,11 @@ name: Kurosuke Weekly Tips
 
 on:
   schedule:
-    # 23:00 UTC（日曜）= 08:00 JST（月曜）。collector.py/poster.pyとは別の、
+    # 22:00 UTC（金曜）= 07:00 JST（土曜）。collector.py/poster.pyとは別の、
     # 週1回だけの軽いバッチ（相場振り返り・注目シグナル・シグナル成績・投資理論TIPS）。
-    - cron: '0 23 * * 0'
+    # 【2026-09-14変更】月曜08:00 JST→土曜07:00 JSTに変更（サロン
+    # 「#【月次（週間）tips】」の運用に合わせ、週末朝に届くように調整）。
+    - cron: '0 22 * * 5'
   workflow_dispatch: {}
 
 # 【2026-09-07追加】このワークフローはリポジトリへの書き込みを行わないため、
