@@ -1,7 +1,24 @@
 {
   "policy_seen_links": {
     "FRB": [
-      "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260825a.htm"
+      "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260714a.htm",
+      "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260318a.htm",
+      "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260819a.htm",
+      "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260318b.htm",
+      "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260429a.htm",
+      "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260708a.htm",
+      "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260617b.htm",
+      "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260709a.htm",
+      "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260526a.htm",
+      "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260825a.htm",
+      "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260617a.htm",
+      "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260520a.htm",
+      "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260729a.htm",
+      "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260414a.htm",
+      "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260408a.htm"
+    ],
+    "日銀": [
+      "http://www.boj.or.jp/research/imes/dps/dps260914b.htm"
     ]
   }
 }
