@@ -284,9 +284,50 @@ def get_webhook_urls(channel):
     return urls
 
 
+# 【2026-09-16追加】Discordの制限：1投稿あたりEmbedは10件まで、かつ全Embedの合計6,000文字まで。
+# 件数だけ守って文字数を超えると、Discordは400ではなく500を返す（2026-09-16にロング通知10件・8,071文字で発生）。
+MAX_EMBEDS_PER_MESSAGE = 10
+MAX_EMBED_TOTAL_CHARS = 5800  # 6,000の手前で余裕を持たせる
+# 【2026-09-16】実測：8フィールドのEmbedを10件（合計80フィールド）送ると500エラー、9件（72）なら成功。
+# 公式には明記が無いが、1投稿あたりのフィールド総数にも上限があるとみられるため余裕を持って72で止める。
+MAX_EMBED_TOTAL_FIELDS = 72
+
+
+def _embed_chars(embed):
+    """Discordが数える文字数（title/description/footer/author/fieldのname・value）。"""
+    n = len(embed.get('title') or '') + len(embed.get('description') or '')
+    n += len((embed.get('footer') or {}).get('text') or '')
+    n += len((embed.get('author') or {}).get('name') or '')
+    for f in embed.get('fields') or []:
+        n += len(f.get('name') or '') + len(f.get('value') or '')
+    return n
+
+
+def limit_embeds(embeds):
+    """Discordの上限内に収まるようEmbedを絞る。戻り値: (収まったEmbed, 落とした件数)"""
+    kept, total, fields = [], 0, 0
+    for e in embeds or []:
+        c, f = _embed_chars(e), len(e.get('fields') or [])
+        if (len(kept) >= MAX_EMBEDS_PER_MESSAGE or total + c > MAX_EMBED_TOTAL_CHARS
+                or fields + f > MAX_EMBED_TOTAL_FIELDS):
+            break
+        kept.append(e)
+        total += c
+        fields += f
+    return kept, len(embeds or []) - len(kept)
+
+
 def send_discord_message(channel, payload, file_bytes=None, filename=None):
     if payload is None:
         return True
+
+    if payload.get('embeds'):
+        kept, dropped = limit_embeds(payload['embeds'])
+        if dropped:
+            payload = dict(payload, embeds=kept)
+            note = f"（表示は{len(kept)}件まで。残り{dropped}件はDiscordの表示上限のため省略しています）"
+            payload['content'] = ((payload.get('content') or '') + chr(10) + note)[:2000]
+            print(f"[{CHANNEL_LABELS[channel]}] Embedが上限を超えたため{dropped}件を省略しました")
 
     urls = get_webhook_urls(channel)
     if not urls:

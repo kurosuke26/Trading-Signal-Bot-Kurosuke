@@ -190,5 +190,17 @@ def run():
     print('\n統合テスト（collector→poster、モック使用）: 成功')
 
 
+def test_embed_limits():
+    """Discordの上限（Embed10件・合計6,000文字・フィールド総数）で投稿が500にならないよう絞れているか。"""
+    big = {'title': 'x' * 100, 'description': 'y' * 300,
+           'fields': [{'name': f'f{i}', 'value': 'v' * 50} for i in range(8)]}
+    kept, dropped = pst.limit_embeds([dict(big) for _ in range(20)])
+    assert len(kept) <= pst.MAX_EMBEDS_PER_MESSAGE and dropped == 20 - len(kept)
+    assert sum(pst._embed_chars(e) for e in kept) <= pst.MAX_EMBED_TOTAL_CHARS
+    assert sum(len(e['fields']) for e in kept) <= pst.MAX_EMBED_TOTAL_FIELDS
+    print(f'embed limits: {len(kept)}件採用 / {dropped}件省略')
+
+
 if __name__ == '__main__':
+    test_embed_limits()
     run()
