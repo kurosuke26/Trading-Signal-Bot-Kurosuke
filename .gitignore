@@ -9,3 +9,7 @@ venv/
 
 # OS
 .DS_Store
+
+# 検証の中間ファイル（build_panel.py等が再生成する。大きいのでコミットしない）
+data/backtest_out/*.pkl
+data/backtest_out/*.log

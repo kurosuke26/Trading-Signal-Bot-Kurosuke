@@ -1,0 +1,39 @@
+{
+  "code": {
+    "git_commit": "082a0e6b29ebd8fb2b11e73568b8e193e632cd4c",
+    "git_dirty": true,
+    "file_sha256": {
+      "build_panel.py": "2c39ab0059d7cd6e",
+      "evaluate_sakata.py": "4139e82a760b24fd",
+      "fast_features.py": "997659060b70d248",
+      "fundamental_features.py": "f337b16d0ee18f84",
+      "universe_filters.py": "b9e585850be1ec44"
+    }
+  },
+  "data_fingerprint_sha256": "5032c4574dd07ce7805c1953e4b8dc9d544f482ed62ff9bbfb91bc8dc01689fa",
+  "tickers": 3979,
+  "environment": {
+    "python": "3.14.7",
+    "pandas": "3.0.5",
+    "numpy": "2.5.2",
+    "platform": "Windows-11-10.0.26200-SP0"
+  },
+  "params": {
+    "panel_step": 5,
+    "horizons": [
+      5,
+      20,
+      60
+    ],
+    "min_rows": 20,
+    "calendar_ticker": "7203",
+    "universe_filter": {
+      "min_avg_trading_value_yen_20d": 50000000,
+      "max_no_trade_days_60d": 3,
+      "surge_trading_value_ratio_20d_vs_250d": 10.0,
+      "price_high_low_ratio_60d": 3.0,
+      "max_atr_pct": 0.1,
+      "max_limit_hits_20d": 3
+    }
+  }
+}

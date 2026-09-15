@@ -1,0 +1,728 @@
+{
+  "impl": "sakata.py",
+  "tickers": 3979,
+  "delisted_tickers": 245,
+  "stock_days": 1431103,
+  "meta": {
+    "code": {
+      "git_commit": "082a0e6b29ebd8fb2b11e73568b8e193e632cd4c",
+      "git_dirty": true,
+      "file_sha256": {
+        "evaluate_sakata.py": "4139e82a760b24fd",
+        "fast_features.py": "997659060b70d248",
+        "sakata.py": "e2de188855953a81",
+        "universe_filters.py": "b9e585850be1ec44"
+      }
+    },
+    "data_fingerprint_sha256": "5032c4574dd07ce7805c1953e4b8dc9d544f482ed62ff9bbfb91bc8dc01689fa",
+    "tickers": 3979,
+    "environment": {
+      "python": "3.14.7",
+      "pandas": "3.0.5",
+      "numpy": "2.5.2",
+      "platform": "Windows-11-10.0.26200-SP0"
+    },
+    "params": {
+      "horizons": [
+        5,
+        20
+      ],
+      "lookback_rows": 220,
+      "min_rows": 80,
+      "score_buckets": [
+        [
+          0.0,
+          0.0,
+          "0（検出なし・相殺）"
+        ],
+        [
+          0.0001,
+          0.3999,
+          "0.01〜0.39"
+        ],
+        [
+          0.4,
+          0.5999,
+          "0.40〜0.59"
+        ],
+        [
+          0.6,
+          0.6999,
+          "0.60〜0.69"
+        ],
+        [
+          0.7,
+          0.7999,
+          "0.70〜0.79"
+        ],
+        [
+          0.8,
+          1.0,
+          "0.80〜1.00"
+        ]
+      ],
+      "universe_filter": {
+        "min_avg_trading_value_yen_20d": 50000000,
+        "max_no_trade_days_60d": 3,
+        "surge_trading_value_ratio_20d_vs_250d": 10.0,
+        "price_high_low_ratio_60d": 3.0,
+        "max_atr_pct": 0.1,
+        "max_limit_hits_20d": 3
+      }
+    }
+  },
+  "baseline_mean_return_pct": {
+    "5d": 0.306,
+    "20d": 1.54
+  },
+  "patterns": {
+    "all": {
+      "N字|bullish": {
+        "n": 14039,
+        "5d": {
+          "mean_return_pct": 0.255,
+          "win_rate_pct": 47.9,
+          "excess_return_pct": -0.018,
+          "excess_win_rate_pct": 44.4,
+          "t_stat_excess": -0.34
+        },
+        "20d": {
+          "mean_return_pct": 1.484,
+          "win_rate_pct": 52.4,
+          "excess_return_pct": 0.189,
+          "excess_win_rate_pct": 43.6,
+          "t_stat_excess": 1.66
+        }
+      },
+      "V字|bullish": {
+        "n": 5958,
+        "5d": {
+          "mean_return_pct": 0.909,
+          "win_rate_pct": 54.0,
+          "excess_return_pct": -0.237,
+          "excess_win_rate_pct": 41.0,
+          "t_stat_excess": -2.43
+        },
+        "20d": {
+          "mean_return_pct": 2.401,
+          "win_rate_pct": 54.6,
+          "excess_return_pct": -0.753,
+          "excess_win_rate_pct": 39.3,
+          "t_stat_excess": -4.21
+        }
+      },
+      "たすき線|bearish": {
+        "n": 1530,
+        "5d": {
+          "mean_return_pct": 0.567,
+          "win_rate_pct": 47.6,
+          "excess_return_pct": -0.062,
+          "excess_win_rate_pct": 54.1,
+          "t_stat_excess": -0.53
+        },
+        "20d": {
+          "mean_return_pct": 1.915,
+          "win_rate_pct": 44.8,
+          "excess_return_pct": -0.098,
+          "excess_win_rate_pct": 56.7,
+          "t_stat_excess": -0.34
+        }
+      },
+      "たすき線|bullish": {
+        "n": 1434,
+        "5d": {
+          "mean_return_pct": 0.416,
+          "win_rate_pct": 50.1,
+          "excess_return_pct": 0.163,
+          "excess_win_rate_pct": 45.8,
+          "t_stat_excess": 1.14
+        },
+        "20d": {
+          "mean_return_pct": 2.115,
+          "win_rate_pct": 54.0,
+          "excess_return_pct": 0.828,
+          "excess_win_rate_pct": 45.2,
+          "t_stat_excess": 2.42
+        }
+      },
+      "三兵|bearish": {
+        "n": 3354,
+        "5d": {
+          "mean_return_pct": 0.121,
+          "win_rate_pct": 47.7,
+          "excess_return_pct": 0.06,
+          "excess_win_rate_pct": 53.4,
+          "t_stat_excess": 0.74
+        },
+        "20d": {
+          "mean_return_pct": 1.808,
+          "win_rate_pct": 43.5,
+          "excess_return_pct": 0.048,
+          "excess_win_rate_pct": 57.3,
+          "t_stat_excess": 0.22
+        }
+      },
+      "三兵|bullish": {
+        "n": 1360,
+        "5d": {
+          "mean_return_pct": 0.052,
+          "win_rate_pct": 46.6,
+          "excess_return_pct": -0.222,
+          "excess_win_rate_pct": 43.7,
+          "t_stat_excess": -1.28
+        },
+        "20d": {
+          "mean_return_pct": 0.161,
+          "win_rate_pct": 47.9,
+          "excess_return_pct": -1.061,
+          "excess_win_rate_pct": 38.8,
+          "t_stat_excess": -3.7
+        }
+      },
+      "三山|bearish": {
+        "n": 10889,
+        "5d": {
+          "mean_return_pct": 0.194,
+          "win_rate_pct": 45.5,
+          "excess_return_pct": 0.037,
+          "excess_win_rate_pct": 53.6,
+          "t_stat_excess": 0.98
+        },
+        "20d": {
+          "mean_return_pct": 1.815,
+          "win_rate_pct": 42.3,
+          "excess_return_pct": 0.049,
+          "excess_win_rate_pct": 56.1,
+          "t_stat_excess": 0.54
+        }
+      },
+      "三川|bullish": {
+        "n": 11765,
+        "5d": {
+          "mean_return_pct": 0.158,
+          "win_rate_pct": 46.8,
+          "excess_return_pct": -0.037,
+          "excess_win_rate_pct": 43.8,
+          "t_stat_excess": -0.78
+        },
+        "20d": {
+          "mean_return_pct": 1.002,
+          "win_rate_pct": 50.7,
+          "excess_return_pct": -0.073,
+          "excess_win_rate_pct": 42.0,
+          "t_stat_excess": -0.75
+        }
+      },
+      "三法|bearish": {
+        "n": 564,
+        "5d": {
+          "mean_return_pct": 0.215,
+          "win_rate_pct": 43.8,
+          "excess_return_pct": -0.098,
+          "excess_win_rate_pct": 50.9,
+          "t_stat_excess": -0.58
+        },
+        "20d": {
+          "mean_return_pct": 0.972,
+          "win_rate_pct": 41.5,
+          "excess_return_pct": -0.666,
+          "excess_win_rate_pct": 55.1,
+          "t_stat_excess": -2.02
+        }
+      },
+      "三法|bullish": {
+        "n": 843,
+        "5d": {
+          "mean_return_pct": 0.243,
+          "win_rate_pct": 46.4,
+          "excess_return_pct": 0.041,
+          "excess_win_rate_pct": 42.8,
+          "t_stat_excess": 0.18
+        },
+        "20d": {
+          "mean_return_pct": 1.536,
+          "win_rate_pct": 49.7,
+          "excess_return_pct": 0.254,
+          "excess_win_rate_pct": 38.8,
+          "t_stat_excess": 0.45
+        }
+      },
+      "三空|bearish": {
+        "n": 3913,
+        "5d": {
+          "mean_return_pct": 0.235,
+          "win_rate_pct": 49.3,
+          "excess_return_pct": -0.108,
+          "excess_win_rate_pct": 55.8,
+          "t_stat_excess": -0.77
+        },
+        "20d": {
+          "mean_return_pct": 2.119,
+          "win_rate_pct": 44.9,
+          "excess_return_pct": 0.402,
+          "excess_win_rate_pct": 56.7,
+          "t_stat_excess": 1.66
+        }
+      },
+      "三空|bullish": {
+        "n": 3457,
+        "5d": {
+          "mean_return_pct": 1.907,
+          "win_rate_pct": 61.5,
+          "excess_return_pct": -0.155,
+          "excess_win_rate_pct": 45.9,
+          "t_stat_excess": -1.85
+        },
+        "20d": {
+          "mean_return_pct": 5.3,
+          "win_rate_pct": 68.2,
+          "excess_return_pct": 0.193,
+          "excess_win_rate_pct": 45.0,
+          "t_stat_excess": 1.08
+        }
+      },
+      "段違い|bearish": {
+        "n": 2732,
+        "5d": {
+          "mean_return_pct": 1.351,
+          "win_rate_pct": 36.6,
+          "excess_return_pct": -0.107,
+          "excess_win_rate_pct": 52.8,
+          "t_stat_excess": -1.05
+        },
+        "20d": {
+          "mean_return_pct": 3.611,
+          "win_rate_pct": 38.5,
+          "excess_return_pct": -0.046,
+          "excess_win_rate_pct": 55.5,
+          "t_stat_excess": -0.19
+        }
+      },
+      "段違い|bullish": {
+        "n": 4129,
+        "5d": {
+          "mean_return_pct": 0.006,
+          "win_rate_pct": 45.3,
+          "excess_return_pct": -0.208,
+          "excess_win_rate_pct": 42.7,
+          "t_stat_excess": -1.8
+        },
+        "20d": {
+          "mean_return_pct": 0.577,
+          "win_rate_pct": 49.3,
+          "excess_return_pct": -0.663,
+          "excess_win_rate_pct": 40.7,
+          "t_stat_excess": -3.18
+        }
+      },
+      "毛抜き（かい値）|bearish": {
+        "n": 17512,
+        "5d": {
+          "mean_return_pct": 0.244,
+          "win_rate_pct": 47.5,
+          "excess_return_pct": 0.006,
+          "excess_win_rate_pct": 55.1,
+          "t_stat_excess": 0.18
+        },
+        "20d": {
+          "mean_return_pct": 1.405,
+          "win_rate_pct": 45.1,
+          "excess_return_pct": -0.05,
+          "excess_win_rate_pct": 56.8,
+          "t_stat_excess": -0.64
+        }
+      },
+      "毛抜き（かい値）|bullish": {
+        "n": 14411,
+        "5d": {
+          "mean_return_pct": 0.119,
+          "win_rate_pct": 48.2,
+          "excess_return_pct": -0.162,
+          "excess_win_rate_pct": 43.0,
+          "t_stat_excess": -3.82
+        },
+        "20d": {
+          "mean_return_pct": 1.229,
+          "win_rate_pct": 51.8,
+          "excess_return_pct": -0.312,
+          "excess_win_rate_pct": 40.3,
+          "t_stat_excess": -2.84
+        }
+      }
+    },
+    "liquid": {
+      "N字|bullish": {
+        "n": 7918,
+        "5d": {
+          "mean_return_pct": 0.312,
+          "win_rate_pct": 48.6,
+          "excess_return_pct": 0.025,
+          "excess_win_rate_pct": 45.1,
+          "t_stat_excess": 0.34
+        },
+        "20d": {
+          "mean_return_pct": 1.542,
+          "win_rate_pct": 52.9,
+          "excess_return_pct": 0.257,
+          "excess_win_rate_pct": 44.4,
+          "t_stat_excess": 1.67
+        }
+      },
+      "V字|bullish": {
+        "n": 3583,
+        "5d": {
+          "mean_return_pct": 0.979,
+          "win_rate_pct": 55.7,
+          "excess_return_pct": -0.06,
+          "excess_win_rate_pct": 43.5,
+          "t_stat_excess": -0.56
+        },
+        "20d": {
+          "mean_return_pct": 2.327,
+          "win_rate_pct": 54.6,
+          "excess_return_pct": -0.444,
+          "excess_win_rate_pct": 42.4,
+          "t_stat_excess": -1.93
+        }
+      },
+      "たすき線|bearish": {
+        "n": 916,
+        "5d": {
+          "mean_return_pct": 0.146,
+          "win_rate_pct": 50.8,
+          "excess_return_pct": -0.144,
+          "excess_win_rate_pct": 54.5,
+          "t_stat_excess": -0.95
+        },
+        "20d": {
+          "mean_return_pct": 1.284,
+          "win_rate_pct": 46.1,
+          "excess_return_pct": -0.032,
+          "excess_win_rate_pct": 53.8,
+          "t_stat_excess": -0.1
+        }
+      },
+      "たすき線|bullish": {
+        "n": 937,
+        "5d": {
+          "mean_return_pct": 0.566,
+          "win_rate_pct": 51.4,
+          "excess_return_pct": 0.337,
+          "excess_win_rate_pct": 47.8,
+          "t_stat_excess": 1.93
+        },
+        "20d": {
+          "mean_return_pct": 2.493,
+          "win_rate_pct": 54.7,
+          "excess_return_pct": 1.227,
+          "excess_win_rate_pct": 46.2,
+          "t_stat_excess": 2.72
+        }
+      },
+      "三兵|bearish": {
+        "n": 1719,
+        "5d": {
+          "mean_return_pct": 0.016,
+          "win_rate_pct": 49.9,
+          "excess_return_pct": 0.111,
+          "excess_win_rate_pct": 52.9,
+          "t_stat_excess": 0.95
+        },
+        "20d": {
+          "mean_return_pct": 1.944,
+          "win_rate_pct": 44.4,
+          "excess_return_pct": 0.313,
+          "excess_win_rate_pct": 55.6,
+          "t_stat_excess": 1.07
+        }
+      },
+      "三兵|bullish": {
+        "n": 617,
+        "5d": {
+          "mean_return_pct": -0.097,
+          "win_rate_pct": 48.1,
+          "excess_return_pct": -0.518,
+          "excess_win_rate_pct": 42.0,
+          "t_stat_excess": -2.35
+        },
+        "20d": {
+          "mean_return_pct": -0.222,
+          "win_rate_pct": 49.1,
+          "excess_return_pct": -1.522,
+          "excess_win_rate_pct": 39.9,
+          "t_stat_excess": -3.4
+        }
+      },
+      "三山|bearish": {
+        "n": 5317,
+        "5d": {
+          "mean_return_pct": 0.259,
+          "win_rate_pct": 46.0,
+          "excess_return_pct": 0.144,
+          "excess_win_rate_pct": 51.5,
+          "t_stat_excess": 2.69
+        },
+        "20d": {
+          "mean_return_pct": 1.94,
+          "win_rate_pct": 42.4,
+          "excess_return_pct": 0.17,
+          "excess_win_rate_pct": 53.2,
+          "t_stat_excess": 1.33
+        }
+      },
+      "三川|bullish": {
+        "n": 5345,
+        "5d": {
+          "mean_return_pct": 0.05,
+          "win_rate_pct": 48.0,
+          "excess_return_pct": -0.181,
+          "excess_win_rate_pct": 43.8,
+          "t_stat_excess": -2.76
+        },
+        "20d": {
+          "mean_return_pct": 0.696,
+          "win_rate_pct": 50.0,
+          "excess_return_pct": -0.354,
+          "excess_win_rate_pct": 41.8,
+          "t_stat_excess": -2.44
+        }
+      },
+      "三法|bearish": {
+        "n": 218,
+        "5d": {
+          "mean_return_pct": 0.156,
+          "win_rate_pct": 48.6,
+          "excess_return_pct": -0.011,
+          "excess_win_rate_pct": 50.9,
+          "t_stat_excess": -0.03
+        },
+        "20d": {
+          "mean_return_pct": 1.083,
+          "win_rate_pct": 40.4,
+          "excess_return_pct": -0.412,
+          "excess_win_rate_pct": 51.4,
+          "t_stat_excess": -0.76
+        }
+      },
+      "三法|bullish": {
+        "n": 379,
+        "5d": {
+          "mean_return_pct": 0.54,
+          "win_rate_pct": 51.7,
+          "excess_return_pct": 0.473,
+          "excess_win_rate_pct": 47.2,
+          "t_stat_excess": 1.28
+        },
+        "20d": {
+          "mean_return_pct": 1.607,
+          "win_rate_pct": 48.8,
+          "excess_return_pct": 0.428,
+          "excess_win_rate_pct": 39.8,
+          "t_stat_excess": 0.5
+        }
+      },
+      "三空|bearish": {
+        "n": 2242,
+        "5d": {
+          "mean_return_pct": 0.471,
+          "win_rate_pct": 47.5,
+          "excess_return_pct": 0.133,
+          "excess_win_rate_pct": 53.7,
+          "t_stat_excess": 0.91
+        },
+        "20d": {
+          "mean_return_pct": 3.176,
+          "win_rate_pct": 44.1,
+          "excess_return_pct": 1.491,
+          "excess_win_rate_pct": 53.3,
+          "t_stat_excess": 4.99
+        }
+      },
+      "三空|bullish": {
+        "n": 2077,
+        "5d": {
+          "mean_return_pct": 1.847,
+          "win_rate_pct": 60.6,
+          "excess_return_pct": -0.148,
+          "excess_win_rate_pct": 46.5,
+          "t_stat_excess": -1.52
+        },
+        "20d": {
+          "mean_return_pct": 5.547,
+          "win_rate_pct": 68.8,
+          "excess_return_pct": 0.366,
+          "excess_win_rate_pct": 47.0,
+          "t_stat_excess": 1.91
+        }
+      },
+      "段違い|bearish": {
+        "n": 1742,
+        "5d": {
+          "mean_return_pct": 0.538,
+          "win_rate_pct": 40.6,
+          "excess_return_pct": -0.23,
+          "excess_win_rate_pct": 53.6,
+          "t_stat_excess": -1.96
+        },
+        "20d": {
+          "mean_return_pct": 2.246,
+          "win_rate_pct": 43.1,
+          "excess_return_pct": -0.334,
+          "excess_win_rate_pct": 55.4,
+          "t_stat_excess": -1.49
+        }
+      },
+      "段違い|bullish": {
+        "n": 2783,
+        "5d": {
+          "mean_return_pct": 0.184,
+          "win_rate_pct": 46.5,
+          "excess_return_pct": -0.073,
+          "excess_win_rate_pct": 43.8,
+          "t_stat_excess": -0.6
+        },
+        "20d": {
+          "mean_return_pct": 0.8,
+          "win_rate_pct": 50.2,
+          "excess_return_pct": -0.447,
+          "excess_win_rate_pct": 40.7,
+          "t_stat_excess": -1.88
+        }
+      },
+      "毛抜き（かい値）|bearish": {
+        "n": 9172,
+        "5d": {
+          "mean_return_pct": 0.273,
+          "win_rate_pct": 47.5,
+          "excess_return_pct": 0.002,
+          "excess_win_rate_pct": 54.2,
+          "t_stat_excess": 0.05
+        },
+        "20d": {
+          "mean_return_pct": 1.531,
+          "win_rate_pct": 44.7,
+          "excess_return_pct": 0.007,
+          "excess_win_rate_pct": 55.1,
+          "t_stat_excess": 0.06
+        }
+      },
+      "毛抜き（かい値）|bullish": {
+        "n": 7200,
+        "5d": {
+          "mean_return_pct": 0.071,
+          "win_rate_pct": 48.8,
+          "excess_return_pct": -0.176,
+          "excess_win_rate_pct": 44.4,
+          "t_stat_excess": -3.0
+        },
+        "20d": {
+          "mean_return_pct": 1.163,
+          "win_rate_pct": 51.6,
+          "excess_return_pct": -0.372,
+          "excess_win_rate_pct": 41.9,
+          "t_stat_excess": -2.8
+        }
+      }
+    }
+  },
+  "score_buckets": {
+    "all": {
+      "0.01〜0.39": {
+        "n": 1114,
+        "5d": {
+          "mean_return_pct": 0.893,
+          "win_rate_pct": 53.4,
+          "excess_return_pct": -0.172,
+          "excess_win_rate_pct": 42.9,
+          "t_stat_excess": -0.92
+        },
+        "20d": {
+          "mean_return_pct": 3.04,
+          "win_rate_pct": 58.7,
+          "excess_return_pct": 0.244,
+          "excess_win_rate_pct": 45.2,
+          "t_stat_excess": 0.76
+        }
+      },
+      "0.40〜0.59": {
+        "n": 54892,
+        "5d": {
+          "mean_return_pct": 0.347,
+          "win_rate_pct": 49.0,
+          "excess_return_pct": -0.098,
+          "excess_win_rate_pct": 43.6,
+          "t_stat_excess": -3.86
+        },
+        "20d": {
+          "mean_return_pct": 1.554,
+          "win_rate_pct": 52.7,
+          "excess_return_pct": -0.166,
+          "excess_win_rate_pct": 41.7,
+          "t_stat_excess": -3.05
+        }
+      },
+      "0（検出なし・相殺）": {
+        "n": 1375097,
+        "5d": {
+          "mean_return_pct": 0.304,
+          "win_rate_pct": 50.0,
+          "excess_return_pct": 0.004
+        },
+        "20d": {
+          "mean_return_pct": 1.538,
+          "win_rate_pct": 53.0,
+          "excess_return_pct": 0.006
+        }
+      }
+    },
+    "liquid": {
+      "0.01〜0.39": {
+        "n": 612,
+        "5d": {
+          "mean_return_pct": 0.562,
+          "win_rate_pct": 53.3,
+          "excess_return_pct": -0.234,
+          "excess_win_rate_pct": 44.3,
+          "t_stat_excess": -1.15
+        },
+        "20d": {
+          "mean_return_pct": 2.843,
+          "win_rate_pct": 57.2,
+          "excess_return_pct": 0.476,
+          "excess_win_rate_pct": 45.9,
+          "t_stat_excess": 1.11
+        }
+      },
+      "0.40〜0.59": {
+        "n": 29509,
+        "5d": {
+          "mean_return_pct": 0.388,
+          "win_rate_pct": 50.1,
+          "excess_return_pct": -0.075,
+          "excess_win_rate_pct": 44.6,
+          "t_stat_excess": -2.28
+        },
+        "20d": {
+          "mean_return_pct": 1.598,
+          "win_rate_pct": 53.0,
+          "excess_return_pct": -0.138,
+          "excess_win_rate_pct": 42.8,
+          "t_stat_excess": -1.93
+        }
+      },
+      "0（検出なし・相殺）": {
+        "n": 726938,
+        "5d": {
+          "mean_return_pct": 0.33,
+          "win_rate_pct": 50.8,
+          "excess_return_pct": 0.031
+        },
+        "20d": {
+          "mean_return_pct": 1.666,
+          "win_rate_pct": 53.5,
+          "excess_return_pct": 0.15
+        }
+      }
+    }
+  }
+}

@@ -313,3 +313,69 @@ def technical_score(snapshot):
         return None, []
 
     return min(score, 1.0), reasons
+
+
+def detect_volume_surge_quiet_price(df, recent_window=5, baseline_window=60, surge_ratio=3.0,
+                                    max_move_pct=3.0, max_range_atr=2.0, min_baseline_value_yen=10_000_000):
+    """
+    【2026-09-16追加】「出来高が急に増えているのに、株価はまだあまり動いていない」銘柄の検出。
+    大口の仕込み（集め）や、材料が出る前の出来高先行として注目される形。
+
+    判定（すべて t日の引けまでのデータだけを使う。未来の値は参照しない）:
+      - 出来高：直近recent_window日の平均出来高が、その直前baseline_window日の平均の surge_ratio 倍以上
+      - 鮮度：前日の時点ではまだ surge_ratio 倍に届いていなかった（＝本日初めて条件を満たした日だけ検出）
+      - 株価：recent_window日間の終値の変化率が ±max_move_pct% 以内、かつ
+              recent_window日間の値幅（最高値−最安値）が、急増前のATR×max_range_atr 以内
+      - 流動性：急増前の平均売買代金（終値×出来高）が min_baseline_value_yen 以上
+              （もともと出来高がほぼゼロの銘柄の「見かけ上の急増」を除外）
+
+    戻り値: {'detected': bool, 'volume_ratio': float or None, 'price_move_pct': float or None, 'note': str or None}
+    """
+    result = {'detected': False, 'volume_ratio': None, 'price_move_pct': None, 'note': None}
+    need = recent_window + baseline_window + 2
+    if df is None or 'Volume' not in df.columns or len(df) < need:
+        result['note'] = 'データ不足'
+        return result
+
+    vol = df['Volume'].astype(float).to_numpy()
+    close = df['Close'].astype(float).to_numpy()
+    high = df['High'].astype(float).to_numpy()
+    low = df['Low'].astype(float).to_numpy()
+
+    def ratio_at(end):  # end: 末尾からの位置（0=本日, 1=前日）
+        stop = len(vol) - end
+        recent = vol[stop - recent_window:stop]
+        base = vol[stop - recent_window - baseline_window:stop - recent_window]
+        base_mean = np.nanmean(base)
+        if not np.isfinite(base_mean) or base_mean <= 0:
+            return None, None
+        return float(np.nanmean(recent) / base_mean), base_mean
+
+    ratio_today, base_mean = ratio_at(0)
+    ratio_prev, _ = ratio_at(1)
+    if ratio_today is None:
+        result['note'] = '平常時の出来高が0'
+        return result
+    result['volume_ratio'] = round(ratio_today, 2)
+
+    base_close = close[-(recent_window + baseline_window + 1):-(recent_window + 1)]
+    if np.nanmean(base_close) * base_mean < min_baseline_value_yen:
+        result['note'] = '平常時の売買代金が小さい'
+        return result
+
+    start_close = close[-(recent_window + 1)]
+    move_pct = (close[-1] / start_close - 1) * 100 if start_close > 0 else None
+    result['price_move_pct'] = round(move_pct, 2) if move_pct is not None else None
+
+    pre = df.iloc[:-(recent_window)]
+    _, atr_before = compute_atr(pre)
+    rng = float(np.nanmax(high[-recent_window:]) - np.nanmin(low[-recent_window:]))
+
+    surge = ratio_today >= surge_ratio and (ratio_prev is None or ratio_prev < surge_ratio)
+    quiet = move_pct is not None and abs(move_pct) <= max_move_pct and \
+        atr_before is not None and rng <= atr_before * max_range_atr
+    if surge and quiet:
+        result['detected'] = True
+        result['note'] = (f'直近{recent_window}日の出来高が平常時の{ratio_today:.1f}倍に急増、'
+                          f'株価は{move_pct:+.1f}%とほぼ横ばい')
+    return result

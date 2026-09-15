@@ -18,6 +18,7 @@ import pandas as pd
 
 import collector as col
 import poster as pst
+import tracking
 
 
 def make_ohlcv(n=200, start=1000, drift=2.0, noise=8.0, seed=0):
@@ -87,7 +88,7 @@ def run_collector_stage(n_tickers=25):
     with mock.patch.object(col, 'fetch_fundamentals', return_value=(fundamentals, [('9999.T', 'テスト用の取得失敗')])), \
          mock.patch.object(col, 'fetch_price_histories', return_value=(histories, [])), \
          mock.patch.object(col, 'get_eps_trend', side_effect=fake_get_eps_trend), \
-         mock.patch.object(col, 'resolve_universe', return_value=(tickers, None, False)):
+         mock.patch.object(col, 'resolve_universe', return_value=(tickers, None, False, True)):
         ok = col.collect()
 
     assert ok is True, 'collector.collect()がFalseを返した'
@@ -98,7 +99,8 @@ def run():
     tmpdir = tempfile.mkdtemp()
     snapshot_path = os.path.join(tmpdir, 'latest_scan.json')
 
-    with mock.patch.object(col, 'OUTPUT_PATH', snapshot_path):
+    # 本番の仮想売買記録（data/trade_log.json）にテスト用の架空ポジションが書き込まれないよう、一時ファイルに差し替える
+    with mock.patch.object(col, 'OUTPUT_PATH', snapshot_path),          mock.patch.object(tracking, 'TRADE_LOG_PATH', os.path.join(tmpdir, 'trade_log.json')):
         tickers = run_collector_stage(25)
 
     assert os.path.exists(snapshot_path), 'スナップショットファイルが作成されていない'
@@ -137,12 +139,13 @@ def run():
                                          ('SHORT', 'TEST'): 'https://discord.test/short',
                                          ('WARNING', 'TEST'): 'https://discord.test/warning',
                                          ('PERFORMANCE', 'TEST'): 'https://discord.test/perf',
-                                         ('STRATEGY', 'TEST'): 'https://discord.test/strategy'}):
+                                         ('STRATEGY', 'TEST'): 'https://discord.test/strategy',
+                                         ('BACKTEST', 'TEST'): 'https://discord.test/backtest'}):
         result = pst.post()
 
     print(f'poster.post() result = {result}')
     assert result is True, 'poster.post()がFalseを返した（一部チャネル送信失敗扱い）'
-    assert len(sent_payloads) == 5, f'送信されたWebhook URL数が想定と違う: {list(sent_payloads.keys())}'
+    assert len(sent_payloads) == 6, f'送信されたWebhook URL数が想定と違う: {list(sent_payloads.keys())}'
 
     for url, payload_list in sent_payloads.items():
         for payload in payload_list:

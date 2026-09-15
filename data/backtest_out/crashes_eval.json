@@ -1,0 +1,4888 @@
+{
+  "meta": {
+    "code": {
+      "git_commit": "082a0e6b29ebd8fb2b11e73568b8e193e632cd4c",
+      "git_dirty": true,
+      "file_sha256": {
+        "build_panel.py": "2c39ab0059d7cd6e",
+        "evaluate_crashes.py": "d872b221f2d73e86",
+        "universe_filters.py": "b9e585850be1ec44"
+      }
+    },
+    "data_fingerprint_sha256": "cdbb4ab2635c35e0afc445a4905f768de68efe715e70bc599c623efaf15e2759",
+    "tickers": 3972,
+    "environment": {
+      "python": "3.14.7",
+      "pandas": "3.0.5",
+      "numpy": "2.5.2",
+      "platform": "Windows-11-10.0.26200-SP0"
+    },
+    "params": {
+      "seed": 20260916,
+      "n_boot": 10000,
+      "entry_delays": [
+        0,
+        1,
+        2,
+        3,
+        5,
+        10
+      ],
+      "holds": [
+        5,
+        20,
+        60
+      ],
+      "cooldown": 20,
+      "triggers": [
+        [
+          "1日で−3%以下",
+          "day",
+          -0.03
+        ],
+        [
+          "1日で−4%以下",
+          "day",
+          -0.04
+        ],
+        [
+          "1日で−5%以下",
+          "day",
+          -0.05
+        ],
+        [
+          "20日高値から−7%以下",
+          "dd",
+          -0.07
+        ],
+        [
+          "20日高値から−10%以下",
+          "dd",
+          -0.1
+        ],
+        [
+          "20日高値から−15%以下",
+          "dd",
+          -0.15
+        ]
+      ],
+      "universe_filter": {
+        "min_avg_trading_value_yen_20d": 50000000,
+        "max_no_trade_days_60d": 3,
+        "surge_trading_value_ratio_20d_vs_250d": 10.0,
+        "price_high_low_ratio_60d": 3.0,
+        "max_atr_pct": 0.1,
+        "max_limit_hits_20d": 3
+      }
+    }
+  },
+  "period": [
+    "2024-06-17",
+    "2026-06-11"
+  ],
+  "split_date": "2025-06-13",
+  "prospective": [
+    {
+      "trigger": "1日で−3%以下",
+      "entry_delay_days": 0,
+      "hold_days": 5,
+      "events": 4,
+      "event_dates": [
+        "2024-08-01",
+        "2024-09-04",
+        "2025-04-04",
+        "2026-03-04"
+      ],
+      "mean_return_pct": 0.78,
+      "win_rate_pct": 50.0,
+      "all_days_mean_pct": 0.24,
+      "p_value_random_days": 0.3307,
+      "first_half_events": 3,
+      "second_half_events": 1,
+      "first_half_mean_pct": 0.8,
+      "second_half_mean_pct": 0.69,
+      "first_half_edge_vs_all_days_pct": 0.67
+    },
+    {
+      "trigger": "1日で−3%以下",
+      "entry_delay_days": 0,
+      "hold_days": 20,
+      "events": 4,
+      "event_dates": [
+        "2024-08-01",
+        "2024-09-04",
+        "2025-04-04",
+        "2026-03-04"
+      ],
+      "mean_return_pct": 5.51,
+      "win_rate_pct": 75.0,
+      "all_days_mean_pct": 1.54,
+      "p_value_random_days": 0.0248,
+      "first_half_events": 3,
+      "second_half_events": 1,
+      "first_half_mean_pct": 8.49,
+      "second_half_mean_pct": -3.44,
+      "first_half_edge_vs_all_days_pct": 7.36
+    },
+    {
+      "trigger": "1日で−3%以下",
+      "entry_delay_days": 0,
+      "hold_days": 60,
+      "events": 4,
+      "event_dates": [
+        "2024-08-01",
+        "2024-09-04",
+        "2025-04-04",
+        "2026-03-04"
+      ],
+      "mean_return_pct": 7.71,
+      "win_rate_pct": 75.0,
+      "all_days_mean_pct": 4.93,
+      "p_value_random_days": 0.1826,
+      "first_half_events": 3,
+      "second_half_events": 1,
+      "first_half_mean_pct": 10.6,
+      "second_half_mean_pct": -0.95,
+      "first_half_edge_vs_all_days_pct": 6.37
+    },
+    {
+      "trigger": "1日で−3%以下",
+      "entry_delay_days": 1,
+      "hold_days": 5,
+      "events": 4,
+      "event_dates": [
+        "2024-08-01",
+        "2024-09-04",
+        "2025-04-04",
+        "2026-03-04"
+      ],
+      "mean_return_pct": 2.17,
+      "win_rate_pct": 50.0,
+      "all_days_mean_pct": 0.24,
+      "p_value_random_days": 0.0416,
+      "first_half_events": 3,
+      "second_half_events": 1,
+      "first_half_mean_pct": 3.14,
+      "second_half_mean_pct": -0.75,
+      "first_half_edge_vs_all_days_pct": 2.99
+    },
+    {
+      "trigger": "1日で−3%以下",
+      "entry_delay_days": 1,
+      "hold_days": 20,
+      "events": 4,
+      "event_dates": [
+        "2024-08-01",
+        "2024-09-04",
+        "2025-04-04",
+        "2026-03-04"
+      ],
+      "mean_return_pct": 6.76,
+      "win_rate_pct": 75.0,
+      "all_days_mean_pct": 1.55,
+      "p_value_random_days": 0.0075,
+      "first_half_events": 3,
+      "second_half_events": 1,
+      "first_half_mean_pct": 9.72,
+      "second_half_mean_pct": -2.11,
+      "first_half_edge_vs_all_days_pct": 8.55
+    },
+    {
+      "trigger": "1日で−3%以下",
+      "entry_delay_days": 1,
+      "hold_days": 60,
+      "events": 4,
+      "event_dates": [
+        "2024-08-01",
+        "2024-09-04",
+        "2025-04-04",
+        "2026-03-04"
+      ],
+      "mean_return_pct": 8.08,
+      "win_rate_pct": 75.0,
+      "all_days_mean_pct": 4.95,
+      "p_value_random_days": 0.1421,
+      "first_half_events": 3,
+      "second_half_events": 1,
+      "first_half_mean_pct": 11.12,
+      "second_half_mean_pct": -1.02,
+      "first_half_edge_vs_all_days_pct": 6.81
+    },
+    {
+      "trigger": "1日で−3%以下",
+      "entry_delay_days": 2,
+      "hold_days": 5,
+      "events": 4,
+      "event_dates": [
+        "2024-08-01",
+        "2024-09-04",
+        "2025-04-04",
+        "2026-03-04"
+      ],
+      "mean_return_pct": 4.35,
+      "win_rate_pct": 100.0,
+      "all_days_mean_pct": 0.24,
+      "p_value_random_days": 0.0006,
+      "first_half_events": 3,
+      "second_half_events": 1,
+      "first_half_mean_pct": 5.21,
+      "second_half_mean_pct": 1.78,
+      "first_half_edge_vs_all_days_pct": 5.07
+    },
+    {
+      "trigger": "1日で−3%以下",
+      "entry_delay_days": 2,
+      "hold_days": 20,
+      "events": 4,
+      "event_dates": [
+        "2024-08-01",
+        "2024-09-04",
+        "2025-04-04",
+        "2026-03-04"
+      ],
+      "mean_return_pct": 8.91,
+      "win_rate_pct": 100.0,
+      "all_days_mean_pct": 1.56,
+      "p_value_random_days": 0.0004,
+      "first_half_events": 3,
+      "second_half_events": 1,
+      "first_half_mean_pct": 11.44,
+      "second_half_mean_pct": 1.33,
+      "first_half_edge_vs_all_days_pct": 10.24
+    },
+    {
+      "trigger": "1日で−3%以下",
+      "entry_delay_days": 2,
+      "hold_days": 60,
+      "events": 4,
+      "event_dates": [
+        "2024-08-01",
+        "2024-09-04",
+        "2025-04-04",
+        "2026-03-04"
+      ],
+      "mean_return_pct": 10.01,
+      "win_rate_pct": 100.0,
+      "all_days_mean_pct": 4.97,
+      "p_value_random_days": 0.0531,
+      "first_half_events": 3,
+      "second_half_events": 1,
+      "first_half_mean_pct": 12.21,
+      "second_half_mean_pct": 3.43,
+      "first_half_edge_vs_all_days_pct": 7.81
+    },
+    {
+      "trigger": "1日で−3%以下",
+      "entry_delay_days": 3,
+      "hold_days": 5,
+      "events": 4,
+      "event_dates": [
+        "2024-08-01",
+        "2024-09-04",
+        "2025-04-04",
+        "2026-03-04"
+      ],
+      "mean_return_pct": 1.47,
+      "win_rate_pct": 25.0,
+      "all_days_mean_pct": 0.24,
+      "p_value_random_days": 0.1325,
+      "first_half_events": 3,
+      "second_half_events": 1,
+      "first_half_mean_pct": 2.4,
+      "second_half_mean_pct": -1.34,
+      "first_half_edge_vs_all_days_pct": 2.26
+    },
+    {
+      "trigger": "1日で−3%以下",
+      "entry_delay_days": 3,
+      "hold_days": 20,
+      "events": 4,
+      "event_dates": [
+        "2024-08-01",
+        "2024-09-04",
+        "2025-04-04",
+        "2026-03-04"
+      ],
+      "mean_return_pct": 5.34,
+      "win_rate_pct": 75.0,
+      "all_days_mean_pct": 1.57,
+      "p_value_random_days": 0.0302,
+      "first_half_events": 3,
+      "second_half_events": 1,
+      "first_half_mean_pct": 7.5,
+      "second_half_mean_pct": -1.16,
+      "first_half_edge_vs_all_days_pct": 6.29
+    },
+    {
+      "trigger": "1日で−3%以下",
+      "entry_delay_days": 3,
+      "hold_days": 60,
+      "events": 4,
+      "event_dates": [
+        "2024-08-01",
+        "2024-09-04",
+        "2025-04-04",
+        "2026-03-04"
+      ],
+      "mean_return_pct": 6.26,
+      "win_rate_pct": 75.0,
+      "all_days_mean_pct": 4.99,
+      "p_value_random_days": 0.3292,
+      "first_half_events": 3,
+      "second_half_events": 1,
+      "first_half_mean_pct": 8.88,
+      "second_half_mean_pct": -1.61,
+      "first_half_edge_vs_all_days_pct": 4.41
+    },
+    {
+      "trigger": "1日で−3%以下",
+      "entry_delay_days": 5,
+      "hold_days": 5,
+      "events": 4,
+      "event_dates": [
+        "2024-08-01",
+        "2024-09-04",
+        "2025-04-04",
+        "2026-03-04"
+      ],
+      "mean_return_pct": 2.71,
+      "win_rate_pct": 100.0,
+      "all_days_mean_pct": 0.3,
+      "p_value_random_days": 0.0175,
+      "first_half_events": 3,
+      "second_half_events": 1,
+      "first_half_mean_pct": 3.52,
+      "second_half_mean_pct": 0.28,
+      "first_half_edge_vs_all_days_pct": 3.25
+    },
+    {
+      "trigger": "1日で−3%以下",
+      "entry_delay_days": 5,
+      "hold_days": 20,
+      "events": 4,
+      "event_dates": [
+        "2024-08-01",
+        "2024-09-04",
+        "2025-04-04",
+        "2026-03-04"
+      ],
+      "mean_return_pct": 3.88,
+      "win_rate_pct": 75.0,
+      "all_days_mean_pct": 1.59,
+      "p_value_random_days": 0.1113,
+      "first_half_events": 3,
+      "second_half_events": 1,
+      "first_half_mean_pct": 5.33,
+      "second_half_mean_pct": -0.45,
+      "first_half_edge_vs_all_days_pct": 4.08
+    },
+    {
+      "trigger": "1日で−3%以下",
+      "entry_delay_days": 5,
+      "hold_days": 60,
+      "events": 4,
+      "event_dates": [
+        "2024-08-01",
+        "2024-09-04",
+        "2025-04-04",
+        "2026-03-04"
+      ],
+      "mean_return_pct": 6.58,
+      "win_rate_pct": 75.0,
+      "all_days_mean_pct": 5.05,
+      "p_value_random_days": 0.2965,
+      "first_half_events": 3,
+      "second_half_events": 1,
+      "first_half_mean_pct": 8.89,
+      "second_half_mean_pct": -0.35,
+      "first_half_edge_vs_all_days_pct": 4.24
+    },
+    {
+      "trigger": "1日で−3%以下",
+      "entry_delay_days": 10,
+      "hold_days": 5,
+      "events": 4,
+      "event_dates": [
+        "2024-08-01",
+        "2024-09-04",
+        "2025-04-04",
+        "2026-03-04"
+      ],
+      "mean_return_pct": 0.79,
+      "win_rate_pct": 75.0,
+      "all_days_mean_pct": 0.34,
+      "p_value_random_days": 0.333,
+      "first_half_events": 3,
+      "second_half_events": 1,
+      "first_half_mean_pct": 1.49,
+      "second_half_mean_pct": -1.34,
+      "first_half_edge_vs_all_days_pct": 1.14
+    },
+    {
+      "trigger": "1日で−3%以下",
+      "entry_delay_days": 10,
+      "hold_days": 20,
+      "events": 4,
+      "event_dates": [
+        "2024-08-01",
+        "2024-09-04",
+        "2025-04-04",
+        "2026-03-04"
+      ],
+      "mean_return_pct": 1.19,
+      "win_rate_pct": 50.0,
+      "all_days_mean_pct": 1.53,
+      "p_value_random_days": 0.5795,
+      "first_half_events": 3,
+      "second_half_events": 1,
+      "first_half_mean_pct": 1.0,
+      "second_half_mean_pct": 1.75,
+      "first_half_edge_vs_all_days_pct": -0.19
+    },
+    {
+      "trigger": "1日で−3%以下",
+      "entry_delay_days": 10,
+      "hold_days": 60,
+      "events": 3,
+      "event_dates": [
+        "2024-08-01",
+        "2024-09-04",
+        "2025-04-04"
+      ],
+      "mean_return_pct": 4.43,
+      "win_rate_pct": 100.0,
+      "all_days_mean_pct": 5.07,
+      "p_value_random_days": 0.5528,
+      "first_half_events": 3,
+      "second_half_events": 0,
+      "first_half_mean_pct": 4.43,
+      "second_half_mean_pct": null,
+      "first_half_edge_vs_all_days_pct": -0.45
+    },
+    {
+      "trigger": "1日で−4%以下",
+      "entry_delay_days": 0,
+      "hold_days": 5,
+      "events": 2,
+      "event_dates": [
+        "2024-08-02",
+        "2025-04-07"
+      ],
+      "mean_return_pct": 5.32,
+      "win_rate_pct": 100.0,
+      "all_days_mean_pct": 0.24,
+      "p_value_random_days": 0.0035,
+      "first_half_events": 2,
+      "second_half_events": 0,
+      "first_half_mean_pct": 5.32,
+      "second_half_mean_pct": null,
+      "first_half_edge_vs_all_days_pct": 5.19
+    },
+    {
+      "trigger": "1日で−4%以下",
+      "entry_delay_days": 0,
+      "hold_days": 20,
+      "events": 2,
+      "event_dates": [
+        "2024-08-02",
+        "2025-04-07"
+      ],
+      "mean_return_pct": 13.34,
+      "win_rate_pct": 100.0,
+      "all_days_mean_pct": 1.54,
+      "p_value_random_days": 0.0004,
+      "first_half_events": 2,
+      "second_half_events": 0,
+      "first_half_mean_pct": 13.34,
+      "second_half_mean_pct": null,
+      "first_half_edge_vs_all_days_pct": 12.21
+    },
+    {
+      "trigger": "1日で−4%以下",
+      "entry_delay_days": 0,
+      "hold_days": 60,
+      "events": 2,
+      "event_dates": [
+        "2024-08-02",
+        "2025-04-07"
+      ],
+      "mean_return_pct": 16.07,
+      "win_rate_pct": 100.0,
+      "all_days_mean_pct": 4.93,
+      "p_value_random_days": 0.0036,
+      "first_half_events": 2,
+      "second_half_events": 0,
+      "first_half_mean_pct": 16.07,
+      "second_half_mean_pct": null,
+      "first_half_edge_vs_all_days_pct": 11.84
+    },
+    {
+      "trigger": "1日で−4%以下",
+      "entry_delay_days": 1,
+      "hold_days": 5,
+      "events": 2,
+      "event_dates": [
+        "2024-08-02",
+        "2025-04-07"
+      ],
+      "mean_return_pct": 6.9,
+      "win_rate_pct": 100.0,
+      "all_days_mean_pct": 0.24,
+      "p_value_random_days": 0.0002,
+      "first_half_events": 2,
+      "second_half_events": 0,
+      "first_half_mean_pct": 6.9,
+      "second_half_mean_pct": null,
+      "first_half_edge_vs_all_days_pct": 6.75
+    },
+    {
+      "trigger": "1日で−4%以下",
+      "entry_delay_days": 1,
+      "hold_days": 20,
+      "events": 2,
+      "event_dates": [
+        "2024-08-02",
+        "2025-04-07"
+      ],
+      "mean_return_pct": 14.69,
+      "win_rate_pct": 100.0,
+      "all_days_mean_pct": 1.55,
+      "p_value_random_days": 0.0001,
+      "first_half_events": 2,
+      "second_half_events": 0,
+      "first_half_mean_pct": 14.69,
+      "second_half_mean_pct": null,
+      "first_half_edge_vs_all_days_pct": 13.52
+    },
+    {
+      "trigger": "1日で−4%以下",
+      "entry_delay_days": 1,
+      "hold_days": 60,
+      "events": 2,
+      "event_dates": [
+        "2024-08-02",
+        "2025-04-07"
+      ],
+      "mean_return_pct": 15.55,
+      "win_rate_pct": 100.0,
+      "all_days_mean_pct": 4.95,
+      "p_value_random_days": 0.006,
+      "first_half_events": 2,
+      "second_half_events": 0,
+      "first_half_mean_pct": 15.55,
+      "second_half_mean_pct": null,
+      "first_half_edge_vs_all_days_pct": 11.24
+    },
+    {
+      "trigger": "1日で−4%以下",
+      "entry_delay_days": 2,
+      "hold_days": 5,
+      "events": 2,
+      "event_dates": [
+        "2024-08-02",
+        "2025-04-07"
+      ],
+      "mean_return_pct": 3.96,
+      "win_rate_pct": 50.0,
+      "all_days_mean_pct": 0.24,
+      "p_value_random_days": 0.0143,
+      "first_half_events": 2,
+      "second_half_events": 0,
+      "first_half_mean_pct": 3.96,
+      "second_half_mean_pct": null,
+      "first_half_edge_vs_all_days_pct": 3.82
+    },
+    {
+      "trigger": "1日で−4%以下",
+      "entry_delay_days": 2,
+      "hold_days": 20,
+      "events": 2,
+      "event_dates": [
+        "2024-08-02",
+        "2025-04-07"
+      ],
+      "mean_return_pct": 9.91,
+      "win_rate_pct": 100.0,
+      "all_days_mean_pct": 1.56,
+      "p_value_random_days": 0.0064,
+      "first_half_events": 2,
+      "second_half_events": 0,
+      "first_half_mean_pct": 9.91,
+      "second_half_mean_pct": null,
+      "first_half_edge_vs_all_days_pct": 8.71
+    },
+    {
+      "trigger": "1日で−4%以下",
+      "entry_delay_days": 2,
+      "hold_days": 60,
+      "events": 2,
+      "event_dates": [
+        "2024-08-02",
+        "2025-04-07"
+      ],
+      "mean_return_pct": 12.05,
+      "win_rate_pct": 100.0,
+      "all_days_mean_pct": 4.97,
+      "p_value_random_days": 0.063,
+      "first_half_events": 2,
+      "second_half_events": 0,
+      "first_half_mean_pct": 12.05,
+      "second_half_mean_pct": null,
+      "first_half_edge_vs_all_days_pct": 7.66
+    },
+    {
+      "trigger": "1日で−4%以下",
+      "entry_delay_days": 3,
+      "hold_days": 5,
+      "events": 2,
+      "event_dates": [
+        "2024-08-02",
+        "2025-04-07"
+      ],
+      "mean_return_pct": 5.41,
+      "win_rate_pct": 100.0,
+      "all_days_mean_pct": 0.24,
+      "p_value_random_days": 0.0038,
+      "first_half_events": 2,
+      "second_half_events": 0,
+      "first_half_mean_pct": 5.41,
+      "second_half_mean_pct": null,
+      "first_half_edge_vs_all_days_pct": 5.26
+    },
+    {
+      "trigger": "1日で−4%以下",
+      "entry_delay_days": 3,
+      "hold_days": 20,
+      "events": 2,
+      "event_dates": [
+        "2024-08-02",
+        "2025-04-07"
+      ],
+      "mean_return_pct": 10.84,
+      "win_rate_pct": 100.0,
+      "all_days_mean_pct": 1.57,
+      "p_value_random_days": 0.0027,
+      "first_half_events": 2,
+      "second_half_events": 0,
+      "first_half_mean_pct": 10.84,
+      "second_half_mean_pct": null,
+      "first_half_edge_vs_all_days_pct": 9.63
+    },
+    {
+      "trigger": "1日で−4%以下",
+      "entry_delay_days": 3,
+      "hold_days": 60,
+      "events": 2,
+      "event_dates": [
+        "2024-08-02",
+        "2025-04-07"
+      ],
+      "mean_return_pct": 14.02,
+      "win_rate_pct": 100.0,
+      "all_days_mean_pct": 4.99,
+      "p_value_random_days": 0.0193,
+      "first_half_events": 2,
+      "second_half_events": 0,
+      "first_half_mean_pct": 14.02,
+      "second_half_mean_pct": null,
+      "first_half_edge_vs_all_days_pct": 9.55
+    },
+    {
+      "trigger": "1日で−4%以下",
+      "entry_delay_days": 5,
+      "hold_days": 5,
+      "events": 2,
+      "event_dates": [
+        "2024-08-02",
+        "2025-04-07"
+      ],
+      "mean_return_pct": 3.24,
+      "win_rate_pct": 100.0,
+      "all_days_mean_pct": 0.3,
+      "p_value_random_days": 0.031,
+      "first_half_events": 2,
+      "second_half_events": 0,
+      "first_half_mean_pct": 3.24,
+      "second_half_mean_pct": null,
+      "first_half_edge_vs_all_days_pct": 2.97
+    },
+    {
+      "trigger": "1日で−4%以下",
+      "entry_delay_days": 5,
+      "hold_days": 20,
+      "events": 2,
+      "event_dates": [
+        "2024-08-02",
+        "2025-04-07"
+      ],
+      "mean_return_pct": 5.87,
+      "win_rate_pct": 100.0,
+      "all_days_mean_pct": 1.59,
+      "p_value_random_days": 0.0503,
+      "first_half_events": 2,
+      "second_half_events": 0,
+      "first_half_mean_pct": 5.87,
+      "second_half_mean_pct": null,
+      "first_half_edge_vs_all_days_pct": 4.62
+    },
+    {
+      "trigger": "1日で−4%以下",
+      "entry_delay_days": 5,
+      "hold_days": 60,
+      "events": 2,
+      "event_dates": [
+        "2024-08-02",
+        "2025-04-07"
+      ],
+      "mean_return_pct": 10.95,
+      "win_rate_pct": 100.0,
+      "all_days_mean_pct": 5.05,
+      "p_value_random_days": 0.0929,
+      "first_half_events": 2,
+      "second_half_events": 0,
+      "first_half_mean_pct": 10.95,
+      "second_half_mean_pct": null,
+      "first_half_edge_vs_all_days_pct": 6.3
+    },
+    {
+      "trigger": "1日で−4%以下",
+      "entry_delay_days": 10,
+      "hold_days": 5,
+      "events": 2,
+      "event_dates": [
+        "2024-08-02",
+        "2025-04-07"
+      ],
+      "mean_return_pct": 2.08,
+      "win_rate_pct": 100.0,
+      "all_days_mean_pct": 0.34,
+      "p_value_random_days": 0.0948,
+      "first_half_events": 2,
+      "second_half_events": 0,
+      "first_half_mean_pct": 2.08,
+      "second_half_mean_pct": null,
+      "first_half_edge_vs_all_days_pct": 1.72
+    },
+    {
+      "trigger": "1日で−4%以下",
+      "entry_delay_days": 10,
+      "hold_days": 20,
+      "events": 2,
+      "event_dates": [
+        "2024-08-02",
+        "2025-04-07"
+      ],
+      "mean_return_pct": 2.14,
+      "win_rate_pct": 50.0,
+      "all_days_mean_pct": 1.53,
+      "p_value_random_days": 0.401,
+      "first_half_events": 2,
+      "second_half_events": 0,
+      "first_half_mean_pct": 2.14,
+      "second_half_mean_pct": null,
+      "first_half_edge_vs_all_days_pct": 0.95
+    },
+    {
+      "trigger": "1日で−4%以下",
+      "entry_delay_days": 10,
+      "hold_days": 60,
+      "events": 2,
+      "event_dates": [
+        "2024-08-02",
+        "2025-04-07"
+      ],
+      "mean_return_pct": 7.17,
+      "win_rate_pct": 100.0,
+      "all_days_mean_pct": 5.07,
+      "p_value_random_days": 0.3107,
+      "first_half_events": 2,
+      "second_half_events": 0,
+      "first_half_mean_pct": 7.17,
+      "second_half_mean_pct": null,
+      "first_half_edge_vs_all_days_pct": 2.3
+    },
+    {
+      "trigger": "1日で−5%以下",
+      "entry_delay_days": 0,
+      "hold_days": 5,
+      "events": 2,
+      "event_dates": [
+        "2024-08-02",
+        "2025-04-07"
+      ],
+      "mean_return_pct": 5.32,
+      "win_rate_pct": 100.0,
+      "all_days_mean_pct": 0.24,
+      "p_value_random_days": 0.0035,
+      "first_half_events": 2,
+      "second_half_events": 0,
+      "first_half_mean_pct": 5.32,
+      "second_half_mean_pct": null,
+      "first_half_edge_vs_all_days_pct": 5.19
+    },
+    {
+      "trigger": "1日で−5%以下",
+      "entry_delay_days": 0,
+      "hold_days": 20,
+      "events": 2,
+      "event_dates": [
+        "2024-08-02",
+        "2025-04-07"
+      ],
+      "mean_return_pct": 13.34,
+      "win_rate_pct": 100.0,
+      "all_days_mean_pct": 1.54,
+      "p_value_random_days": 0.0002,
+      "first_half_events": 2,
+      "second_half_events": 0,
+      "first_half_mean_pct": 13.34,
+      "second_half_mean_pct": null,
+      "first_half_edge_vs_all_days_pct": 12.21
+    },
+    {
+      "trigger": "1日で−5%以下",
+      "entry_delay_days": 0,
+      "hold_days": 60,
+      "events": 2,
+      "event_dates": [
+        "2024-08-02",
+        "2025-04-07"
+      ],
+      "mean_return_pct": 16.07,
+      "win_rate_pct": 100.0,
+      "all_days_mean_pct": 4.93,
+      "p_value_random_days": 0.006,
+      "first_half_events": 2,
+      "second_half_events": 0,
+      "first_half_mean_pct": 16.07,
+      "second_half_mean_pct": null,
+      "first_half_edge_vs_all_days_pct": 11.84
+    },
+    {
+      "trigger": "1日で−5%以下",
+      "entry_delay_days": 1,
+      "hold_days": 5,
+      "events": 2,
+      "event_dates": [
+        "2024-08-02",
+        "2025-04-07"
+      ],
+      "mean_return_pct": 6.9,
+      "win_rate_pct": 100.0,
+      "all_days_mean_pct": 0.24,
+      "p_value_random_days": 0.0006,
+      "first_half_events": 2,
+      "second_half_events": 0,
+      "first_half_mean_pct": 6.9,
+      "second_half_mean_pct": null,
+      "first_half_edge_vs_all_days_pct": 6.75
+    },
+    {
+      "trigger": "1日で−5%以下",
+      "entry_delay_days": 1,
+      "hold_days": 20,
+      "events": 2,
+      "event_dates": [
+        "2024-08-02",
+        "2025-04-07"
+      ],
+      "mean_return_pct": 14.69,
+      "win_rate_pct": 100.0,
+      "all_days_mean_pct": 1.55,
+      "p_value_random_days": 0.0001,
+      "first_half_events": 2,
+      "second_half_events": 0,
+      "first_half_mean_pct": 14.69,
+      "second_half_mean_pct": null,
+      "first_half_edge_vs_all_days_pct": 13.52
+    },
+    {
+      "trigger": "1日で−5%以下",
+      "entry_delay_days": 1,
+      "hold_days": 60,
+      "events": 2,
+      "event_dates": [
+        "2024-08-02",
+        "2025-04-07"
+      ],
+      "mean_return_pct": 15.55,
+      "win_rate_pct": 100.0,
+      "all_days_mean_pct": 4.95,
+      "p_value_random_days": 0.0064,
+      "first_half_events": 2,
+      "second_half_events": 0,
+      "first_half_mean_pct": 15.55,
+      "second_half_mean_pct": null,
+      "first_half_edge_vs_all_days_pct": 11.24
+    },
+    {
+      "trigger": "1日で−5%以下",
+      "entry_delay_days": 2,
+      "hold_days": 5,
+      "events": 2,
+      "event_dates": [
+        "2024-08-02",
+        "2025-04-07"
+      ],
+      "mean_return_pct": 3.96,
+      "win_rate_pct": 50.0,
+      "all_days_mean_pct": 0.24,
+      "p_value_random_days": 0.0139,
+      "first_half_events": 2,
+      "second_half_events": 0,
+      "first_half_mean_pct": 3.96,
+      "second_half_mean_pct": null,
+      "first_half_edge_vs_all_days_pct": 3.82
+    },
+    {
+      "trigger": "1日で−5%以下",
+      "entry_delay_days": 2,
+      "hold_days": 20,
+      "events": 2,
+      "event_dates": [
+        "2024-08-02",
+        "2025-04-07"
+      ],
+      "mean_return_pct": 9.91,
+      "win_rate_pct": 100.0,
+      "all_days_mean_pct": 1.56,
+      "p_value_random_days": 0.006,
+      "first_half_events": 2,
+      "second_half_events": 0,
+      "first_half_mean_pct": 9.91,
+      "second_half_mean_pct": null,
+      "first_half_edge_vs_all_days_pct": 8.71
+    },
+    {
+      "trigger": "1日で−5%以下",
+      "entry_delay_days": 2,
+      "hold_days": 60,
+      "events": 2,
+      "event_dates": [
+        "2024-08-02",
+        "2025-04-07"
+      ],
+      "mean_return_pct": 12.05,
+      "win_rate_pct": 100.0,
+      "all_days_mean_pct": 4.97,
+      "p_value_random_days": 0.0618,
+      "first_half_events": 2,
+      "second_half_events": 0,
+      "first_half_mean_pct": 12.05,
+      "second_half_mean_pct": null,
+      "first_half_edge_vs_all_days_pct": 7.66
+    },
+    {
+      "trigger": "1日で−5%以下",
+      "entry_delay_days": 3,
+      "hold_days": 5,
+      "events": 2,
+      "event_dates": [
+        "2024-08-02",
+        "2025-04-07"
+      ],
+      "mean_return_pct": 5.41,
+      "win_rate_pct": 100.0,
+      "all_days_mean_pct": 0.24,
+      "p_value_random_days": 0.0028,
+      "first_half_events": 2,
+      "second_half_events": 0,
+      "first_half_mean_pct": 5.41,
+      "second_half_mean_pct": null,
+      "first_half_edge_vs_all_days_pct": 5.26
+    },
+    {
+      "trigger": "1日で−5%以下",
+      "entry_delay_days": 3,
+      "hold_days": 20,
+      "events": 2,
+      "event_dates": [
+        "2024-08-02",
+        "2025-04-07"
+      ],
+      "mean_return_pct": 10.84,
+      "win_rate_pct": 100.0,
+      "all_days_mean_pct": 1.57,
+      "p_value_random_days": 0.0025,
+      "first_half_events": 2,
+      "second_half_events": 0,
+      "first_half_mean_pct": 10.84,
+      "second_half_mean_pct": null,
+      "first_half_edge_vs_all_days_pct": 9.63
+    },
+    {
+      "trigger": "1日で−5%以下",
+      "entry_delay_days": 3,
+      "hold_days": 60,
+      "events": 2,
+      "event_dates": [
+        "2024-08-02",
+        "2025-04-07"
+      ],
+      "mean_return_pct": 14.02,
+      "win_rate_pct": 100.0,
+      "all_days_mean_pct": 4.99,
+      "p_value_random_days": 0.0192,
+      "first_half_events": 2,
+      "second_half_events": 0,
+      "first_half_mean_pct": 14.02,
+      "second_half_mean_pct": null,
+      "first_half_edge_vs_all_days_pct": 9.55
+    },
+    {
+      "trigger": "1日で−5%以下",
+      "entry_delay_days": 5,
+      "hold_days": 5,
+      "events": 2,
+      "event_dates": [
+        "2024-08-02",
+        "2025-04-07"
+      ],
+      "mean_return_pct": 3.24,
+      "win_rate_pct": 100.0,
+      "all_days_mean_pct": 0.3,
+      "p_value_random_days": 0.0253,
+      "first_half_events": 2,
+      "second_half_events": 0,
+      "first_half_mean_pct": 3.24,
+      "second_half_mean_pct": null,
+      "first_half_edge_vs_all_days_pct": 2.97
+    },
+    {
+      "trigger": "1日で−5%以下",
+      "entry_delay_days": 5,
+      "hold_days": 20,
+      "events": 2,
+      "event_dates": [
+        "2024-08-02",
+        "2025-04-07"
+      ],
+      "mean_return_pct": 5.87,
+      "win_rate_pct": 100.0,
+      "all_days_mean_pct": 1.59,
+      "p_value_random_days": 0.057,
+      "first_half_events": 2,
+      "second_half_events": 0,
+      "first_half_mean_pct": 5.87,
+      "second_half_mean_pct": null,
+      "first_half_edge_vs_all_days_pct": 4.62
+    },
+    {
+      "trigger": "1日で−5%以下",
+      "entry_delay_days": 5,
+      "hold_days": 60,
+      "events": 2,
+      "event_dates": [
+        "2024-08-02",
+        "2025-04-07"
+      ],
+      "mean_return_pct": 10.95,
+      "win_rate_pct": 100.0,
+      "all_days_mean_pct": 5.05,
+      "p_value_random_days": 0.0945,
+      "first_half_events": 2,
+      "second_half_events": 0,
+      "first_half_mean_pct": 10.95,
+      "second_half_mean_pct": null,
+      "first_half_edge_vs_all_days_pct": 6.3
+    },
+    {
+      "trigger": "1日で−5%以下",
+      "entry_delay_days": 10,
+      "hold_days": 5,
+      "events": 2,
+      "event_dates": [
+        "2024-08-02",
+        "2025-04-07"
+      ],
+      "mean_return_pct": 2.08,
+      "win_rate_pct": 100.0,
+      "all_days_mean_pct": 0.34,
+      "p_value_random_days": 0.0986,
+      "first_half_events": 2,
+      "second_half_events": 0,
+      "first_half_mean_pct": 2.08,
+      "second_half_mean_pct": null,
+      "first_half_edge_vs_all_days_pct": 1.72
+    },
+    {
+      "trigger": "1日で−5%以下",
+      "entry_delay_days": 10,
+      "hold_days": 20,
+      "events": 2,
+      "event_dates": [
+        "2024-08-02",
+        "2025-04-07"
+      ],
+      "mean_return_pct": 2.14,
+      "win_rate_pct": 50.0,
+      "all_days_mean_pct": 1.53,
+      "p_value_random_days": 0.3958,
+      "first_half_events": 2,
+      "second_half_events": 0,
+      "first_half_mean_pct": 2.14,
+      "second_half_mean_pct": null,
+      "first_half_edge_vs_all_days_pct": 0.95
+    },
+    {
+      "trigger": "1日で−5%以下",
+      "entry_delay_days": 10,
+      "hold_days": 60,
+      "events": 2,
+      "event_dates": [
+        "2024-08-02",
+        "2025-04-07"
+      ],
+      "mean_return_pct": 7.17,
+      "win_rate_pct": 100.0,
+      "all_days_mean_pct": 5.07,
+      "p_value_random_days": 0.3117,
+      "first_half_events": 2,
+      "second_half_events": 0,
+      "first_half_mean_pct": 7.17,
+      "second_half_mean_pct": null,
+      "first_half_edge_vs_all_days_pct": 2.3
+    },
+    {
+      "trigger": "20日高値から−7%以下",
+      "entry_delay_days": 0,
+      "hold_days": 5,
+      "events": 3,
+      "event_dates": [
+        "2024-08-02",
+        "2025-04-03",
+        "2026-03-04"
+      ],
+      "mean_return_pct": 1.57,
+      "win_rate_pct": 66.7,
+      "all_days_mean_pct": 0.24,
+      "p_value_random_days": 0.1366,
+      "first_half_events": 2,
+      "second_half_events": 1,
+      "first_half_mean_pct": 2.02,
+      "second_half_mean_pct": 0.69,
+      "first_half_edge_vs_all_days_pct": 1.88
+    },
+    {
+      "trigger": "20日高値から−7%以下",
+      "entry_delay_days": 0,
+      "hold_days": 20,
+      "events": 3,
+      "event_dates": [
+        "2024-08-02",
+        "2025-04-03",
+        "2026-03-04"
+      ],
+      "mean_return_pct": 5.42,
+      "win_rate_pct": 66.7,
+      "all_days_mean_pct": 1.54,
+      "p_value_random_days": 0.0421,
+      "first_half_events": 2,
+      "second_half_events": 1,
+      "first_half_mean_pct": 9.86,
+      "second_half_mean_pct": -3.44,
+      "first_half_edge_vs_all_days_pct": 8.73
+    },
+    {
+      "trigger": "20日高値から−7%以下",
+      "entry_delay_days": 0,
+      "hold_days": 60,
+      "events": 3,
+      "event_dates": [
+        "2024-08-02",
+        "2025-04-03",
+        "2026-03-04"
+      ],
+      "mean_return_pct": 8.47,
+      "win_rate_pct": 66.7,
+      "all_days_mean_pct": 4.93,
+      "p_value_random_days": 0.1611,
+      "first_half_events": 2,
+      "second_half_events": 1,
+      "first_half_mean_pct": 13.17,
+      "second_half_mean_pct": -0.95,
+      "first_half_edge_vs_all_days_pct": 8.94
+    },
+    {
+      "trigger": "20日高値から−7%以下",
+      "entry_delay_days": 1,
+      "hold_days": 5,
+      "events": 3,
+      "event_dates": [
+        "2024-08-02",
+        "2025-04-03",
+        "2026-03-04"
+      ],
+      "mean_return_pct": 5.81,
+      "win_rate_pct": 66.7,
+      "all_days_mean_pct": 0.24,
+      "p_value_random_days": 0.0002,
+      "first_half_events": 2,
+      "second_half_events": 1,
+      "first_half_mean_pct": 9.09,
+      "second_half_mean_pct": -0.75,
+      "first_half_edge_vs_all_days_pct": 8.94
+    },
+    {
+      "trigger": "20日高値から−7%以下",
+      "entry_delay_days": 1,
+      "hold_days": 20,
+      "events": 3,
+      "event_dates": [
+        "2024-08-02",
+        "2025-04-03",
+        "2026-03-04"
+      ],
+      "mean_return_pct": 10.68,
+      "win_rate_pct": 66.7,
+      "all_days_mean_pct": 1.55,
+      "p_value_random_days": 0.0001,
+      "first_half_events": 2,
+      "second_half_events": 1,
+      "first_half_mean_pct": 17.08,
+      "second_half_mean_pct": -2.11,
+      "first_half_edge_vs_all_days_pct": 15.91
+    },
+    {
+      "trigger": "20日高値から−7%以下",
+      "entry_delay_days": 1,
+      "hold_days": 60,
+      "events": 3,
+      "event_dates": [
+        "2024-08-02",
+        "2025-04-03",
+        "2026-03-04"
+      ],
+      "mean_return_pct": 12.29,
+      "win_rate_pct": 66.7,
+      "all_days_mean_pct": 4.95,
+      "p_value_random_days": 0.0234,
+      "first_half_events": 2,
+      "second_half_events": 1,
+      "first_half_mean_pct": 18.94,
+      "second_half_mean_pct": -1.02,
+      "first_half_edge_vs_all_days_pct": 14.63
+    },
+    {
+      "trigger": "20日高値から−7%以下",
+      "entry_delay_days": 2,
+      "hold_days": 5,
+      "events": 3,
+      "event_dates": [
+        "2024-08-02",
+        "2025-04-03",
+        "2026-03-04"
+      ],
+      "mean_return_pct": 5.54,
+      "win_rate_pct": 100.0,
+      "all_days_mean_pct": 0.24,
+      "p_value_random_days": 0.0003,
+      "first_half_events": 2,
+      "second_half_events": 1,
+      "first_half_mean_pct": 7.42,
+      "second_half_mean_pct": 1.78,
+      "first_half_edge_vs_all_days_pct": 7.28
+    },
+    {
+      "trigger": "20日高値から−7%以下",
+      "entry_delay_days": 2,
+      "hold_days": 20,
+      "events": 3,
+      "event_dates": [
+        "2024-08-02",
+        "2025-04-03",
+        "2026-03-04"
+      ],
+      "mean_return_pct": 8.69,
+      "win_rate_pct": 100.0,
+      "all_days_mean_pct": 1.56,
+      "p_value_random_days": 0.0022,
+      "first_half_events": 2,
+      "second_half_events": 1,
+      "first_half_mean_pct": 12.37,
+      "second_half_mean_pct": 1.33,
+      "first_half_edge_vs_all_days_pct": 11.18
+    },
+    {
+      "trigger": "20日高値から−7%以下",
+      "entry_delay_days": 2,
+      "hold_days": 60,
+      "events": 3,
+      "event_dates": [
+        "2024-08-02",
+        "2025-04-03",
+        "2026-03-04"
+      ],
+      "mean_return_pct": 11.65,
+      "win_rate_pct": 100.0,
+      "all_days_mean_pct": 4.97,
+      "p_value_random_days": 0.0345,
+      "first_half_events": 2,
+      "second_half_events": 1,
+      "first_half_mean_pct": 15.76,
+      "second_half_mean_pct": 3.43,
+      "first_half_edge_vs_all_days_pct": 11.37
+    },
+    {
+      "trigger": "20日高値から−7%以下",
+      "entry_delay_days": 3,
+      "hold_days": 5,
+      "events": 3,
+      "event_dates": [
+        "2024-08-02",
+        "2025-04-03",
+        "2026-03-04"
+      ],
+      "mean_return_pct": 3.81,
+      "win_rate_pct": 66.7,
+      "all_days_mean_pct": 0.24,
+      "p_value_random_days": 0.0062,
+      "first_half_events": 2,
+      "second_half_events": 1,
+      "first_half_mean_pct": 6.39,
+      "second_half_mean_pct": -1.34,
+      "first_half_edge_vs_all_days_pct": 6.25
+    },
+    {
+      "trigger": "20日高値から−7%以下",
+      "entry_delay_days": 3,
+      "hold_days": 20,
+      "events": 3,
+      "event_dates": [
+        "2024-08-02",
+        "2025-04-03",
+        "2026-03-04"
+      ],
+      "mean_return_pct": 7.29,
+      "win_rate_pct": 66.7,
+      "all_days_mean_pct": 1.57,
+      "p_value_random_days": 0.0096,
+      "first_half_events": 2,
+      "second_half_events": 1,
+      "first_half_mean_pct": 11.51,
+      "second_half_mean_pct": -1.16,
+      "first_half_edge_vs_all_days_pct": 10.3
+    },
+    {
+      "trigger": "20日高値から−7%以下",
+      "entry_delay_days": 3,
+      "hold_days": 60,
+      "events": 3,
+      "event_dates": [
+        "2024-08-02",
+        "2025-04-03",
+        "2026-03-04"
+      ],
+      "mean_return_pct": 9.34,
+      "win_rate_pct": 66.7,
+      "all_days_mean_pct": 4.99,
+      "p_value_random_days": 0.1113,
+      "first_half_events": 2,
+      "second_half_events": 1,
+      "first_half_mean_pct": 14.82,
+      "second_half_mean_pct": -1.61,
+      "first_half_edge_vs_all_days_pct": 10.34
+    },
+    {
+      "trigger": "20日高値から−7%以下",
+      "entry_delay_days": 5,
+      "hold_days": 5,
+      "events": 3,
+      "event_dates": [
+        "2024-08-02",
+        "2025-04-03",
+        "2026-03-04"
+      ],
+      "mean_return_pct": 3.1,
+      "win_rate_pct": 100.0,
+      "all_days_mean_pct": 0.3,
+      "p_value_random_days": 0.0161,
+      "first_half_events": 2,
+      "second_half_events": 1,
+      "first_half_mean_pct": 4.51,
+      "second_half_mean_pct": 0.28,
+      "first_half_edge_vs_all_days_pct": 4.24
+    },
+    {
+      "trigger": "20日高値から−7%以下",
+      "entry_delay_days": 5,
+      "hold_days": 20,
+      "events": 3,
+      "event_dates": [
+        "2024-08-02",
+        "2025-04-03",
+        "2026-03-04"
+      ],
+      "mean_return_pct": 5.61,
+      "win_rate_pct": 66.7,
+      "all_days_mean_pct": 1.59,
+      "p_value_random_days": 0.0413,
+      "first_half_events": 2,
+      "second_half_events": 1,
+      "first_half_mean_pct": 8.64,
+      "second_half_mean_pct": -0.45,
+      "first_half_edge_vs_all_days_pct": 7.39
+    },
+    {
+      "trigger": "20日高値から−7%以下",
+      "entry_delay_days": 5,
+      "hold_days": 60,
+      "events": 3,
+      "event_dates": [
+        "2024-08-02",
+        "2025-04-03",
+        "2026-03-04"
+      ],
+      "mean_return_pct": 8.54,
+      "win_rate_pct": 66.7,
+      "all_days_mean_pct": 5.05,
+      "p_value_random_days": 0.1623,
+      "first_half_events": 2,
+      "second_half_events": 1,
+      "first_half_mean_pct": 12.98,
+      "second_half_mean_pct": -0.35,
+      "first_half_edge_vs_all_days_pct": 8.33
+    },
+    {
+      "trigger": "20日高値から−7%以下",
+      "entry_delay_days": 10,
+      "hold_days": 5,
+      "events": 3,
+      "event_dates": [
+        "2024-08-02",
+        "2025-04-03",
+        "2026-03-04"
+      ],
+      "mean_return_pct": 0.84,
+      "win_rate_pct": 66.7,
+      "all_days_mean_pct": 0.34,
+      "p_value_random_days": 0.3406,
+      "first_half_events": 2,
+      "second_half_events": 1,
+      "first_half_mean_pct": 1.92,
+      "second_half_mean_pct": -1.34,
+      "first_half_edge_vs_all_days_pct": 1.56
+    },
+    {
+      "trigger": "20日高値から−7%以下",
+      "entry_delay_days": 10,
+      "hold_days": 20,
+      "events": 3,
+      "event_dates": [
+        "2024-08-02",
+        "2025-04-03",
+        "2026-03-04"
+      ],
+      "mean_return_pct": 2.4,
+      "win_rate_pct": 66.7,
+      "all_days_mean_pct": 1.53,
+      "p_value_random_days": 0.327,
+      "first_half_events": 2,
+      "second_half_events": 1,
+      "first_half_mean_pct": 2.73,
+      "second_half_mean_pct": 1.75,
+      "first_half_edge_vs_all_days_pct": 1.54
+    },
+    {
+      "trigger": "20日高値から−7%以下",
+      "entry_delay_days": 10,
+      "hold_days": 60,
+      "events": 2,
+      "event_dates": [
+        "2024-08-02",
+        "2025-04-03"
+      ],
+      "mean_return_pct": 7.3,
+      "win_rate_pct": 100.0,
+      "all_days_mean_pct": 5.07,
+      "p_value_random_days": 0.2999,
+      "first_half_events": 2,
+      "second_half_events": 0,
+      "first_half_mean_pct": 7.3,
+      "second_half_mean_pct": null,
+      "first_half_edge_vs_all_days_pct": 2.42
+    },
+    {
+      "trigger": "20日高値から−10%以下",
+      "entry_delay_days": 0,
+      "hold_days": 5,
+      "events": 3,
+      "event_dates": [
+        "2024-08-02",
+        "2025-04-04",
+        "2026-03-23"
+      ],
+      "mean_return_pct": 4.56,
+      "win_rate_pct": 66.7,
+      "all_days_mean_pct": 0.24,
+      "p_value_random_days": 0.0017,
+      "first_half_events": 2,
+      "second_half_events": 1,
+      "first_half_mean_pct": 7.44,
+      "second_half_mean_pct": -1.2,
+      "first_half_edge_vs_all_days_pct": 7.3
+    },
+    {
+      "trigger": "20日高値から−10%以下",
+      "entry_delay_days": 0,
+      "hold_days": 20,
+      "events": 3,
+      "event_dates": [
+        "2024-08-02",
+        "2025-04-04",
+        "2026-03-23"
+      ],
+      "mean_return_pct": 12.18,
+      "win_rate_pct": 100.0,
+      "all_days_mean_pct": 1.54,
+      "p_value_random_days": 0.0,
+      "first_half_events": 2,
+      "second_half_events": 1,
+      "first_half_mean_pct": 16.16,
+      "second_half_mean_pct": 4.21,
+      "first_half_edge_vs_all_days_pct": 15.03
+    },
+    {
+      "trigger": "20日高値から−10%以下",
+      "entry_delay_days": 0,
+      "hold_days": 60,
+      "events": 2,
+      "event_dates": [
+        "2024-08-02",
+        "2025-04-04"
+      ],
+      "mean_return_pct": 19.39,
+      "win_rate_pct": 100.0,
+      "all_days_mean_pct": 4.93,
+      "p_value_random_days": 0.0007,
+      "first_half_events": 2,
+      "second_half_events": 0,
+      "first_half_mean_pct": 19.39,
+      "second_half_mean_pct": null,
+      "first_half_edge_vs_all_days_pct": 15.16
+    },
+    {
+      "trigger": "20日高値から−10%以下",
+      "entry_delay_days": 1,
+      "hold_days": 5,
+      "events": 3,
+      "event_dates": [
+        "2024-08-02",
+        "2025-04-04",
+        "2026-03-23"
+      ],
+      "mean_return_pct": 3.54,
+      "win_rate_pct": 66.7,
+      "all_days_mean_pct": 0.24,
+      "p_value_random_days": 0.0092,
+      "first_half_events": 2,
+      "second_half_events": 1,
+      "first_half_mean_pct": 6.97,
+      "second_half_mean_pct": -3.32,
+      "first_half_edge_vs_all_days_pct": 6.82
+    },
+    {
+      "trigger": "20日高値から−10%以下",
+      "entry_delay_days": 1,
+      "hold_days": 20,
+      "events": 3,
+      "event_dates": [
+        "2024-08-02",
+        "2025-04-04",
+        "2026-03-23"
+      ],
+      "mean_return_pct": 10.34,
+      "win_rate_pct": 100.0,
+      "all_days_mean_pct": 1.55,
+      "p_value_random_days": 0.0005,
+      "first_half_events": 2,
+      "second_half_events": 1,
+      "first_half_mean_pct": 14.26,
+      "second_half_mean_pct": 2.5,
+      "first_half_edge_vs_all_days_pct": 13.09
+    },
+    {
+      "trigger": "20日高値から−10%以下",
+      "entry_delay_days": 1,
+      "hold_days": 60,
+      "events": 2,
+      "event_dates": [
+        "2024-08-02",
+        "2025-04-04"
+      ],
+      "mean_return_pct": 15.62,
+      "win_rate_pct": 100.0,
+      "all_days_mean_pct": 4.95,
+      "p_value_random_days": 0.006,
+      "first_half_events": 2,
+      "second_half_events": 0,
+      "first_half_mean_pct": 15.62,
+      "second_half_mean_pct": null,
+      "first_half_edge_vs_all_days_pct": 11.31
+    },
+    {
+      "trigger": "20日高値から−10%以下",
+      "entry_delay_days": 2,
+      "hold_days": 5,
+      "events": 3,
+      "event_dates": [
+        "2024-08-02",
+        "2025-04-04",
+        "2026-03-23"
+      ],
+      "mean_return_pct": 4.7,
+      "win_rate_pct": 66.7,
+      "all_days_mean_pct": 0.24,
+      "p_value_random_days": 0.0007,
+      "first_half_events": 2,
+      "second_half_events": 1,
+      "first_half_mean_pct": 7.35,
+      "second_half_mean_pct": -0.6,
+      "first_half_edge_vs_all_days_pct": 7.21
+    },
+    {
+      "trigger": "20日高値から−10%以下",
+      "entry_delay_days": 2,
+      "hold_days": 20,
+      "events": 3,
+      "event_dates": [
+        "2024-08-02",
+        "2025-04-04",
+        "2026-03-23"
+      ],
+      "mean_return_pct": 8.76,
+      "win_rate_pct": 100.0,
+      "all_days_mean_pct": 1.56,
+      "p_value_random_days": 0.0017,
+      "first_half_events": 2,
+      "second_half_events": 1,
+      "first_half_mean_pct": 12.8,
+      "second_half_mean_pct": 0.67,
+      "first_half_edge_vs_all_days_pct": 11.61
+    },
+    {
+      "trigger": "20日高値から−10%以下",
+      "entry_delay_days": 2,
+      "hold_days": 60,
+      "events": 2,
+      "event_dates": [
+        "2024-08-02",
+        "2025-04-04"
+      ],
+      "mean_return_pct": 15.69,
+      "win_rate_pct": 100.0,
+      "all_days_mean_pct": 4.97,
+      "p_value_random_days": 0.0071,
+      "first_half_events": 2,
+      "second_half_events": 0,
+      "first_half_mean_pct": 15.69,
+      "second_half_mean_pct": null,
+      "first_half_edge_vs_all_days_pct": 11.3
+    },
+    {
+      "trigger": "20日高値から−10%以下",
+      "entry_delay_days": 3,
+      "hold_days": 5,
+      "events": 3,
+      "event_dates": [
+        "2024-08-02",
+        "2025-04-04",
+        "2026-03-23"
+      ],
+      "mean_return_pct": 1.86,
+      "win_rate_pct": 33.3,
+      "all_days_mean_pct": 0.24,
+      "p_value_random_days": 0.0879,
+      "first_half_events": 2,
+      "second_half_events": 1,
+      "first_half_mean_pct": 3.0,
+      "second_half_mean_pct": -0.44,
+      "first_half_edge_vs_all_days_pct": 2.86
+    },
+    {
+      "trigger": "20日高値から−10%以下",
+      "entry_delay_days": 3,
+      "hold_days": 20,
+      "events": 3,
+      "event_dates": [
+        "2024-08-02",
+        "2025-04-04",
+        "2026-03-23"
+      ],
+      "mean_return_pct": 6.06,
+      "win_rate_pct": 100.0,
+      "all_days_mean_pct": 1.57,
+      "p_value_random_days": 0.0254,
+      "first_half_events": 2,
+      "second_half_events": 1,
+      "first_half_mean_pct": 8.62,
+      "second_half_mean_pct": 0.95,
+      "first_half_edge_vs_all_days_pct": 7.4
+    },
+    {
+      "trigger": "20日高値から−10%以下",
+      "entry_delay_days": 3,
+      "hold_days": 60,
+      "events": 2,
+      "event_dates": [
+        "2024-08-02",
+        "2025-04-04"
+      ],
+      "mean_return_pct": 11.18,
+      "win_rate_pct": 100.0,
+      "all_days_mean_pct": 4.99,
+      "p_value_random_days": 0.087,
+      "first_half_events": 2,
+      "second_half_events": 0,
+      "first_half_mean_pct": 11.18,
+      "second_half_mean_pct": null,
+      "first_half_edge_vs_all_days_pct": 6.71
+    },
+    {
+      "trigger": "20日高値から−10%以下",
+      "entry_delay_days": 5,
+      "hold_days": 5,
+      "events": 3,
+      "event_dates": [
+        "2024-08-02",
+        "2025-04-04",
+        "2026-03-23"
+      ],
+      "mean_return_pct": 3.73,
+      "win_rate_pct": 100.0,
+      "all_days_mean_pct": 0.3,
+      "p_value_random_days": 0.0071,
+      "first_half_events": 2,
+      "second_half_events": 1,
+      "first_half_mean_pct": 3.75,
+      "second_half_mean_pct": 3.69,
+      "first_half_edge_vs_all_days_pct": 3.48
+    },
+    {
+      "trigger": "20日高値から−10%以下",
+      "entry_delay_days": 5,
+      "hold_days": 20,
+      "events": 3,
+      "event_dates": [
+        "2024-08-02",
+        "2025-04-04",
+        "2026-03-23"
+      ],
+      "mean_return_pct": 5.5,
+      "win_rate_pct": 100.0,
+      "all_days_mean_pct": 1.59,
+      "p_value_random_days": 0.0397,
+      "first_half_events": 2,
+      "second_half_events": 1,
+      "first_half_mean_pct": 6.61,
+      "second_half_mean_pct": 3.29,
+      "first_half_edge_vs_all_days_pct": 5.36
+    },
+    {
+      "trigger": "20日高値から−10%以下",
+      "entry_delay_days": 5,
+      "hold_days": 60,
+      "events": 2,
+      "event_dates": [
+        "2024-08-02",
+        "2025-04-04"
+      ],
+      "mean_return_pct": 11.46,
+      "win_rate_pct": 100.0,
+      "all_days_mean_pct": 5.05,
+      "p_value_random_days": 0.0755,
+      "first_half_events": 2,
+      "second_half_events": 0,
+      "first_half_mean_pct": 11.46,
+      "second_half_mean_pct": null,
+      "first_half_edge_vs_all_days_pct": 6.82
+    },
+    {
+      "trigger": "20日高値から−10%以下",
+      "entry_delay_days": 10,
+      "hold_days": 5,
+      "events": 3,
+      "event_dates": [
+        "2024-08-02",
+        "2025-04-04",
+        "2026-03-23"
+      ],
+      "mean_return_pct": 1.28,
+      "win_rate_pct": 100.0,
+      "all_days_mean_pct": 0.34,
+      "p_value_random_days": 0.2065,
+      "first_half_events": 2,
+      "second_half_events": 1,
+      "first_half_mean_pct": 1.61,
+      "second_half_mean_pct": 0.64,
+      "first_half_edge_vs_all_days_pct": 1.25
+    },
+    {
+      "trigger": "20日高値から−10%以下",
+      "entry_delay_days": 10,
+      "hold_days": 20,
+      "events": 3,
+      "event_dates": [
+        "2024-08-02",
+        "2025-04-04",
+        "2026-03-23"
+      ],
+      "mean_return_pct": 1.94,
+      "win_rate_pct": 66.7,
+      "all_days_mean_pct": 1.53,
+      "p_value_random_days": 0.4253,
+      "first_half_events": 2,
+      "second_half_events": 1,
+      "first_half_mean_pct": 1.99,
+      "second_half_mean_pct": 1.83,
+      "first_half_edge_vs_all_days_pct": 0.81
+    },
+    {
+      "trigger": "20日高値から−10%以下",
+      "entry_delay_days": 10,
+      "hold_days": 60,
+      "events": 2,
+      "event_dates": [
+        "2024-08-02",
+        "2025-04-04"
+      ],
+      "mean_return_pct": 6.49,
+      "win_rate_pct": 100.0,
+      "all_days_mean_pct": 5.07,
+      "p_value_random_days": 0.3604,
+      "first_half_events": 2,
+      "second_half_events": 0,
+      "first_half_mean_pct": 6.49,
+      "second_half_mean_pct": null,
+      "first_half_edge_vs_all_days_pct": 1.62
+    },
+    {
+      "trigger": "20日高値から−15%以下",
+      "entry_delay_days": 0,
+      "hold_days": 5,
+      "events": 2,
+      "event_dates": [
+        "2024-08-05",
+        "2025-04-07"
+      ],
+      "mean_return_pct": 6.97,
+      "win_rate_pct": 100.0,
+      "all_days_mean_pct": 0.24,
+      "p_value_random_days": 0.0004,
+      "first_half_events": 2,
+      "second_half_events": 0,
+      "first_half_mean_pct": 6.97,
+      "second_half_mean_pct": null,
+      "first_half_edge_vs_all_days_pct": 6.83
+    },
+    {
+      "trigger": "20日高値から−15%以下",
+      "entry_delay_days": 0,
+      "hold_days": 20,
+      "events": 2,
+      "event_dates": [
+        "2024-08-05",
+        "2025-04-07"
+      ],
+      "mean_return_pct": 14.26,
+      "win_rate_pct": 100.0,
+      "all_days_mean_pct": 1.54,
+      "p_value_random_days": 0.0001,
+      "first_half_events": 2,
+      "second_half_events": 0,
+      "first_half_mean_pct": 14.26,
+      "second_half_mean_pct": null,
+      "first_half_edge_vs_all_days_pct": 13.13
+    },
+    {
+      "trigger": "20日高値から−15%以下",
+      "entry_delay_days": 0,
+      "hold_days": 60,
+      "events": 2,
+      "event_dates": [
+        "2024-08-05",
+        "2025-04-07"
+      ],
+      "mean_return_pct": 15.62,
+      "win_rate_pct": 100.0,
+      "all_days_mean_pct": 4.93,
+      "p_value_random_days": 0.0053,
+      "first_half_events": 2,
+      "second_half_events": 0,
+      "first_half_mean_pct": 15.62,
+      "second_half_mean_pct": null,
+      "first_half_edge_vs_all_days_pct": 11.39
+    },
+    {
+      "trigger": "20日高値から−15%以下",
+      "entry_delay_days": 1,
+      "hold_days": 5,
+      "events": 2,
+      "event_dates": [
+        "2024-08-05",
+        "2025-04-07"
+      ],
+      "mean_return_pct": 7.35,
+      "win_rate_pct": 100.0,
+      "all_days_mean_pct": 0.24,
+      "p_value_random_days": 0.0002,
+      "first_half_events": 2,
+      "second_half_events": 0,
+      "first_half_mean_pct": 7.35,
+      "second_half_mean_pct": null,
+      "first_half_edge_vs_all_days_pct": 7.2
+    },
+    {
+      "trigger": "20日高値から−15%以下",
+      "entry_delay_days": 1,
+      "hold_days": 20,
+      "events": 2,
+      "event_dates": [
+        "2024-08-05",
+        "2025-04-07"
+      ],
+      "mean_return_pct": 12.8,
+      "win_rate_pct": 100.0,
+      "all_days_mean_pct": 1.55,
+      "p_value_random_days": 0.0005,
+      "first_half_events": 2,
+      "second_half_events": 0,
+      "first_half_mean_pct": 12.8,
+      "second_half_mean_pct": null,
+      "first_half_edge_vs_all_days_pct": 11.63
+    },
+    {
+      "trigger": "20日高値から−15%以下",
+      "entry_delay_days": 1,
+      "hold_days": 60,
+      "events": 2,
+      "event_dates": [
+        "2024-08-05",
+        "2025-04-07"
+      ],
+      "mean_return_pct": 15.69,
+      "win_rate_pct": 100.0,
+      "all_days_mean_pct": 4.95,
+      "p_value_random_days": 0.0055,
+      "first_half_events": 2,
+      "second_half_events": 0,
+      "first_half_mean_pct": 15.69,
+      "second_half_mean_pct": null,
+      "first_half_edge_vs_all_days_pct": 11.38
+    },
+    {
+      "trigger": "20日高値から−15%以下",
+      "entry_delay_days": 2,
+      "hold_days": 5,
+      "events": 2,
+      "event_dates": [
+        "2024-08-05",
+        "2025-04-07"
+      ],
+      "mean_return_pct": 3.0,
+      "win_rate_pct": 50.0,
+      "all_days_mean_pct": 0.24,
+      "p_value_random_days": 0.0332,
+      "first_half_events": 2,
+      "second_half_events": 0,
+      "first_half_mean_pct": 3.0,
+      "second_half_mean_pct": null,
+      "first_half_edge_vs_all_days_pct": 2.86
+    },
+    {
+      "trigger": "20日高値から−15%以下",
+      "entry_delay_days": 2,
+      "hold_days": 20,
+      "events": 2,
+      "event_dates": [
+        "2024-08-05",
+        "2025-04-07"
+      ],
+      "mean_return_pct": 8.62,
+      "win_rate_pct": 100.0,
+      "all_days_mean_pct": 1.56,
+      "p_value_random_days": 0.0115,
+      "first_half_events": 2,
+      "second_half_events": 0,
+      "first_half_mean_pct": 8.62,
+      "second_half_mean_pct": null,
+      "first_half_edge_vs_all_days_pct": 7.42
+    },
+    {
+      "trigger": "20日高値から−15%以下",
+      "entry_delay_days": 2,
+      "hold_days": 60,
+      "events": 2,
+      "event_dates": [
+        "2024-08-05",
+        "2025-04-07"
+      ],
+      "mean_return_pct": 11.18,
+      "win_rate_pct": 100.0,
+      "all_days_mean_pct": 4.97,
+      "p_value_random_days": 0.0833,
+      "first_half_events": 2,
+      "second_half_events": 0,
+      "first_half_mean_pct": 11.18,
+      "second_half_mean_pct": null,
+      "first_half_edge_vs_all_days_pct": 6.79
+    },
+    {
+      "trigger": "20日高値から−15%以下",
+      "entry_delay_days": 3,
+      "hold_days": 5,
+      "events": 2,
+      "event_dates": [
+        "2024-08-05",
+        "2025-04-07"
+      ],
+      "mean_return_pct": 5.16,
+      "win_rate_pct": 100.0,
+      "all_days_mean_pct": 0.24,
+      "p_value_random_days": 0.0046,
+      "first_half_events": 2,
+      "second_half_events": 0,
+      "first_half_mean_pct": 5.16,
+      "second_half_mean_pct": null,
+      "first_half_edge_vs_all_days_pct": 5.01
+    },
+    {
+      "trigger": "20日高値から−15%以下",
+      "entry_delay_days": 3,
+      "hold_days": 20,
+      "events": 2,
+      "event_dates": [
+        "2024-08-05",
+        "2025-04-07"
+      ],
+      "mean_return_pct": 8.89,
+      "win_rate_pct": 100.0,
+      "all_days_mean_pct": 1.57,
+      "p_value_random_days": 0.0093,
+      "first_half_events": 2,
+      "second_half_events": 0,
+      "first_half_mean_pct": 8.89,
+      "second_half_mean_pct": null,
+      "first_half_edge_vs_all_days_pct": 7.68
+    },
+    {
+      "trigger": "20日高値から−15%以下",
+      "entry_delay_days": 3,
+      "hold_days": 60,
+      "events": 2,
+      "event_dates": [
+        "2024-08-05",
+        "2025-04-07"
+      ],
+      "mean_return_pct": 13.13,
+      "win_rate_pct": 100.0,
+      "all_days_mean_pct": 4.99,
+      "p_value_random_days": 0.0415,
+      "first_half_events": 2,
+      "second_half_events": 0,
+      "first_half_mean_pct": 13.13,
+      "second_half_mean_pct": null,
+      "first_half_edge_vs_all_days_pct": 8.66
+    },
+    {
+      "trigger": "20日高値から−15%以下",
+      "entry_delay_days": 5,
+      "hold_days": 5,
+      "events": 2,
+      "event_dates": [
+        "2024-08-05",
+        "2025-04-07"
+      ],
+      "mean_return_pct": 3.19,
+      "win_rate_pct": 100.0,
+      "all_days_mean_pct": 0.3,
+      "p_value_random_days": 0.0292,
+      "first_half_events": 2,
+      "second_half_events": 0,
+      "first_half_mean_pct": 3.19,
+      "second_half_mean_pct": null,
+      "first_half_edge_vs_all_days_pct": 2.93
+    },
+    {
+      "trigger": "20日高値から−15%以下",
+      "entry_delay_days": 5,
+      "hold_days": 20,
+      "events": 2,
+      "event_dates": [
+        "2024-08-05",
+        "2025-04-07"
+      ],
+      "mean_return_pct": 4.97,
+      "win_rate_pct": 100.0,
+      "all_days_mean_pct": 1.59,
+      "p_value_random_days": 0.1001,
+      "first_half_events": 2,
+      "second_half_events": 0,
+      "first_half_mean_pct": 4.97,
+      "second_half_mean_pct": null,
+      "first_half_edge_vs_all_days_pct": 3.73
+    },
+    {
+      "trigger": "20日高値から−15%以下",
+      "entry_delay_days": 5,
+      "hold_days": 60,
+      "events": 2,
+      "event_dates": [
+        "2024-08-05",
+        "2025-04-07"
+      ],
+      "mean_return_pct": 9.82,
+      "win_rate_pct": 100.0,
+      "all_days_mean_pct": 5.05,
+      "p_value_random_days": 0.1278,
+      "first_half_events": 2,
+      "second_half_events": 0,
+      "first_half_mean_pct": 9.82,
+      "second_half_mean_pct": null,
+      "first_half_edge_vs_all_days_pct": 5.18
+    },
+    {
+      "trigger": "20日高値から−15%以下",
+      "entry_delay_days": 10,
+      "hold_days": 5,
+      "events": 2,
+      "event_dates": [
+        "2024-08-05",
+        "2025-04-07"
+      ],
+      "mean_return_pct": 2.62,
+      "win_rate_pct": 100.0,
+      "all_days_mean_pct": 0.34,
+      "p_value_random_days": 0.0506,
+      "first_half_events": 2,
+      "second_half_events": 0,
+      "first_half_mean_pct": 2.62,
+      "second_half_mean_pct": null,
+      "first_half_edge_vs_all_days_pct": 2.26
+    },
+    {
+      "trigger": "20日高値から−15%以下",
+      "entry_delay_days": 10,
+      "hold_days": 20,
+      "events": 2,
+      "event_dates": [
+        "2024-08-05",
+        "2025-04-07"
+      ],
+      "mean_return_pct": 2.42,
+      "win_rate_pct": 50.0,
+      "all_days_mean_pct": 1.53,
+      "p_value_random_days": 0.3665,
+      "first_half_events": 2,
+      "second_half_events": 0,
+      "first_half_mean_pct": 2.42,
+      "second_half_mean_pct": null,
+      "first_half_edge_vs_all_days_pct": 1.23
+    },
+    {
+      "trigger": "20日高値から−15%以下",
+      "entry_delay_days": 10,
+      "hold_days": 60,
+      "events": 2,
+      "event_dates": [
+        "2024-08-05",
+        "2025-04-07"
+      ],
+      "mean_return_pct": 7.12,
+      "win_rate_pct": 100.0,
+      "all_days_mean_pct": 5.07,
+      "p_value_random_days": 0.3127,
+      "first_half_events": 2,
+      "second_half_events": 0,
+      "first_half_mean_pct": 7.12,
+      "second_half_mean_pct": null,
+      "first_half_edge_vs_all_days_pct": 2.25
+    }
+  ],
+  "prospective_chosen_by_first_half": {
+    "5": {
+      "rule": "指数が20日高値から−7%以下の日の1営業日後、翌日の始値で買い5日保有",
+      "first_half_events": 2,
+      "first_half_edge_pct": 8.94,
+      "second_half_events": 1,
+      "second_half_mean_pct": -0.75,
+      "second_half_all_days_mean_pct": 0.32
+    },
+    "20": {
+      "rule": "指数が20日高値から−7%以下の日の1営業日後、翌日の始値で買い20日保有",
+      "first_half_events": 2,
+      "first_half_edge_pct": 15.91,
+      "second_half_events": 1,
+      "second_half_mean_pct": -2.11,
+      "second_half_all_days_mean_pct": 1.93
+    },
+    "60": {
+      "rule": "指数が20日高値から−10%以下の日の0営業日後、翌日の始値で買い60日保有",
+      "first_half_events": 2,
+      "first_half_edge_pct": 15.16,
+      "second_half_events": 0,
+      "second_half_mean_pct": null,
+      "second_half_all_days_mean_pct": 5.76
+    }
+  },
+  "index_drawdown_levels": [
+    {
+      "level": "-5%",
+      "events": 6,
+      "dates": [
+        "2024-07-25",
+        "2024-09-11",
+        "2024-10-23",
+        "2025-04-02",
+        "2025-10-14",
+        "2026-03-04"
+      ],
+      "5日": -0.08,
+      "20日": 1.52,
+      "60日": 4.64,
+      "すべての日_20日": 1.54,
+      "すべての日_60日": 4.93
+    },
+    {
+      "level": "-7%",
+      "events": 3,
+      "dates": [
+        "2024-08-02",
+        "2025-04-03",
+        "2026-03-04"
+      ],
+      "5日": 1.57,
+      "20日": 5.42,
+      "60日": 8.47,
+      "すべての日_20日": 1.54,
+      "すべての日_60日": 4.93
+    },
+    {
+      "level": "-10%",
+      "events": 3,
+      "dates": [
+        "2024-08-02",
+        "2025-04-04",
+        "2026-03-23"
+      ],
+      "5日": 4.56,
+      "20日": 12.18,
+      "60日": 19.39,
+      "すべての日_20日": 1.54,
+      "すべての日_60日": 4.93
+    },
+    {
+      "level": "-12%",
+      "events": 2,
+      "dates": [
+        "2024-08-05",
+        "2025-04-07"
+      ],
+      "5日": 6.97,
+      "20日": 14.26,
+      "60日": 15.62,
+      "すべての日_20日": 1.54,
+      "すべての日_60日": 4.93
+    },
+    {
+      "level": "-15%",
+      "events": 2,
+      "dates": [
+        "2024-08-05",
+        "2025-04-07"
+      ],
+      "5日": 6.97,
+      "20日": 14.26,
+      "60日": 15.62,
+      "すべての日_20日": 1.54,
+      "すべての日_60日": 4.93
+    },
+    {
+      "level": "-20%",
+      "events": 1,
+      "dates": [
+        "2024-08-05"
+      ],
+      "5日": 7.35,
+      "20日": 15.77,
+      "60日": 11.27,
+      "すべての日_20日": 1.54,
+      "すべての日_60日": 4.93
+    }
+  ],
+  "retrospective": {
+    "episodes": [
+      {
+        "peak_date": "2024-07-17",
+        "trough_date": "2024-08-05",
+        "index_drawdown_pct": -22.41,
+        "stocks": 1974
+      },
+      {
+        "peak_date": "2025-03-27",
+        "trough_date": "2025-04-07",
+        "index_drawdown_pct": -18.29,
+        "stocks": 2005
+      },
+      {
+        "peak_date": "2026-02-27",
+        "trough_date": "2026-03-23",
+        "index_drawdown_pct": -10.89,
+        "stocks": 2200
+      }
+    ],
+    "pooled": {
+      "by_drop": {
+        "−40%以上": {
+          "銘柄数": 90,
+          "20日後 平均": 23.45,
+          "20日後 勝率": 92.2,
+          "20日後 局面平均との差": 8.66,
+          "60日後 平均": 22.72,
+          "60日後 勝率": 79.1,
+          "60日後 局面平均との差": 10.04
+        },
+        "−30〜−40%": {
+          "銘柄数": 642,
+          "20日後 平均": 19.97,
+          "20日後 勝率": 96.3,
+          "20日後 局面平均との差": 5.56,
+          "60日後 平均": 21.26,
+          "60日後 勝率": 85.4,
+          "60日後 局面平均との差": 7.21
+        },
+        "−20〜−30%": {
+          "銘柄数": 1839,
+          "20日後 平均": 14.17,
+          "20日後 勝率": 92.8,
+          "20日後 局面平均との差": 1.56,
+          "60日後 平均": 17.03,
+          "60日後 勝率": 87.9,
+          "60日後 局面平均との差": 1.54
+        },
+        "−10〜−20%": {
+          "銘柄数": 2496,
+          "20日後 平均": 8.09,
+          "20日後 勝率": 83.3,
+          "20日後 局面平均との差": -1.56,
+          "60日後 平均": 12.66,
+          "60日後 勝率": 83.4,
+          "60日後 局面平均との差": -3.72
+        },
+        "−10%未満": {
+          "銘柄数": 1112,
+          "20日後 平均": 4.29,
+          "20日後 勝率": 67.7,
+          "20日後 局面平均との差": -3.03,
+          "60日後 平均": 9.51,
+          "60日後 勝率": 80.9,
+          "60日後 局面平均との差": -7.59
+        }
+      },
+      "by_size": {
+        "300億未満": {
+          "銘柄数": 1535,
+          "20日後 平均": 12.75,
+          "20日後 勝率": 83.7,
+          "20日後 局面平均との差": 2.18,
+          "60日後 平均": 19.09,
+          "60日後 勝率": 85.3,
+          "60日後 局面平均との差": 3.28
+        },
+        "300〜1000億": {
+          "銘柄数": 1992,
+          "20日後 平均": 10.4,
+          "20日後 勝率": 84.2,
+          "20日後 局面平均との差": -0.46,
+          "60日後 平均": 14.86,
+          "60日後 勝率": 85.4,
+          "60日後 局面平均との差": -0.78
+        },
+        "1000〜5000億": {
+          "銘柄数": 1684,
+          "20日後 平均": 9.72,
+          "20日後 勝率": 86.4,
+          "20日後 局面平均との差": -1.04,
+          "60日後 平均": 14.48,
+          "60日後 勝率": 84.4,
+          "60日後 局面平均との差": -1.05
+        },
+        "5000億以上": {
+          "銘柄数": 967,
+          "20日後 平均": 9.66,
+          "20日後 勝率": 85.2,
+          "20日後 局面平均との差": -0.71,
+          "60日後 平均": 13.91,
+          "60日後 勝率": 85.8,
+          "60日後 局面平均との差": -1.75
+        }
+      },
+      "by_pbr": {
+        "0.7未満": {
+          "銘柄数": 274,
+          "20日後 平均": 5.98,
+          "20日後 勝率": 71.4,
+          "20日後 局面平均との差": -0.94,
+          "60日後 平均": 15.49,
+          "60日後 勝率": 87.5,
+          "60日後 局面平均との差": -2.75
+        },
+        "0.7〜1": {
+          "銘柄数": 465,
+          "20日後 平均": 5.04,
+          "20日後 勝率": 70.1,
+          "20日後 局面平均との差": -1.16,
+          "60日後 平均": 16.06,
+          "60日後 勝率": 92.2,
+          "60日後 局面平均との差": -2.56
+        },
+        "1〜1.5": {
+          "銘柄数": 668,
+          "20日後 平均": 4.66,
+          "20日後 勝率": 68.1,
+          "20日後 局面平均との差": -1.23,
+          "60日後 平均": 19.96,
+          "60日後 勝率": 87.0,
+          "60日後 局面平均との差": 0.83
+        },
+        "1.5〜3": {
+          "銘柄数": 777,
+          "20日後 平均": 6.36,
+          "20日後 勝率": 73.4,
+          "20日後 局面平均との差": 0.06,
+          "60日後 平均": 17.29,
+          "60日後 勝率": 86.9,
+          "60日後 局面平均との差": -1.83
+        },
+        "3以上": {
+          "銘柄数": 700,
+          "20日後 平均": 9.6,
+          "20日後 勝率": 76.9,
+          "20日後 局面平均との差": 2.71,
+          "60日後 平均": 22.98,
+          "60日後 勝率": 86.3,
+          "60日後 局面平均との差": 3.54
+        }
+      },
+      "by_div_yield": {
+        "無配": {
+          "銘柄数": 467,
+          "20日後 平均": 12.66,
+          "20日後 勝率": 81.5,
+          "20日後 局面平均との差": 3.81,
+          "60日後 平均": 26.37,
+          "60日後 勝率": 81.6,
+          "60日後 局面平均との差": 8.11
+        },
+        "〜2%": {
+          "銘柄数": 1157,
+          "20日後 平均": 9.72,
+          "20日後 勝率": 81.4,
+          "20日後 局面平均との差": 1.2,
+          "60日後 平均": 18.07,
+          "60日後 勝率": 84.6,
+          "60日後 局面平均との差": -0.46
+        },
+        "2〜3%": {
+          "銘柄数": 1114,
+          "20日後 平均": 8.02,
+          "20日後 勝率": 79.9,
+          "20日後 局面平均との差": -0.3,
+          "60日後 平均": 18.13,
+          "60日後 勝率": 89.6,
+          "60日後 局面平均との差": -0.7
+        },
+        "3〜4%": {
+          "銘柄数": 918,
+          "20日後 平均": 7.36,
+          "20日後 勝率": 80.2,
+          "20日後 局面平均との差": -1.5,
+          "60日後 平均": 18.78,
+          "60日後 勝率": 91.3,
+          "60日後 局面平均との差": -0.46
+        },
+        "4%〜": {
+          "銘柄数": 600,
+          "20日後 平均": 6.87,
+          "20日後 勝率": 80.3,
+          "20日後 局面平均との差": -2.79,
+          "60日後 平均": 16.64,
+          "60日後 勝率": 93.6,
+          "60日後 局面平均との差": -2.78
+        }
+      },
+      "by_volatility": {
+        "低（日次1.5%未満）": {
+          "銘柄数": 2454,
+          "20日後 平均": 8.42,
+          "20日後 勝率": 85.0,
+          "20日後 局面平均との差": -3.33,
+          "60日後 平均": 11.43,
+          "60日後 勝率": 85.7,
+          "60日後 局面平均との差": -3.66
+        },
+        "中（1.5〜2.5%）": {
+          "銘柄数": 2289,
+          "20日後 平均": 10.91,
+          "20日後 勝率": 84.8,
+          "20日後 局面平均との差": 0.69,
+          "60日後 平均": 16.53,
+          "60日後 勝率": 85.4,
+          "60日後 局面平均との差": 0.51
+        },
+        "高（2.5〜4%）": {
+          "銘柄数": 1099,
+          "20日後 平均": 14.39,
+          "20日後 勝率": 86.3,
+          "20日後 局面平均との差": 4.51,
+          "60日後 平均": 25.36,
+          "60日後 勝率": 84.9,
+          "60日後 局面平均との差": 8.96
+        },
+        "非常に高（4%以上）": {
+          "銘柄数": 336,
+          "20日後 平均": 13.56,
+          "20日後 勝率": 78.5,
+          "20日後 局面平均との差": 4.84,
+          "60日後 平均": 17.15,
+          "60日後 勝率": 76.9,
+          "60日後 局面平均との差": 1.31
+        }
+      },
+      "by_pre_momentum": {
+        "−10%以下": {
+          "銘柄数": 515,
+          "20日後 平均": 11.93,
+          "20日後 勝率": 86.8,
+          "20日後 局面平均との差": 2.79,
+          "60日後 平均": 23.69,
+          "60日後 勝率": 89.0,
+          "60日後 局面平均との差": 4.95
+        },
+        "−10〜0%": {
+          "銘柄数": 1058,
+          "20日後 平均": 10.66,
+          "20日後 勝率": 86.3,
+          "20日後 局面平均との差": -0.89,
+          "60日後 平均": 15.67,
+          "60日後 勝率": 85.5,
+          "60日後 局面平均との差": -0.53
+        },
+        "0〜10%": {
+          "銘柄数": 2116,
+          "20日後 平均": 11.21,
+          "20日後 勝率": 89.2,
+          "20日後 局面平均との差": -1.22,
+          "60日後 平均": 13.31,
+          "60日後 勝率": 84.0,
+          "60日後 局面平均との差": -1.42
+        },
+        "10〜30%": {
+          "銘柄数": 1701,
+          "20日後 平均": 9.89,
+          "20日後 勝率": 80.4,
+          "20日後 局面平均との差": 0.04,
+          "60日後 平均": 16.54,
+          "60日後 勝率": 86.1,
+          "60日後 局面平均との差": 0.57
+        },
+        "30%超": {
+          "銘柄数": 661,
+          "20日後 平均": 9.48,
+          "20日後 勝率": 78.0,
+          "20日後 局面平均との差": 3.22,
+          "60日後 平均": 21.7,
+          "60日後 勝率": 84.9,
+          "60日後 局面平均との差": 3.29
+        }
+      },
+      "by_sector": {
+        "その他製品": {
+          "銘柄数": 121,
+          "20日後 平均": 9.69,
+          "20日後 勝率": 83.5,
+          "20日後 局面平均との差": -0.73,
+          "60日後 平均": 17.79,
+          "60日後 勝率": 92.0,
+          "60日後 局面平均との差": 2.11
+        },
+        "その他金融業": {
+          "銘柄数": 81,
+          "20日後 平均": 11.75,
+          "20日後 勝率": 92.6,
+          "20日後 局面平均との差": 1.09,
+          "60日後 平均": 15.79,
+          "60日後 勝率": 92.3,
+          "60日後 局面平均との差": 0.17
+        },
+        "ガラス・土石製品": {
+          "銘柄数": 97,
+          "20日後 平均": 10.4,
+          "20日後 勝率": 83.5,
+          "20日後 局面平均との差": -0.08,
+          "60日後 平均": 16.51,
+          "60日後 勝率": 88.5,
+          "60日後 局面平均との差": 0.67
+        },
+        "ゴム製品": {
+          "銘柄数": 35,
+          "20日後 平均": 8.14,
+          "20日後 勝率": 85.7,
+          "20日後 局面平均との差": -2.63,
+          "60日後 平均": 14.02,
+          "60日後 勝率": 91.3,
+          "60日後 局面平均との差": -1.79
+        },
+        "サービス業": {
+          "銘柄数": 613,
+          "20日後 平均": 11.29,
+          "20日後 勝率": 83.2,
+          "20日後 局面平均との差": 0.65,
+          "60日後 平均": 15.38,
+          "60日後 勝率": 82.4,
+          "60日後 局面平均との差": -0.32
+        },
+        "パルプ・紙": {
+          "銘柄数": 33,
+          "20日後 平均": 9.81,
+          "20日後 勝率": 87.9,
+          "20日後 局面平均との差": -1.11,
+          "60日後 平均": 8.88,
+          "60日後 勝率": 77.3,
+          "60日後 局面平均との差": -6.74
+        },
+        "不動産業": {
+          "銘柄数": 211,
+          "20日後 平均": 11.15,
+          "20日後 勝率": 87.2,
+          "20日後 局面平均との差": 0.72,
+          "60日後 平均": 14.77,
+          "60日後 勝率": 87.1,
+          "60日後 局面平均との差": -1.19
+        },
+        "保険業": {
+          "銘柄数": 31,
+          "20日後 平均": 11.19,
+          "20日後 勝率": 90.3,
+          "20日後 局面平均との差": 0.59,
+          "60日後 平均": 16.73,
+          "60日後 勝率": 90.0,
+          "60日後 局面平均との差": 0.67
+        },
+        "倉庫・運輸関連業": {
+          "銘柄数": 31,
+          "20日後 平均": 9.37,
+          "20日後 勝率": 90.3,
+          "20日後 局面平均との差": -1.6,
+          "60日後 平均": 22.32,
+          "60日後 勝率": 95.2,
+          "60日後 局面平均との差": 6.49
+        },
+        "化学": {
+          "銘柄数": 390,
+          "20日後 平均": 8.91,
+          "20日後 勝率": 84.4,
+          "20日後 局面平均との差": -1.56,
+          "60日後 平均": 14.51,
+          "60日後 勝率": 87.7,
+          "60日後 局面平均との差": -1.13
+        },
+        "医薬品": {
+          "銘柄数": 162,
+          "20日後 平均": 9.91,
+          "20日後 勝率": 82.7,
+          "20日後 局面平均との差": -0.29,
+          "60日後 平均": 10.56,
+          "60日後 勝率": 73.5,
+          "60日後 局面平均との差": -5.51
+        },
+        "卸売業": {
+          "銘柄数": 402,
+          "20日後 平均": 9.19,
+          "20日後 勝率": 83.1,
+          "20日後 局面平均との差": -1.44,
+          "60日後 平均": 14.58,
+          "60日後 勝率": 87.5,
+          "60日後 局面平均との差": -1.1
+        },
+        "小売業": {
+          "銘柄数": 493,
+          "20日後 平均": 7.83,
+          "20日後 勝率": 80.9,
+          "20日後 局面平均との差": -2.95,
+          "60日後 平均": 11.45,
+          "60日後 勝率": 78.9,
+          "60日後 局面平均との差": -4.24
+        },
+        "建設業": {
+          "銘柄数": 263,
+          "20日後 平均": 9.03,
+          "20日後 勝率": 75.7,
+          "20日後 局面平均との差": -1.52,
+          "60日後 平均": 16.11,
+          "60日後 勝率": 88.6,
+          "60日後 局面平均との差": 0.3
+        },
+        "情報・通信業": {
+          "銘柄数": 766,
+          "20日後 平均": 14.19,
+          "20日後 勝率": 87.3,
+          "20日後 局面平均との差": 3.68,
+          "60日後 平均": 18.55,
+          "60日後 勝率": 87.3,
+          "60日後 局面平均との差": 3.01
+        },
+        "機械": {
+          "銘柄数": 405,
+          "20日後 平均": 11.45,
+          "20日後 勝率": 86.7,
+          "20日後 局面平均との差": 0.85,
+          "60日後 平均": 19.6,
+          "60日後 勝率": 89.9,
+          "60日後 局面平均との差": 3.99
+        },
+        "水産・農林業": {
+          "銘柄数": 20,
+          "20日後 平均": 3.68,
+          "20日後 勝率": 65.0,
+          "20日後 局面平均との差": -6.99,
+          "60日後 平均": 8.35,
+          "60日後 勝率": 92.3,
+          "60日後 局面平均との差": -7.61
+        },
+        "海運業": {
+          "銘柄数": 20,
+          "20日後 平均": 7.78,
+          "20日後 勝率": 70.0,
+          "20日後 局面平均との差": -3.04,
+          "60日後 平均": 10.73,
+          "60日後 勝率": 76.9,
+          "60日後 局面平均との差": -4.56
+        },
+        "石油・石炭製品": {
+          "銘柄数": 21,
+          "20日後 平均": 10.5,
+          "20日後 勝率": 66.7,
+          "20日後 局面平均との差": -0.0,
+          "60日後 平均": 17.79,
+          "60日後 勝率": 100.0,
+          "60日後 局面平均との差": 2.5
+        },
+        "精密機器": {
+          "銘柄数": 101,
+          "20日後 平均": 11.29,
+          "20日後 勝率": 86.1,
+          "20日後 局面平均との差": 0.97,
+          "60日後 平均": 15.35,
+          "60日後 勝率": 88.7,
+          "60日後 局面平均との差": -0.55
+        },
+        "繊維製品": {
+          "銘柄数": 61,
+          "20日後 平均": 9.56,
+          "20日後 勝率": 88.5,
+          "20日後 局面平均との差": -1.34,
+          "60日後 平均": 13.73,
+          "60日後 勝率": 92.5,
+          "60日後 局面平均との差": -1.46
+        },
+        "証券、商品先物取引業": {
+          "銘柄数": 80,
+          "20日後 平均": 8.43,
+          "20日後 勝率": 77.5,
+          "20日後 局面平均との差": -1.88,
+          "60日後 平均": 15.91,
+          "60日後 勝率": 91.8,
+          "60日後 局面平均との差": 0.02
+        },
+        "輸送用機器": {
+          "銘柄数": 145,
+          "20日後 平均": 8.77,
+          "20日後 勝率": 86.9,
+          "20日後 局面平均との差": -1.78,
+          "60日後 平均": 16.74,
+          "60日後 勝率": 87.0,
+          "60日後 局面平均との差": 0.92
+        },
+        "金属製品": {
+          "銘柄数": 96,
+          "20日後 平均": 10.63,
+          "20日後 勝率": 83.3,
+          "20日後 局面平均との差": 0.41,
+          "60日後 平均": 15.83,
+          "60日後 勝率": 87.7,
+          "60日後 局面平均との差": 0.44
+        },
+        "鉄鋼": {
+          "銘柄数": 75,
+          "20日後 平均": 7.59,
+          "20日後 勝率": 73.3,
+          "20日後 局面平均との差": -3.21,
+          "60日後 平均": 10.73,
+          "60日後 勝率": 81.6,
+          "60日後 局面平均との差": -4.81
+        },
+        "銀行業": {
+          "銘柄数": 214,
+          "20日後 平均": 11.65,
+          "20日後 勝率": 96.7,
+          "20日後 局面平均との差": 1.03,
+          "60日後 平均": 15.04,
+          "60日後 勝率": 84.7,
+          "60日後 局面平均との差": -0.67
+        },
+        "陸運業": {
+          "銘柄数": 111,
+          "20日後 平均": 6.28,
+          "20日後 勝率": 82.9,
+          "20日後 局面平均との差": -4.4,
+          "60日後 平均": 8.76,
+          "60日後 勝率": 73.6,
+          "60日後 局面平均との差": -7.1
+        },
+        "電気・ガス業": {
+          "銘柄数": 69,
+          "20日後 平均": 8.62,
+          "20日後 勝率": 79.7,
+          "20日後 局面平均との差": -2.0,
+          "60日後 平均": 9.72,
+          "60日後 勝率": 79.5,
+          "60日後 局面平均との差": -5.91
+        },
+        "電気機器": {
+          "銘柄数": 460,
+          "20日後 平均": 14.03,
+          "20日後 勝率": 92.4,
+          "20日後 局面平均との差": 3.48,
+          "60日後 平均": 20.47,
+          "60日後 勝率": 82.1,
+          "60日後 局面平均との差": 4.85
+        },
+        "非鉄金属": {
+          "銘柄数": 58,
+          "20日後 平均": 15.24,
+          "20日後 勝率": 94.8,
+          "20日後 局面平均との差": 4.64,
+          "60日後 平均": 25.08,
+          "60日後 勝率": 94.6,
+          "60日後 局面平均との差": 9.34
+        },
+        "食料品": {
+          "銘柄数": 221,
+          "20日後 平均": 6.2,
+          "20日後 勝率": 79.2,
+          "20日後 局面平均との差": -4.53,
+          "60日後 平均": 8.02,
+          "60日後 勝率": 78.5,
+          "60日後 局面平均との差": -7.72
+        }
+      },
+      "by_size_x_drop": {
+        "大型（1000億以上）": {
+          "−30%以上": {
+            "銘柄数": 212,
+            "20日後 平均": 17.69,
+            "20日後 勝率": 96.2,
+            "20日後 局面平均との差": 3.5,
+            "60日後 平均": 24.91,
+            "60日後 勝率": 85.0,
+            "60日後 局面平均との差": 10.81
+          },
+          "−20〜−30%": {
+            "銘柄数": 690,
+            "20日後 平均": 13.12,
+            "20日後 勝率": 92.3,
+            "20日後 局面平均との差": 0.79,
+            "60日後 平均": 15.84,
+            "60日後 勝率": 89.3,
+            "60日後 局面平均との差": 0.67
+          },
+          "−10〜−20%": {
+            "銘柄数": 1175,
+            "20日後 平均": 8.52,
+            "20日後 勝率": 86.8,
+            "20日後 局面平均との差": -1.68,
+            "60日後 平均": 11.52,
+            "60日後 勝率": 82.8,
+            "60日後 局面平均との差": -4.23
+          },
+          "−10%未満": {
+            "銘柄数": 574,
+            "20日後 平均": 5.02,
+            "20日後 勝率": 72.7,
+            "20日後 局面平均との差": -3.07,
+            "60日後 平均": 9.67,
+            "60日後 勝率": 81.1,
+            "60日後 局面平均との差": -7.62
+          }
+        },
+        "中小型（1000億未満）": {
+          "−30%以上": {
+            "銘柄数": 520,
+            "20日後 平均": 21.5,
+            "20日後 勝率": 95.6,
+            "20日後 局面平均との差": 6.94,
+            "60日後 平均": 20.07,
+            "60日後 勝率": 84.5,
+            "60日後 局面平均との差": 6.26
+          },
+          "−20〜−30%": {
+            "銘柄数": 1148,
+            "20日後 平均": 14.8,
+            "20日後 勝率": 93.0,
+            "20日後 局面平均との差": 2.02,
+            "60日後 平均": 17.68,
+            "60日後 勝率": 87.1,
+            "60日後 局面平均との差": 2.02
+          },
+          "−10〜−20%": {
+            "銘柄数": 1321,
+            "20日後 平均": 7.7,
+            "20日後 勝率": 80.2,
+            "20日後 局面平均との差": -1.45,
+            "60日後 平均": 13.84,
+            "60日後 勝率": 84.1,
+            "60日後 局面平均との差": -3.19
+          },
+          "−10%未満": {
+            "銘柄数": 538,
+            "20日後 平均": 3.51,
+            "20日後 勝率": 62.3,
+            "20日後 局面平均との差": -2.98,
+            "60日後 平均": 9.17,
+            "60日後 勝率": 80.6,
+            "60日後 局面平均との差": -7.5
+          }
+        }
+      },
+      "by_div_x_drop": {
+        "配当利回り3%以上": {
+          "−30%以上": {
+            "銘柄数": 44,
+            "20日後 平均": 16.14,
+            "20日後 勝率": 95.5,
+            "20日後 局面平均との差": 3.04,
+            "60日後 平均": 28.34,
+            "60日後 勝率": 93.0,
+            "60日後 局面平均との差": 9.98
+          },
+          "−20〜−30%": {
+            "銘柄数": 396,
+            "20日後 平均": 12.14,
+            "20日後 勝率": 95.7,
+            "20日後 局面平均との差": -0.12,
+            "60日後 平均": 20.81,
+            "60日後 勝率": 95.9,
+            "60日後 局面平均との差": 1.58
+          },
+          "−10〜−20%": {
+            "銘柄数": 777,
+            "20日後 平均": 5.95,
+            "20日後 勝率": 79.3,
+            "20日後 局面平均との差": -2.83,
+            "60日後 平均": 14.98,
+            "60日後 勝率": 89.9,
+            "60日後 局面平均との差": -4.48
+          },
+          "−10%未満": {
+            "銘柄数": 303,
+            "20日後 平均": 2.47,
+            "20日後 勝率": 60.3,
+            "20日後 局面平均との差": -3.06,
+            "60日後 平均": 10.05,
+            "60日後 勝率": 84.8,
+            "60日後 局面平均との差": -9.55
+          }
+        },
+        "配当利回り3%未満（無配含む）": {
+          "−30%以上": {
+            "銘柄数": 255,
+            "20日後 平均": 18.1,
+            "20日後 勝率": 95.7,
+            "20日後 局面平均との差": 5.34,
+            "60日後 平均": 30.12,
+            "60日後 勝率": 89.6,
+            "60日後 局面平均との差": 12.87
+          },
+          "−20〜−30%": {
+            "銘柄数": 668,
+            "20日後 平均": 13.19,
+            "20日後 勝率": 86.7,
+            "20日後 局面平均との差": 3.58,
+            "60日後 平均": 23.14,
+            "60日後 勝率": 88.6,
+            "60日後 局面平均との差": 4.2
+          },
+          "−10〜−20%": {
+            "銘柄数": 1153,
+            "20日後 平均": 8.31,
+            "20日後 勝率": 80.9,
+            "20日後 局面平均との差": 0.55,
+            "60日後 平均": 15.21,
+            "60日後 勝率": 83.8,
+            "60日後 局面平均との差": -3.57
+          },
+          "−10%未満": {
+            "銘柄数": 660,
+            "20日後 平均": 4.56,
+            "20日後 勝率": 68.8,
+            "20日後 局面平均との差": -2.43,
+            "60日後 平均": 9.8,
+            "60日後 勝率": 81.9,
+            "60日後 局面平均との差": -9.27
+          }
+        }
+      }
+    },
+    "per_episode": {
+      "2024-07-17→2024-08-05": {
+        "by_drop": {
+          "−40%以上": {
+            "銘柄数": 72,
+            "20日後 平均": 25.96,
+            "20日後 勝率": 94.4,
+            "20日後 局面平均との差": 10.18,
+            "60日後 平均": 20.8,
+            "60日後 勝率": 77.8,
+            "60日後 局面平均との差": 9.52
+          },
+          "−30〜−40%": {
+            "銘柄数": 420,
+            "20日後 平均": 21.92,
+            "20日後 勝率": 96.9,
+            "20日後 局面平均との差": 6.15,
+            "60日後 平均": 14.73,
+            "60日後 勝率": 81.0,
+            "60日後 局面平均との差": 3.46
+          },
+          "−20〜−30%": {
+            "銘柄数": 789,
+            "20日後 平均": 16.37,
+            "20日後 勝率": 96.7,
+            "20日後 局面平均との差": 0.6,
+            "60日後 平均": 11.51,
+            "60日後 勝率": 82.7,
+            "60日後 局面平均との差": 0.24
+          },
+          "−10〜−20%": {
+            "銘柄数": 572,
+            "20日後 平均": 10.88,
+            "20日後 勝率": 95.6,
+            "20日後 局面平均との差": -4.89,
+            "60日後 平均": 7.86,
+            "60日後 勝率": 75.0,
+            "60日後 局面平均との差": -3.41
+          },
+          "−10%未満": {
+            "銘柄数": 121,
+            "20日後 平均": 7.54,
+            "20日後 勝率": 85.0,
+            "20日後 局面平均との差": -8.23,
+            "60日後 平均": 7.86,
+            "60日後 勝率": 76.6,
+            "60日後 局面平均との差": -3.41
+          }
+        },
+        "by_size": {
+          "300億未満": {
+            "銘柄数": 467,
+            "20日後 平均": 21.39,
+            "20日後 勝率": 96.4,
+            "20日後 局面平均との差": 5.62,
+            "60日後 平均": 13.87,
+            "60日後 勝率": 78.8,
+            "60日後 局面平均との差": 2.6
+          },
+          "300〜1000億": {
+            "銘柄数": 655,
+            "20日後 平均": 15.13,
+            "20日後 勝率": 96.5,
+            "20日後 局面平均との差": -0.65,
+            "60日後 平均": 10.3,
+            "60日後 勝率": 79.7,
+            "60日後 局面平均との差": -0.97
+          },
+          "1000〜5000億": {
+            "銘柄数": 558,
+            "20日後 平均": 13.02,
+            "20日後 勝率": 94.8,
+            "20日後 局面平均との差": -2.75,
+            "60日後 平均": 10.86,
+            "60日後 勝率": 78.9,
+            "60日後 局面平均との差": -0.41
+          },
+          "5000億以上": {
+            "銘柄数": 294,
+            "20日後 平均": 13.51,
+            "20日後 勝率": 94.2,
+            "20日後 局面平均との差": -2.26,
+            "60日後 平均": 10.1,
+            "60日後 勝率": 81.6,
+            "60日後 局面平均との差": -1.17
+          }
+        },
+        "by_pbr": {
+          "0.7未満": {
+            "銘柄数": 16,
+            "20日後 平均": 13.6,
+            "20日後 勝率": 100.0,
+            "20日後 局面平均との差": -2.17,
+            "60日後 平均": 7.24,
+            "60日後 勝率": 75.0,
+            "60日後 局面平均との差": -4.03
+          },
+          "0.7〜1": {
+            "銘柄数": 16,
+            "20日後 平均": 15.56,
+            "20日後 勝率": 100.0,
+            "20日後 局面平均との差": -0.22,
+            "60日後 平均": 10.1,
+            "60日後 勝率": 75.0,
+            "60日後 局面平均との差": -1.17
+          },
+          "1.5〜3": {
+            "銘柄数": 18,
+            "20日後 平均": 15.88,
+            "20日後 勝率": 100.0,
+            "20日後 局面平均との差": 0.11,
+            "60日後 平均": 6.54,
+            "60日後 勝率": 72.2,
+            "60日後 局面平均との差": -4.73
+          }
+        },
+        "by_div_yield": {
+          "無配": {
+            "銘柄数": 45,
+            "20日後 平均": 23.14,
+            "20日後 勝率": 95.6,
+            "20日後 局面平均との差": 7.36,
+            "60日後 平均": 13.48,
+            "60日後 勝率": 60.0,
+            "60日後 局面平均との差": 2.21
+          },
+          "〜2%": {
+            "銘柄数": 91,
+            "20日後 平均": 12.19,
+            "20日後 勝率": 93.4,
+            "20日後 局面平均との差": -3.58,
+            "60日後 平均": 7.77,
+            "60日後 勝率": 71.4,
+            "60日後 局面平均との差": -3.5
+          },
+          "2〜3%": {
+            "銘柄数": 67,
+            "20日後 平均": 14.4,
+            "20日後 勝率": 98.5,
+            "20日後 局面平均との差": -1.37,
+            "60日後 平均": 10.63,
+            "60日後 勝率": 76.1,
+            "60日後 局面平均との差": -0.64
+          },
+          "3〜4%": {
+            "銘柄数": 41,
+            "20日後 平均": 11.72,
+            "20日後 勝率": 100.0,
+            "20日後 局面平均との差": -4.05,
+            "60日後 平均": 9.44,
+            "60日後 勝率": 70.7,
+            "60日後 局面平均との差": -1.83
+          },
+          "4%〜": {
+            "銘柄数": 24,
+            "20日後 平均": 15.05,
+            "20日後 勝率": 100.0,
+            "20日後 局面平均との差": -0.73,
+            "60日後 平均": 12.19,
+            "60日後 勝率": 87.5,
+            "60日後 局面平均との差": 0.92
+          }
+        },
+        "by_volatility": {
+          "低（日次1.5%未満）": {
+            "銘柄数": 1015,
+            "20日後 平均": 12.21,
+            "20日後 勝率": 96.1,
+            "20日後 局面平均との差": -3.57,
+            "60日後 平均": 9.43,
+            "60日後 勝率": 82.3,
+            "60日後 局面平均との差": -1.84
+          },
+          "中（1.5〜2.5%）": {
+            "銘柄数": 629,
+            "20日後 平均": 17.59,
+            "20日後 勝率": 94.6,
+            "20日後 局面平均との差": 1.82,
+            "60日後 平均": 11.68,
+            "60日後 勝率": 77.3,
+            "60日後 局面平均との差": 0.41
+          },
+          "高（2.5〜4%）": {
+            "銘柄数": 260,
+            "20日後 平均": 23.56,
+            "20日後 勝率": 96.5,
+            "20日後 局面平均との差": 7.78,
+            "60日後 平均": 17.51,
+            "60日後 勝率": 77.2,
+            "60日後 局面平均との差": 6.24
+          },
+          "非常に高（4%以上）": {
+            "銘柄数": 70,
+            "20日後 平均": 22.23,
+            "20日後 勝率": 95.7,
+            "20日後 局面平均との差": 6.46,
+            "60日後 平均": 10.98,
+            "60日後 勝率": 69.1,
+            "60日後 局面平均との差": -0.29
+          }
+        },
+        "by_pre_momentum": {
+          "−10%以下": {
+            "銘柄数": 40,
+            "20日後 平均": 21.58,
+            "20日後 勝率": 97.5,
+            "20日後 局面平均との差": 5.81,
+            "60日後 平均": 16.85,
+            "60日後 勝率": 75.0,
+            "60日後 局面平均との差": 5.58
+          },
+          "−10〜0%": {
+            "銘柄数": 342,
+            "20日後 平均": 14.89,
+            "20日後 勝率": 94.4,
+            "20日後 局面平均との差": -0.88,
+            "60日後 平均": 10.13,
+            "60日後 勝率": 78.4,
+            "60日後 局面平均との差": -1.14
+          },
+          "0〜10%": {
+            "銘柄数": 1008,
+            "20日後 平均": 14.59,
+            "20日後 勝率": 96.0,
+            "20日後 局面平均との差": -1.19,
+            "60日後 平均": 10.5,
+            "60日後 勝率": 79.7,
+            "60日後 局面平均との差": -0.77
+          },
+          "10〜30%": {
+            "銘柄数": 443,
+            "20日後 平均": 18.09,
+            "20日後 勝率": 96.6,
+            "20日後 局面平均との差": 2.32,
+            "60日後 平均": 12.24,
+            "60日後 勝率": 79.7,
+            "60日後 局面平均との差": 0.97
+          },
+          "30%超": {
+            "銘柄数": 25,
+            "20日後 平均": 27.08,
+            "20日後 勝率": 96.0,
+            "20日後 局面平均との差": 11.31,
+            "60日後 平均": 16.63,
+            "60日後 勝率": 80.0,
+            "60日後 局面平均との差": 5.36
+          }
+        },
+        "by_sector": {
+          "その他製品": {
+            "銘柄数": 37,
+            "20日後 平均": 16.46,
+            "20日後 勝率": 94.6,
+            "20日後 局面平均との差": 0.69,
+            "60日後 平均": 15.14,
+            "60日後 勝率": 89.2,
+            "60日後 局面平均との差": 3.87
+          },
+          "その他金融業": {
+            "銘柄数": 26,
+            "20日後 平均": 18.85,
+            "20日後 勝率": 96.2,
+            "20日後 局面平均との差": 3.07,
+            "60日後 平均": 13.97,
+            "60日後 勝率": 88.5,
+            "60日後 局面平均との差": 2.7
+          },
+          "ガラス・土石製品": {
+            "銘柄数": 29,
+            "20日後 平均": 13.19,
+            "20日後 勝率": 89.7,
+            "20日後 局面平均との差": -2.58,
+            "60日後 平均": 10.57,
+            "60日後 勝率": 79.3,
+            "60日後 局面平均との差": -0.7
+          },
+          "サービス業": {
+            "銘柄数": 193,
+            "20日後 平均": 18.12,
+            "20日後 勝率": 93.8,
+            "20日後 局面平均との差": 2.34,
+            "60日後 平均": 12.02,
+            "60日後 勝率": 79.3,
+            "60日後 局面平均との差": 0.75
+          },
+          "不動産業": {
+            "銘柄数": 61,
+            "20日後 平均": 18.27,
+            "20日後 勝率": 100.0,
+            "20日後 局面平均との差": 2.49,
+            "60日後 平均": 13.27,
+            "60日後 勝率": 83.6,
+            "60日後 局面平均との差": 2.0
+          },
+          "化学": {
+            "銘柄数": 121,
+            "20日後 平均": 13.69,
+            "20日後 勝率": 94.2,
+            "20日後 局面平均との差": -2.08,
+            "60日後 平均": 10.4,
+            "60日後 勝率": 81.0,
+            "60日後 局面平均との差": -0.87
+          },
+          "医薬品": {
+            "銘柄数": 44,
+            "20日後 平均": 18.95,
+            "20日後 勝率": 95.5,
+            "20日後 局面平均との差": 3.18,
+            "60日後 平均": 12.2,
+            "60日後 勝率": 77.3,
+            "60日後 局面平均との差": 0.93
+          },
+          "卸売業": {
+            "銘柄数": 127,
+            "20日後 平均": 14.1,
+            "20日後 勝率": 98.4,
+            "20日後 局面平均との差": -1.67,
+            "60日後 平均": 9.2,
+            "60日後 勝率": 79.5,
+            "60日後 局面平均との差": -2.07
+          },
+          "小売業": {
+            "銘柄数": 159,
+            "20日後 平均": 10.27,
+            "20日後 勝率": 91.2,
+            "20日後 局面平均との差": -5.5,
+            "60日後 平均": 6.82,
+            "60日後 勝率": 67.3,
+            "60日後 局面平均との差": -4.45
+          },
+          "建設業": {
+            "銘柄数": 80,
+            "20日後 平均": 14.01,
+            "20日後 勝率": 98.8,
+            "20日後 局面平均との差": -1.77,
+            "60日後 平均": 10.08,
+            "60日後 勝率": 83.8,
+            "60日後 局面平均との差": -1.19
+          },
+          "情報・通信業": {
+            "銘柄数": 244,
+            "20日後 平均": 22.94,
+            "20日後 勝率": 97.5,
+            "20日後 局面平均との差": 7.17,
+            "60日後 平均": 15.17,
+            "60日後 勝率": 84.4,
+            "60日後 局面平均との差": 3.9
+          },
+          "機械": {
+            "銘柄数": 129,
+            "20日後 平均": 15.28,
+            "20日後 勝率": 95.3,
+            "20日後 局面平均との差": -0.49,
+            "60日後 平均": 13.51,
+            "60日後 勝率": 84.5,
+            "60日後 局面平均との差": 2.24
+          },
+          "精密機器": {
+            "銘柄数": 29,
+            "20日後 平均": 16.01,
+            "20日後 勝率": 100.0,
+            "20日後 局面平均との差": 0.24,
+            "60日後 平均": 12.63,
+            "60日後 勝率": 82.8,
+            "60日後 局面平均との差": 1.36
+          },
+          "繊維製品": {
+            "銘柄数": 22,
+            "20日後 平均": 14.2,
+            "20日後 勝率": 100.0,
+            "20日後 局面平均との差": -1.57,
+            "60日後 平均": 11.26,
+            "60日後 勝率": 90.9,
+            "60日後 局面平均との差": -0.01
+          },
+          "証券、商品先物取引業": {
+            "銘柄数": 23,
+            "20日後 平均": 17.12,
+            "20日後 勝率": 95.7,
+            "20日後 局面平均との差": 1.34,
+            "60日後 平均": 12.71,
+            "60日後 勝率": 87.0,
+            "60日後 局面平均との差": 1.44
+          },
+          "輸送用機器": {
+            "銘柄数": 44,
+            "20日後 平均": 12.09,
+            "20日後 勝率": 100.0,
+            "20日後 局面平均との差": -3.68,
+            "60日後 平均": 6.83,
+            "60日後 勝率": 77.3,
+            "60日後 局面平均との差": -4.44
+          },
+          "金属製品": {
+            "銘柄数": 30,
+            "20日後 平均": 15.55,
+            "20日後 勝率": 96.7,
+            "20日後 局面平均との差": -0.22,
+            "60日後 平均": 12.49,
+            "60日後 勝率": 80.0,
+            "60日後 局面平均との差": 1.22
+          },
+          "鉄鋼": {
+            "銘柄数": 25,
+            "20日後 平均": 15.28,
+            "20日後 勝率": 100.0,
+            "20日後 局面平均との差": -0.49,
+            "60日後 平均": 8.77,
+            "60日後 勝率": 72.0,
+            "60日後 局面平均との差": -2.5
+          },
+          "銀行業": {
+            "銘柄数": 67,
+            "20日後 平均": 12.98,
+            "20日後 勝率": 100.0,
+            "20日後 局面平均との差": -2.79,
+            "60日後 平均": 4.42,
+            "60日後 勝率": 68.7,
+            "60日後 局面平均との差": -6.85
+          },
+          "陸運業": {
+            "銘柄数": 34,
+            "20日後 平均": 9.77,
+            "20日後 勝率": 97.1,
+            "20日後 局面平均との差": -6.0,
+            "60日後 平均": 8.74,
+            "60日後 勝率": 76.5,
+            "60日後 局面平均との差": -2.53
+          },
+          "電気・ガス業": {
+            "銘柄数": 22,
+            "20日後 平均": 16.0,
+            "20日後 勝率": 100.0,
+            "20日後 局面平均との差": 0.23,
+            "60日後 平均": 7.56,
+            "60日後 勝率": 77.3,
+            "60日後 局面平均との差": -3.71
+          },
+          "電気機器": {
+            "銘柄数": 145,
+            "20日後 平均": 16.45,
+            "20日後 勝率": 95.2,
+            "20日後 局面平均との差": 0.67,
+            "60日後 平均": 11.42,
+            "60日後 勝率": 70.3,
+            "60日後 局面平均との差": 0.15
+          },
+          "非鉄金属": {
+            "銘柄数": 18,
+            "20日後 平均": 23.13,
+            "20日後 勝率": 100.0,
+            "20日後 局面平均との差": 7.35,
+            "60日後 平均": 20.33,
+            "60日後 勝率": 94.4,
+            "60日後 局面平均との差": 9.06
+          },
+          "食料品": {
+            "銘柄数": 70,
+            "20日後 平均": 8.84,
+            "20日後 勝率": 88.6,
+            "20日後 局面平均との差": -6.93,
+            "60日後 平均": 7.52,
+            "60日後 勝率": 82.9,
+            "60日後 局面平均との差": -3.75
+          }
+        },
+        "by_size_x_drop": {
+          "大型（1000億以上）": {
+            "−30%以上": {
+              "銘柄数": 135,
+              "20日後 平均": 18.33,
+              "20日後 勝率": 95.6,
+              "20日後 局面平均との差": 2.56,
+              "60日後 平均": 15.32,
+              "60日後 勝率": 78.5,
+              "60日後 局面平均との差": 4.05
+            },
+            "−20〜−30%": {
+              "銘柄数": 303,
+              "20日後 平均": 15.08,
+              "20日後 勝率": 95.7,
+              "20日後 局面平均との差": -0.69,
+              "60日後 平均": 11.74,
+              "60日後 勝率": 85.5,
+              "60日後 局面平均との差": 0.47
+            },
+            "−10〜−20%": {
+              "銘柄数": 341,
+              "20日後 平均": 10.52,
+              "20日後 勝率": 95.0,
+              "20日後 局面平均との差": -5.25,
+              "60日後 平均": 7.97,
+              "60日後 勝率": 76.2,
+              "60日後 局面平均との差": -3.3
+            },
+            "−10%未満": {
+              "銘柄数": 73,
+              "20日後 平均": 8.3,
+              "20日後 勝率": 86.3,
+              "20日後 局面平均との差": -7.47,
+              "60日後 平均": 9.35,
+              "60日後 勝率": 75.7,
+              "60日後 局面平均との差": -1.92
+            }
+          },
+          "中小型（1000億未満）": {
+            "−30%以上": {
+              "銘柄数": 357,
+              "20日後 平均": 24.09,
+              "20日後 勝率": 96.9,
+              "20日後 局面平均との差": 8.32,
+              "60日後 平均": 15.73,
+              "60日後 勝率": 81.2,
+              "60日後 局面平均との差": 4.46
+            },
+            "−20〜−30%": {
+              "銘柄数": 486,
+              "20日後 平均": 17.17,
+              "20日後 勝率": 97.3,
+              "20日後 局面平均との差": 1.4,
+              "60日後 平均": 11.36,
+              "60日後 勝率": 81.0,
+              "60日後 局面平均との差": 0.09
+            },
+            "−10〜−20%": {
+              "銘柄数": 231,
+              "20日後 平均": 11.42,
+              "20日後 勝率": 96.5,
+              "20日後 局面平均との差": -4.35,
+              "60日後 平均": 7.7,
+              "60日後 勝率": 73.0,
+              "60日後 局面平均との差": -3.57
+            },
+            "−10%未満": {
+              "銘柄数": 48,
+              "20日後 平均": 6.35,
+              "20日後 勝率": 83.0,
+              "20日後 局面平均との差": -9.42,
+              "60日後 平均": 5.32,
+              "60日後 勝率": 78.0,
+              "60日後 局面平均との差": -5.95
+            }
+          }
+        },
+        "by_div_x_drop": {
+          "配当利回り3%以上": {
+            "−20〜−30%": {
+              "銘柄数": 31,
+              "20日後 平均": 16.06,
+              "20日後 勝率": 100.0,
+              "20日後 局面平均との差": 0.28,
+              "60日後 平均": 13.24,
+              "60日後 勝率": 87.1,
+              "60日後 局面平均との差": 1.97
+            },
+            "−10〜−20%": {
+              "銘柄数": 24,
+              "20日後 平均": 8.07,
+              "20日後 勝率": 100.0,
+              "20日後 局面平均との差": -7.7,
+              "60日後 平均": 5.24,
+              "60日後 勝率": 62.5,
+              "60日後 局面平均との差": -6.03
+            }
+          },
+          "配当利回り3%未満（無配含む）": {
+            "−30%以上": {
+              "銘柄数": 72,
+              "20日後 平均": 22.33,
+              "20日後 勝率": 98.6,
+              "20日後 局面平均との差": 6.56,
+              "60日後 平均": 18.19,
+              "60日後 勝率": 79.2,
+              "60日後 局面平均との差": 6.92
+            },
+            "−20〜−30%": {
+              "銘柄数": 48,
+              "20日後 平均": 17.02,
+              "20日後 勝率": 97.9,
+              "20日後 局面平均との差": 1.24,
+              "60日後 平均": 5.74,
+              "60日後 勝率": 68.8,
+              "60日後 局面平均との差": -5.54
+            },
+            "−10〜−20%": {
+              "銘柄数": 63,
+              "20日後 平均": 9.29,
+              "20日後 勝率": 92.1,
+              "20日後 局面平均との差": -6.48,
+              "60日後 平均": 4.66,
+              "60日後 勝率": 58.7,
+              "60日後 局面平均との差": -6.61
+            },
+            "−10%未満": {
+              "銘柄数": 20,
+              "20日後 平均": 5.26,
+              "20日後 勝率": 90.0,
+              "20日後 局面平均との差": -10.51,
+              "60日後 平均": 7.39,
+              "60日後 勝率": 80.0,
+              "60日後 局面平均との差": -3.88
+            }
+          }
+        }
+      },
+      "2025-03-27→2025-04-07": {
+        "by_drop": {
+          "−30〜−40%": {
+            "銘柄数": 198,
+            "20日後 平均": 17.12,
+            "20日後 勝率": 97.5,
+            "20日後 局面平均との差": 4.37,
+            "60日後 平均": 35.13,
+            "60日後 勝率": 94.9,
+            "60日後 局面平均との差": 15.15
+          },
+          "−20〜−30%": {
+            "銘柄数": 741,
+            "20日後 平均": 14.13,
+            "20日後 勝率": 96.9,
+            "20日後 局面平均との差": 1.38,
+            "60日後 平均": 22.91,
+            "60日後 勝率": 93.4,
+            "60日後 局面平均との差": 2.93
+          },
+          "−10〜−20%": {
+            "銘柄数": 811,
+            "20日後 平均": 11.38,
+            "20日後 勝率": 95.9,
+            "20日後 局面平均との差": -1.37,
+            "60日後 平均": 16.04,
+            "60日後 勝率": 89.4,
+            "60日後 局面平均との差": -3.94
+          },
+          "−10%未満": {
+            "銘柄数": 241,
+            "20日後 平均": 9.2,
+            "20日後 勝率": 93.3,
+            "20日後 局面平均との差": -3.55,
+            "60日後 平均": 10.32,
+            "60日後 勝率": 83.0,
+            "60日後 局面平均との差": -9.66
+          }
+        },
+        "by_size": {
+          "300億未満": {
+            "銘柄数": 510,
+            "20日後 平均": 14.03,
+            "20日後 勝率": 95.7,
+            "20日後 局面平均との差": 1.28,
+            "60日後 平均": 23.89,
+            "60日後 勝率": 91.3,
+            "60日後 局面平均との差": 3.91
+          },
+          "300〜1000億": {
+            "銘柄数": 661,
+            "20日後 平均": 12.88,
+            "20日後 勝率": 96.7,
+            "20日後 局面平均との差": 0.13,
+            "60日後 平均": 19.39,
+            "60日後 勝率": 91.0,
+            "60日後 局面平均との差": -0.59
+          },
+          "1000〜5000億": {
+            "銘柄数": 533,
+            "20日後 平均": 11.81,
+            "20日後 勝率": 96.2,
+            "20日後 局面平均との差": -0.94,
+            "60日後 平均": 18.26,
+            "60日後 勝率": 90.2,
+            "60日後 局面平均との差": -1.71
+          },
+          "5000億以上": {
+            "銘柄数": 300,
+            "20日後 平均": 11.93,
+            "20日後 勝率": 95.3,
+            "20日後 局面平均との差": -0.82,
+            "60日後 平均": 17.66,
+            "60日後 勝率": 89.9,
+            "60日後 局面平均との差": -2.31
+          }
+        },
+        "by_pbr": {
+          "0.7未満": {
+            "銘柄数": 65,
+            "20日後 平均": 10.12,
+            "20日後 勝率": 90.8,
+            "20日後 局面平均との差": -2.63,
+            "60日後 平均": 17.55,
+            "60日後 勝率": 90.6,
+            "60日後 局面平均との差": -2.42
+          },
+          "0.7〜1": {
+            "銘柄数": 87,
+            "20日後 平均": 11.05,
+            "20日後 勝率": 98.8,
+            "20日後 局面平均との差": -1.7,
+            "60日後 平均": 17.16,
+            "60日後 勝率": 95.3,
+            "60日後 局面平均との差": -2.81
+          },
+          "1〜1.5": {
+            "銘柄数": 114,
+            "20日後 平均": 11.86,
+            "20日後 勝率": 97.4,
+            "20日後 局面平均との差": -0.89,
+            "60日後 平均": 21.41,
+            "60日後 勝率": 91.9,
+            "60日後 局面平均との差": 1.44
+          },
+          "1.5〜3": {
+            "銘柄数": 166,
+            "20日後 平均": 12.87,
+            "20日後 勝率": 94.6,
+            "20日後 局面平均との差": 0.12,
+            "60日後 平均": 18.46,
+            "60日後 勝率": 88.5,
+            "60日後 局面平均との差": -1.51
+          },
+          "3以上": {
+            "銘柄数": 201,
+            "20日後 平均": 16.53,
+            "20日後 勝率": 94.5,
+            "20日後 局面平均との差": 3.78,
+            "60日後 平均": 23.14,
+            "60日後 勝率": 86.9,
+            "60日後 局面平均との差": 3.16
+          }
+        },
+        "by_div_yield": {
+          "無配": {
+            "銘柄数": 192,
+            "20日後 平均": 15.57,
+            "20日後 勝率": 90.6,
+            "20日後 局面平均との差": 2.82,
+            "60日後 平均": 29.54,
+            "60日後 勝率": 86.9,
+            "60日後 局面平均との差": 9.56
+          },
+          "〜2%": {
+            "銘柄数": 460,
+            "20日後 平均": 13.61,
+            "20日後 勝率": 94.1,
+            "20日後 局面平均との差": 0.86,
+            "60日後 平均": 20.12,
+            "60日後 勝率": 87.3,
+            "60日後 局面平均との差": 0.15
+          },
+          "2〜3%": {
+            "銘柄数": 443,
+            "20日後 平均": 12.65,
+            "20日後 勝率": 96.2,
+            "20日後 局面平均との差": -0.1,
+            "60日後 平均": 19.27,
+            "60日後 勝率": 91.6,
+            "60日後 局面平均との差": -0.7
+          },
+          "3〜4%": {
+            "銘柄数": 444,
+            "20日後 平均": 12.42,
+            "20日後 勝率": 98.4,
+            "20日後 局面平均との差": -0.33,
+            "60日後 平均": 19.64,
+            "60日後 勝率": 93.2,
+            "60日後 局面平均との差": -0.33
+          },
+          "4%〜": {
+            "銘柄数": 349,
+            "20日後 平均": 10.64,
+            "20日後 勝率": 98.3,
+            "20日後 局面平均との差": -2.11,
+            "60日後 平均": 16.95,
+            "60日後 勝率": 94.0,
+            "60日後 局面平均との差": -3.03
+          }
+        },
+        "by_volatility": {
+          "低（日次1.5%未満）": {
+            "銘柄数": 789,
+            "20日後 平均": 9.86,
+            "20日後 勝率": 97.1,
+            "20日後 局面平均との差": -2.89,
+            "60日後 平均": 13.99,
+            "60日後 勝率": 90.1,
+            "60日後 局面平均との差": -5.99
+          },
+          "中（1.5〜2.5%）": {
+            "銘柄数": 756,
+            "20日後 平均": 13.76,
+            "20日後 勝率": 96.4,
+            "20日後 局面平均との差": 1.01,
+            "60日後 平均": 20.57,
+            "60日後 勝率": 92.2,
+            "60日後 局面平均との差": 0.6
+          },
+          "高（2.5〜4%）": {
+            "銘柄数": 378,
+            "20日後 平均": 16.22,
+            "20日後 勝率": 94.9,
+            "20日後 局面平均との差": 3.47,
+            "60日後 平均": 30.82,
+            "60日後 勝率": 90.3,
+            "60日後 局面平均との差": 10.85
+          },
+          "非常に高（4%以上）": {
+            "銘柄数": 82,
+            "20日後 平均": 15.23,
+            "20日後 勝率": 89.0,
+            "20日後 局面平均との差": 2.48,
+            "60日後 平均": 22.75,
+            "60日後 勝率": 84.0,
+            "60日後 局面平均との差": 2.77
+          }
+        },
+        "by_pre_momentum": {
+          "−10%以下": {
+            "銘柄数": 243,
+            "20日後 平均": 14.74,
+            "20日後 勝率": 95.5,
+            "20日後 局面平均との差": 1.99,
+            "60日後 平均": 24.82,
+            "60日後 勝率": 91.4,
+            "60日後 局面平均との差": 4.85
+          },
+          "−10〜0%": {
+            "銘柄数": 446,
+            "20日後 平均": 12.39,
+            "20日後 勝率": 96.9,
+            "20日後 局面平均との差": -0.36,
+            "60日後 平均": 19.92,
+            "60日後 勝率": 91.0,
+            "60日後 局面平均との差": -0.06
+          },
+          "0〜10%": {
+            "銘柄数": 667,
+            "20日後 平均": 11.8,
+            "20日後 勝率": 96.4,
+            "20日後 局面平均との差": -0.94,
+            "60日後 平均": 17.58,
+            "60日後 勝率": 90.5,
+            "60日後 局面平均との差": -2.39
+          },
+          "10〜30%": {
+            "銘柄数": 521,
+            "20日後 平均": 13.13,
+            "20日後 勝率": 97.3,
+            "20日後 局面平均との差": 0.38,
+            "60日後 平均": 20.2,
+            "60日後 勝率": 91.5,
+            "60日後 局面平均との差": 0.23
+          },
+          "30%超": {
+            "銘柄数": 126,
+            "20日後 平均": 13.73,
+            "20日後 勝率": 88.7,
+            "20日後 局面平均との差": 0.98,
+            "60日後 平均": 22.81,
+            "60日後 勝率": 86.0,
+            "60日後 局面平均との差": 2.84
+          }
+        },
+        "by_sector": {
+          "その他製品": {
+            "銘柄数": 38,
+            "20日後 平均": 10.98,
+            "20日後 勝率": 97.4,
+            "20日後 局面平均との差": -1.77,
+            "60日後 平均": 20.38,
+            "60日後 勝率": 94.7,
+            "60日後 局面平均との差": 0.4
+          },
+          "その他金融業": {
+            "銘柄数": 26,
+            "20日後 平均": 12.76,
+            "20日後 勝率": 100.0,
+            "20日後 局面平均との差": 0.01,
+            "60日後 平均": 17.6,
+            "60日後 勝率": 96.2,
+            "60日後 局面平均との差": -2.37
+          },
+          "ガラス・土石製品": {
+            "銘柄数": 32,
+            "20日後 平均": 14.12,
+            "20日後 勝率": 100.0,
+            "20日後 局面平均との差": 1.37,
+            "60日後 平均": 21.89,
+            "60日後 勝率": 96.9,
+            "60日後 局面平均との差": 1.91
+          },
+          "サービス業": {
+            "銘柄数": 200,
+            "20日後 平均": 13.33,
+            "20日後 勝率": 96.0,
+            "20日後 局面平均との差": 0.58,
+            "60日後 平均": 18.63,
+            "60日後 勝率": 85.5,
+            "60日後 局面平均との差": -1.35
+          },
+          "不動産業": {
+            "銘柄数": 71,
+            "20日後 平均": 13.34,
+            "20日後 勝率": 97.2,
+            "20日後 局面平均との差": 0.59,
+            "60日後 平均": 16.05,
+            "60日後 勝率": 90.1,
+            "60日後 局面平均との差": -3.93
+          },
+          "化学": {
+            "銘柄数": 122,
+            "20日後 平均": 10.7,
+            "20日後 勝率": 96.7,
+            "20日後 局面平均との差": -2.05,
+            "60日後 平均": 18.6,
+            "60日後 勝率": 94.3,
+            "60日後 局面平均との差": -1.38
+          },
+          "医薬品": {
+            "銘柄数": 54,
+            "20日後 平均": 8.6,
+            "20日後 勝率": 85.2,
+            "20日後 局面平均との差": -4.15,
+            "60日後 平均": 9.22,
+            "60日後 勝率": 70.4,
+            "60日後 局面平均との差": -10.76
+          },
+          "卸売業": {
+            "銘柄数": 130,
+            "20日後 平均": 12.41,
+            "20日後 勝率": 97.7,
+            "20日後 局面平均との差": -0.34,
+            "60日後 平均": 19.83,
+            "60日後 勝率": 95.4,
+            "60日後 局面平均との差": -0.14
+          },
+          "小売業": {
+            "銘柄数": 164,
+            "20日後 平均": 12.05,
+            "20日後 勝率": 97.6,
+            "20日後 局面平均との差": -0.7,
+            "60日後 平均": 15.94,
+            "60日後 勝率": 90.2,
+            "60日後 局面平均との差": -4.04
+          },
+          "建設業": {
+            "銘柄数": 87,
+            "20日後 平均": 15.5,
+            "20日後 勝率": 97.7,
+            "20日後 局面平均との差": 2.75,
+            "60日後 平均": 21.66,
+            "60日後 勝率": 93.1,
+            "60日後 局面平均との差": 1.68
+          },
+          "情報・通信業": {
+            "銘柄数": 235,
+            "20日後 平均": 15.54,
+            "20日後 勝率": 95.3,
+            "20日後 局面平均との差": 2.79,
+            "60日後 平均": 22.07,
+            "60日後 勝率": 90.2,
+            "60日後 局面平均との差": 2.09
+          },
+          "機械": {
+            "銘柄数": 128,
+            "20日後 平均": 14.09,
+            "20日後 勝率": 99.2,
+            "20日後 局面平均との差": 1.34,
+            "60日後 平均": 25.74,
+            "60日後 勝率": 95.3,
+            "60日後 局面平均との差": 5.76
+          },
+          "精密機器": {
+            "銘柄数": 33,
+            "20日後 平均": 12.34,
+            "20日後 勝率": 87.9,
+            "20日後 局面平均との差": -0.41,
+            "60日後 平均": 17.75,
+            "60日後 勝率": 93.9,
+            "60日後 局面平均との差": -2.23
+          },
+          "繊維製品": {
+            "銘柄数": 18,
+            "20日後 平均": 7.55,
+            "20日後 勝率": 94.4,
+            "20日後 局面平均との差": -5.2,
+            "60日後 平均": 16.74,
+            "60日後 勝率": 94.4,
+            "60日後 局面平均との差": -3.23
+          },
+          "証券、商品先物取引業": {
+            "銘柄数": 26,
+            "20日後 平均": 10.97,
+            "20日後 勝率": 96.2,
+            "20日後 局面平均との差": -1.78,
+            "60日後 平均": 18.73,
+            "60日後 勝率": 96.2,
+            "60日後 局面平均との差": -1.24
+          },
+          "輸送用機器": {
+            "銘柄数": 48,
+            "20日後 平均": 11.93,
+            "20日後 勝率": 95.8,
+            "20日後 局面平均との差": -0.82,
+            "60日後 平均": 25.82,
+            "60日後 勝率": 95.8,
+            "60日後 局面平均との差": 5.84
+          },
+          "金属製品": {
+            "銘柄数": 27,
+            "20日後 平均": 11.57,
+            "20日後 勝率": 100.0,
+            "20日後 局面平均との差": -1.18,
+            "60日後 平均": 19.54,
+            "60日後 勝率": 96.3,
+            "60日後 局面平均との差": -0.43
+          },
+          "鉄鋼": {
+            "銘柄数": 24,
+            "20日後 平均": 8.38,
+            "20日後 勝率": 83.3,
+            "20日後 局面平均との差": -4.37,
+            "60日後 平均": 12.77,
+            "60日後 勝率": 91.7,
+            "60日後 局面平均との差": -7.21
+          },
+          "銀行業": {
+            "銘柄数": 70,
+            "20日後 平均": 12.97,
+            "20日後 勝率": 100.0,
+            "20日後 局面平均との差": 0.22,
+            "60日後 平均": 25.21,
+            "60日後 勝率": 100.0,
+            "60日後 局面平均との差": 5.24
+          },
+          "陸運業": {
+            "銘柄数": 38,
+            "20日後 平均": 8.07,
+            "20日後 勝率": 97.4,
+            "20日後 局面平均との差": -4.68,
+            "60日後 平均": 8.79,
+            "60日後 勝率": 71.1,
+            "60日後 局面平均との差": -11.19
+          },
+          "電気・ガス業": {
+            "銘柄数": 22,
+            "20日後 平均": 8.54,
+            "20日後 勝率": 90.9,
+            "20日後 局面平均との差": -4.21,
+            "60日後 平均": 11.87,
+            "60日後 勝率": 81.8,
+            "60日後 局面平均との差": -8.1
+          },
+          "電気機器": {
+            "銘柄数": 145,
+            "20日後 平均": 14.67,
+            "20日後 勝率": 96.6,
+            "20日後 局面平均との差": 1.92,
+            "60日後 平均": 29.52,
+            "60日後 勝率": 93.8,
+            "60日後 局面平均との差": 9.54
+          },
+          "非鉄金属": {
+            "銘柄数": 19,
+            "20日後 平均": 13.43,
+            "20日後 勝率": 100.0,
+            "20日後 局面平均との差": 0.68,
+            "60日後 平均": 29.58,
+            "60日後 勝率": 94.7,
+            "60日後 局面平均との差": 9.61
+          },
+          "食料品": {
+            "銘柄数": 74,
+            "20日後 平均": 8.5,
+            "20日後 勝率": 95.9,
+            "20日後 局面平均との差": -4.24,
+            "60日後 平均": 8.5,
+            "60日後 勝率": 74.3,
+            "60日後 局面平均との差": -11.48
+          }
+        },
+        "by_size_x_drop": {
+          "大型（1000億以上）": {
+            "−30%以上": {
+              "銘柄数": 65,
+              "20日後 平均": 18.16,
+              "20日後 勝率": 100.0,
+              "20日後 局面平均との差": 5.41,
+              "60日後 平均": 44.83,
+              "60日後 勝率": 98.5,
+              "60日後 局面平均との差": 24.85
+            },
+            "−20〜−30%": {
+              "銘柄数": 246,
+              "20日後 平均": 12.86,
+              "20日後 勝率": 95.1,
+              "20日後 局面平均との差": 0.11,
+              "60日後 平均": 20.9,
+              "60日後 勝率": 93.9,
+              "60日後 局面平均との差": 0.92
+            },
+            "−10〜−20%": {
+              "銘柄数": 361,
+              "20日後 平均": 11.16,
+              "20日後 勝率": 96.1,
+              "20日後 局面平均との差": -1.59,
+              "60日後 平均": 14.87,
+              "60日後 勝率": 88.9,
+              "60日後 局面平均との差": -5.11
+            },
+            "−10%未満": {
+              "銘柄数": 161,
+              "20日後 平均": 9.32,
+              "20日後 勝率": 95.0,
+              "20日後 局面平均との差": -3.43,
+              "60日後 平均": 9.81,
+              "60日後 勝率": 83.4,
+              "60日後 局面平均との差": -10.17
+            }
+          },
+          "中小型（1000億未満）": {
+            "−30%以上": {
+              "銘柄数": 147,
+              "20日後 平均": 16.73,
+              "20日後 勝率": 95.9,
+              "20日後 局面平均との差": 3.98,
+              "60日後 平均": 30.6,
+              "60日後 勝率": 92.5,
+              "60日後 局面平均との差": 10.63
+            },
+            "−20〜−30%": {
+              "銘柄数": 494,
+              "20日後 平均": 14.74,
+              "20日後 勝率": 97.8,
+              "20日後 局面平均との差": 1.99,
+              "60日後 平均": 23.89,
+              "60日後 勝率": 93.1,
+              "60日後 局面平均との差": 3.91
+            },
+            "−10〜−20%": {
+              "銘柄数": 450,
+              "20日後 平均": 11.55,
+              "20日後 勝率": 95.8,
+              "20日後 局面平均との差": -1.2,
+              "60日後 平均": 16.98,
+              "60日後 勝率": 89.8,
+              "60日後 局面平均との差": -2.99
+            },
+            "−10%未満": {
+              "銘柄数": 80,
+              "20日後 平均": 8.94,
+              "20日後 勝率": 89.7,
+              "20日後 局面平均との差": -3.81,
+              "60日後 平均": 11.52,
+              "60日後 勝率": 82.1,
+              "60日後 局面平均との差": -8.45
+            }
+          }
+        },
+        "by_div_x_drop": {
+          "配当利回り3%以上": {
+            "−30%以上": {
+              "銘柄数": 35,
+              "20日後 平均": 16.7,
+              "20日後 勝率": 97.1,
+              "20日後 局面平均との差": 3.95,
+              "60日後 平均": 30.75,
+              "60日後 勝率": 94.3,
+              "60日後 局面平均との差": 10.78
+            },
+            "−20〜−30%": {
+              "銘柄数": 331,
+              "20日後 平均": 12.76,
+              "20日後 勝率": 99.4,
+              "20日後 局面平均との差": 0.01,
+              "60日後 平均": 21.52,
+              "60日後 勝率": 96.7,
+              "60日後 局面平均との差": 1.54
+            },
+            "−10〜−20%": {
+              "銘柄数": 383,
+              "20日後 平均": 10.27,
+              "20日後 勝率": 97.7,
+              "20日後 局面平均との差": -2.48,
+              "60日後 平均": 15.59,
+              "60日後 勝率": 91.6,
+              "60日後 局面平均との差": -4.38
+            },
+            "−10%未満": {
+              "銘柄数": 44,
+              "20日後 平均": 11.05,
+              "20日後 勝率": 97.7,
+              "20日後 局面平均との差": -1.7,
+              "60日後 平均": 10.48,
+              "60日後 勝率": 86.4,
+              "60日後 局面平均との差": -9.5
+            }
+          },
+          "配当利回り3%未満（無配含む）": {
+            "−30%以上": {
+              "銘柄数": 158,
+              "20日後 平均": 17.64,
+              "20日後 勝率": 97.5,
+              "20日後 局面平均との差": 4.89,
+              "60日後 平均": 35.56,
+              "60日後 勝率": 94.3,
+              "60日後 局面平均との差": 15.58
+            },
+            "−20〜−30%": {
+              "銘柄数": 357,
+              "20日後 平均": 15.45,
+              "20日後 勝率": 94.1,
+              "20日後 局面平均との差": 2.7,
+              "60日後 平均": 25.48,
+              "60日後 勝率": 91.3,
+              "60日後 局面平均との差": 5.51
+            },
+            "−10〜−20%": {
+              "銘柄数": 393,
+              "20日後 平均": 12.43,
+              "20日後 勝率": 93.9,
+              "20日後 局面平均との差": -0.32,
+              "60日後 平均": 16.9,
+              "60日後 勝率": 87.8,
+              "60日後 局面平均との差": -3.08
+            },
+            "−10%未満": {
+              "銘柄数": 187,
+              "20日後 平均": 8.82,
+              "20日後 勝率": 93.0,
+              "20日後 局面平均との差": -3.93,
+              "60日後 平均": 10.08,
+              "60日後 勝率": 82.1,
+              "60日後 局面平均との差": -9.9
+            }
+          }
+        }
+      },
+      "2026-02-27→2026-03-23": {
+        "by_drop": {
+          "−30〜−40%": {
+            "銘柄数": 24,
+            "20日後 平均": 9.33,
+            "20日後 勝率": 75.0,
+            "20日後 局面平均との差": 5.11,
+            "60日後 平均": null,
+            "60日後 勝率": null,
+            "60日後 局面平均との差": null
+          },
+          "−20〜−30%": {
+            "銘柄数": 309,
+            "20日後 平均": 8.66,
+            "20日後 勝率": 72.8,
+            "20日後 局面平均との差": 4.45,
+            "60日後 平均": null,
+            "60日後 勝率": null,
+            "60日後 局面平均との差": null
+          },
+          "−10〜−20%": {
+            "銘柄数": 1113,
+            "20日後 平均": 4.24,
+            "20日後 勝率": 67.7,
+            "20日後 局面平均との差": 0.03,
+            "60日後 平均": null,
+            "60日後 勝率": null,
+            "60日後 局面平均との差": null
+          },
+          "−10%未満": {
+            "銘柄数": 750,
+            "20日後 平均": 2.2,
+            "20日後 勝率": 56.7,
+            "20日後 局面平均との差": -2.02,
+            "60日後 平均": null,
+            "60日後 勝率": null,
+            "60日後 局面平均との差": null
+          }
+        },
+        "by_size": {
+          "300億未満": {
+            "銘柄数": 558,
+            "20日後 平均": 4.33,
+            "20日後 勝率": 62.1,
+            "20日後 局面平均との差": 0.11,
+            "60日後 平均": null,
+            "60日後 勝率": null,
+            "60日後 局面平均との差": null
+          },
+          "300〜1000億": {
+            "銘柄数": 676,
+            "20日後 平均": 3.36,
+            "20日後 勝率": 60.0,
+            "20日後 局面平均との差": -0.86,
+            "60日後 平均": null,
+            "60日後 勝率": null,
+            "60日後 局面平均との差": null
+          },
+          "1000〜5000億": {
+            "銘柄数": 593,
+            "20日後 平均": 4.71,
+            "20日後 勝率": 69.4,
+            "20日後 局面平均との差": 0.5,
+            "60日後 平均": null,
+            "60日後 勝率": null,
+            "60日後 局面平均との差": null
+          },
+          "5000億以上": {
+            "銘柄数": 373,
+            "20日後 平均": 4.8,
+            "20日後 勝率": 70.0,
+            "20日後 局面平均との差": 0.59,
+            "60日後 平均": null,
+            "60日後 勝率": null,
+            "60日後 局面平均との差": null
+          }
+        },
+        "by_pbr": {
+          "0.7未満": {
+            "銘柄数": 193,
+            "20日後 平均": 3.95,
+            "20日後 勝率": 62.5,
+            "20日後 局面平均との差": -0.26,
+            "60日後 平均": null,
+            "60日後 勝率": null,
+            "60日後 局面平均との差": null
+          },
+          "0.7〜1": {
+            "銘柄数": 362,
+            "20日後 平均": 3.14,
+            "20日後 勝率": 61.9,
+            "20日後 局面平均との差": -1.07,
+            "60日後 平均": null,
+            "60日後 勝率": null,
+            "60日後 局面平均との差": null
+          },
+          "1〜1.5": {
+            "銘柄数": 542,
+            "20日後 平均": 3.0,
+            "20日後 勝率": 61.2,
+            "20日後 局面平均との差": -1.21,
+            "60日後 平均": null,
+            "60日後 勝率": null,
+            "60日後 局面平均との差": null
+          },
+          "1.5〜3": {
+            "銘柄数": 593,
+            "20日後 平均": 4.25,
+            "20日後 勝率": 66.6,
+            "20日後 局面平均との差": 0.04,
+            "60日後 平均": null,
+            "60日後 勝率": null,
+            "60日後 局面平均との差": null
+          },
+          "3以上": {
+            "銘柄数": 486,
+            "20日後 平均": 6.41,
+            "20日後 勝率": 69.0,
+            "20日後 局面平均との差": 2.19,
+            "60日後 平均": null,
+            "60日後 勝率": null,
+            "60日後 局面平均との差": null
+          }
+        },
+        "by_div_yield": {
+          "無配": {
+            "銘柄数": 230,
+            "20日後 平均": 8.16,
+            "20日後 勝率": 71.1,
+            "20日後 局面平均との差": 3.94,
+            "60日後 平均": null,
+            "60日後 勝率": null,
+            "60日後 局面平均との差": null
+          },
+          "〜2%": {
+            "銘柄数": 606,
+            "20日後 平均": 6.39,
+            "20日後 勝率": 69.9,
+            "20日後 局面平均との差": 2.17,
+            "60日後 平均": null,
+            "60日後 勝率": null,
+            "60日後 局面平均との差": null
+          },
+          "2〜3%": {
+            "銘柄数": 604,
+            "20日後 平均": 3.9,
+            "20日後 勝率": 65.9,
+            "20日後 局面平均との差": -0.32,
+            "60日後 平均": null,
+            "60日後 勝率": null,
+            "60日後 局面平均との差": null
+          },
+          "3〜4%": {
+            "銘柄数": 433,
+            "20日後 平均": 1.75,
+            "20日後 勝率": 59.6,
+            "20日後 局面平均との差": -2.46,
+            "60日後 平均": null,
+            "60日後 勝率": null,
+            "60日後 局面平均との差": null
+          },
+          "4%〜": {
+            "銘柄数": 227,
+            "20日後 平均": 0.15,
+            "20日後 勝率": 50.2,
+            "20日後 局面平均との差": -4.07,
+            "60日後 平均": null,
+            "60日後 勝率": null,
+            "60日後 局面平均との差": null
+          }
+        },
+        "by_volatility": {
+          "低（日次1.5%未満）": {
+            "銘柄数": 650,
+            "20日後 平均": 0.73,
+            "20日後 勝率": 52.9,
+            "20日後 局面平均との差": -3.48,
+            "60日後 平均": null,
+            "60日後 勝率": null,
+            "60日後 局面平均との差": null
+          },
+          "中（1.5〜2.5%）": {
+            "銘柄数": 904,
+            "20日後 平均": 3.85,
+            "20日後 勝率": 68.3,
+            "20日後 局面平均との差": -0.36,
+            "60日後 平均": null,
+            "60日後 勝率": null,
+            "60日後 局面平均との差": null
+          },
+          "高（2.5〜4%）": {
+            "銘柄数": 461,
+            "20日後 平均": 7.71,
+            "20日後 勝率": 73.5,
+            "20日後 局面平均との差": 3.5,
+            "60日後 平均": null,
+            "60日後 勝率": null,
+            "60日後 局面平均との差": null
+          },
+          "非常に高（4%以上）": {
+            "銘柄数": 184,
+            "20日後 平均": 9.49,
+            "20日後 勝率": 67.2,
+            "20日後 局面平均との差": 5.27,
+            "60日後 平均": null,
+            "60日後 勝率": null,
+            "60日後 局面平均との差": null
+          }
+        },
+        "by_pre_momentum": {
+          "−10%以下": {
+            "銘柄数": 232,
+            "20日後 平均": 7.31,
+            "20日後 勝率": 75.9,
+            "20日後 局面平均との差": 3.1,
+            "60日後 平均": null,
+            "60日後 勝率": null,
+            "60日後 局面平均との差": null
+          },
+          "−10〜0%": {
+            "銘柄数": 270,
+            "20日後 平均": 2.43,
+            "20日後 勝率": 58.4,
+            "20日後 局面平均との差": -1.78,
+            "60日後 平均": null,
+            "60日後 勝率": null,
+            "60日後 局面平均との差": null
+          },
+          "0〜10%": {
+            "銘柄数": 441,
+            "20日後 平均": 2.49,
+            "20日後 勝率": 62.2,
+            "20日後 局面平均との差": -1.72,
+            "60日後 平均": null,
+            "60日後 勝率": null,
+            "60日後 局面平均との差": null
+          },
+          "10〜30%": {
+            "銘柄数": 737,
+            "20日後 平均": 2.64,
+            "20日後 勝率": 58.6,
+            "20日後 局面平均との差": -1.57,
+            "60日後 平均": null,
+            "60日後 勝率": null,
+            "60日後 局面平均との差": null
+          },
+          "30%超": {
+            "銘柄数": 510,
+            "20日後 平均": 7.58,
+            "20日後 勝率": 74.5,
+            "20日後 局面平均との差": 3.37,
+            "60日後 平均": null,
+            "60日後 勝率": null,
+            "60日後 局面平均との差": null
+          }
+        },
+        "by_sector": {
+          "その他製品": {
+            "銘柄数": 46,
+            "20日後 平均": 3.19,
+            "20日後 勝率": 63.0,
+            "20日後 局面平均との差": -1.03,
+            "60日後 平均": null,
+            "60日後 勝率": null,
+            "60日後 局面平均との差": null
+          },
+          "その他金融業": {
+            "銘柄数": 29,
+            "20日後 平均": 4.49,
+            "20日後 勝率": 82.8,
+            "20日後 局面平均との差": 0.28,
+            "60日後 平均": null,
+            "60日後 勝率": null,
+            "60日後 局面平均との差": null
+          },
+          "ガラス・土石製品": {
+            "銘柄数": 36,
+            "20日後 平均": 4.85,
+            "20日後 勝率": 63.9,
+            "20日後 局面平均との差": 0.64,
+            "60日後 平均": null,
+            "60日後 勝率": null,
+            "60日後 局面平均との差": null
+          },
+          "サービス業": {
+            "銘柄数": 220,
+            "20日後 平均": 3.44,
+            "20日後 勝率": 62.3,
+            "20日後 局面平均との差": -0.77,
+            "60日後 平均": null,
+            "60日後 勝率": null,
+            "60日後 局面平均との差": null
+          },
+          "不動産業": {
+            "銘柄数": 79,
+            "20日後 平均": 3.69,
+            "20日後 勝率": 68.4,
+            "20日後 局面平均との差": -0.53,
+            "60日後 平均": null,
+            "60日後 勝率": null,
+            "60日後 局面平均との差": null
+          },
+          "化学": {
+            "銘柄数": 147,
+            "20日後 平均": 3.47,
+            "20日後 勝率": 66.0,
+            "20日後 局面平均との差": -0.74,
+            "60日後 平均": null,
+            "60日後 勝率": null,
+            "60日後 局面平均との差": null
+          },
+          "医薬品": {
+            "銘柄数": 64,
+            "20日後 平均": 4.79,
+            "20日後 勝率": 71.9,
+            "20日後 局面平均との差": 0.57,
+            "60日後 平均": null,
+            "60日後 勝率": null,
+            "60日後 局面平均との差": null
+          },
+          "卸売業": {
+            "銘柄数": 145,
+            "20日後 平均": 2.0,
+            "20日後 勝率": 56.6,
+            "20日後 局面平均との差": -2.22,
+            "60日後 平均": null,
+            "60日後 勝率": null,
+            "60日後 局面平均との差": null
+          },
+          "小売業": {
+            "銘柄数": 170,
+            "20日後 平均": 1.49,
+            "20日後 勝率": 55.3,
+            "20日後 局面平均との差": -2.72,
+            "60日後 平均": null,
+            "60日後 勝率": null,
+            "60日後 局面平均との差": null
+          },
+          "建設業": {
+            "銘柄数": 96,
+            "20日後 平均": -0.96,
+            "20日後 勝率": 36.5,
+            "20日後 局面平均との差": -5.18,
+            "60日後 平均": null,
+            "60日後 勝率": null,
+            "60日後 局面平均との差": null
+          },
+          "情報・通信業": {
+            "銘柄数": 287,
+            "20日後 平均": 5.65,
+            "20日後 勝率": 72.1,
+            "20日後 局面平均との差": 1.44,
+            "60日後 平均": null,
+            "60日後 勝率": null,
+            "60日後 局面平均との差": null
+          },
+          "機械": {
+            "銘柄数": 148,
+            "20日後 平均": 5.82,
+            "20日後 勝率": 68.2,
+            "20日後 局面平均との差": 1.61,
+            "60日後 平均": null,
+            "60日後 勝率": null,
+            "60日後 局面平均との差": null
+          },
+          "精密機器": {
+            "銘柄数": 39,
+            "20日後 平均": 6.91,
+            "20日後 勝率": 74.4,
+            "20日後 局面平均との差": 2.69,
+            "60日後 平均": null,
+            "60日後 勝率": null,
+            "60日後 局面平均との差": null
+          },
+          "繊維製品": {
+            "銘柄数": 21,
+            "20日後 平均": 6.43,
+            "20日後 勝率": 71.4,
+            "20日後 局面平均との差": 2.22,
+            "60日後 平均": null,
+            "60日後 勝率": null,
+            "60日後 局面平均との差": null
+          },
+          "証券、商品先物取引業": {
+            "銘柄数": 31,
+            "20日後 平均": -0.14,
+            "20日後 勝率": 48.4,
+            "20日後 局面平均との差": -4.36,
+            "60日後 平均": null,
+            "60日後 勝率": null,
+            "60日後 局面平均との差": null
+          },
+          "輸送用機器": {
+            "銘柄数": 53,
+            "20日後 平均": 3.15,
+            "20日後 勝率": 67.9,
+            "20日後 局面平均との差": -1.07,
+            "60日後 平均": null,
+            "60日後 勝率": null,
+            "60日後 局面平均との差": null
+          },
+          "金属製品": {
+            "銘柄数": 39,
+            "20日後 平均": 6.2,
+            "20日後 勝率": 61.5,
+            "20日後 局面平均との差": 1.99,
+            "60日後 平均": null,
+            "60日後 勝率": null,
+            "60日後 局面平均との差": null
+          },
+          "鉄鋼": {
+            "銘柄数": 26,
+            "20日後 平均": -0.53,
+            "20日後 勝率": 38.5,
+            "20日後 局面平均との差": -4.74,
+            "60日後 平均": null,
+            "60日後 勝率": null,
+            "60日後 局面平均との差": null
+          },
+          "銀行業": {
+            "銘柄数": 77,
+            "20日後 平均": 9.3,
+            "20日後 勝率": 90.9,
+            "20日後 局面平均との差": 5.08,
+            "60日後 平均": null,
+            "60日後 勝率": null,
+            "60日後 局面平均との差": null
+          },
+          "陸運業": {
+            "銘柄数": 39,
+            "20日後 平均": 1.49,
+            "20日後 勝率": 56.4,
+            "20日後 局面平均との差": -2.72,
+            "60日後 平均": null,
+            "60日後 勝率": null,
+            "60日後 局面平均との差": null
+          },
+          "電気・ガス業": {
+            "銘柄数": 25,
+            "20日後 平均": 2.18,
+            "20日後 勝率": 52.0,
+            "20日後 局面平均との差": -2.03,
+            "60日後 平均": null,
+            "60日後 勝率": null,
+            "60日後 局面平均との差": null
+          },
+          "電気機器": {
+            "銘柄数": 170,
+            "20日後 平均": 11.42,
+            "20日後 勝率": 86.5,
+            "20日後 局面平均との差": 7.21,
+            "60日後 平均": null,
+            "60日後 勝率": null,
+            "60日後 局面平均との差": null
+          },
+          "非鉄金属": {
+            "銘柄数": 21,
+            "20日後 平均": 10.13,
+            "20日後 勝率": 85.7,
+            "20日後 局面平均との差": 5.91,
+            "60日後 平均": null,
+            "60日後 勝率": null,
+            "60日後 局面平均との差": null
+          },
+          "食料品": {
+            "銘柄数": 77,
+            "20日後 平均": 1.6,
+            "20日後 勝率": 54.5,
+            "20日後 局面平均との差": -2.62,
+            "60日後 平均": null,
+            "60日後 勝率": null,
+            "60日後 局面平均との差": null
+          }
+        },
+        "by_size_x_drop": {
+          "大型（1000億以上）": {
+            "−20〜−30%": {
+              "銘柄数": 141,
+              "20日後 平均": 9.36,
+              "20日後 勝率": 80.1,
+              "20日後 局面平均との差": 5.14,
+              "60日後 平均": null,
+              "60日後 勝率": null,
+              "60日後 局面平均との差": null
+            },
+            "−10〜−20%": {
+              "銘柄数": 473,
+              "20日後 平均": 5.06,
+              "20日後 勝率": 73.7,
+              "20日後 局面平均との差": 0.85,
+              "60日後 平均": null,
+              "60日後 勝率": null,
+              "60日後 局面平均との差": null
+            },
+            "−10%未満": {
+              "銘柄数": 340,
+              "20日後 平均": 2.27,
+              "20日後 勝率": 59.2,
+              "20日後 局面平均との差": -1.95,
+              "60日後 平均": null,
+              "60日後 勝率": null,
+              "60日後 局面平均との差": null
+            }
+          },
+          "中小型（1000億未満）": {
+            "−30%以上": {
+              "銘柄数": 16,
+              "20日後 平均": 7.45,
+              "20日後 勝率": 62.5,
+              "20日後 局面平均との差": 3.23,
+              "60日後 平均": null,
+              "60日後 勝率": null,
+              "60日後 局面平均との差": null
+            },
+            "−20〜−30%": {
+              "銘柄数": 168,
+              "20日後 平均": 8.08,
+              "20日後 勝率": 66.7,
+              "20日後 局面平均との差": 3.87,
+              "60日後 平均": null,
+              "60日後 勝率": null,
+              "60日後 局面平均との差": null
+            },
+            "−10〜−20%": {
+              "銘柄数": 640,
+              "20日後 平均": 3.64,
+              "20日後 勝率": 63.4,
+              "20日後 局面平均との差": -0.58,
+              "60日後 平均": null,
+              "60日後 勝率": null,
+              "60日後 局面平均との差": null
+            },
+            "−10%未満": {
+              "銘柄数": 410,
+              "20日後 平均": 2.13,
+              "20日後 勝率": 54.7,
+              "20日後 局面平均との差": -2.08,
+              "60日後 平均": null,
+              "60日後 勝率": null,
+              "60日後 局面平均との差": null
+            }
+          }
+        },
+        "by_div_x_drop": {
+          "配当利回り3%以上": {
+            "−20〜−30%": {
+              "銘柄数": 34,
+              "20日後 平均": 2.47,
+              "20日後 勝率": 55.9,
+              "20日後 局面平均との差": -1.74,
+              "60日後 平均": null,
+              "60日後 勝率": null,
+              "60日後 局面平均との差": null
+            },
+            "−10〜−20%": {
+              "銘柄数": 370,
+              "20日後 平均": 1.33,
+              "20日後 勝率": 58.8,
+              "20日後 局面平均との差": -2.88,
+              "60日後 平均": null,
+              "60日後 勝率": null,
+              "60日後 局面平均との差": null
+            },
+            "−10%未満": {
+              "銘柄数": 257,
+              "20日後 平均": 0.99,
+              "20日後 勝率": 53.5,
+              "20日後 局面平均との差": -3.23,
+              "60日後 平均": null,
+              "60日後 勝率": null,
+              "60日後 局面平均との差": null
+            }
+          },
+          "配当利回り3%未満（無配含む）": {
+            "−30%以上": {
+              "銘柄数": 25,
+              "20日後 平均": 8.86,
+              "20日後 勝率": 76.0,
+              "20日後 局面平均との差": 4.64,
+              "60日後 平均": null,
+              "60日後 勝率": null,
+              "60日後 局面平均との差": null
+            },
+            "−20〜−30%": {
+              "銘柄数": 263,
+              "20日後 平均": 9.42,
+              "20日後 勝率": 74.5,
+              "20日後 局面平均との差": 5.2,
+              "60日後 平均": null,
+              "60日後 勝率": null,
+              "60日後 局面平均との差": null
+            },
+            "−10〜−20%": {
+              "銘柄数": 697,
+              "20日後 平均": 5.9,
+              "20日後 勝率": 72.6,
+              "20日後 局面平均との差": 1.68,
+              "60日後 平均": null,
+              "60日後 勝率": null,
+              "60日後 局面平均との差": null
+            },
+            "−10%未満": {
+              "銘柄数": 453,
+              "20日後 平均": 2.77,
+              "20日後 勝率": 57.8,
+              "20日後 局面平均との差": -1.45,
+              "60日後 平均": null,
+              "60日後 勝率": null,
+              "60日後 局面平均との差": null
+            }
+          }
+        }
+      }
+    }
+  }
+}
