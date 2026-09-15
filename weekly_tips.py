@@ -20,11 +20,15 @@ collector.py / poster.py（毎日実行）とは独立した、週1回だけ動�
      「1週間分の振り返り」ではなく「直近の収集時点」のスナップショットに
      基づく紹介である点に注意（正直な制約として明記）
   3. シグナル成績（累計）：data/trade_log.json（tracking.py）に基づく、
-     LONG＋SHORT合算／LONGのみ／SHORTのみ（自信度上位10銘柄）の勝率・
-     ペイオフレシオの週次チェックポイント。あわせて、トレーリングストップ幅を
-     ATR×1.5（現行）／2.0／2.5で変えた場合の比較も表示する（2026-08-26より
-     前に開始したポジションは1.5倍のみのデータのため、2.0／2.5倍の比較には
-     含まれない）
+     LONG＋SHORT合算／LONGのみ／SHORTのみの勝率・ペイオフレシオの週次
+     チェックポイント（LONGは複合スコア90点以上・上位5件、SHORTは
+     PER×PBR上位10件を新規追跡対象にする設計。tracking.py参照）。あわせて、
+     トレーリングストップ幅を主要な倍率で変えた場合の比較も表示する。
+     ※ 2026-08-25（初回起動日、絞り込みロジック導入前）に無条件で一括
+     ポジション化された1,804件は、単一日に相関した異常なコホートのため
+     2026-09-15より集計から除外している（tracking.pyのLEGACY_BULK_LOAD_
+     ENTRY_DATES参照）。除外後の「本来の設計」のポジションはまだ蓄積中で、
+     しばらくは「集計中」表示が続く見込み
   4. 投資理論・スクリーニング手法の一言解説（週替わりで固定トピックを順番に紹介）
 """
 
@@ -241,20 +245,35 @@ def build_performance_recap_text():
         return f"{label}：" + "／".join(parts)
 
     lines = [
-        _fmt('LONG＋SHORT合算（上位10銘柄・累計）', stats['long_short']),
-        _fmt('LONGのみ（上位10銘柄・累計）', stats['long_only']),
-        _fmt('SHORTのみ（上位10銘柄・累計）', stats['short_only']),
+        _fmt('LONG＋SHORT合算（累計）', stats['long_short']),
+        _fmt('LONGのみ（複合スコア90点以上・累計）', stats['long_only']),
+        _fmt('SHORTのみ（PER×PBR上位・累計）', stats['short_only']),
         f"現在保有中（未決済）：{stats['open_positions']}件",
     ]
+    # 【2026-09-15追加】初回起動日の一括ロード分（絞り込みロジック導入前の
+    # 異常なコホート）を集計から除外している旨を明記する。理由の詳細は
+    # tracking.pyのLEGACY_BULK_LOAD_ENTRY_DATESコメント参照。
+    excluded = stats.get('excluded_legacy_bulk_load_closed_count') or 0
+    if excluded:
+        lines.append(
+            f"※初回起動日（絞り込み導入前）に一括で建てた{excluded}件の決済済み"
+            "ポジションは、集計対象から除外しています（単一日に相関した異常な"
+            "コホートのため）"
+        )
 
-    # 【2026-08-26追加】トレーリングストップ幅（ATR×1.5／2.0／2.5）を変えた
-    # 場合の比較。tracking.pyのATR_MULTIPLIER_VARIANTSと表示順を揃える。
+    # 【2026-08-26追加、2026-09-15修正】トレーリングストップ幅の比較。
+    # 各行は「その倍率をLONG・SHORT共通で使っていたら」という仮定の比較で
+    # あり、現在の本番設定（LONGは5.0倍／SHORTは1.8倍と、シグナルごとに
+    # 別の倍率を使う。2026-09-11分離、tracking.pyのATR_MULTIPLIER_BY_SIGNAL
+    # 参照）とは前提が異なる点に注意。現在の本番設定そのものの成績は、上の
+    # 「LONGのみ」「SHORTのみ」の行を見ること。以前は「1.5（現行）」という
+    # 誤った表記だった（本番はLONG/SHORTで倍率が違うため、単一の「現行」は
+    # 存在しない）ため削除した。
     atr_variants = stats.get('atr_variants') or {}
     if atr_variants:
-        lines.append('― ATR倍率比較（ストップ幅1.5／2.0／2.5倍・LONG+SHORT合算） ―')
-        for key in ('1.5', '2.0', '2.5'):
-            label = f'ATR×{key}' + ('（現行）' if key == '1.5' else '')
-            lines.append(_fmt(label, atr_variants.get(key)))
+        lines.append('― ATR倍率比較（LONG・SHORT共通で使った場合・参考） ―')
+        for key in ('1.8', '2.5', '5.0'):
+            lines.append(_fmt(f'ATR×{key}', atr_variants.get(key)))
 
     return "\n".join(lines)
 

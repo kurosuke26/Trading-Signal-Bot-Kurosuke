@@ -129,6 +129,21 @@ ATR_MULTIPLIER = 1.5  # 過去形式ポジションのマイグレーション�
 ATR_MULTIPLIER_BY_SIGNAL = {'LONG': 5.0, 'SHORT': 1.8}  # 本番のプライマリ倍率（シグナル別）
 ATR_MULTIPLIER_VARIANTS = [1.5, 1.8, 2.0, 2.2, 2.5, 2.7, 3.0, 3.5, 4.0, 4.5, 5.0, 6.0]
 
+# 【2026-09-15追記：初回起動時の一括ロード汚染を集計から除外】
+# 2026-08-25はcollector.pyの初回実行日で、TOP_N_TRACKEDによる絞り込み
+# （2026-08-26導入）もLONG_ENTRY_SCORE_THRESHOLDによる絞り込み
+# （2026-09-11導入）も、まだ存在しなかった。そのためこの1日だけ、
+# LONG/SHORT判定された銘柄が無制限に一括で新規ポジション化されており
+# （実際に1,804件、東証全銘柄のうち相当数）、以降の「日々数銘柄ずつ
+# 絞り込んで追跡する」設計とは前提が全く異なる。同じ日に一括で建てた
+# ポジションは市場全体の動きに強く相関するため、その後の一方向の値動き
+# （例：この期間はSHORT側が市場上昇で一斉に同時期の損切りに抵触）だけで
+# 勝率が実力と無関係に0%近くまで振れる。実際、この日を除外すると
+# 決済済み件数は94件→0件（絞り込みロジック導入後の19件はまだ全件未決済）
+# に変わり、「勝率0%」がこの汚染の産物だったことが確認できた。
+# trade_log.json自体は履歴として保持し、削除はしない。集計関数側で除外する。
+LEGACY_BULK_LOAD_ENTRY_DATES = {'2026-08-25'}
+
 
 def _variant_key(multiplier):
     return f'{multiplier:.1f}'
@@ -225,6 +240,22 @@ def _ensure_variants(p):
                 'stop': None, 'status': 'not_tracked',
                 'close_date': None, 'close_price': None, 'return_pct': None,
             }
+
+    # 【2026-09-15追記：p['status']の同期漏れ修正】
+    # p['status']はupdate_open_positions()が「その時点のプライマリ倍率キー」の
+    # variantが閉じた時だけ'closed'に書き換える。だが2026-09-11にプライマリ倍率の
+    # 定義が変わった（両シグナル共通1.5倍→LONG5.0倍／SHORT1.8倍に分離）ことで、
+    # 「旧プライマリ(1.5倍)は決済済みだが新プライマリ(5.0/1.8倍)はまだ未決済」の
+    # ポジションが生まれ、p['status']は旧プライマリ決済時の'closed'のまま
+    # 取り残されていた（新プライマリが決済されるまで誰も'open'に戻さないため）。
+    # ロードのたびに必ず「現在のプライマリ倍率キーのvariant状態」へ同期し直す
+    # ことで、_has_open()（重複エントリー防止）やopen_positions集計が常に
+    # 現在の定義と一致した状態を見るようにする。
+    primary_key = PRIMARY_VARIANT_KEY_BY_SIGNAL.get(signal)
+    primary_variant = p['variants'].get(primary_key) if primary_key else None
+    if primary_variant is not None and primary_variant.get('status') in ('open', 'closed'):
+        p['status'] = primary_variant['status']
+
     return p
 
 
@@ -430,14 +461,32 @@ def compute_performance_stats(trade_log):
       場合の比較集計（LONG＋SHORT合算）。倍率が拡張される前に開始した
       ポジションはその倍率のデータが無いため、比較対象には含まれない点に
       注意（_ensure_variants()参照）。
+
+    【2026-09-15追記】LEGACY_BULK_LOAD_ENTRY_DATES（初回一括ロード分）は
+    集計対象から除外する（理由は同定数のコメント参照）。除外した中に
+    決済済みだったものが何件あるかは 'excluded_legacy_bulk_load_closed_count'
+    で分かるようにしておく（サイレントに消すと後から気づけないため）。
+    この件数は position['status']（ポジション単位のフラグ）ではなく
+    _closed_variant_trades()と同じ「現在のプライマリ倍率キーでのvariant単位の
+    status」で数える。position['status']は2026-09-11にプライマリ倍率の定義
+    （ATR_MULTIPLIER_BY_SIGNAL）自体が変わった際、それより前に古い定義で
+    'closed'になったポジションの値が更新されずに残っており、現在のプライマリ
+    倍率での実際のvariant状態とズレている（古いキャッシュ）ため。
     """
-    closed_primary_long = _closed_variant_trades(trade_log, PRIMARY_VARIANT_KEY_BY_SIGNAL['LONG'], 'LONG')
-    closed_primary_short = _closed_variant_trades(trade_log, PRIMARY_VARIANT_KEY_BY_SIGNAL['SHORT'], 'SHORT')
+    filtered_log = [p for p in trade_log if p.get('entry_date') not in LEGACY_BULK_LOAD_ENTRY_DATES]
+    legacy_log = [p for p in trade_log if p.get('entry_date') in LEGACY_BULK_LOAD_ENTRY_DATES]
+    excluded_closed_count = (
+        len(_closed_variant_trades(legacy_log, PRIMARY_VARIANT_KEY_BY_SIGNAL['LONG'], 'LONG'))
+        + len(_closed_variant_trades(legacy_log, PRIMARY_VARIANT_KEY_BY_SIGNAL['SHORT'], 'SHORT'))
+    )
+
+    closed_primary_long = _closed_variant_trades(filtered_log, PRIMARY_VARIANT_KEY_BY_SIGNAL['LONG'], 'LONG')
+    closed_primary_short = _closed_variant_trades(filtered_log, PRIMARY_VARIANT_KEY_BY_SIGNAL['SHORT'], 'SHORT')
     closed_primary_all = closed_primary_long + closed_primary_short
-    open_count = len([p for p in trade_log if p.get('status') == 'open'])
+    open_count = len([p for p in filtered_log if p.get('status') == 'open'])
 
     atr_variants = {
-        _variant_key(m): _stats_for(_closed_variant_trades(trade_log, _variant_key(m)))
+        _variant_key(m): _stats_for(_closed_variant_trades(filtered_log, _variant_key(m)))
         for m in ATR_MULTIPLIER_VARIANTS
     }
 
@@ -447,4 +496,5 @@ def compute_performance_stats(trade_log):
         'short_only': _stats_for(closed_primary_short),
         'open_positions': open_count,
         'atr_variants': atr_variants,
+        'excluded_legacy_bulk_load_closed_count': excluded_closed_count,
     }
