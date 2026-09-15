@@ -17,6 +17,7 @@ import numpy as np
 import pandas as pd
 
 import collector as col
+import event_strategies
 import poster as pst
 import tracking
 
@@ -100,7 +101,7 @@ def run():
     snapshot_path = os.path.join(tmpdir, 'latest_scan.json')
 
     # 本番の仮想売買記録（data/trade_log.json）にテスト用の架空ポジションが書き込まれないよう、一時ファイルに差し替える
-    with mock.patch.object(col, 'OUTPUT_PATH', snapshot_path),          mock.patch.object(tracking, 'TRADE_LOG_PATH', os.path.join(tmpdir, 'trade_log.json')):
+    with mock.patch.object(col, 'OUTPUT_PATH', snapshot_path),          mock.patch.object(tracking, 'TRADE_LOG_PATH', os.path.join(tmpdir, 'trade_log.json')),          mock.patch.object(event_strategies, 'EVENT_TRADE_LOG_PATH', os.path.join(tmpdir, 'event_trade_log.json')),          mock.patch.object(event_strategies, 'EVENT_STATE_PATH', os.path.join(tmpdir, 'event_state.json')),          mock.patch.object(event_strategies, 'fetch_tdnet_dividend_hikes', return_value=[]),          mock.patch.object(event_strategies, 'fetch_missing_histories', return_value={}):
         tickers = run_collector_stage(25)
 
     assert os.path.exists(snapshot_path), 'スナップショットファイルが作成されていない'
@@ -153,8 +154,9 @@ def run():
             json.dumps(payload)  # 再シリアライズ可能であることの確認
 
     long_payloads = sent_payloads.get('https://discord.test/long', [])
-    assert long_payloads and long_payloads[0]['embeds'], 'LONGチャネルにEmbedが送られていない'
-    print(f"LONG embeds count: {len(long_payloads[0]['embeds'])}")
+    # 【2026-09-16】ロング通知は複合スコア70点以上だけを並べる仕様に変更。合成データで該当が無い日は本文のみの投稿になる
+    assert long_payloads and '70点以上' in long_payloads[0]['content'], 'LONGチャネルに通知が送られていない'
+    print(f"LONG embeds count: {len(long_payloads[0].get('embeds', []))}")
     print(f"LONG content: {long_payloads[0]['content']}")
 
     short_payloads = sent_payloads.get('https://discord.test/short', [])

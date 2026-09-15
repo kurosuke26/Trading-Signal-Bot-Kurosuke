@@ -67,6 +67,12 @@ jobs:
         if [ -f data/trade_log.json ]; then
           git add data/trade_log.json
         fi
+        # 【2026-09-16追加】別枠のイベント型仮想売買（event_strategies.py）の記録と状態
+        for f in data/event_trade_log.json data/event_state.json; do
+          if [ -f "$f" ]; then
+            git add "$f"
+          fi
+        done
         if git diff --cached --quiet; then
           echo "変更なし（データは前回と同一）のためコミットをスキップします"
         else

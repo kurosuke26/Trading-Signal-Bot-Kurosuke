@@ -165,6 +165,107 @@ def build_csv_bytes(results, columns):
 
 CSV_COLUMNS = ['ticker', 'name', 'current_price', 'dividend_yield', 'per_pbr', 'score', 'signal', 'entry_timing']
 
+# 【2026-09-16追加】ロング通知に並べる最低スコア。LONG_ENTRY_SCORE_THRESHOLD（75）以上が仮想エントリー対象で、
+# この点数〜75点未満は「参考」として境界線の下に並べる。
+LONG_DISPLAY_MIN_SCORE = float(os.getenv('LONG_DISPLAY_MIN_SCORE', '70'))
+LONG_CSV_COLUMNS = ['band', 'ticker', 'name', 'score', 'current_price', 'dividend_yield', 'per_pbr', 'entry_timing']
+
+
+def _score_of(r):
+    return r['score'] if r.get('score') is not None else -1
+
+
+def build_long_payload(long_results, total_long, stale_note=''):
+    """
+    ロング通知：複合スコアLONG_DISPLAY_MIN_SCORE点以上の銘柄をスコアの高い順に並べ、
+    LONG_ENTRY_SCORE_THRESHOLD点（仮想エントリー対象）との境に線を入れる。
+    Discordの1投稿あたりEmbedは10件までのため、入りきらない分は添付CSV（区分列つき）で全件を渡す。
+    戻り値: (payload, csv_bytes or None)
+    """
+    shown = [r for r in long_results if _score_of(r) >= LONG_DISPLAY_MIN_SCORE]
+    buy = [r for r in shown if _score_of(r) >= LONG_ENTRY_SCORE_THRESHOLD]
+    watch = [r for r in shown if _score_of(r) < LONG_ENTRY_SCORE_THRESHOLD]
+    lo, hi = f'{LONG_DISPLAY_MIN_SCORE:g}', f'{LONG_ENTRY_SCORE_THRESHOLD:g}'
+    if not shown:
+        content = (f"🟢 Kurosuke割安チェッカー - ロングシグナル（複合スコア{lo}点以上の銘柄は本日なし／"
+                   f"LONG判定{total_long}銘柄）")
+        return {'content': ((stale_note + ' ') if stale_note else '') + content}, None
+
+    embeds = [format_stock_embed(r) for r in buy[:10]]
+    if watch and len(embeds) < 9:
+        embeds.append({'description': f"──────── ここから下は {lo}〜{hi}点未満（参考・仮想エントリー対象外） ────────",
+                       'color': 0x7F8C8D})
+        embeds += [format_stock_embed(r) for r in watch[:10 - len(embeds)]]
+    shown_in_embeds = min(len(buy), 10) + (min(len(watch), max(0, 10 - min(len(buy), 10) - 1)) if watch and len(buy) < 9 else 0)
+    content = (f"🟢 Kurosuke割安チェッカー - ロングシグナル（複合スコア{lo}点以上{len(shown)}銘柄をスコアの高い順に表示）\n"
+               f"🎯 {hi}点以上（仮想エントリー対象）：{len(buy)}銘柄 ／ 👀 {lo}〜{hi}点未満（参考）：{len(watch)}銘柄")
+    if shown_in_embeds < len(shown):
+        content += f"\n※表示しきれない{len(shown) - shown_in_embeds}銘柄を含む全件は添付CSVを参照（band列で区分）"
+    if stale_note:
+        content = stale_note + ' ' + content
+    csv_bytes = None
+    if shown_in_embeds < len(shown):
+        rows = [dict(r, band=f'{hi}点以上（仮想エントリー対象）') for r in buy] + \
+               [dict(r, band=f'{lo}〜{hi}点未満（参考）') for r in watch]
+        csv_bytes = build_csv_bytes(rows, LONG_CSV_COLUMNS)
+    return {'content': content[:2000], 'embeds': embeds[:10]}, csv_bytes
+
+
+def _fmt_num(v, suffix='%', signed=True):
+    if v is None:
+        return '—'
+    return f"{v:+.2f}{suffix}" if signed else f"{v}{suffix}"
+
+
+def build_event_embeds(event_summary):
+    """別枠のイベント型仮想売買（event_strategies.py）の投稿用Embed。戻り値: dict(channel -> [embed])"""
+    out = {'STRATEGY': [], 'WARNING': [], 'PERFORMANCE': []}
+    if not event_summary:
+        return out
+    hikes = event_summary.get('new_dividend_hikes') or []
+    if hikes:
+        lines = [f"・{p['ticker']}（{p.get('name') or ''}）{(p.get('reason') or '')[:40]}" for p in hikes[:15]]
+        if len(hikes) > 15:
+            lines.append(f"…ほか{len(hikes) - 15}件")
+        out['STRATEGY'].append({
+            'title': f"💴 増配修正の発表（別枠の仮想売買）：本日{len(hikes)}件",
+            'description': ("TDnetで「（増配）」を明示した配当予想の修正・剰余金の配当を検知。翌営業日の始値で仮想エントリーし、"
+                            "終値−ATR×3.0のトレーリングで管理します（本番LONGとは別の検証用の系列）。\n" + "\n".join(lines))[:4000],
+            'color': 0x27AE60,
+        })
+    crash = event_summary.get('crash')
+    if crash:
+        cands = crash.get('candidates') or []
+        lines = [f"・{p['ticker']}：20日高値から{p['drop_pct']}%" for p in cands[:20]]
+        if len(cands) > 20:
+            lines.append(f"…ほか{len(cands) - 20}銘柄")
+        out['WARNING'].append({
+            'title': f"🚨 暴落時の行動ルール発動（{crash['date']}）",
+            'description': (f"取引可能な銘柄の等金額指数が20営業日高値から{crash['index_dd_pct']}%。"
+                            f"20日高値から−20%以上下げた取引可能な{len(cands)}銘柄が対象です。\n"
+                            "ルール：翌営業日の始値で分割して買い、利確ATR×4／損切りATR×2／最長20営業日。"
+                            "過去約2年で暴落は3回のみのため、一度に資金を集中させない前提の目安です。\n"
+                            + "\n".join(lines))[:4000],
+            'color': 0xC0392B,
+        })
+    perf = event_summary.get('performance') or {}
+    if perf:
+        fields = []
+        for v in perf.values():
+            fields.append({'name': v['label'],
+                           'value': (f"決済済み{v['closed']}件／保有中{v['open']}件／約定待ち{v['pending_entry']}件\n"
+                                     f"勝率{_fmt_num(v['win_rate_pct'], '%', False)}・ペイオフ{_fmt_num(v['payoff_ratio'], '', False)}・"
+                                     f"期待値{_fmt_num(v['expectancy_pct'])}・市場平均との差{_fmt_num(v['excess_pct'])}"),
+                           'inline': False})
+        idx = event_summary.get('index') or {}
+        out['PERFORMANCE'].append({
+            'title': '🧪 別枠の仮想売買（実運用での検証中）',
+            'description': (f"指数（取引可能な銘柄の等金額平均）の20日高値からの位置：{_fmt_num(idx.get('dd20_pct'))}"
+                            f"（{idx.get('date', '—')}時点、−10%以下で暴落ルール発動）"),
+            'fields': fields, 'color': 0x8E44AD,
+        })
+    return out
+
 
 # ---------------------------------------------------------------------------
 # Discord送信
@@ -291,20 +392,10 @@ def build_payloads(snapshot, stale, age_hours):
     # ストップをかける買いシグナル」であり、format_stock_embed()側で金色・
     # 🎯マーク付きの見た目にして一覧の中で目立たせる（バックテストでの効果は
     # Claude outputs/2026-09-11-long-entry-score-gate.md参照）。
-    long_buy_signals = [r for r in long_results
-                         if (r['score'] if r['score'] is not None else -1) >= LONG_ENTRY_SCORE_THRESHOLD]
-    long_payload = None
-    long_csv = None
-    if long_results:
-        embeds = [format_stock_embed(r) for r in long_results[:10]]
-        buy_note = f"／🎯買いシグナル点灯{len(long_buy_signals)}銘柄" if long_buy_signals else "／本日は買いシグナルなし"
-        content = (f"🟢 Kurosuke割安チェッカー - ロングシグナル"
-                   f"（該当{total_long}銘柄／上位10件を表示{buy_note}）")
-        if stale_note:
-            content = stale_note + " " + content
-        long_payload = {'content': content[:2000], 'embeds': embeds}
-        if total_long > 10 or len(long_results) > 10:
-            long_csv = build_csv_bytes(long_results, CSV_COLUMNS)
+    # 【2026-09-16変更】複合スコア70点以上をスコアの高い順に並べ、75点（仮想エントリー対象）との境に線を入れる
+    long_payload, long_csv = build_long_payload(long_results, total_long, stale_note)
+    long_buy_signals = [r for r in long_results if _score_of(r) >= LONG_ENTRY_SCORE_THRESHOLD]
+    event_embeds = build_event_embeds(snapshot.get('event_strategies'))
 
     # ---- SHORT ----
     short_payload = None
@@ -342,15 +433,16 @@ def build_payloads(snapshot, stale, age_hours):
 
     warning_payload = None
     warning_csv = None
-    if warning_lines:
-        warning_payload = {
-            'embeds': [{
+    if warning_lines or event_embeds['WARNING']:
+        embeds = list(event_embeds['WARNING'])
+        if warning_lines:
+            embeds.append({
                 'title': '⚠️ マーケット警告',
                 'description': "\n".join(warning_lines)[:4000],
                 'color': 0xF39C12,
                 'footer': {'text': footer_text},
-            }],
-        }
+            })
+        warning_payload = {'embeds': embeds[:10]}
         if total_failed > 15:
             warning_csv = build_csv_bytes(
                 [{'ticker': t, 'reason': e} for t, e in (fund_failed + hist_failed)],
@@ -446,6 +538,7 @@ def build_payloads(snapshot, stale, age_hours):
         # パフォーマンスチャンネルにも引き続き表示（ユーザー希望：「今後のためのシグナルなので残しておいて」）
         perf_embeds.append(backtest_embed)
 
+    perf_embeds.extend(event_embeds['PERFORMANCE'])
     performance_payload = {'embeds': perf_embeds[:10]}
 
     # ---- BACKTEST（勝率・ペイオフレシオ専用チャンネル） ----
@@ -453,7 +546,7 @@ def build_payloads(snapshot, stale, age_hours):
     if backtest_embed is not None:
         backtest_payload = {
             'content': '🎯 Kurosuke割安チェッカー - バックテスト結果',
-            'embeds': [backtest_embed],
+            'embeds': [backtest_embed] + event_embeds['PERFORMANCE'],
         }
 
     # ---- STRATEGY ----
@@ -473,7 +566,8 @@ def build_payloads(snapshot, stale, age_hours):
         ),
         'color': 0x95A5A6,
     }
-    strategy_embeds = [note_embed] + [format_stock_embed(r) for r in (long_results[:5] + neutral_results[:4])]
+    strategy_embeds = [note_embed] + event_embeds['STRATEGY'] + \
+        [format_stock_embed(r) for r in (long_results[:5] + neutral_results[:4])]
     strategy_payload = {
         'content': "📋 Kurosuke割安チェッカー - 本日の戦略通知",
         'embeds': strategy_embeds[:10],

@@ -590,7 +590,7 @@ def serialize_results(results):
 
 
 def build_snapshot(results, fund_failed, hist_failed, tickers, used_fallback, started_at_utc,
-                    performance_stats=None):
+                    performance_stats=None, event_summary=None):
     counts = {'LONG': 0, 'SHORT': 0, 'NEUTRAL': 0}
     for r in results.values():
         counts[r['signal']] = counts.get(r['signal'], 0) + 1
@@ -609,6 +609,8 @@ def build_snapshot(results, fund_failed, hist_failed, tickers, used_fallback, st
         'hist_failed': hist_failed,
         'results': serialize_results(results),
         'performance_stats': performance_stats,
+        # 【2026-09-16追加】別枠のイベント型仮想売買（増配修正・暴落後。event_strategies.py）
+        'event_strategies': event_summary,
     }
 
 
@@ -755,8 +757,26 @@ def collect():
         performance_stats = compute_performance_stats(trade_log)
         print(f"[tracking] 新規建玉{opened_n}件／決済{closed_n}件／保有中{performance_stats['open_positions']}件")
 
+    # 【2026-09-16追加】別枠のイベント型仮想売買（増配修正の発表翌日・暴落後の行動ルール）。
+    # 本番LONG/SHORTの記録（data/trade_log.json）とは別ファイルに記録する。失敗しても収集結果は保存する。
+    event_summary = None
+    if not is_test_run:
+        print("\n--- 別枠の仮想売買（増配修正・暴落後）：TDnetとYahoo Financeの日足で判定 ---")
+        try:
+            import event_strategies
+            event_summary = event_strategies.run(histories)
+            perf = event_summary['performance']
+            print(f"[event] 新規の増配修正{len(event_summary['new_dividend_hikes'])}件／"
+                  f"暴落の発動{'あり' if event_summary['crash'] else 'なし'}／"
+                  + ' ／ '.join(f"{v['label']}：決済{v['closed']}件・保有{v['open']}件・約定待ち{v['pending_entry']}件"
+                               for v in perf.values()))
+        except Exception as e:  # noqa: BLE001
+            import traceback
+            traceback.print_exc()
+            print(f"[event] 別枠の仮想売買の処理でエラー（収集結果の保存は続行します）: {e}")
+
     snapshot = build_snapshot(results, fund_failed, hist_failed, tickers, used_fallback, started_at_utc,
-                               performance_stats=performance_stats)
+                               performance_stats=performance_stats, event_summary=event_summary)
     write_snapshot(snapshot)
 
     print(f"\n総実行時間：{_elapsed_minutes():.1f}分")
