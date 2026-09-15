@@ -39,6 +39,15 @@ collector.py — データ収集・判定バッチ（2:00〜6:00 JST頃に実行
 これとは別に、想定外に遅れた場合の非常停止ラインとして TIME_BUDGET_MINUTES
 （既定230分）を設けており、超過分は打ち切ってそこまでの結果を保存する。
 
+【2026-09-15変更：株価をauto_adjust=True（分割・配当調整済み）に変更】
+以前はauto_adjust=Falseでraw（未調整）の四本値を使っていたが、株式分割が
+あった銘柄は分割前後で価格が不連続に見え、ATR・移動平均・パターン判定が
+誤作動するリスクがあった（backtest.pyのコメント参照）。LONG上位10・SHORT
+上位10の実サンプル20銘柄で両設定を比較したところ、配当調整のみの銘柄では
+ATR・複合スコア・シグナル判定に実質差が無く（過去1年に分割が起きた銘柄は
+サンプル中0件だった）、分割が実際に起きた銘柄にだけ安全側に効くことを
+確認した上で切り替えた。yfinanceの無料機能のみで対応でき、追加コストは無い。
+
 【2026-09-04追加：対象銘柄を絞ることによる時間短縮】
 上記のペーシング調整に加え、対象銘柄そのものを絞ることでも所要時間・
 リクエスト数を削減する。
@@ -307,7 +316,7 @@ def fetch_price_histories(tickers, period=HISTORY_PERIOD, chunk_size=HISTORY_CHU
             try:
                 data = yf.download(tickers=chunk, period=period, interval='1d',
                                     group_by='ticker', threads=True, progress=False,
-                                    auto_adjust=False)
+                                    auto_adjust=True)
                 break
             except Exception as e:
                 print(f'[history] チャンク{ci + 1}/{total_chunks} 取得失敗（試行{attempt + 1}）: {e}')
