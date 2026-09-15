@@ -740,6 +740,17 @@ def collect():
     print("\n--- LONG候補のEPS3期推移 深掘り取得 ---")
     run_eps_deepdive(results)
 
+    # 【2026-09-16追加】同じ業種の中での相対評価（60日リターンの業種平均との差・PER×PBRの業種中央値比）。
+    # tracking.py のLONG候補選定（業種内モメンタム条件）と、Discord投稿の表示に使う。
+    print("\n--- 業種内の相対評価 ---")
+    try:
+        import sector_relative
+        sector_relative.annotate(results, histories)
+        rated = sum(1 for r in results.values() if (r.get('sector_relative') or {}).get('rel_ret60') is not None)
+        print(f"[sector] {rated}/{len(results)}銘柄で業種内の相対評価を算出しました")
+    except Exception as e:  # noqa: BLE001
+        print(f"[sector] 業種内の相対評価でエラー（条件なしで続行）: {e}")
+
     # MAX_TICKERSを絞ったテスト実行では、対象銘柄が本番と異なる一部分になり、
     # 本番用の勝率・ペイオフレシオ集計（data/trade_log.json）にノイズが混ざって
     # しまうため、テスト実行時は追跡をスキップする（画面表示は「集計対象外」とする）。

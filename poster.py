@@ -26,6 +26,7 @@ from datetime import datetime, timezone
 
 import requests
 
+import sector_relative
 from scoring import score_band_label, suggested_trade_levels
 from tracking import (
     ATR_MULTIPLIER_BY_SIGNAL, ATR_MULTIPLIER_VARIANTS, _variant_key,
@@ -117,6 +118,10 @@ def format_stock_embed(r):
         {'name': '複合スコア', 'value': score_str, 'inline': True},
         {'name': 'テクニカル', 'value': _ma_rsi_macd_line(r.get('tech_snapshot')), 'inline': False},
     ]
+
+    sector_line = sector_relative.format_line(r)
+    if sector_line:
+        fields.append({'name': '業種内の位置', 'value': sector_line, 'inline': False})
 
     sakata_reasons = r.get('sakata_reasons') or []
     if sakata_reasons:

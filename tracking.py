@@ -104,6 +104,14 @@ TOP_N_TRACKED = env_int('TOP_N_TRACKED', 10)  # 新規追跡対象とする「�
 LONG_ENTRY_SCORE_THRESHOLD = env_int('LONG_ENTRY_SCORE_THRESHOLD', 75)
 LONG_TOP_N = env_int('LONG_TOP_N', 5)  # 該当銘柄が多い日でも上位5件までに絞る
 
+# 【2026-09-16追加】業種内の相対評価（sector_relative.py）。先読みなしの検証で、複合スコアだけの選定は
+# 市場平均は上回るが「同じ業種の平均」には届いていなかった（後半：市場との差+1.4%に対し業種との差−0.5%）。
+# 「60日リターンが同業種の平均以上」を条件に加えると、前半・後半・テーマ相場の期間・期間外の4通りすべてで
+# 業種との差がプラスになった（後半：市場との差+1.5%／業種との差+0.3%）。
+# 業種内の割安（PER×PBRが業種中央値以下）は件数が減り、テーマ相場の期間はマイナスだったため条件には使わず表示のみ。
+# 詳細: data/backtest_out/selection_rules_eval.md
+LONG_REQUIRE_SECTOR_MOMENTUM = env_int('LONG_REQUIRE_SECTOR_MOMENTUM', 1) == 1
+
 # 【2026-08-26追加】トレーリングストップの倍率バリエーション（比較バックテスト用）。
 # 1.5倍がプライマリ（Discordの「エントリー・ストップ目安」欄と一致させる正式な幅）。
 # 複数の倍率を扱うため、他の実行パラメータと違って環境変数では変更できない
@@ -302,6 +310,11 @@ def _select_top_candidates(results, signal, top_n=TOP_N_TRACKED):
     candidates = [r for r in results.values() if r.get('signal') == signal]
     if signal == 'LONG':
         candidates = [r for r in candidates if (r.get('score') if r.get('score') is not None else -1) >= LONG_ENTRY_SCORE_THRESHOLD]
+        if LONG_REQUIRE_SECTOR_MOMENTUM:
+            # 同業種の平均より60日リターンが弱い銘柄は仮想エントリーしない
+            # （相対評価が計算できない小さな業種・データ不足の銘柄はそのまま通す）
+            import sector_relative
+            candidates = [r for r in candidates if sector_relative.passes(r, require_momentum=True)]
         candidates.sort(key=lambda r: (r.get('score') if r.get('score') is not None else -1), reverse=True)
     else:  # SHORT
         candidates.sort(key=lambda r: (r.get('per_pbr') if r.get('per_pbr') is not None else 0), reverse=True)

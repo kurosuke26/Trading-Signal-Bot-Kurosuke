@@ -21,6 +21,14 @@ search_selection_rules.py — 「勝率60%台・ペイオフレシオ2前後」�
 - 上場廃止は最終取引日の終値で決済。往復コスト0.1%。
 - 市場との差：同じ保有期間の、取引可能な全銘柄の等金額平均との差（上昇相場の追い風を除いた実力）。
 
+【2026-09-16追加：テーマ相場の影響を切り分ける3つの見方】
+検証期間の後半（2025年10月〜2026年5月）は、MLCC関連（村田製作所・太陽誘電・TDK・京セラなど電気機器）が
+市場平均を大きく上回って動いた。この1つのテーマ相場に乗っただけのルールを「有効」と誤解しないため、
+同じ売買記録を次の3通りで集計する。
+  1. 電気機器を除いた場合（MLCC関連を含む業種をまるごと除外）
+  2. 市場平均との差に加えて「同じ業種の平均との差」（業種ぐるみの追い風を除く）
+  3. MLCC相場の期間（THEME_PERIOD）とそれ以外に分けた成績
+
 【出力】data/backtest_out/selection_rules_eval.json / .md
 """
 
@@ -49,6 +57,8 @@ SPLIT_DATE = '2025-08-08'   # evaluate_strategy.py と同じ前半／後半の�
 MIN_TRADES = 80
 TARGET_WIN = 60.0
 TARGET_PR_MIN = 1.8
+THEME_PERIOD = ('2025-10-01', '2026-05-31')  # MLCC関連が大きく動いた期間（月次騰落率から判断）
+THEME_SECTOR = '電気機器'                      # MLCC関連（村田製作所・太陽誘電・TDK・京セラ等）を含む業種
 
 EXIT_RULES = (
     [{'name': f'トレーリング ATR×{m}', 'kind': 'trail', 'm': m} for m in (2.0, 3.0, 4.0)]
@@ -64,7 +74,7 @@ EXIT_RULES = (
 # ---------------------------------------------------------------------------
 
 def _prod_long_rows(item):
-    """evaluate_strategy.extract_ticker の特徴量から、本番LONGの (日付, スコア) だけを返す。"""
+    """evaluate_strategy.extract_ticker の特徴量から、本番LONGの (日付, スコア, PER×PBR) を返す。"""
     res = extract_ticker(item)
     if not res:
         return None
@@ -75,7 +85,7 @@ def _prod_long_rows(item):
             continue
         signal, score = classify(row, acc)
         if signal == 'LONG' and score is not None:
-            out.append((res['dates'][row[0]], score))
+            out.append((res['dates'][row[0]], score, row[2]))
     return item[0], out
 
 
@@ -85,6 +95,30 @@ _ACC = {}
 def _init_acc(acc):
     global _ACC
     _ACC = acc
+
+
+def sector_map():
+    with open(os.path.join('data/jquants_cache', '_universe.json'), encoding='utf-8') as f:
+        return {u['ticker4']: (u.get('sector_name') or 'その他') for u in json.load(f)['universe']}
+
+
+def sector_levels(daily, sectors):
+    """業種ごとの等金額指数（前日に取引可能だった銘柄の平均）。{業種: {日付: 水準}}"""
+    close = daily.pivot(index='date', columns='ticker', values='close').sort_index()
+    trad = daily.pivot(index='date', columns='ticker', values='tradeable').sort_index()
+    trad = trad.astype('boolean').fillna(False).astype(bool)
+    ret = close / close.shift(1) - 1
+    elig = trad.shift(1, fill_value=False) & ret.notna() & np.isfinite(ret)
+    out = {}
+    by_sector = {}
+    for t in close.columns:
+        by_sector.setdefault(sectors.get(t, 'その他'), []).append(t)
+    for sec, cols in by_sector.items():
+        if len(cols) < 5:
+            continue
+        ew = ret[cols].where(elig[cols]).mean(axis=1).fillna(0)
+        out[sec] = (1 + ew).cumprod().to_dict()
+    return out
 
 
 def build_entry_sets(universe, workers):
@@ -100,13 +134,62 @@ def build_entry_sets(universe, workers):
             if not res:
                 continue
             t, rows = res
-            for d, s in rows:
-                by_date[d].append((s, t))
+            for d, sc, per_pbr in rows:
+                by_date[d].append((sc, t, per_pbr))
+
+    # 【2026-09-16追加】業種内の相対評価（同じ日・同じ業種の中での位置）。
+    # ・相対モメンタム：その銘柄の60日リターン − 同業種の等金額指数の60日リターン
+    # ・相対割安：PER×PBRが、その日のLONG候補の同業種中央値以下かどうか
+    # いずれも当日の引けまでの情報だけで計算でき、本番（collector.py）でも同じ形で計算できる。
+    sectors = sector_map()
+    daily = pd.read_pickle(os.path.join(OUT, 'daily.pkl'))
+    close_all = daily.pivot(index='date', columns='ticker', values='close').sort_index()
+    sec_lv = sector_levels(daily, sectors)
+    ret60 = close_all / close_all.shift(60) - 1
+    sec_ret60 = {}
+    for sec, lv in sec_lv.items():
+        ser = pd.Series(lv).sort_index()
+        sec_ret60[sec] = (ser / ser.shift(60) - 1).to_dict()
+
+    def rel_mom(t, d):
+        try:
+            r = ret60.at[d, t]
+        except KeyError:
+            return None
+        sr = sec_ret60.get(sectors.get(t, 'その他'), {}).get(d)
+        if r != r or sr is None or sr != sr:
+            return None
+        return float(r - sr)
+
+    sector_median_perpbr = {}
+    for d, rows in by_date.items():
+        acc_by_sec = defaultdict(list)
+        for sc, t, pp in rows:
+            if pp is not None:
+                acc_by_sec[sectors.get(t, 'その他')].append(pp)
+        sector_median_perpbr[d] = {sec: float(np.median(v)) for sec, v in acc_by_sec.items() if len(v) >= 3}
+
     for thr in (70, 75):
-        name = f'本番LONG（スコア{thr}点以上・上位5）'
-        for d in sorted(by_date):
-            for s, t in sorted([x for x in by_date[d] if x[0] >= thr], key=lambda x: (-x[0], x[1]))[:5]:
-                sets[name][t].append(d)
+        base = f'本番LONG（スコア{thr}点以上・上位5）'
+        variants = {
+            base: lambda t, d, pp: True,
+            f'本番LONG{thr}＋業種内モメンタム（60日が同業種平均以上）':
+                lambda t, d, pp: (rel_mom(t, d) or -1) >= 0,
+            f'本番LONG{thr}＋業種内割安（PER×PBRが同業種中央値以下）':
+                lambda t, d, pp: (pp is not None and sector_median_perpbr.get(d, {}).get(sectors.get(t, "その他")) is not None
+                                  and pp <= sector_median_perpbr[d][sectors.get(t, 'その他')]),
+            f'本番LONG{thr}＋業種内モメンタム＋業種内割安':
+                lambda t, d, pp: ((rel_mom(t, d) or -1) >= 0
+                                  and pp is not None
+                                  and sector_median_perpbr.get(d, {}).get(sectors.get(t, "その他")) is not None
+                                  and pp <= sector_median_perpbr[d][sectors.get(t, 'その他')]),
+        }
+        for name, cond in variants.items():
+            for d in sorted(by_date):
+                cands = sorted([x for x in by_date[d] if x[0] >= thr], key=lambda x: (-x[0], x[1]))
+                picked = [x for x in cands if cond(x[1], d, x[2])][:5]
+                for sc, t, pp in picked:
+                    sets[name][t].append(d)
 
     # C〜F: パネル（5営業日ごと）の割安系
     p = pd.read_pickle(os.path.join(OUT, 'panel.pkl'))
@@ -229,12 +312,12 @@ def simulate_ticker(job):
                 x, px = run_exit(O, H, L, C, A, i, rule, n)
                 ret = (px / O[i + 1] - 1) * 100 - COST_PCT
                 open_end = (x == n - 1) and not delisted and rule['kind'] == 'trail'
-                out.append((set_name, r_k, dates[i], dates[x], ret, x - i, open_end))
+                out.append((set_name, r_k, dates[i], dates[x], ret, x - i, open_end, ticker))
                 busy = x
     return out
 
 
-def stats(trs, market):
+def stats(trs, market, sector_idx=None, sectors=None):
     n = len(trs)
     if not n:
         return {'n': 0}
@@ -242,17 +325,25 @@ def stats(trs, market):
     wins, losses = rets[rets > 0], rets[rets <= 0]
     aw = wins.mean() if len(wins) else 0.0
     al = losses.mean() if len(losses) else 0.0
-    ex = []
+    ex, ex_sec = [], []
     for t in trs:
         a, b = market.get(t[2]), market.get(t[3])
         if a and b:
             ex.append(t[4] - (b / a - 1) * 100)
+        if sector_idx is not None and sectors is not None:
+            lv = sector_idx.get(sectors.get(t[7], 'その他'))
+            if lv:
+                sa, sb = lv.get(t[2]), lv.get(t[3])
+                if sa and sb:
+                    ex_sec.append(t[4] - (sb / sa - 1) * 100)
     hold = float(np.mean([t[5] for t in trs]))
     return {'n': n, 'win_rate_pct': round(float((rets > 0).mean()) * 100, 1), 'avg_win_pct': round(float(aw), 2),
             'avg_loss_pct': round(float(al), 2), 'payoff_ratio': round(float(aw / abs(al)), 2) if al else None,
             'expectancy_pct': round(float(rets.mean()), 3),
             'excess_pct': round(float(np.mean(ex)), 3) if ex else None,
             'excess_win_rate_pct': round(float(np.mean([x > 0 for x in ex])) * 100, 1) if ex else None,
+            'excess_vs_sector_pct': round(float(np.mean(ex_sec)), 3) if ex_sec else None,
+            'excess_vs_sector_win_rate_pct': round(float(np.mean([x > 0 for x in ex_sec])) * 100, 1) if ex_sec else None,
             'avg_hold_days': round(hold, 1), 'open_at_end': int(sum(t[6] for t in trs))}
 
 
@@ -275,16 +366,36 @@ def main():
             for t in res:
                 trades[(t[0], t[1])].append(t)
 
+    sectors = sector_map()
+    sec_idx = sector_levels(pd.read_pickle(os.path.join(OUT, 'daily.pkl')), sectors)
+    theme_lo, theme_hi = THEME_PERIOD
+
+    def agg(trs, scope):
+        """scope: 'all'（全銘柄）/ 'ex_theme'（テーマ業種を除く）"""
+        if scope == 'ex_theme':
+            trs = [t for t in trs if sectors.get(t[7]) != THEME_SECTOR]
+        cut = {
+            '前半': [t for t in trs if t[2] < SPLIT_DATE],
+            '後半': [t for t in trs if t[2] >= SPLIT_DATE],
+            'MLCC相場期間': [t for t in trs if theme_lo <= t[2] <= theme_hi],
+            'MLCC相場期間以外': [t for t in trs if not (theme_lo <= t[2] <= theme_hi)],
+            '全期間': trs,
+        }
+        return {k: stats(v, market, sec_idx, sectors) for k, v in cut.items()}
+
     results = []
     for (set_name, r_k), trs in sorted(trades.items()):
         first = [t for t in trs if t[2] < SPLIT_DATE]
         second = [t for t in trs if t[2] >= SPLIT_DATE]
-        f, s = stats(first, market), stats(second, market)
+        f, s = stats(first, market, sec_idx, sectors), stats(second, market, sec_idx, sectors)
         meets_first = (f.get('n', 0) >= MIN_TRADES and f['win_rate_pct'] >= TARGET_WIN
                        and (f['payoff_ratio'] or 0) >= TARGET_PR_MIN)
         meets_second = (s.get('n', 0) >= MIN_TRADES and s['win_rate_pct'] >= TARGET_WIN
                         and (s['payoff_ratio'] or 0) >= TARGET_PR_MIN)
-        results.append({'entry': set_name, 'exit': EXIT_RULES[r_k]['name'], 'first': f, 'second': s, 'all': stats(trs, market),
+        results.append({'entry': set_name, 'exit': EXIT_RULES[r_k]['name'], 'first': f, 'second': s,
+                        'all': stats(trs, market, sec_idx, sectors),
+                        'robustness': {'全銘柄': agg(trs, 'all'), f'{THEME_SECTOR}を除く': agg(trs, 'ex_theme')},
+                        'theme_share_pct': round(sum(1 for t in trs if sectors.get(t[7]) == THEME_SECTOR) / len(trs) * 100, 1) if trs else None,
                         'meets_target_first': meets_first, 'meets_target_second': meets_second})
 
     report = {'meta': repro.run_metadata([t for t, _ in universe],
@@ -293,7 +404,8 @@ def main():
                                           'cost_pct': COST_PCT, 'universe_filter': filter_params()},
                                          ['search_selection_rules.py', 'evaluate_strategy.py', 'build_panel.py',
                                           'universe_filters.py', 'sakata.py']),
-              'combinations_tested': len(results), 'entry_sets': {k: sum(len(v) for v in tk.values()) for k, tk in sets.items()},
+              'combinations_tested': len(results), 'theme_period': THEME_PERIOD, 'theme_sector': THEME_SECTOR,
+              'entry_sets': {k: sum(len(v) for v in tk.values()) for k, tk in sets.items()},
               'results': results}
     with open(os.path.join(OUT, 'selection_rules_eval.json'), 'w', encoding='utf-8') as f:
         json.dump(report, f, ensure_ascii=False, indent=2)
@@ -323,6 +435,28 @@ def render(rep):
         L.append(f"| {r['entry']} | {r['exit']} | {_row(r, 'first')} | {_row(r, 'second')} | {'◎' if r['meets_target_second'] else '×'} |")
     if not chosen:
         L.append('| （前半で目標を満たした組み合わせなし） | | | | | | | | | | | | |')
+    L += ['', '## テーマ相場（MLCC）の影響を切り分けた結果', '',
+          f"- テーマ業種：{rep['theme_sector']}（村田製作所・太陽誘電・TDK・京セラ等を含む）／テーマ相場の期間：{rep['theme_period'][0]}〜{rep['theme_period'][1]}",
+          '- 「業種との差」は、同じ保有期間の同業種の等金額平均との差（業種ぐるみの追い風を除いた値）',
+          '- 代表的な手仕舞い（トレーリングATR×3.0、暴落後は利確ATR×4・損切りATR×2・最長20日）で比較', '',
+          '| エントリー | 集計対象 | 期間 | 件数 | 勝率 | ペイオフ | 期待値 | 市場との差 | 業種との差 |',
+          '|---|---|---|---:|---:|---:|---:|---:|---:|']
+    reps = {}
+    for r in rep['results']:
+        key = r['entry']
+        want = '利確ATR×4・損切りATR×2・最長20日' if key.startswith('暴落後') else 'トレーリング ATR×3.0'
+        if r['exit'] == want:
+            reps[key] = r
+    for key, r in reps.items():
+        for scope, tabs in r['robustness'].items():
+            for part in ('前半', '後半', 'MLCC相場期間', 'MLCC相場期間以外'):
+                x = tabs[part]
+                if not x.get('n'):
+                    continue
+                L.append(f"| {key}（{r['exit']}） | {scope} | {part} | {x['n']:,} | {x['win_rate_pct']}% | {x['payoff_ratio']} | "
+                         f"{x['expectancy_pct']:+.2f}% | {'—' if x['excess_pct'] is None else f"{x['excess_pct']:+.2f}%"} | "
+                         f"{'—' if x['excess_vs_sector_pct'] is None else f"{x['excess_vs_sector_pct']:+.2f}%"} |")
+        L.append(f"| {key} | 参考：電気機器の占める割合 | 全期間 | {r['theme_share_pct']}% | | | | | |")
     L += ['', '## 全組み合わせ（後半の勝率が高い順）', '',
           '| エントリー | 手仕舞い | 前半 件数 | 前半 勝率 | 前半 ペイオフ | 前半 期待値 | 前半 市場との差 | 後半 件数 | 後半 勝率 | 後半 ペイオフ | 後半 期待値 | 後半 市場との差 |',
           '|---|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|']

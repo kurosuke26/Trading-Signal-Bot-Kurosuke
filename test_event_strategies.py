@@ -102,6 +102,32 @@ def test_run_opens_tradeable_hikes_without_duplicates():
     assert out['performance'][es.DIVIDEND_HIKE]['open'] + out['performance'][es.DIVIDEND_HIKE]['closed'] == 1
 
 
+
+
+def test_sector_relative_annotation_and_filter():
+    """業種内の相対評価：業種平均との差・中央値比の計算と、候補選定の判定（sector_relative.py）。"""
+    import sector_relative
+    hist = {}
+    results = {}
+    # 同じ業種の5銘柄：60日リターンは +10/+5/0/−5/−10%（平均0%）、PER×PBRは 5/10/15/20/25（中央値15）
+    for k, (ret, pp) in enumerate(zip([0.10, 0.05, 0.0, -0.05, -0.10], [5, 10, 15, 20, 25])):
+        closes = [100.0] * 61
+        closes[-1] = 100 * (1 + ret)
+        hist[f'{k}.T'] = make_df(closes)
+        results[f'{k}.T'] = {'ticker': f'{k}.T', 'per_pbr': pp, 'signal': 'LONG',
+                             'fundamental_snapshot': {'sector_name': '機械'}}
+    sector_relative.annotate(results, hist)
+    top, bottom = results['0.T']['sector_relative'], results['4.T']['sector_relative']
+    assert abs(top['rel_ret60'] - 0.10) < 1e-6 and top['momentum_ok'] is True and top['value_ok'] is True
+    assert abs(bottom['rel_ret60'] + 0.10) < 1e-6 and bottom['momentum_ok'] is False and bottom['value_ok'] is False
+    assert sector_relative.passes(results['0.T']) and not sector_relative.passes(results['4.T'])
+    # 業種の対象が少ない場合は判定不能（None）＝条件では落とさない
+    small = {'9.T': {'ticker': '9.T', 'per_pbr': 30, 'fundamental_snapshot': {'sector_name': '鉱業'}}}
+    sector_relative.annotate(small, {'9.T': make_df([100.0] * 61)})
+    assert small['9.T']['sector_relative']['momentum_ok'] is None
+    assert sector_relative.passes(small['9.T'])
+
+
 if __name__ == '__main__':
     tests = [v for k, v in sorted(globals().items()) if k.startswith('test_')]
     for t in tests:
