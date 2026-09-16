@@ -393,5 +393,15 @@
     "at_utc": "2026-09-15T22:12:29.243969+00:00",
     "category": "us_morning",
     "text": "🌅 **米国市場サマリー（前日終値比）**\n📉 NYダウ -0.63%\n📉 S&P500 -0.45%\n📉 ナスダック -0.78%"
+  },
+  {
+    "at_utc": "2026-09-16T17:27:02.896059+00:00",
+    "category": "policy",
+    "text": "📜 **日銀発表**：日・マレーシア間の第三次二国間通貨スワップ契約の署名\nhttps://www.boj.or.jp/intl_finance/cooperate/coop260915a.pdf"
+  },
+  {
+    "at_utc": "2026-09-16T17:27:02.896059+00:00",
+    "category": "policy",
+    "text": "📜 **日銀発表**：日本銀行が保有する国債の銘柄別残高\nhttps://www.boj.or.jp/statistics/boj/other/mei/release/2026/mei260910.xlsx"
   }
 ]
