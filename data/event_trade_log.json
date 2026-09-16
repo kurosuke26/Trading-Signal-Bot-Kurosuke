@@ -1,0 +1,61 @@
+[
+ {
+  "series": "DIVIDEND_HIKE",
+  "ticker": "296A.T",
+  "name": "Ｇ－令和ＡＨ",
+  "signal_date": "2026-09-14",
+  "reason": "2027年３月期第２四半期（中間期）業績予想及び配当予想の修正（増配）に関するお知らせ",
+  "disclosure_url": "https://webapi.yanoshin.jp/rd.php?https://www.release.tdnet.info/inbs/140120260910533968.pdf",
+  "atr_at_signal": 48.0988,
+  "market_level_at_signal": 1.0799048557382809,
+  "state": "open",
+  "entry_date": "2026-09-15",
+  "entry_price": 1191.0,
+  "held_days": 0,
+  "last_processed": "2026-09-16",
+  "stop": 1054.02
+ },
+ {
+  "series": "DIVIDEND_HIKE",
+  "ticker": "9279.T",
+  "name": "ギフトＨＤ",
+  "signal_date": "2026-09-14",
+  "reason": "配当予想の修正（増配）に関するお知らせ",
+  "disclosure_url": "https://webapi.yanoshin.jp/rd.php?https://www.release.tdnet.info/inbs/140120260914535456.pdf",
+  "atr_at_signal": 83.0193,
+  "market_level_at_signal": 1.0799048557382809,
+  "state": "open",
+  "entry_date": "2026-09-15",
+  "entry_price": 2200.0,
+  "held_days": 0,
+  "last_processed": "2026-09-16",
+  "stop": 1950.94
+ },
+ {
+  "series": "DIVIDEND_HIKE",
+  "ticker": "3441.T",
+  "name": "山王",
+  "signal_date": "2026-09-14",
+  "reason": "剰余金の配当（増配）に関するお知らせ",
+  "disclosure_url": "https://webapi.yanoshin.jp/rd.php?https://www.release.tdnet.info/inbs/140120260914535963.pdf",
+  "atr_at_signal": 139.645,
+  "market_level_at_signal": 1.0799048557382809,
+  "state": "open",
+  "entry_date": "2026-09-15",
+  "entry_price": 2195.0,
+  "held_days": 0,
+  "last_processed": "2026-09-16",
+  "stop": 1776.07
+ },
+ {
+  "series": "DIVIDEND_HIKE",
+  "ticker": "8841.T",
+  "name": "テーオーシー",
+  "signal_date": "2026-09-16",
+  "reason": "配当予想の修正（増配）に関するお知らせ",
+  "disclosure_url": "https://webapi.yanoshin.jp/rd.php?https://www.release.tdnet.info/inbs/140120260904532169.pdf",
+  "atr_at_signal": 28.0067,
+  "market_level_at_signal": 1.0843809141088205,
+  "state": "pending_entry"
+ }
+]
