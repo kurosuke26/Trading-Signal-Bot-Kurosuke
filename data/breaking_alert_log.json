@@ -433,5 +433,15 @@
     "at_utc": "2026-09-17T22:12:20.533964+00:00",
     "category": "us_morning",
     "text": "🌅 **米国市場サマリー（前日終値比）**\n📈 NYダウ +0.61%\n📈 S&P500 +1.14%\n📈 ナスダック +1.69%"
+  },
+  {
+    "at_utc": "2026-09-18T00:17:37.375927+00:00",
+    "category": "policy",
+    "text": "📜 **日銀発表**：基準外国為替相場及び裁定外国為替相場（10月分）\nhttp://www.boj.or.jp/about/services/tame/tame_rate/kijun/kiju2610.htm"
+  },
+  {
+    "at_utc": "2026-09-18T00:17:37.375927+00:00",
+    "category": "policy",
+    "text": "📜 **日銀発表**：報告省令レート（10月分）\nhttp://www.boj.or.jp/about/services/tame/tame_rate/syorei/hou2610.htm"
   }
 ]
