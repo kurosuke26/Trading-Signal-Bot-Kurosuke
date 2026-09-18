@@ -12,7 +12,7 @@
   "entry_date": "2026-09-15",
   "entry_price": 1191.0,
   "held_days": 0,
-  "last_processed": "2026-09-17",
+  "last_processed": "2026-09-18",
   "stop": 1100.38
  },
  {
@@ -28,7 +28,7 @@
   "entry_date": "2026-09-15",
   "entry_price": 2200.0,
   "held_days": 0,
-  "last_processed": "2026-09-17",
+  "last_processed": "2026-09-18",
   "stop": 1950.94
  },
  {
@@ -44,7 +44,7 @@
   "entry_date": "2026-09-15",
   "entry_price": 2195.0,
   "held_days": 0,
-  "last_processed": "2026-09-17",
+  "last_processed": "2026-09-18",
   "stop": 1776.07
  },
  {
@@ -56,6 +56,22 @@
   "disclosure_url": "https://webapi.yanoshin.jp/rd.php?https://www.release.tdnet.info/inbs/140120260904532169.pdf",
   "atr_at_signal": 28.0067,
   "market_level_at_signal": 1.0843809141088205,
+  "state": "open",
+  "entry_date": "2026-09-17",
+  "entry_price": 1027.0,
+  "held_days": 0,
+  "last_processed": "2026-09-18",
+  "stop": 942.98
+ },
+ {
+  "series": "DIVIDEND_HIKE",
+  "ticker": "5367.T",
+  "name": "ニッカトー",
+  "signal_date": "2026-09-18",
+  "reason": "第２四半期業績予想の修正並びに通期業績予想の修正および配当予想の修正（増配）に関するお知らせ",
+  "disclosure_url": "https://webapi.yanoshin.jp/rd.php?https://www.release.tdnet.info/inbs/140120260916536942.pdf",
+  "atr_at_signal": 69.9535,
+  "market_level_at_signal": 1.1054075301902244,
   "state": "pending_entry"
  }
 ]
