@@ -13,7 +13,9 @@
   "entry_price": 1191.0,
   "held_days": 0,
   "last_processed": "2026-09-18",
-  "stop": 1100.38
+  "stop": 1100.38,
+  "last_price": 1222.0,
+  "last_price_date": "2026-09-18"
  },
  {
   "series": "DIVIDEND_HIKE",
@@ -29,7 +31,9 @@
   "entry_price": 2200.0,
   "held_days": 0,
   "last_processed": "2026-09-18",
-  "stop": 1950.94
+  "stop": 1950.94,
+  "last_price": 2016.0,
+  "last_price_date": "2026-09-18"
  },
  {
   "series": "DIVIDEND_HIKE",
@@ -45,7 +49,9 @@
   "entry_price": 2195.0,
   "held_days": 0,
   "last_processed": "2026-09-18",
-  "stop": 1776.07
+  "stop": 1776.07,
+  "last_price": 1800.0,
+  "last_price_date": "2026-09-18"
  },
  {
   "series": "DIVIDEND_HIKE",
@@ -61,7 +67,9 @@
   "entry_price": 1027.0,
   "held_days": 0,
   "last_processed": "2026-09-18",
-  "stop": 942.98
+  "stop": 942.98,
+  "last_price": 1025.0,
+  "last_price_date": "2026-09-18"
  },
  {
   "series": "DIVIDEND_HIKE",

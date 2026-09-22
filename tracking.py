@@ -538,6 +538,8 @@ def compute_performance_stats(trade_log):
 # 1銘柄＝1単元（VALUATION_LOT_SHARES株、既定100株）を買った（売った）前提で、投資元本と現在の評価額を円で出す。
 # 評価に使う株価は、その銘柄の最新の終値（p['last_price']。当日データが取れなかった銘柄は直近に取れた終値）。
 VALUATION_LOT_SHARES = env_int('VALUATION_LOT_SHARES', 100)
+# 最新の終値が取得価格の5倍超／5分の1未満なら、データ異常とみなして評価から外す（件数は表示する）
+VALUATION_PRICE_SANITY_RATIO = 5.0
 
 
 def position_pnl_yen(signal, entry_price, price, lot=VALUATION_LOT_SHARES):
@@ -548,6 +550,13 @@ def position_pnl_yen(signal, entry_price, price, lot=VALUATION_LOT_SHARES):
 
 
 def compute_valuation(trade_log, lot=VALUATION_LOT_SHARES):
+    """通常分の評価に、運用開始時（2026-08-25）の一括分の参考値（'LEGACY'）を付けて返す。"""
+    out = _valuation(trade_log, lot, legacy=False)
+    out['LEGACY'] = _valuation(trade_log, lot, legacy=True)
+    return out
+
+
+def _valuation(trade_log, lot=VALUATION_LOT_SHARES, legacy=False):
     """
     シグナル別（LONG/SHORT）と合計の、保有中の評価と決済済みの確定損益。
     立ち上げ時の一括分（LEGACY_BULK_LOAD_ENTRY_DATES）は成績集計と同じく除外する。
@@ -558,10 +567,10 @@ def compute_valuation(trade_log, lot=VALUATION_LOT_SHARES):
     latest_date = max((p.get('last_price_date') or '' for p in trade_log), default='')
     for signal in ('LONG', 'SHORT'):
         key = PRIMARY_VARIANT_KEY_BY_SIGNAL[signal]
-        v = {'open_count': 0, 'principal': 0.0, 'value': 0.0, 'unrealized': 0.0, 'stale_price_count': 0,
+        v = {'open_count': 0, 'principal': 0.0, 'value': 0.0, 'unrealized': 0.0, 'stale_price_count': 0, 'bad_price_count': 0,
              'closed_count': 0, 'realized': 0.0, 'realized_principal': 0.0}
         for p in trade_log:
-            if p.get('signal') != signal or p.get('entry_date') in LEGACY_BULK_LOAD_ENTRY_DATES:
+            if p.get('signal') != signal or ((p.get('entry_date') in LEGACY_BULK_LOAD_ENTRY_DATES) != legacy):
                 continue
             entry = p.get('entry_price')
             if not entry:
@@ -573,6 +582,9 @@ def compute_valuation(trade_log, lot=VALUATION_LOT_SHARES):
                 v['realized_principal'] += entry * lot
             elif p.get('status') == 'open':
                 price = p.get('last_price') or entry
+                if not (entry / VALUATION_PRICE_SANITY_RATIO <= price <= entry * VALUATION_PRICE_SANITY_RATIO):
+                    v['bad_price_count'] += 1  # 取得データの異常（例: 1909.T が約163億円）。評価から外す
+                    continue
                 if (p.get('last_price_date') or '') < latest_date:
                     v['stale_price_count'] += 1
                 principal, value, pnl = position_pnl_yen(signal, entry, price, lot)
@@ -587,8 +599,12 @@ def compute_valuation(trade_log, lot=VALUATION_LOT_SHARES):
             tot[k] += v[k]
         tot['open_count'] += v['open_count']
         tot['closed_count'] += v['closed_count']
+        tot['bad_price_count'] = tot.get('bad_price_count', 0) + v['bad_price_count']
         out[signal] = v
     tot['unrealized_pct'] = round(tot['unrealized'] / tot['principal'] * 100, 2) if tot['principal'] else None
+    for v in list(out.values()) + [tot]:
+        if isinstance(v, dict):
+            v['profit'] = v.get('unrealized', 0) + v.get('realized', 0)  # 利益＝含み損益＋確定損益
     out['TOTAL'] = tot
     out['price_date'] = latest_date or None
     return out

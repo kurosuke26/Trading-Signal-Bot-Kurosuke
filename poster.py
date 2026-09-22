@@ -273,10 +273,9 @@ def build_event_embeds(event_summary):
         for v in perf.values():
             fields.append({'name': v['label'],
                            'value': (f"決済済み{v['closed']}件／保有中{v['open']}件／約定待ち{v['pending_entry']}件\n"
-                                     + (f"保有中の評価（1銘柄{v.get('lot_shares', 100)}株換算）：元本 ¥{v.get('principal', 0):,} → "
-                                        f"評価額 ¥{v.get('value', 0):,}（含み損益 {v.get('unrealized', 0):+,}円／"
-                                        f"{_fmt_num(v.get('unrealized_pct'))}）\n" if v.get('principal') else '')
-                                     + (f"確定損益 {v.get('realized', 0):+,}円（{_fmt_num(v.get('realized_pct'))}）\n" if v['closed'] else '')
+                                     + (f"利益 **{v.get('unrealized', 0) + v.get('realized', 0):+,}円**（1銘柄{v.get('lot_shares', 100)}株換算）　"
+                                        f"含み {v.get('unrealized', 0):+,}円（保有{v['open']}件・元本¥{v.get('principal', 0):,}）／確定 {v.get('realized', 0):+,}円（決済{v['closed']}件）\n"
+                                        if (v.get('principal') or v['closed']) else '')
                                      + f"勝率{_fmt_num(v['win_rate_pct'], '%', False)}・ペイオフ{_fmt_num(v['payoff_ratio'], '', False)}・"
                                      f"期待値{_fmt_num(v['expectancy_pct'])}・市場平均との差{_fmt_num(v['excess_pct'])}"),
                            'inline': False})
@@ -552,24 +551,30 @@ def build_payloads(snapshot, stale, age_hours):
         return " ／ ".join(parts)
 
     def _fmt_valuation(val):
-        """保有中の評価（含み損益）と確定損益。tracking.compute_valuation の結果を整形する。"""
+        """利益をLONG・SHORT別に先頭で示し、内訳（含み損益・確定損益）を後ろに添える。"""
         if not val:
             return 'データがありません'
-        lines = []
-        for sig, label in (('LONG', 'LONG'), ('SHORT', 'SHORT')):
-            v = val.get(sig) or {}
+
+        def line(label, v):
+            if not v or not (v.get('open_count') or v.get('closed_count')):
+                return f"{label}：ポジションなし"
+            parts = []
             if v.get('open_count'):
-                lines.append(f"{label}：保有{v['open_count']}件　元本 ¥{v['principal']:,} → 評価額 ¥{v['value']:,}"
-                             f"（含み損益 {v['unrealized']:+,}円／{v['unrealized_pct']:+.2f}%）"
-                             + (f"　※{v['stale_price_count']}件は直近に取れた終値で評価" if v.get('stale_price_count') else ''))
-            else:
-                lines.append(f"{label}：保有なし")
+                parts.append(f"含み {v['unrealized']:+,}円（保有{v['open_count']}件・元本¥{v['principal']:,}）")
             if v.get('closed_count'):
-                lines.append(f"　└ 決済済み{v['closed_count']}件の確定損益 {v['realized']:+,}円（{v['realized_pct']:+.2f}%）")
+                parts.append(f"確定 {v['realized']:+,}円（決済{v['closed_count']}件）")
+            return f"{label}：**{v['profit']:+,}円**　" + "／".join(parts)
+
+        lines = [line('LONG', val.get('LONG')), line('SHORT', val.get('SHORT'))]
         t = val.get('TOTAL') or {}
-        if t.get('open_count'):
-            lines.append(f"合計：元本 ¥{t['principal']:,} → 評価額 ¥{t['value']:,}（含み損益 {t['unrealized']:+,}円／"
-                         f"{t['unrealized_pct']:+.2f}%）＋確定損益 {t['realized']:+,}円")
+        lines.append(f"合計：**{t.get('profit', 0):+,}円**"
+                     + (f"　※価格データ異常の{t['bad_price_count']}件は除外" if t.get('bad_price_count') else ''))
+        lg = val.get('LEGACY') or {}
+        lt = lg.get('TOTAL') or {}
+        if lt.get('open_count') or lt.get('closed_count'):
+            lines.append(f"（参考：運用開始時2026-08-25の一括分　LONG {(lg.get('LONG') or {}).get('profit', 0):+,}円／"
+                         f"SHORT {(lg.get('SHORT') or {}).get('profit', 0):+,}円。条件を絞る前の分のため上の成績には含めません"
+                         + (f"。価格データ異常の{lt['bad_price_count']}件は除外" if lt.get('bad_price_count') else '') + "）")
         return "\n".join(lines)[:1000]
 
     def _fmt_atr_variants(atr_variants):
@@ -621,7 +626,7 @@ def build_payloads(snapshot, stale, age_hours):
                 {'name': f'LONGのみ（{LONG_ENTRY_SCORE_THRESHOLD}点以上＋業種内モメンタム・上位{LONG_TOP_N}）', 'value': _fmt_perf_stats(performance_stats.get('long_only')), 'inline': False},
                 {'name': 'SHORTのみ（PER×PBR上位10）', 'value': _fmt_perf_stats(performance_stats.get('short_only')), 'inline': False},
                 {'name': '現在保有中（未決済）', 'value': f"{performance_stats.get('open_positions', 0)}件", 'inline': True},
-                {'name': f"💰 保有中の評価（1銘柄{(performance_stats.get('valuation') or {}).get('lot_shares', 100)}株で換算・"
+                {'name': f"💰 損益（1銘柄{(performance_stats.get('valuation') or {}).get('lot_shares', 100)}株で換算・"
                          f"{(performance_stats.get('valuation') or {}).get('price_date') or '—'}の終値）",
                  'value': _fmt_valuation(performance_stats.get('valuation')), 'inline': False},
                 {'name': '🔬 ATR倍率比較（ストップ幅、LONG+SHORT合算）',
