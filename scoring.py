@@ -151,7 +151,8 @@ def suggested_trade_levels(last_close, atr_value, atr_multiplier=1.5):
         result['initial_stop_pct'] = round((atr_value * atr_multiplier / last_close) * 100, 2)
         result['trailing_rule'] = (
             f'初期損切り：¥{stop:,.0f}（ATR×{atr_multiplier}）／'
-            f'以降は「その時点までの直近高値 − ATR×{atr_multiplier}」を目安に'
+            f'以降は毎日「その日の終値 − ATR×{atr_multiplier}」まで損切りラインを引き上げ（下げない）、終値がラインを割ったら翌朝手仕舞い。'
+            f'目安として'
             f'損切りラインを切り上げてください（シャンデリア・ストップ方式）'
         )
     else:

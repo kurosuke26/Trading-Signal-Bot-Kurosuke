@@ -284,7 +284,12 @@ def _has_open(trade_log, ticker, signal):
     の状態だけで判定する（他の倍率は比較用の並行シミュレーションであり、
     新規追跡対象に入れるかどうかの判定には使わない）。
     """
-    return any(p['ticker'] == ticker and p['signal'] == signal and p['status'] == 'open' for p in trade_log)
+    # 【2026-09-22修正】2026-08-25の立ち上げ時に無制限に一括で建てたポジション（LEGACY_BULK_LOAD_ENTRY_DATES）は
+    # 成績集計から除外しているのに、ここでは「保有中」として新規エントリーを塞いでいた。
+    # 割安株ほど一括分が残っており、スコア上位の銘柄が9/14以降ほぼ建てられなくなっていたため、判定から外す
+    # （一括分の記録自体は履歴として残し、決済判定も続ける）。
+    return any(p['ticker'] == ticker and p['signal'] == signal and p['status'] == 'open'
+               and p.get('entry_date') not in LEGACY_BULK_LOAD_ENTRY_DATES for p in trade_log)
 
 
 def _initial_stop(entry_price, atr_value, signal, multiplier):

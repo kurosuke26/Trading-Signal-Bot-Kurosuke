@@ -30,7 +30,7 @@ import sector_relative
 from scoring import score_band_label, suggested_trade_levels
 from tracking import (
     ATR_MULTIPLIER_BY_SIGNAL, ATR_MULTIPLIER_VARIANTS, _variant_key,
-    LONG_ENTRY_SCORE_THRESHOLD, LONG_TOP_N,
+    LONG_ENTRY_SCORE_THRESHOLD, LONG_TOP_N, LONG_REQUIRE_SECTOR_MOMENTUM,
 )
 from util import env_float, json_default
 
@@ -103,8 +103,13 @@ def format_stock_embed(r):
     # 【2026-09-11追加】LONGで複合スコアがLONG_ENTRY_SCORE_THRESHOLD以上＝
     # 「買いシグナル点灯（実際に仮想エントリーしてトレーリングストップをかける対象）」
     # であることを、日々のロング一覧の中でも目立つようにする。
-    is_buy_signal = r.get('signal') == 'LONG' and score is not None and score >= LONG_ENTRY_SCORE_THRESHOLD
-    title_prefix = '🎯買いシグナル点灯！ ' if is_buy_signal else ('🔥 ' if r.get('super_cheap') else '')
+    over_threshold = r.get('signal') == 'LONG' and score is not None and score >= LONG_ENTRY_SCORE_THRESHOLD
+    # 【2026-09-22修正】仮想エントリーは「75点以上」かつ「業種内モメンタム（60日リターンが同業種平均以上）」。
+    # 75点以上でも業種内モメンタムを満たさない銘柄を「実際に仮想エントリー中」と表示していたのを直す。
+    sector_ok = sector_relative.passes(r, require_momentum=LONG_REQUIRE_SECTOR_MOMENTUM)
+    is_buy_signal = over_threshold and sector_ok
+    title_prefix = ('🎯買いシグナル点灯！ ' if is_buy_signal else
+                    '⏸ ' if over_threshold else ('🔥 ' if r.get('super_cheap') else ''))
     title = f"{title_prefix}{r['ticker']}（{r.get('name')}）"
     band = score_band_label(score)
     score_str = f"{score:.1f}/100（{band}）" if score is not None else '判定不能'
@@ -147,9 +152,13 @@ def format_stock_embed(r):
     description = SIGNAL_LABEL.get(r.get('signal'), r.get('signal'))
     color = SIGNAL_COLOR.get(r.get('signal'), 0x95A5A6)
     if is_buy_signal:
-        description = (f"🎯 買いシグナル点灯（複合スコア{LONG_ENTRY_SCORE_THRESHOLD}点以上）／"
-                        f"実際に仮想エントリーしトレーリングストップを適用中")
+        description = (f"🎯 買いシグナル点灯（複合スコア{LONG_ENTRY_SCORE_THRESHOLD}点以上＋業種内モメンタム）／"
+                        f"仮想エントリーの対象（同じ銘柄を保有中の場合は重複して建てません）")
         color = 0xF1C40F  # 金色：通常のLONG（緑）と区別して目立たせる
+    elif over_threshold:
+        description = (f"⏸ 複合スコア{LONG_ENTRY_SCORE_THRESHOLD}点以上ですが、60日リターンが同業種平均を下回るため"
+                       f"仮想エントリーの対象外（業種内モメンタム待ち）")
+        color = 0xE67E22
 
     return {
         'title': title,
@@ -188,7 +197,10 @@ def build_long_payload(long_results, total_long, stale_note=''):
     戻り値: (payload, csv_bytes or None)
     """
     shown = [r for r in long_results if _score_of(r) >= LONG_DISPLAY_MIN_SCORE]
-    buy = [r for r in shown if _score_of(r) >= LONG_ENTRY_SCORE_THRESHOLD]
+    over = [r for r in shown if _score_of(r) >= LONG_ENTRY_SCORE_THRESHOLD]
+    # 75点以上でも業種内モメンタムを満たさない銘柄は、線より上に「⏸対象外」として並べる（スコア順は維持）
+    buy = list(over)
+    n_entry = sum(1 for r in over if sector_relative.passes(r, require_momentum=LONG_REQUIRE_SECTOR_MOMENTUM))
     watch = [r for r in shown if _score_of(r) < LONG_ENTRY_SCORE_THRESHOLD]
     lo, hi = f'{LONG_DISPLAY_MIN_SCORE:g}', f'{LONG_ENTRY_SCORE_THRESHOLD:g}'
     if not shown:
@@ -203,14 +215,16 @@ def build_long_payload(long_results, total_long, stale_note=''):
         embeds += [format_stock_embed(r) for r in watch[:10 - len(embeds)]]
     shown_in_embeds = min(len(buy), 10) + (min(len(watch), max(0, 10 - min(len(buy), 10) - 1)) if watch and len(buy) < 9 else 0)
     content = (f"🟢 Kurosuke割安チェッカー - ロングシグナル（複合スコア{lo}点以上{len(shown)}銘柄をスコアの高い順に表示）\n"
-               f"🎯 {hi}点以上（仮想エントリー対象）：{len(buy)}銘柄 ／ 👀 {lo}〜{hi}点未満（参考）：{len(watch)}銘柄")
+               f"🎯 {hi}点以上：{len(buy)}銘柄（うち業種内モメンタムも満たす仮想エントリー対象 {n_entry}銘柄）"
+               f" ／ 👀 {lo}〜{hi}点未満（参考）：{len(watch)}銘柄")
     if shown_in_embeds < len(shown):
         content += f"\n※表示しきれない{len(shown) - shown_in_embeds}銘柄を含む全件は添付CSVを参照（band列で区分）"
     if stale_note:
         content = stale_note + ' ' + content
     csv_bytes = None
     if shown_in_embeds < len(shown):
-        rows = [dict(r, band=f'{hi}点以上（仮想エントリー対象）') for r in buy] + \
+        rows = [dict(r, band=(f'{hi}点以上（仮想エントリー対象）' if sector_relative.passes(r, require_momentum=LONG_REQUIRE_SECTOR_MOMENTUM)
+                              else f'{hi}点以上（業種内モメンタム待ち・対象外）')) for r in buy] + \
                [dict(r, band=f'{lo}〜{hi}点未満（参考）') for r in watch]
         csv_bytes = build_csv_bytes(rows, LONG_CSV_COLUMNS)
     return {'content': content[:2000], 'embeds': embeds[:10]}, csv_bytes
@@ -440,7 +454,8 @@ def build_payloads(snapshot, stale, age_hours):
     # Claude outputs/2026-09-11-long-entry-score-gate.md参照）。
     # 【2026-09-16変更】複合スコア70点以上をスコアの高い順に並べ、75点（仮想エントリー対象）との境に線を入れる
     long_payload, long_csv = build_long_payload(long_results, total_long, stale_note)
-    long_buy_signals = [r for r in long_results if _score_of(r) >= LONG_ENTRY_SCORE_THRESHOLD]
+    long_buy_signals = [r for r in long_results if _score_of(r) >= LONG_ENTRY_SCORE_THRESHOLD
+                        and sector_relative.passes(r, require_momentum=LONG_REQUIRE_SECTOR_MOMENTUM)]
     event_embeds = build_event_embeds(snapshot.get('event_strategies'))
 
     # ---- SHORT ----
@@ -460,6 +475,12 @@ def build_payloads(snapshot, stale, age_hours):
     if stale_note:
         warning_lines.append(f"【データ鮮度】{stale_note}")
     total_failed = len(fund_failed) + len(hist_failed)
+    # 【2026-09-22修正】株価の上限フィルター（MAX_SHARE_PRICE）による除外はエラーではないので分けて表示する
+    price_excluded = [(t, e) for t, e in fund_failed if '以上のため除外' in str(e)]
+    fund_failed = [(t, e) for t, e in fund_failed if '以上のため除外' not in str(e)]
+    if price_excluded:
+        warning_lines.append(f"【株価の上限フィルターで除外】{len(price_excluded)}銘柄（{price_excluded[0][1]}）："
+                             + '、'.join(t for t, _ in price_excluded[:20]) + ('…' if len(price_excluded) > 20 else ''))
     if fund_failed:
         sample = fund_failed[:15]
         warning_lines.append(f"【データ取得エラー（ファンダメンタルズ）】{len(fund_failed)}件")
@@ -504,7 +525,7 @@ def build_payloads(snapshot, stale, age_hours):
             {'name': '分析成功', 'value': f"{analyzed}", 'inline': True},
             {'name': '取得失敗', 'value': f"{total_failed}", 'inline': True},
             {'name': 'ロングシグナル', 'value': f"{total_long}銘柄", 'inline': True},
-            {'name': f'うち買いシグナル点灯(score≧{LONG_ENTRY_SCORE_THRESHOLD})',
+            {'name': f'うち買いシグナル点灯(≧{LONG_ENTRY_SCORE_THRESHOLD}点＋業種内モメンタム)',
              'value': f"{len(long_buy_signals)}銘柄", 'inline': True},
             {'name': 'ショートシグナル', 'value': f"{total_short}銘柄", 'inline': True},
             {'name': 'ニュートラル', 'value': f"{total_neutral}銘柄", 'inline': True},
@@ -559,12 +580,11 @@ def build_payloads(snapshot, stale, age_hours):
         backtest_embed = {
             'title': '🎯 シグナル成績（仮想シミュレーション）',
             'description': (
-                '毎日のLONG／SHORTシグナルのうち「自信度が高い」上位10銘柄（LONGは複合'
-                f'スコア上位、SHORTはPER×PBR上位。それぞれ別枠）にエントリーし、LONGはATR×'
+                f'LONGは複合スコア{LONG_ENTRY_SCORE_THRESHOLD}点以上かつ60日リターンが同業種平均以上の上位{LONG_TOP_N}銘柄、'
+                'SHORTはPER×PBR上位10銘柄に毎日エントリーし、LONGはATR×'
                 f'{ATR_MULTIPLIER_BY_SIGNAL["LONG"]}、SHORTはATR×{ATR_MULTIPLIER_BY_SIGNAL["SHORT"]}の'
-                'トレーリングストップルールで決済していたと仮定した場合の成績です'
-                '（バックテストで倍率がシグナルごとに異なる方が期待値が高いことを'
-                '確認し、2026-09-11に変更）。'
+                'トレーリングストップで決済していたと仮定した場合の成績です'
+                '（2026-09-16に先読みなしの検証に基づき条件を更新。立ち上げ時2026-08-25の一括分は集計対象外）。'
                 '実際の取引成績ではなく、シグナルそのものの参考成績である点にご注意ください。'
                 '\n下部の「ATR倍率比較」は、同じエントリーに対してストップ幅を変えていたら'
                 'どうなっていたかの比較です（各倍率が追加された時期より前に開始した'
@@ -573,8 +593,8 @@ def build_payloads(snapshot, stale, age_hours):
             'color': 0x9B59B6,
             'fields': [
                 {'name': 'LONG＋SHORT合算', 'value': _fmt_perf_stats(performance_stats.get('long_short')), 'inline': False},
-                {'name': 'LONGのみ（上位10銘柄）', 'value': _fmt_perf_stats(performance_stats.get('long_only')), 'inline': False},
-                {'name': 'SHORTのみ（上位10銘柄）', 'value': _fmt_perf_stats(performance_stats.get('short_only')), 'inline': False},
+                {'name': f'LONGのみ（{LONG_ENTRY_SCORE_THRESHOLD}点以上＋業種内モメンタム・上位{LONG_TOP_N}）', 'value': _fmt_perf_stats(performance_stats.get('long_only')), 'inline': False},
+                {'name': 'SHORTのみ（PER×PBR上位10）', 'value': _fmt_perf_stats(performance_stats.get('short_only')), 'inline': False},
                 {'name': '現在保有中（未決済）', 'value': f"{performance_stats.get('open_positions', 0)}件", 'inline': True},
                 {'name': '🔬 ATR倍率比較（ストップ幅、LONG+SHORT合算）',
                  'value': _fmt_atr_variants(performance_stats.get('atr_variants')), 'inline': False},
