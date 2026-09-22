@@ -375,6 +375,8 @@ def open_new_positions(trade_log, results, today_str, top_n=TOP_N_TRACKED):
             'sector_code': (r.get('fundamental_snapshot') or {}).get('sector_code'),
             'sector_name': (r.get('fundamental_snapshot') or {}).get('sector_name'),
             'status': 'open',  # プライマリ（シグナル別。ATR_MULTIPLIER_BY_SIGNAL）が決済されるまで'open'
+            'last_price': round(entry_price, 2),
+            'last_price_date': today_str,
             'variants': variants,
         })
         opened += 1
@@ -406,6 +408,9 @@ def update_open_positions(trade_log, results, today_str):
         raw_atr = (r.get('tech_snapshot') or {}).get('atr') if r else None
         if r is None or not current_price or current_price <= 0:
             continue  # 今回データ欠損。全バリエーションとも次回まで持ち越す
+        # 【2026-09-22追加】含み損益の評価用に、最新の終値を残す（compute_valuation 参照）
+        p['last_price'] = round(current_price, 2)
+        p['last_price_date'] = today_str
 
         for m in ATR_MULTIPLIER_VARIANTS:
             key = _variant_key(m)
@@ -526,4 +531,65 @@ def compute_performance_stats(trade_log):
         'open_positions': open_count,
         'atr_variants': atr_variants,
         'excluded_legacy_bulk_load_closed_count': excluded_closed_count,
+        'valuation': compute_valuation(trade_log),
     }
+
+# 【2026-09-22追加】保有中ポジションの評価（含み損益）。決済を待たずに今の損益が分かるよう、
+# 1銘柄＝1単元（VALUATION_LOT_SHARES株、既定100株）を買った（売った）前提で、投資元本と現在の評価額を円で出す。
+# 評価に使う株価は、その銘柄の最新の終値（p['last_price']。当日データが取れなかった銘柄は直近に取れた終値）。
+VALUATION_LOT_SHARES = env_int('VALUATION_LOT_SHARES', 100)
+
+
+def position_pnl_yen(signal, entry_price, price, lot=VALUATION_LOT_SHARES):
+    """(投資元本, 評価額, 損益) を円で返す。SHORTは売った値段からの下落分が利益。"""
+    principal = entry_price * lot
+    pnl = (price - entry_price) * lot if signal == 'LONG' else (entry_price - price) * lot
+    return principal, principal + pnl, pnl
+
+
+def compute_valuation(trade_log, lot=VALUATION_LOT_SHARES):
+    """
+    シグナル別（LONG/SHORT）と合計の、保有中の評価と決済済みの確定損益。
+    立ち上げ時の一括分（LEGACY_BULK_LOAD_ENTRY_DATES）は成績集計と同じく除外する。
+    """
+    out = {'lot_shares': lot}
+    tot = {'open_count': 0, 'principal': 0, 'value': 0, 'unrealized': 0, 'closed_count': 0,
+           'realized': 0, 'realized_principal': 0}
+    latest_date = max((p.get('last_price_date') or '' for p in trade_log), default='')
+    for signal in ('LONG', 'SHORT'):
+        key = PRIMARY_VARIANT_KEY_BY_SIGNAL[signal]
+        v = {'open_count': 0, 'principal': 0.0, 'value': 0.0, 'unrealized': 0.0, 'stale_price_count': 0,
+             'closed_count': 0, 'realized': 0.0, 'realized_principal': 0.0}
+        for p in trade_log:
+            if p.get('signal') != signal or p.get('entry_date') in LEGACY_BULK_LOAD_ENTRY_DATES:
+                continue
+            entry = p.get('entry_price')
+            if not entry:
+                continue
+            primary = (p.get('variants') or {}).get(key) or {}
+            if primary.get('status') == 'closed' and primary.get('return_pct') is not None:
+                v['closed_count'] += 1
+                v['realized'] += entry * lot * primary['return_pct'] / 100
+                v['realized_principal'] += entry * lot
+            elif p.get('status') == 'open':
+                price = p.get('last_price') or entry
+                if (p.get('last_price_date') or '') < latest_date:
+                    v['stale_price_count'] += 1
+                principal, value, pnl = position_pnl_yen(signal, entry, price, lot)
+                v['open_count'] += 1
+                v['principal'] += principal
+                v['value'] += value
+                v['unrealized'] += pnl
+        v['unrealized_pct'] = round(v['unrealized'] / v['principal'] * 100, 2) if v['principal'] else None
+        v['realized_pct'] = round(v['realized'] / v['realized_principal'] * 100, 2) if v['realized_principal'] else None
+        for k in ('principal', 'value', 'unrealized', 'realized', 'realized_principal'):
+            v[k] = round(v[k])
+            tot[k] += v[k]
+        tot['open_count'] += v['open_count']
+        tot['closed_count'] += v['closed_count']
+        out[signal] = v
+    tot['unrealized_pct'] = round(tot['unrealized'] / tot['principal'] * 100, 2) if tot['principal'] else None
+    out['TOTAL'] = tot
+    out['price_date'] = latest_date or None
+    return out
+

@@ -60,6 +60,7 @@ CRASH_INDEX_DD = -0.10
 CRASH_STOCK_DD = -0.20
 CRASH_TP_ATR, CRASH_SL_ATR, CRASH_MAX_DAYS = 4.0, 2.0, 20
 CRASH_COOLDOWN_DAYS = 20
+VALUATION_LOT_SHARES = int(os.getenv('VALUATION_LOT_SHARES', '100'))  # 含み損益の円換算：1銘柄あたりの株数
 COST_PCT = 0.1
 FALLBACK_ATR_PCT = 0.03
 
@@ -265,6 +266,8 @@ def update_position(p, df, atr_now, index_df):
             elif p['held_days'] >= CRASH_MAX_DAYS:
                 _close(p, d, c, f'最長{CRASH_MAX_DAYS}営業日（終値）', index_df)
         p['last_processed'] = d
+        if p['state'] != 'closed':
+            p['last_price'], p['last_price_date'] = round(c, 2), d  # 含み損益の評価用（最新の終値）
 
 
 def _close(p, date, price, reason, index_df):
@@ -389,6 +392,13 @@ def performance(log):
         wins = [r for r in rets if r > 0]
         losses = [r for r in rets if r <= 0]
         ex = [p['excess_pct'] for p in closed if p.get('excess_pct') is not None]
+        # 【2026-09-22追加】保有中の評価（1銘柄100株換算）と、決済済みの確定損益
+        lot = VALUATION_LOT_SHARES
+        opens = [p for p in ps if p['state'] in ('open', 'exit_next_open') and p.get('entry_price')]
+        principal = sum(p['entry_price'] * lot for p in opens)
+        value = sum((p.get('last_price') or p['entry_price']) * lot for p in opens)
+        realized = sum(p['entry_price'] * lot * p['return_pct'] / 100 for p in closed if p.get('return_pct') is not None)
+        realized_principal = sum(p['entry_price'] * lot for p in closed if p.get('return_pct') is not None)
         out[series] = {
             'label': SERIES_LABEL[series], 'closed': len(closed),
             'open': sum(1 for p in ps if p['state'] in ('open', 'exit_next_open')),
@@ -397,5 +407,10 @@ def performance(log):
             'payoff_ratio': round((sum(wins) / len(wins)) / abs(sum(losses) / len(losses)), 2) if wins and losses and sum(losses) else None,
             'expectancy_pct': round(sum(rets) / len(rets), 2) if rets else None,
             'excess_pct': round(sum(ex) / len(ex), 2) if ex else None,
+            'lot_shares': lot,
+            'principal': round(principal), 'value': round(value), 'unrealized': round(value - principal),
+            'unrealized_pct': round((value - principal) / principal * 100, 2) if principal else None,
+            'realized': round(realized),
+            'realized_pct': round(realized / realized_principal * 100, 2) if realized_principal else None,
         }
     return out
