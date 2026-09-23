@@ -87,7 +87,9 @@ discord-ai-team側の_format_candidate）は、本変更時点ではまだATR×1
 import json
 import os
 
-from util import env_int, json_default
+import numpy as np
+
+from util import env_int, json_default, price_adjust_factor
 
 TRADE_LOG_PATH = os.getenv('TRADE_LOG_PATH') or 'data/trade_log.json'
 FALLBACK_STOP_PCT = 0.03  # ATRが算出できない銘柄向けの簡易フォールバック（±3%相当）
@@ -162,6 +164,10 @@ ATR_MULTIPLIER_VARIANTS = [1.5, 1.8, 2.0, 2.2, 2.5, 2.7, 3.0, 3.5, 4.0, 4.5, 5.0
 # に変わり、「勝率0%」がこの汚染の産物だったことが確認できた。
 # trade_log.json自体は履歴として保持し、削除はしない。集計関数側で除外する。
 LEGACY_BULK_LOAD_ENTRY_DATES = {'2026-08-25'}
+
+# 【2026-09-23追加】株価がこの営業日数ぶん取れないままなら、上場廃止（TOB・経営統合など）とみなして
+# 最後に取れた終値で決済する（_close_if_delisted）。数日の欠損は通信・銘柄側の一時的な事情もあるため待つ。
+DELISTED_MISSING_BDAYS = env_int('DELISTED_MISSING_BDAYS', 10)
 
 
 def _variant_key(multiplier):
@@ -383,7 +389,76 @@ def open_new_positions(trade_log, results, today_str, top_n=TOP_N_TRACKED):
     return opened
 
 
-def update_open_positions(trade_log, results, today_str):
+def _close_on(hist, date_str):
+    """日足データフレームから、指定日の終値を取り出す（無ければNone）。"""
+    if hist is None or getattr(hist, 'empty', True) or 'Close' not in hist:
+        return None
+    try:
+        s = hist['Close']
+        idx = s.index.strftime('%Y-%m-%d')
+        hit = s[idx == date_str]
+        if len(hit) == 0:
+            return None
+        v = float(hit.iloc[-1])
+        return v if v == v and v > 0 else None
+    except (AttributeError, KeyError, TypeError, ValueError):
+        return None
+
+
+def _business_days_between(a, b):
+    """営業日数（土日のみ除外。祝日は考慮しない＝多少甘めに数える）。"""
+    try:
+        return int(np.busday_count(a, b))
+    except (TypeError, ValueError):
+        return 0
+
+
+def _close_if_delisted(p, today_str, missing_days=DELISTED_MISSING_BDAYS):
+    """
+    【2026-09-23追加】株価が missing_days 営業日ぶん取れないままの銘柄は、上場廃止とみなして
+    最後に取れた終値で決済する。決済理由は 'delisted' として記録に残す（普通の決済と区別できるように）。
+    """
+    last_date, last_price = p.get('last_price_date'), p.get('last_price')
+    if not last_date or not last_price or _business_days_between(last_date, today_str) < missing_days:
+        return False
+    entry = p.get('entry_price')
+    if not entry:
+        return False
+    ret = ((last_price - entry) if p['signal'] == 'LONG' else (entry - last_price)) / entry * 100
+    for v in (p.get('variants') or {}).values():
+        if v.get('status') == 'open':
+            v.update(status='closed', close_date=last_date, close_price=round(last_price, 2),
+                     return_pct=round(ret, 2), close_reason='delisted')
+    p['status'] = 'closed'
+    p['delisted'] = {'detected': today_str, 'last_price_date': last_date}
+    return True
+
+
+def apply_split_adjustment(p, hist, today_str):
+    """
+    【2026-09-23追加】分割が起きたポジションの記録を、今の株価と同じ水準に揃える。
+
+    エントリー日の終値（記録時の entry_price と同じもの）が、最新データでいくらになっているかを見て
+    倍率を求め、取得価格・ATR・前回終値・建玉中のストップをまとめて掛け直す。決済済みのバリエーションは
+    当時の水準どうしで完結しているため触らない。調整した履歴は 'adjustments' に残す。
+    """
+    close_at_entry = _close_on(hist, p.get('entry_date'))
+    f = price_adjust_factor(p.get('entry_price'), close_at_entry)
+    if f is None:
+        return None
+    p['entry_price'] = round(p['entry_price'] * f, 2)
+    if p.get('atr_at_entry'):
+        p['atr_at_entry'] = p['atr_at_entry'] * f
+    if p.get('last_price'):
+        p['last_price'] = round(p['last_price'] * f, 2)
+    for v in (p.get('variants') or {}).values():
+        if v.get('status') == 'open' and v.get('stop') is not None:
+            v['stop'] = round(v['stop'] * f, 2)
+    p.setdefault('adjustments', []).append({'date': today_str, 'factor': round(f, 6)})
+    return f
+
+
+def update_open_positions(trade_log, results, today_str, histories=None):
     """
     建玉中の全ポジションについて、ATR_MULTIPLIER_VARIANTSの倍率ごとに、今回取得
     できた最新価格・ATRでトレーリングストップを更新し、抵触していれば決済
@@ -407,7 +482,22 @@ def update_open_positions(trade_log, results, today_str):
         current_price = r.get('current_price') if r else None
         raw_atr = (r.get('tech_snapshot') or {}).get('atr') if r else None
         if r is None or not current_price or current_price <= 0:
-            continue  # 今回データ欠損。全バリエーションとも次回まで持ち越す
+            # 今回データ欠損。ふつうは次回まで持ち越すが、長く続く場合は上場廃止とみなして
+            # 最後に取れた終値で決済する（TOB・経営統合などで消えた銘柄を保有中のまま残さない）
+            if _close_if_delisted(p, today_str):
+                closed_primary += 1
+            continue
+        # 【2026-09-23追加】分割があった銘柄は、記録側（取得価格・ストップ）を今の株価水準に揃えてから判定する
+        if histories is not None:
+            apply_split_adjustment(p, histories.get(p['ticker']), today_str)
+        # 【2026-09-23追加】分割でも説明できないほど取得価格とかけ離れた株価は、配信データの異常とみなして
+        # その回の判定を見送る（例：1909.Tが約163億円で配信され、ショートが即決済されるのを防ぐ）
+        entry_price_now = p.get('entry_price')
+        if entry_price_now and not (entry_price_now / VALUATION_PRICE_SANITY_RATIO
+                                    <= current_price <= entry_price_now * VALUATION_PRICE_SANITY_RATIO):
+            p['price_anomaly'] = {'date': today_str, 'price': round(current_price, 2)}
+            continue
+        p.pop('price_anomaly', None)
         # 【2026-09-22追加】含み損益の評価用に、最新の終値を残す（compute_valuation 参照）
         p['last_price'] = round(current_price, 2)
         p['last_price_date'] = today_str
@@ -487,7 +577,7 @@ def compute_performance_stats(trade_log):
     勝率・ペイオフレシオを算出する。
 
     - 'long_short' / 'long_only' / 'short_only'：プライマリ（シグナル別。
-      ATR_MULTIPLIER_BY_SIGNAL＝LONG5.0倍／SHORT1.8倍）のトレーリングストップ
+      ATR_MULTIPLIER_BY_SIGNAL＝LONG3.0倍／SHORT1.8倍）のトレーリングストップ
       での決済結果を「LONG＋SHORT合算」「LONGのみ」「SHORTのみ」の3系統で
       集計したもの。合算はLONG側のプライマリ決済とSHORT側のプライマリ決済を
       単純に足し合わせる（倍率が異なる決済同士を混ぜる形になる点に注意）。

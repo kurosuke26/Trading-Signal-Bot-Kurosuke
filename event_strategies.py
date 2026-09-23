@@ -44,6 +44,8 @@ import numpy as np
 import pandas as pd
 import requests
 
+from util import price_adjust_factor
+
 JST = timezone(timedelta(hours=9))
 EVENT_TRADE_LOG_PATH = os.getenv('EVENT_TRADE_LOG_PATH') or 'data/event_trade_log.json'
 EVENT_STATE_PATH = os.getenv('EVENT_STATE_PATH') or 'data/event_state.json'
@@ -220,6 +222,27 @@ def _level_on_or_before(index_df, date):
     return float(sub['level'].iloc[-1]) if len(sub) else None
 
 
+def _apply_split_adjustment(p, bars):
+    """
+    【2026-09-23追加】分割があった銘柄は、記録した取得価格・ストップを今の株価水準に揃える。
+    株価は分割調整済み（auto_adjust=True）で取得しているため、エントリー日の始値が最新データで
+    いくらになっているかを見れば倍率が分かる（util.price_adjust_factor）。
+    """
+    if p.get('state') in (None, 'pending_entry', 'closed') or not p.get('entry_price'):
+        return
+    same_day = [b for b in bars if b[0] == p['entry_date']]
+    f = price_adjust_factor(p['entry_price'], same_day[0][1] if same_day else None)
+    if f is None:
+        return
+    p['entry_price'] = round(p['entry_price'] * f, 2)
+    for k in ('stop', 'take_profit', 'last_price'):
+        if p.get(k):
+            p[k] = round(p[k] * f, 2)
+    if p.get('atr_at_signal'):
+        p['atr_at_signal'] = p['atr_at_signal'] * f
+    p.setdefault('adjustments', []).append(round(f, 6))
+
+
 def update_position(p, df, atr_now, index_df):
     """
     1ポジションを、まだ処理していない日足で進める（何度呼んでも同じ結果＝冪等）。
@@ -228,6 +251,7 @@ def update_position(p, df, atr_now, index_df):
     bars = [b for b in _bars(df) if b[0] > p['signal_date']]
     if not bars:
         return
+    _apply_split_adjustment(p, bars)
     if p['state'] == 'pending_entry':
         d, o = bars[0][0], bars[0][1]
         if not o > 0:

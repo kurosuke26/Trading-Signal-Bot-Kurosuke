@@ -68,6 +68,34 @@ def json_default(obj):
     return str(obj)
 
 
+# ---------------------------------------------------------------------------
+# 株式分割への対応（2026-09-23追加）
+# ---------------------------------------------------------------------------
+# 株価は yfinance の auto_adjust=True（分割・配当調整済み）で取得しており、分割が起きると
+# 過去の株価が遡って調整される。一方、記録済みの取得価格やストップは分割前の水準のままなので、
+# 放置すると「1:2分割で株価が半分になった＝50%下落」と誤認する（ロングは即ストップ、
+# ショートは含み益が倍に見える）。そこで、記録した当時の株価と、同じ日付の今回の株価を
+# 比べて倍率を求め、記録側を同じ水準に揃える。
+PRICE_ADJUST_TOLERANCE = 0.005      # 同じ日付どうしの比較なので、0.5%以上ずれていれば調整とみなす（分割・配当落ち）
+PRICE_ADJUST_FACTOR_MIN = 0.05      # 1:20分割相当まで
+PRICE_ADJUST_FACTOR_MAX = 20.0      # 20:1併合相当まで。これを外れる倍率はデータ異常として無視する
+
+
+def price_adjust_factor(recorded_price, current_series_price):
+    """
+    記録した株価と、同じ日付の最新データの株価から調整倍率を返す（調整不要ならNone）。
+    データ異常（例：1909.Tが約163億円で配信された）に引きずられないよう、常識的な範囲外はNoneにする。
+    """
+    if not recorded_price or not current_series_price or recorded_price <= 0 or current_series_price <= 0:
+        return None
+    f = current_series_price / recorded_price
+    if abs(f - 1) <= PRICE_ADJUST_TOLERANCE:
+        return None
+    if not PRICE_ADJUST_FACTOR_MIN <= f <= PRICE_ADJUST_FACTOR_MAX:
+        return None
+    return f
+
+
 def pace_to_target(index, total, phase_start_time, target_seconds,
                     now_fn=time.time, sleep_fn=time.sleep):
     """

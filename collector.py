@@ -762,7 +762,7 @@ def collect():
         print("\n--- 仮想ポジション追跡（勝率・ペイオフレシオ集計用、実際の取引ではありません） ---")
         today_str = started_at_utc.strftime('%Y-%m-%d')
         trade_log = load_trade_log()
-        closed_n = update_open_positions(trade_log, results, today_str)
+        closed_n = update_open_positions(trade_log, results, today_str, histories)
         opened_n = open_new_positions(trade_log, results, today_str)
         save_trade_log(trade_log)
         performance_stats = compute_performance_stats(trade_log)
