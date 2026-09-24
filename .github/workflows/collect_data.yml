@@ -52,6 +52,18 @@ jobs:
         TIME_BUDGET_MINUTES: ${{ github.event.inputs.time_budget_minutes || '230' }}
       run: python collector.py
 
+    # 【2026-09-24追加】500万円スタートの資金台帳（capital_tracker.py）を日次で更新する。
+    # data/trade_log.json は本番実行（MAX_TICKERS未指定）時のみ生成されるため、テスト実行では
+    # スキップする（trade_log.json自体のコミット条件と同じ判断）。
+    - name: Run capital tracker
+      if: always()
+      run: |
+        if [ -f data/trade_log.json ]; then
+          python capital_tracker.py
+        else
+          echo "data/trade_log.json が無いため capital_tracker.py をスキップします"
+        fi
+
     - name: Commit and push snapshot
       if: always()  # 途中で時間予算超過により打ち切られた場合でも、そこまでの結果は保存する
       run: |
@@ -68,7 +80,8 @@ jobs:
           git add data/trade_log.json
         fi
         # 【2026-09-16追加】別枠のイベント型仮想売買（event_strategies.py）の記録と状態
-        for f in data/event_trade_log.json data/event_state.json; do
+        # 【2026-09-24追加】500万円スタートの資金台帳（capital_tracker.py）
+        for f in data/event_trade_log.json data/event_state.json data/capital_ledger.json; do
           if [ -f "$f" ]; then
             git add "$f"
           fi
