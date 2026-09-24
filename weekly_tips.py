@@ -40,10 +40,20 @@ from datetime import datetime, timedelta, timezone
 import yfinance as yf
 
 import poster
+from theme_news import fetch_feed_entries
 from tracking import load_trade_log, compute_performance_stats
 
 SNAPSHOT_PATH = os.getenv('SCAN_OUTPUT_PATH') or 'data/latest_scan.json'
 BREAKING_LOG_PATH = os.getenv('BREAKING_ALERT_LOG_PATH') or 'data/breaking_alert_log.json'
+
+# 【2026-09-24追加】サロン（kurosuke式資産運用キャンプ）メンバー向けに、個別株の
+# 売買シグナルだけでなく「相場の大局観・広い経済ニュース」も流してほしいという要望。
+# discord-ai-team側のconfig/news_sources.yamlで生存確認済みの一般経済ニュースフィードを
+# 流用する（theme_news.fetch_feed_entries()を再利用、判定ロジックの二重実装はしない）。
+WEEKLY_NEWS_FEEDS = [
+    {'source': 'Yahoo!ニュース 経済', 'url': 'https://news.yahoo.co.jp/rss/topics/business.xml'},
+]
+WEEKLY_NEWS_MAX_ITEMS = 5
 
 NIKKEI_TICKER = '^N225'
 # TOPIX指数そのもの(998405.T)が取得できない環境向けに、連動ETF(1306.T)へ
@@ -301,6 +311,7 @@ def build_breaking_recap_text():
         'usdjpy_rapid': '為替急変動', 'usdjpy_daily': '為替（本日大幅変動）',
         'nikkei_rapid': '日経急変動', 'nikkei_daily': '日経（本日大幅変動）',
         'policy': '日銀/FRB発表', 'us_morning': '米国市場サマリー',
+        'calendar': '今日の予定', 'vix': 'VIX（恐怖指数）',
     }
     counts = {}
     for e in recent:
@@ -310,14 +321,45 @@ def build_breaking_recap_text():
     summary_line = '、'.join(f'{label}{n}件' for label, n in counts.items())
     lines = [f'今週の速報は合計{len(recent)}件（{summary_line}）でした。']
 
-    # 為替・日経の急変動系だけ、直近3件の見出しを短く添える（政策発表・朝の市場サマリーは
+    # 為替・日経の急変動系とVIXだけ、直近3件の見出しを短く添える（政策発表・朝の市場サマリーは
     # 件数が把握できれば十分なため、本文の再掲はしない）
-    highlight_categories = {'usdjpy_rapid', 'usdjpy_daily', 'nikkei_rapid', 'nikkei_daily'}
+    highlight_categories = {'usdjpy_rapid', 'usdjpy_daily', 'nikkei_rapid', 'nikkei_daily', 'vix'}
     highlights = [e for e in recent if e.get('category') in highlight_categories][-3:]
     for e in highlights:
         first_line = e.get('text', '').split('\n')[0]
         lines.append(f'・{first_line}')
 
+    return "\n".join(lines)
+
+
+def build_weekly_news_text():
+    """
+    サロンメンバー向けの「今週の経済ニュース」。個別銘柄のシグナルとは別に、
+    一般的な経済ニュースの見出し・リンクをそのまま列挙する（当システムによる
+    要約・論評はしない。「出典が確認できない情報は載せない」方針に沿い、
+    見出し自体を一次情報として扱う）。直近7日分・重複タイトル除去・最大
+    WEEKLY_NEWS_MAX_ITEMS件。公開日が取れない記事も「取得できた時点で新着」と
+    みなして対象に含める（取れないことを理由に有用な見出しを落とさない）。
+    """
+    cutoff = (datetime.now(timezone.utc) - timedelta(days=7)).date().isoformat()
+    seen_titles = set()
+    items = []
+    for feed in WEEKLY_NEWS_FEEDS:
+        for entry in fetch_feed_entries(feed):
+            title = entry.get('title')
+            if not title or title in seen_titles:
+                continue
+            published = entry.get('published_date')
+            if published and published < cutoff:
+                continue
+            seen_titles.add(title)
+            items.append(entry)
+
+    if not items:
+        return '今週は経済ニュースの取得に失敗しました（フィード側の一時的な問題の可能性があります）。'
+
+    lines = [f"・[{e['title']}]({e['link']})" if e.get('link') else f"・{e['title']}"
+             for e in items[:WEEKLY_NEWS_MAX_ITEMS]]
     return "\n".join(lines)
 
 
@@ -333,6 +375,7 @@ def build_payload():
     snapshot = load_latest_snapshot()
     embeds = [
         {'title': '📰 今週の市場サマリー', 'description': build_market_narrative_text(nikkei_change, topix_change, snapshot), 'color': 0x2ECC71},
+        {'title': '🌏 今週の経済ニュース', 'description': build_weekly_news_text(), 'color': 0x1ABC9C},
         {'title': '⚡ 今週あった速報', 'description': build_breaking_recap_text(), 'color': 0xE67E22},
         {'title': '👀 直近の注目シグナル', 'description': build_signal_highlight_text(snapshot), 'color': 0x3498DB},
         {'title': '🎯 シグナル成績（累計）', 'description': build_performance_recap_text(), 'color': 0x9B59B6},
