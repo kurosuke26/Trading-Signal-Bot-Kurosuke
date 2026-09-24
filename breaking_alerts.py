@@ -4,7 +4,7 @@
 breaking_alerts.py — 「速報」チャンネル向けの急変動アラート（15分おきに実行する想定）
 
 collector.py/poster.py（1日1回、朝のシグナル投稿）とは別の、日中ずっと動く軽量バッチ。
-以下9種類を「速報」チャンネルにのみ投稿する。
+以下10種類を「速報」チャンネル（10.は別チャンネルも可）に投稿する。
 
   1. 為替（USD/JPY）の急変動：直近チェック（約15分前）比、および本日(JST)の
      累計変化率がしきい値を超えたら投稿。二重通知を防ぐためクールダウンあり。
@@ -23,6 +23,8 @@ collector.py/poster.py（1日1回、朝のシグナル投稿）とは別の、�
      TOPIX・グロース250（後の2つは連動ETFで代用）。東証の営業日のみ。
   9. 【2026-09-24追加・初心者向け】金融庁の新着のうち、NISA・投資詐欺の注意喚起・
      金融経済教育など個人投資家に関係が深いものだけを投稿。
+ 10. 【2026-09-24追加】月末の最後の5日間、会員提出フォーム（Googleフォーム）の案内を
+     1日1回（JST12時台）投稿。URLはSecretsのMEMBER_FORM_URLで渡し、未設定なら何もしない。
   ※国内CPI・GDP速報・日銀短観は、公表予定日を economic_calendar.json に登録して
     5.の「今日の予定」で知らせる（統計局・内閣府にRSSが無いため）。
 
@@ -39,8 +41,9 @@ collector.py/poster.py（1日1回、朝のシグナル投稿）とは別の、�
 import json
 import os
 import sys
-from datetime import datetime, timezone, timedelta
+from datetime import date, datetime, timezone, timedelta
 
+import requests
 import yfinance as yf
 
 import market_calendar
@@ -71,6 +74,31 @@ POLICY_FEEDS = [
     {'source': '日銀', 'url': 'https://www.boj.or.jp/rss/whatsnew.xml'},
     {'source': 'FRB', 'url': 'https://www.federalreserve.gov/feeds/press_monetary.xml'},
 ]
+
+# 【2026-09-24追加】日銀の新着は統計の定期公表や事務的な要領改正まで全部流れてくるため、
+# 投資に関係が深いものだけに絞り、初心者向けの1行解説を付ける（上から順に最初に一致したもの）。
+# FRBのフィードは元々金融政策の発表だけなので絞らない。
+BOJ_TOPICS = [
+    ('動画', None),  # 「記者会見の動画の配信開始」は会見本体と重複するので流さない
+    ('当面の金融政策運営', '日本の金利の方針が決まりました。円相場・銀行株・不動産株などに影響しやすい発表です'),
+    ('金融政策決定会合', '日本の金利の方針を決める会議に関する発表です'),
+    ('展望レポート', '日銀が今後の景気と物価の見通しを示すレポート。金利の先行きを占う材料になります'),
+    ('経済・物価情勢の展望', '日銀が今後の景気と物価の見通しを示すレポート。金利の先行きを占う材料になります'),
+    ('短観', '日銀が約1万社に景気の実感を聞く調査。「業況判断」がプラスなら景気が良いと感じる会社が多い'),
+    ('記者会見', '日銀の総裁・副総裁が今後の方針を説明する場。発言ひとつで円相場や株価が動くことがあります'),
+    ('主な意見', '会合で出た委員の意見の要約。次の利上げ・利下げの手がかりになります'),
+    ('議事要旨', '過去の会合の議論の記録。次の利上げ・利下げの手がかりになります'),
+]
+
+
+def _boj_topic(title):
+    """(流すか, 解説)。どのトピックにも当たらなければ流さない。"""
+    for keyword, explain in BOJ_TOPICS:
+        if keyword in title:
+            return explain is not None, explain
+    return False, None
+
+
 MAX_SEEN_LINKS = 200  # 状態ファイル肥大化防止（各フィードごとの既読リンク保持上限）
 
 US_INDEX_TICKERS = [
@@ -110,6 +138,16 @@ CLOSE_SUMMARY_TICKERS = [
     ('1306.T', 'TOPIX（連動ETFで代用）', '東証プライムのほぼ全銘柄＝日本株全体の動き'),
     ('2516.T', 'グロース250（連動ETFで代用）', '新興・成長企業の動き。値動きが大きめ'),
 ]
+
+# 【2026-09-24追加】月末の最後のN日間、会員提出フォーム（Googleフォーム）の案内を1日1回流す。
+# URLはGitHub Secrets（MEMBER_FORM_URL）で渡す（公開リポジトリのため、ログや状態ファイルに
+# URLを書かない）。未設定なら何もしない。投稿先は MEMBER_FORM_WEBHOOK_URL があればそこ、
+# 無ければ「速報」チャンネル。
+MEMBER_FORM_URL = os.getenv('MEMBER_FORM_URL', '').strip()
+MEMBER_FORM_WEBHOOK_URL = os.getenv('MEMBER_FORM_WEBHOOK_URL', '').strip()
+MEMBER_FORM_TITLE = os.getenv('MEMBER_FORM_TITLE', '').strip() or '会員提出フォーム'
+MEMBER_FORM_LAST_DAYS = int(env_float('MEMBER_FORM_LAST_DAYS', 5))
+MEMBER_FORM_POST_HOUR = int(env_float('MEMBER_FORM_POST_HOUR', 12))  # JST。朝7時台の投稿と重ならない昼に
 
 # 金融庁の新着情報のうち、個人投資家に関係が深いものだけを投稿する
 FSA_FEED = {'source': '金融庁', 'url': 'https://www.fsa.go.jp/fsaNewsListAll_rss2.xml'}
@@ -280,9 +318,13 @@ def check_policy_feeds(state):
             seen.add(link)
 
         for entry in to_post:
-            results.append(('policy',
-                f'📜 **{source}発表**：{entry["title"]}\n{entry["link"]}'
-            ))
+            text = f'📜 **{source}発表**：{entry["title"]}\n{entry["link"]}'
+            if source == '日銀':
+                wanted, explain = _boj_topic(entry['title'] or '')
+                if not wanted:
+                    continue
+                text += f'\n💡 {explain}'
+            results.append(('policy', text))
 
         # 既読リンクは最大MAX_SEEN_LINKS件まで保持（無限に肥大化しないように）
         seen_by_source[source] = list(seen)[-MAX_SEEN_LINKS:]
@@ -422,6 +464,43 @@ def check_close_summary(state, now_jst, today_jst_str):
 
 
 # ---------------------------------------------------------------------------
+# 10. 月末の会員提出フォームの案内（最後のN日間、1日1回）
+# ---------------------------------------------------------------------------
+def build_member_form_message(today):
+    """月末の最後のN日間なら案内文、それ以外はNone。"""
+    if not MEMBER_FORM_URL:
+        return None
+    month_end = (date(today.year + (today.month == 12), today.month % 12 + 1, 1) - timedelta(days=1))
+    days_left = (month_end - today).days
+    if days_left >= MEMBER_FORM_LAST_DAYS:
+        return None
+    when = '今日が締切です！' if days_left == 0 else f'締切まであと{days_left}日'
+    return (f'📝 **{today.month}月の{MEMBER_FORM_TITLE}**（締切：{month_end.month}/{month_end.day}、{when}）\n'
+            f'まだの方は、月末までに提出をお願いします。\n{MEMBER_FORM_URL}')
+
+
+def post_member_form_if_due(state, now_jst, today_jst_str):
+    """投稿先が速報チャンネルと違うことがあるため、他の速報とは別に直接送る。"""
+    if now_jst.hour != MEMBER_FORM_POST_HOUR or state.get('member_form_post_date_jst') == today_jst_str:
+        return True
+    text = build_member_form_message(now_jst.date())
+    if text is None:
+        return True
+    state['member_form_post_date_jst'] = today_jst_str
+    payload = build_payload(text)
+    print('[breaking_alerts] 会員提出フォームの案内を投稿します')  # URLはログに出さない
+    if not MEMBER_FORM_WEBHOOK_URL:
+        return poster.send_discord_message('BREAKING', payload)
+    try:
+        response = requests.post(MEMBER_FORM_WEBHOOK_URL, json=payload, timeout=30)
+        response.raise_for_status()
+        return True
+    except Exception as e:
+        print(f'[breaking_alerts] 会員提出フォームの投稿に失敗: {type(e).__name__}', file=sys.stderr)
+        return False
+
+
+# ---------------------------------------------------------------------------
 # 9. 金融庁の新着（NISA・投資詐欺の注意喚起など、個人投資家に関係が深いものだけ）
 # ---------------------------------------------------------------------------
 def check_fsa_feed(state):
@@ -535,12 +614,13 @@ def run():
     all_results += check_close_summary(state, now_jst, today_jst_str)
     all_results += check_morning_calendar(state, now_jst, today_jst_str)
     all_results += check_us_morning_report(state, now_jst, today_jst_str)
+    form_ok = post_member_form_if_due(state, now_jst, today_jst_str)
 
     save_state(state)
 
     if not all_results:
         print('[breaking_alerts] 今回は速報対象なしでした')
-        return True
+        return form_ok
 
     all_ok = True
     for category, text in all_results:
@@ -550,7 +630,7 @@ def run():
 
     # 実際に投稿を試みたものだけ（送信失敗分も含む）を週間振り返り用ログに残す
     append_to_log(all_results, now_utc)
-    return all_ok
+    return all_ok and form_ok
 
 
 if __name__ == '__main__':

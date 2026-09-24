@@ -39,6 +39,9 @@ jobs:
       env:
         DISCORD_WEBHOOK_URL_BREAKING_TEST: ${{ secrets.DISCORD_WEBHOOK_URL_BREAKING_TEST }}
         DISCORD_WEBHOOK_URL_BREAKING_PROD: ${{ secrets.DISCORD_WEBHOOK_URL_BREAKING_PROD }}
+        # 月末の会員提出フォーム案内（未設定なら無効）。公開リポジトリのためURLはSecretsで渡す
+        MEMBER_FORM_URL: ${{ secrets.MEMBER_FORM_URL }}
+        MEMBER_FORM_WEBHOOK_URL: ${{ secrets.MEMBER_FORM_WEBHOOK_URL }}
       run: python breaking_alerts.py
 
     - name: Commit and push state
