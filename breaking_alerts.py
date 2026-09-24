@@ -148,6 +148,8 @@ MEMBER_FORM_WEBHOOK_URL = os.getenv('MEMBER_FORM_WEBHOOK_URL', '').strip()
 MEMBER_FORM_TITLE = os.getenv('MEMBER_FORM_TITLE', '').strip() or '会員提出フォーム'
 MEMBER_FORM_LAST_DAYS = int(env_float('MEMBER_FORM_LAST_DAYS', 5))
 MEMBER_FORM_POST_HOUR = int(env_float('MEMBER_FORM_POST_HOUR', 12))  # JST。朝7時台の投稿と重ならない昼に
+# 投稿者として表示する名前（速報の「Kurosuke速報」とは分ける）
+MEMBER_FORM_USERNAME = os.getenv('MEMBER_FORM_USERNAME', '').strip() or '【フォーム入力のリマインド】'
 
 # 金融庁の新着情報のうち、個人投資家に関係が深いものだけを投稿する
 FSA_FEED = {'source': '金融庁', 'url': 'https://www.fsa.go.jp/fsaNewsListAll_rss2.xml'}
@@ -487,7 +489,7 @@ def post_member_form_if_due(state, now_jst, today_jst_str):
     if text is None:
         return True
     state['member_form_post_date_jst'] = today_jst_str
-    payload = build_payload(text)
+    payload = {'content': text, 'username': MEMBER_FORM_USERNAME}
     print('[breaking_alerts] 会員提出フォームの案内を投稿します')  # URLはログに出さない
     if not MEMBER_FORM_WEBHOOK_URL:
         return poster.send_discord_message('BREAKING', payload)
