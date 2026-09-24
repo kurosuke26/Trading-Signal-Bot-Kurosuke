@@ -11,7 +11,9 @@ data/capital_ledger.json に積み上げていく。
 - 1トレードあたりの投資額: その時点のequity（現金＋保有中ポジションの簿価）の10%（複利）
 - 同時保有の上限: 投資済み合計がequityの80%を超える新規エントリーは資金不足で見送る
   （10%×8=80%なので、実質「最大8ポジション」に相当）
-- 対象は現物LONGのみ（信用取引・SHORTは対象外。データ上SHORTシグナルは無視する）
+- 対象は現物LONGのみ（信用取引・SHORTは対象外。SHORTシグナルは実際の空売り対象ではなく、
+  保有中のLONG銘柄の判定が「今日SHORT」に変わった場合の警戒シグナルとしてのみ使う
+  ＝apply_caution_flags参照。自動決済はしない、注意喚起の表示のみ）
 - 対象は「この台帳の開始日（start_date）以降に新規エントリーしたポジション」のみ。
   過去分（2026-08-25の一括ロード分やそれ以前の検証用エントリー）は含めない
   （ユーザー要望：「これからは新規でポジションをとるものに関しては」）。
@@ -42,6 +44,7 @@ from tracking import (
     load_trade_log,
 )
 
+LATEST_SCAN_PATH = os.getenv('LATEST_SCAN_PATH') or 'data/latest_scan.json'
 LEDGER_PATH = os.getenv('CAPITAL_LEDGER_PATH') or 'data/capital_ledger.json'
 INITIAL_CAPITAL = float(os.getenv('CAPITAL_TRACKER_INITIAL', '5000000'))
 PER_TRADE_FRACTION = float(os.getenv('CAPITAL_TRACKER_PER_TRADE_FRACTION', '0.10'))
@@ -267,6 +270,34 @@ def summarize(ledger):
     }
 
 
+def load_latest_scan_signals(path=None):
+    """
+    当日の判定結果（data/latest_scan.json の'results'）から、銘柄ごとの最新シグナルを返す。
+    見つからなければ空辞書（呼び出し側は「警戒判定できず」として扱う）。
+    """
+    path = path or LATEST_SCAN_PATH
+    if not os.path.exists(path):
+        return {}
+    try:
+        with open(path, encoding='utf-8') as f:
+            scan = json.load(f)
+    except Exception:
+        return {}
+    return {t: r.get('signal') for t, r in (scan.get('results') or {}).items()}
+
+
+def apply_caution_flags(ledger, signals):
+    """
+    保有中の現物LONGポジションについて、その銘柄の「今日の」判定がSHORTだった場合に
+    警戒フラグを立てる（ユーザー方針：ショートは実際に空売りする対象ではなく、
+    保有銘柄にとっては「弱気の目安が点灯した」という警戒シグナルとして使う）。
+    ポジション自体のトレーリングストップは変えない（自動決済しない、あくまで注意喚起）。
+    """
+    for pos in ledger['open_positions'].values():
+        pos['caution'] = signals.get(pos['ticker']) == 'SHORT'
+    return ledger
+
+
 def print_report(ledger):
     s = summarize(ledger)
     print('=' * 64)
@@ -287,8 +318,12 @@ def print_report(ledger):
                 pnl_str = '含み損益 価格取得できず不明'
             else:
                 pnl_str = f"含み{p['unrealized']:+,.0f}円({p['unrealized_pct']:+.2f}%)"
+            caution_str = ' ⚠️警戒(本日SHORT判定)' if p.get('caution') else ''
             print(f"  {p['ticker']} {p.get('name') or ''} {p['signal']} "
-                  f"entry {p['entry_date']}@{p['entry_price']:,.0f} 元本{p['invested']:,.0f}円 {pnl_str}")
+                  f"entry {p['entry_date']}@{p['entry_price']:,.0f} 元本{p['invested']:,.0f}円 {pnl_str}{caution_str}")
+        caution_n = sum(1 for p in ledger['open_positions'].values() if p.get('caution'))
+        if caution_n:
+            print(f"\n⚠️ {caution_n}件が本日SHORT判定（弱気シグナル点灯中・保有継続の可否は要確認）")
 
 
 def main():
@@ -297,6 +332,7 @@ def main():
     today_str = datetime.now().strftime('%Y-%m-%d')
     ledger = rollover_if_new_year(ledger, trade_log, today_str)
     sync(ledger, trade_log, today_str)
+    apply_caution_flags(ledger, load_latest_scan_signals())
     save_ledger(ledger)
     print_report(ledger)
 
