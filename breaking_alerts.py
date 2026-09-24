@@ -129,9 +129,15 @@ def append_to_log(entries, now_utc):
 # 1・2. 為替／日経平均の急変動チェック（仕組みは共通）
 # ---------------------------------------------------------------------------
 def fetch_last_price(ticker):
-    """yfinanceの軽量な最新値取得。失敗時はNone（呼び出し側で静かにスキップ）。"""
+    """yfinanceの軽量な最新値取得。失敗時はNone（呼び出し側で静かにスキップ）。
+
+    【2026-09-24修正】fast_infoの内部辞書キーは'lastPrice'（キャメルケース）で、
+    'last_price'という辞書キーは存在しないため.get('last_price')は常にNoneだった
+    （属性アクセスのfast_info.last_priceなら正しく取れる）。この結果、FX・日経の
+    急変動チェックが1ヶ月以上一度もアラートを出せていなかった。
+    """
     try:
-        price = yf.Ticker(ticker).fast_info.get('last_price')
+        price = yf.Ticker(ticker).fast_info.last_price
         return float(price) if price is not None else None
     except Exception as e:
         print(f'[breaking_alerts] {ticker} の価格取得に失敗: {e}', file=sys.stderr)
