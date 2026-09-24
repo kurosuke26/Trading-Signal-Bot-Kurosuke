@@ -5,7 +5,12 @@ on:
     # 15分おき（終日）。為替/日経平均の急変動チェック・日銀/FRB発表の監視・
     # 米国主要指数の朝の速報（JST 7時台の回で1日1回だけ）をまとめて行う軽量バッチ。
     - cron: '*/15 * * * *'
-  workflow_dispatch: {}
+  workflow_dispatch:
+    inputs:
+      check_member_form:
+        description: '会員提出フォームの設定だけを確認する（投稿しない）'
+        type: boolean
+        default: false
 
 permissions:
   contents: write  # data/breaking_alert_state.json をリポジトリにコミットするために必要
@@ -42,7 +47,7 @@ jobs:
         # 月末の会員提出フォーム案内（未設定なら無効）。公開リポジトリのためURLはSecretsで渡す
         MEMBER_FORM_URL: ${{ secrets.MEMBER_FORM_URL }}
         MEMBER_FORM_WEBHOOK_URL: ${{ secrets.MEMBER_FORM_WEBHOOK_URL }}
-      run: python breaking_alerts.py
+      run: python breaking_alerts.py ${{ inputs.check_member_form && '--check-member-form' || '' }}
 
     - name: Commit and push state
       if: always()

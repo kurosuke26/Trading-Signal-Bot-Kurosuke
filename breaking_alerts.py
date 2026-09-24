@@ -633,7 +633,52 @@ def run():
     return all_ok and form_ok
 
 
+def check_member_form_settings():
+    """会員提出フォームの設定だけを確かめる（投稿しない。URLやWebhookの値はログに出さない）。
+    Webhookは読み取り専用のGETで有効性とチャンネルを確認する（Discordは投稿されない）。"""
+    ok = True
+    if not MEMBER_FORM_URL:
+        print('❌ MEMBER_FORM_URL が未設定です（GoogleフォームのURLを登録してください）')
+        ok = False
+    elif MEMBER_FORM_URL.startswith(('https://forms.gle/', 'https://docs.google.com/forms/')):
+        print('✅ MEMBER_FORM_URL：GoogleフォームのURLの形式です')
+    elif MEMBER_FORM_URL.startswith('https://discord.com/api/webhooks/'):
+        print('❌ MEMBER_FORM_URL にDiscordのWebhook URLが入っています（GoogleフォームのURLを入れてください）')
+        ok = False
+    else:
+        print('⚠️ MEMBER_FORM_URL：GoogleフォームのURLに見えません（https://forms.gle/… か https://docs.google.com/forms/… のはず）')
+        ok = False
+
+    if not MEMBER_FORM_WEBHOOK_URL:
+        print('ℹ️ MEMBER_FORM_WEBHOOK_URL は未設定です（案内は「速報」チャンネルに流れます）')
+    elif not MEMBER_FORM_WEBHOOK_URL.startswith(('https://discord.com/api/webhooks/',
+                                                  'https://discordapp.com/api/webhooks/')):
+        kind = 'GoogleフォームのURL' if 'google' in MEMBER_FORM_WEBHOOK_URL or 'forms.gle' in MEMBER_FORM_WEBHOOK_URL else 'Webhook以外の値'
+        print(f'❌ MEMBER_FORM_WEBHOOK_URL に{kind}が入っています（DiscordのWebhook URLを入れてください）')
+        ok = False
+    else:
+        try:
+            r = requests.get(MEMBER_FORM_WEBHOOK_URL, timeout=15)
+            if r.status_code == 200:
+                name = r.json().get('name', '（名前なし）')
+                print(f'✅ MEMBER_FORM_WEBHOOK_URL：有効なWebhookです（Webhook名「{name}」）。案内はこのWebhookのチャンネルに流れます')
+            else:
+                print(f'❌ MEMBER_FORM_WEBHOOK_URL：Discordが受け付けませんでした（HTTP {r.status_code}）。削除済みか、コピーが途中で切れている可能性があります')
+                ok = False
+        except Exception as e:
+            print(f'❌ MEMBER_FORM_WEBHOOK_URL：確認中にエラー（{type(e).__name__}）')
+            ok = False
+
+    today = datetime.now(JST).date()
+    month_end = date(today.year + (today.month == 12), today.month % 12 + 1, 1) - timedelta(days=1)
+    first_day = month_end - timedelta(days=MEMBER_FORM_LAST_DAYS - 1)
+    print(f'ℹ️ 今月の案内：{first_day.month}/{first_day.day}〜{month_end.month}/{month_end.day} の毎日{MEMBER_FORM_POST_HOUR}時台（JST）')
+    return ok
+
+
 if __name__ == '__main__':
+    if '--check-member-form' in sys.argv:
+        sys.exit(0 if check_member_form_settings() else 1)
     try:
         success = run()
         sys.exit(0 if success else 1)
