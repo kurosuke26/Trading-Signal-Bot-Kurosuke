@@ -1,49 +1,77 @@
 {
   "_README": [
-    "breaking_alerts.py の「今日の予定」（毎朝7時台）が読む、公式発表済みの経済イベント日程。",
-    "日時はすべて日本時間(JST)。米国の発表は夏時間(3月第2日曜〜11月第1日曜)と冬時間で1時間ずれるので、換算済みの値を入れる。",
-    "  米経済指標 8:30 ET → 夏時間 21:30 JST / 冬時間 22:30 JST",
-    "  FOMC結果 14:00 ET（2日目） → 夏時間 翌日3:00 JST / 冬時間 翌日4:00 JST",
-    "  日銀会合の結果は最終日の昼ごろ（時刻は決まっていない）",
-    "出典（2026-09-24取得）:",
-    "  FOMC  https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm",
-    "  日銀  https://www.boj.or.jp/mopo/mpmsche_minu/index.htm",
-    "  米雇用統計・米CPI  https://www.bls.gov/schedule/2026/home.htm （2027年分は未公表のため未記入）",
-    "日程が尽きる前に、同じ出典から翌年分を追記すること（残りが30日を切るとbreaking_alerts.pyのログに警告が出る）。"
+      "breaking_alerts.py の「今日の予定」（毎朝7時台）が読む、公式発表済みの経済イベント日程。",
+      "日時はすべて日本時間(JST)。米国の発表は夏時間(3月第2日曜〜11月第1日曜)と冬時間で1時間ずれるので、換算済みの値を入れる。",
+      "  米経済指標 8:30 ET → 夏時間 21:30 JST / 冬時間 22:30 JST",
+      "  FOMC結果 14:00 ET（2日目） → 夏時間 翌日3:00 JST / 冬時間 翌日4:00 JST",
+      "  日銀会合の結果は最終日の昼ごろ（時刻は決まっていない）",
+      "出典（2026-09-24取得）:",
+      "  FOMC  https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm",
+      "  日銀  https://www.boj.or.jp/mopo/mpmsche_minu/index.htm",
+      "  米雇用統計・米CPI  https://www.bls.gov/schedule/2026/home.htm （2027年分は未公表のため未記入）",
+      "  国内CPI  https://www.stat.go.jp/data/kouhyou/e-stat_cpi.xml （全国のみ登録）",
+      "  GDP速報  https://www.esri.cao.go.jp/jp/sna/kouhyou/kouhyou_top.html",
+      "  日銀短観  https://www.boj.or.jp/statistics/outline/tkohyos.xlsx （統計データの公表・掲載予定）",
+      "日程が尽きる前に、同じ出典から翌年分を追記すること（残りが30日を切るとbreaking_alerts.pyのログに警告が出る）。"
   ],
   "event_types": {
-    "us_jobs": {
-      "title": "米雇用統計",
-      "explain": "アメリカの働く人の数や失業率。米国の景気の強さが分かり、発表直後は為替や株価が大きく動きやすい"
-    },
-    "us_cpi": {
-      "title": "米消費者物価指数（CPI）",
-      "explain": "アメリカの物価の上がり方。高いと利下げが遠のくと受け止められ、株価の下げ要因になりやすい"
-    },
-    "fomc": {
-      "title": "FOMC（米国の金利を決める会議）の結果発表",
-      "explain": "アメリカの政策金利が決まる。世界中の株価・為替に影響する、年8回の大イベント"
-    },
-    "boj": {
-      "title": "日銀 金融政策決定会合の結果発表",
-      "explain": "日本の金利の方針が決まる。円高・円安や銀行株などに影響しやすい"
-    }
+      "us_jobs": {
+          "title": "米雇用統計",
+          "explain": "アメリカの働く人の数や失業率。米国の景気の強さが分かり、発表直後は為替や株価が大きく動きやすい"
+      },
+      "us_cpi": {
+          "title": "米消費者物価指数（CPI）",
+          "explain": "アメリカの物価の上がり方。高いと利下げが遠のくと受け止められ、株価の下げ要因になりやすい"
+      },
+      "fomc": {
+          "title": "FOMC（米国の金利を決める会議）の結果発表",
+          "explain": "アメリカの政策金利が決まる。世界中の株価・為替に影響する、年8回の大イベント"
+      },
+      "boj": {
+          "title": "日銀 金融政策決定会合の結果発表",
+          "explain": "日本の金利の方針が決まる。円高・円安や銀行株などに影響しやすい"
+      },
+      "jp_cpi": {
+          "title": "全国消費者物価指数（CPI）",
+          "explain": "日本の物価の上がり方。高いと日銀の利上げが意識され、円相場や銀行株が動きやすい"
+      },
+      "jp_gdp": {
+          "title": "GDP速報（国内総生産）",
+          "explain": "日本の経済全体がどれだけ成長したかを示す、景気の通信簿"
+      },
+      "tankan": {
+          "title": "日銀短観（企業の景気実感調査）",
+          "explain": "日銀が約1万社に景気の実感を聞く調査。「業況判断」がプラスなら景気が良いと感じる会社が多い"
+      }
   },
   "events": [
+    {"date_jst": "2026-10-01", "time_jst": "08:50", "type": "tankan", "note": "9月調査"},
     {"date_jst": "2026-10-02", "time_jst": "21:30", "type": "us_jobs", "note": "9月分"},
     {"date_jst": "2026-10-14", "time_jst": "21:30", "type": "us_cpi", "note": "9月分"},
+    {"date_jst": "2026-10-23", "time_jst": "08:30", "type": "jp_cpi", "note": "9月分"},
     {"date_jst": "2026-10-29", "time_jst": "03:00", "type": "fomc"},
     {"date_jst": "2026-10-30", "time_jst": "昼ごろ", "type": "boj"},
     {"date_jst": "2026-11-06", "time_jst": "22:30", "type": "us_jobs", "note": "10月分"},
     {"date_jst": "2026-11-10", "time_jst": "22:30", "type": "us_cpi", "note": "10月分"},
+    {"date_jst": "2026-11-16", "time_jst": "08:50", "type": "jp_gdp", "note": "7-9月期 1次速報"},
+    {"date_jst": "2026-11-20", "time_jst": "08:30", "type": "jp_cpi", "note": "10月分"},
     {"date_jst": "2026-12-04", "time_jst": "22:30", "type": "us_jobs", "note": "11月分"},
+    {"date_jst": "2026-12-08", "time_jst": "08:50", "type": "jp_gdp", "note": "7-9月期 2次速報"},
     {"date_jst": "2026-12-10", "time_jst": "04:00", "type": "fomc"},
     {"date_jst": "2026-12-10", "time_jst": "22:30", "type": "us_cpi", "note": "11月分"},
+    {"date_jst": "2026-12-14", "time_jst": "08:50", "type": "tankan", "note": "12月調査"},
+    {"date_jst": "2026-12-18", "time_jst": "08:30", "type": "jp_cpi", "note": "11月分"},
     {"date_jst": "2026-12-18", "time_jst": "昼ごろ", "type": "boj"},
+    {"date_jst": "2027-01-22", "time_jst": "08:30", "type": "jp_cpi", "note": "12月分・2026年平均"},
     {"date_jst": "2027-01-22", "time_jst": "昼ごろ", "type": "boj"},
     {"date_jst": "2027-01-28", "time_jst": "04:00", "type": "fomc"},
-    {"date_jst": "2027-03-18", "time_jst": "昼ごろ", "type": "boj"},
+    {"date_jst": "2027-02-15", "time_jst": "08:50", "type": "jp_gdp", "note": "10-12月期 1次速報"},
+    {"date_jst": "2027-02-19", "time_jst": "08:30", "type": "jp_cpi", "note": "1月分"},
+    {"date_jst": "2027-03-09", "time_jst": "08:50", "type": "jp_gdp", "note": "10-12月期 2次速報"},
     {"date_jst": "2027-03-18", "time_jst": "03:00", "type": "fomc"},
+    {"date_jst": "2027-03-18", "time_jst": "昼ごろ", "type": "boj"},
+    {"date_jst": "2027-03-19", "time_jst": "08:30", "type": "jp_cpi", "note": "2月分"},
+    {"date_jst": "2027-04-01", "time_jst": "08:50", "type": "tankan", "note": "3月調査"},
     {"date_jst": "2027-04-28", "time_jst": "昼ごろ", "type": "boj"},
     {"date_jst": "2027-04-29", "time_jst": "03:00", "type": "fomc"},
     {"date_jst": "2027-06-10", "time_jst": "03:00", "type": "fomc"},

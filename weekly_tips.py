@@ -317,6 +317,8 @@ def build_breaking_recap_text():
         'nikkei_rapid': '日経急変動', 'nikkei_daily': '日経（本日大幅変動）',
         'policy': '日銀/FRB発表', 'us_morning': '米国市場サマリー',
         'calendar': '今日の予定', 'vix': 'VIX（恐怖指数）',
+        'us10y_daily': '米金利の大きな動き', 'oil_daily': '原油の大きな動き', 'gold_daily': '金の大きな動き',
+        'close_summary': '大引けまとめ', 'fsa': '金融庁のお知らせ',
     }
     counts = {}
     for e in recent:
@@ -328,7 +330,8 @@ def build_breaking_recap_text():
 
     # 為替・日経の急変動系とVIXだけ、直近3件の見出しを短く添える（政策発表・朝の市場サマリーは
     # 件数が把握できれば十分なため、本文の再掲はしない）
-    highlight_categories = {'usdjpy_rapid', 'usdjpy_daily', 'nikkei_rapid', 'nikkei_daily', 'vix'}
+    highlight_categories = {'usdjpy_rapid', 'usdjpy_daily', 'nikkei_rapid', 'nikkei_daily', 'vix',
+                            'us10y_daily', 'oil_daily', 'gold_daily'}
     highlights = [e for e in recent if e.get('category') in highlight_categories][-3:]
     for e in highlights:
         first_line = e.get('text', '').split('\n')[0]

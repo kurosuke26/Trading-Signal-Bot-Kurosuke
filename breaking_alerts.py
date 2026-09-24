@@ -4,7 +4,7 @@
 breaking_alerts.py — 「速報」チャンネル向けの急変動アラート（15分おきに実行する想定）
 
 collector.py/poster.py（1日1回、朝のシグナル投稿）とは別の、日中ずっと動く軽量バッチ。
-以下6種類を「速報」チャンネルにのみ投稿する。
+以下9種類を「速報」チャンネルにのみ投稿する。
 
   1. 為替（USD/JPY）の急変動：直近チェック（約15分前）比、および本日(JST)の
      累計変化率がしきい値を超えたら投稿。二重通知を防ぐためクールダウンあり。
@@ -17,6 +17,14 @@ collector.py/poster.py（1日1回、朝のシグナル投稿）とは別の、�
      （該当が無い日は投稿しない。計算はmarket_calendar.py、日程はeconomic_calendar.json）。
   6. 【2026-09-24追加・初心者向け】VIX（恐怖指数）：25・30を超えたら速報、その後20を
      下回ったら「落ち着いた」ことを1回だけ投稿。
+  7. 【2026-09-24追加・初心者向け】米10年国債利回り・原油・金：朝の米国市場サマリーに
+     1行解説付きで追加し、1日で大きく動いたら（利回り0.15ポイント／原油・金3%）速報。
+  8. 【2026-09-24追加・初心者向け】大引け後（JST 16時台）の国内市場まとめ：日経平均・
+     TOPIX・グロース250（後の2つは連動ETFで代用）。東証の営業日のみ。
+  9. 【2026-09-24追加・初心者向け】金融庁の新着のうち、NISA・投資詐欺の注意喚起・
+     金融経済教育など個人投資家に関係が深いものだけを投稿。
+  ※国内CPI・GDP速報・日銀短観は、公表予定日を economic_calendar.json に登録して
+    5.の「今日の予定」で知らせる（統計局・内閣府にRSSが無いため）。
 
 【正直な注意点】
 - GitHub Actionsのschedule cronは実行時刻が数分ずれることがある前提の設計
@@ -79,6 +87,35 @@ VIX_HIGH_LEVEL = env_float('BREAKING_VIX_HIGH_LEVEL', 30)
 VIX_CALM_LEVEL = env_float('BREAKING_VIX_CALM_LEVEL', 20)
 # 登録済みの経済イベント日程の残りがこの日数を切ったら、ログで追記を促す
 CALENDAR_MIN_DAYS_LEFT = 30
+
+# 【2026-09-24追加・初心者向け】金利・商品。朝の米国市場サマリーに並べ、1日で大きく
+# 動いたら速報する（本日(JST)最初のチェック時点との比較）。unit='pt'は利回りの差（%ポイント）
+MACRO_INSTRUMENTS = [
+    {'key': 'us10y', 'ticker': '^TNX', 'label': '米10年国債利回り', 'unit': 'pt',
+     'threshold': env_float('BREAKING_US10Y_DAILY_THRESHOLD_PT', 0.15),
+     'explain': '世界の金利の基準。上がると株、特に成長株には逆風になりやすい'},
+    {'key': 'oil', 'ticker': 'CL=F', 'label': '原油（WTI）', 'unit': 'pct',
+     'threshold': env_float('BREAKING_OIL_DAILY_THRESHOLD_PCT', 3.0),
+     'explain': 'ガソリンや電気代など物価に直結。上がると物価高・インフレの心配が強まる'},
+    {'key': 'gold', 'ticker': 'GC=F', 'label': '金（ゴールド）', 'unit': 'pct',
+     'threshold': env_float('BREAKING_GOLD_DAILY_THRESHOLD_PCT', 3.0),
+     'explain': '「守りの資産」。世の中が不安になると買われやすい'},
+]
+MACRO_COOLDOWN_MINUTES = env_float('BREAKING_MACRO_COOLDOWN_MINUTES', 240)
+
+# 大引け後の国内市場まとめ（JST 16時台、東証の営業日のみ）。TOPIX・グロース250の指数そのものは
+# yfinanceで取れないため、連動ETFの騰落率で代用する（表示でもその旨を明記）
+CLOSE_SUMMARY_TICKERS = [
+    ('^N225', '日経平均', '日本を代表する225社の平均'),
+    ('1306.T', 'TOPIX（連動ETFで代用）', '東証プライムのほぼ全銘柄＝日本株全体の動き'),
+    ('2516.T', 'グロース250（連動ETFで代用）', '新興・成長企業の動き。値動きが大きめ'),
+]
+
+# 金融庁の新着情報のうち、個人投資家に関係が深いものだけを投稿する
+FSA_FEED = {'source': '金融庁', 'url': 'https://www.fsa.go.jp/fsaNewsListAll_rss2.xml'}
+FSA_KEYWORDS = ['NISA', 'つみたて', 'iDeCo', 'イデコ', '金融経済教育', 'J-FLEC', '詐欺',
+                '注意喚起', '無登録', '税制', '貯蓄から投資', '資産形成']
+FSA_EXCLUDE_KEYWORDS = ['届出一覧', '人事異動']  # 定期的な事務更新は流さない
 
 
 # ---------------------------------------------------------------------------
@@ -277,10 +314,134 @@ def check_us_morning_report(state, now_jst, today_jst_str):
             print(f'[breaking_alerts] {label}({ticker}) の取得に失敗: {e}', file=sys.stderr)
             lines.append(f'{label}：データ取得不可')
 
+    # 【2026-09-24追加】金利・原油・金（1行解説付き）
+    for inst in MACRO_INSTRUMENTS:
+        pair = _prev_and_latest_close(inst['ticker'])
+        if pair is None:
+            lines.append(f'{inst["label"]}：データ取得不可')
+            continue
+        lines.append(f'{_format_change(inst, *pair)}\n　💡 {inst["explain"]}')
+
     state['us_morning_report_date_jst'] = today_jst_str
     if not lines:
         return []
     return [('us_morning', '🌅 **米国市場サマリー（前日終値比）**\n' + '\n'.join(lines))]
+
+
+def _prev_and_latest_close(ticker, period='5d'):
+    """日足の(前日終値, 最新終値, 最新日付)。取れなければNone。"""
+    try:
+        closes = yf.Ticker(ticker).history(period=period, interval='1d')['Close'].dropna()
+        if len(closes) < 2:
+            return None
+        return float(closes.iloc[-2]), float(closes.iloc[-1]), closes.index[-1].date()
+    except Exception as e:
+        print(f'[breaking_alerts] {ticker} の日足取得に失敗: {e}', file=sys.stderr)
+        return None
+
+
+def _format_change(inst, prev, latest, _latest_date=None):
+    if inst['unit'] == 'pt':
+        diff = latest - prev
+        arrow = '📈' if diff >= 0 else '📉'
+        return f'{arrow} {inst["label"]} {latest:.2f}%（{diff:+.2f}ポイント）'
+    change_pct = (latest - prev) / prev * 100
+    arrow = '📈' if change_pct >= 0 else '📉'
+    return f'{arrow} {inst["label"]} {change_pct:+.2f}%'
+
+
+# ---------------------------------------------------------------------------
+# 7. 金利・原油・金が1日で大きく動いた時の速報
+# ---------------------------------------------------------------------------
+def check_macro_moves(state, now_utc, today_jst_str):
+    results = []
+    for inst in MACRO_INSTRUMENTS:
+        price = fetch_last_price(inst['ticker'])
+        if price is None:
+            continue
+        s = state.setdefault(inst['key'], {})
+        if s.get('day_start_date_jst') != today_jst_str:
+            s['day_start_date_jst'] = today_jst_str
+            s['day_start_price'] = price
+        start = s.get('day_start_price')
+
+        in_cooldown = False
+        if s.get('last_alert_at_utc'):
+            try:
+                elapsed = (now_utc - datetime.fromisoformat(s['last_alert_at_utc'])).total_seconds() / 60
+                in_cooldown = elapsed < MACRO_COOLDOWN_MINUTES
+            except ValueError:
+                pass
+
+        if start and not in_cooldown:
+            if inst['unit'] == 'pt':
+                move, shown = price - start, f'{start:.2f}% → {price:.2f}%（{price - start:+.2f}ポイント）'
+            else:
+                move = (price - start) / start * 100
+                shown = f'{start:,.2f} → {price:,.2f}（{move:+.2f}%）'
+            if abs(move) >= inst['threshold']:
+                arrow = '📈' if move > 0 else '📉'
+                results.append((f'{inst["key"]}_daily',
+                    f'{arrow} **{inst["label"]}が大きく動いています**：{shown}、本日累計\n💡 {inst["explain"]}'))
+                s['last_alert_at_utc'] = now_utc.isoformat()
+        s['last_price'] = price
+    return results
+
+
+# ---------------------------------------------------------------------------
+# 8. 大引け後の国内市場まとめ（JST 16時台、東証の営業日に1回）
+# ---------------------------------------------------------------------------
+def check_close_summary(state, now_jst, today_jst_str):
+    if now_jst.hour != 16 or state.get('close_summary_date_jst') == today_jst_str:
+        return []
+    today = now_jst.date()
+    if not market_calendar.is_market_open(today):
+        return []
+
+    lines = []
+    for ticker, label, explain in CLOSE_SUMMARY_TICKERS:
+        pair = _prev_and_latest_close(ticker)
+        if pair is None:
+            continue
+        prev, latest, latest_date = pair
+        if latest_date != today:
+            continue  # まだ本日の終値が反映されていない（次の回で再試行）
+        change_pct = (latest - prev) / prev * 100
+        arrow = '📈' if change_pct >= 0 else '📉'
+        value = f'{latest:,.0f}円 ' if ticker == '^N225' else ''
+        lines.append(f'{arrow} {label} {value}{change_pct:+.2f}%\n　💡 {explain}')
+
+    if len(lines) < len(CLOSE_SUMMARY_TICKERS):
+        # 一部しかそろっていない時は16時台の次の回を待つ。16:45の回（最後）なら取れた分で出す
+        if now_jst.minute < 45 or not lines:
+            return []
+    state['close_summary_date_jst'] = today_jst_str
+
+    note = '※TOPIX・グロース250は指数そのものが取れないため、連動するETFの値動きで代用しています'
+    return [('close_summary', '🔔 **今日の東京市場（大引け）**\n' + '\n'.join(lines) + '\n' + note)]
+
+
+# ---------------------------------------------------------------------------
+# 9. 金融庁の新着（NISA・投資詐欺の注意喚起など、個人投資家に関係が深いものだけ）
+# ---------------------------------------------------------------------------
+def check_fsa_feed(state):
+    is_first_run = 'fsa_seen_links' not in state
+    seen = set(state.get('fsa_seen_links', []))
+    results = []
+    for entry in fetch_feed_entries(FSA_FEED):
+        link = entry['link'] or entry['title']
+        if not link or link in seen:
+            continue
+        seen.add(link)
+        title = entry['title'] or ''
+        if is_first_run:
+            continue  # 初回は既読登録のみ（過去分を一斉に流さない）
+        if any(k in title for k in FSA_EXCLUDE_KEYWORDS):
+            continue
+        if any(k in title for k in FSA_KEYWORDS):
+            results.append(('fsa', f'🏛 **金融庁のお知らせ**：{title}\n{entry["link"]}'))
+    state['fsa_seen_links'] = list(seen)[-MAX_SEEN_LINKS:]
+    return results
 
 
 # ---------------------------------------------------------------------------
@@ -368,7 +529,10 @@ def run():
         now_utc, today_jst_str,
     )
     all_results += check_vix(state, now_utc)
+    all_results += check_macro_moves(state, now_utc, today_jst_str)
     all_results += check_policy_feeds(state)
+    all_results += check_fsa_feed(state)
+    all_results += check_close_summary(state, now_jst, today_jst_str)
     all_results += check_morning_calendar(state, now_jst, today_jst_str)
     all_results += check_us_morning_report(state, now_jst, today_jst_str)
 
