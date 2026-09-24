@@ -42,7 +42,7 @@ import yfinance as yf
 import market_calendar
 import poster
 from theme_news import fetch_feed_entries
-from tracking import load_trade_log, compute_performance_stats
+from tracking import ATR_MULTIPLIER_BY_SIGNAL, load_trade_log, compute_performance_stats
 
 SNAPSHOT_PATH = os.getenv('SCAN_OUTPUT_PATH') or 'data/latest_scan.json'
 BREAKING_LOG_PATH = os.getenv('BREAKING_ALERT_LOG_PATH') or 'data/breaking_alert_log.json'
@@ -93,12 +93,16 @@ TIPS = [
         ),
     },
     {
-        'title': '📖 TIPS：トレーリングストップ（ATR×1.5）の考え方',
+        # 倍率はtracking.pyの本番値から埋め込む（2026-09-24、ATR×1.5のまま古くなっていたため）
+        'title': f'📖 TIPS：トレーリングストップ（ATR×{ATR_MULTIPLIER_BY_SIGNAL["LONG"]}）の考え方',
         'body': (
             'ATR（Average True Range）は値動きの荒さを表す指標です。'
-            'Kurosukeは「直近高値 − ATR×1.5」を損切りラインとして毎日切り上げる'
-            '（シャンデリア・ストップ方式）ことで、値動きの荒い銘柄では損切り幅を'
-            '広めに、落ち着いた銘柄では狭めに、自動的に調整しています。'
+            f'Kurosukeは買い（LONG）の場合「その日の終値 − ATR×{ATR_MULTIPLIER_BY_SIGNAL["LONG"]}」を'
+            '損切りラインとして毎日切り上げ、下げることはしません'
+            '（シャンデリア・ストップ方式）。値動きの荒い銘柄では損切り幅を'
+            '広めに、落ち着いた銘柄では狭めに、自動的に調整されます。'
+            f'倍率の{ATR_MULTIPLIER_BY_SIGNAL["LONG"]}倍は、過去約2年分のデータを'
+            '「その時点で知り得た情報だけ」で検証し直して決めた値です（2026年9月更新）。'
         ),
     },
 ]
