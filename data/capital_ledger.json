@@ -10,5 +10,6 @@
   "open_positions": {},
   "closed_trades": [],
   "skipped_entries": [],
-  "last_synced_at": "2026-09-24"
+  "last_synced_at": "2026-09-24",
+  "period_year": 2026
 }

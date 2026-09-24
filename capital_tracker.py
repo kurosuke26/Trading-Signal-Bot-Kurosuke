@@ -20,6 +20,10 @@ data/capital_ledger.json に積み上げていく。
   資金の出入りだけを追加で計算する（判定ロジックの二重実装はしない）。
 - 含み損益の時価評価には、tracking.update_open_positions()が毎日更新している
   p['last_price']（当日収集できなければ直近の既知終値）を使う。
+- 年が変わったら台帳を500万円・保有0件にリセットする（ユーザー要望・2026-09-24合意）。
+  年をまたいで保有中だったポジションは、年末時点の時価で「注記上の決済」として前年分
+  （data/capital_ledger_archive/<年>.json）に含め、新年の台帳では追跡を打ち切る
+  （rollover_if_new_year参照。bot本体のtrade_log.json側の追跡とは独立）。
 
 【運用方法】
   python capital_tracker.py
@@ -48,24 +52,32 @@ def _position_key(p):
     return f"{p['ticker']}|{p['signal']}|{p['entry_date']}"
 
 
-def load_ledger(start_date=None):
-    if os.path.exists(LEDGER_PATH):
-        with open(LEDGER_PATH, encoding='utf-8') as f:
-            return json.load(f)
-    if start_date is None:
-        start_date = datetime.now().strftime('%Y-%m-%d')
+def _new_ledger(start_date):
     return {
         'initial_capital': INITIAL_CAPITAL,
         'per_trade_fraction': PER_TRADE_FRACTION,
         'max_deployed_fraction': MAX_DEPLOYED_FRACTION,
         'signal_filter': list(SIGNAL_FILTER),
         'start_date': start_date,
+        'period_year': int(start_date[:4]),
         'cash': INITIAL_CAPITAL,
         'open_positions': {},   # key -> {ticker, name, signal, entry_date, entry_price, invested, shares}
         'closed_trades': [],    # 確定済み
         'skipped_entries': [],  # 資金不足で見送った候補
         'last_synced_at': None,
     }
+
+
+def load_ledger(start_date=None):
+    if os.path.exists(LEDGER_PATH):
+        with open(LEDGER_PATH, encoding='utf-8') as f:
+            ledger = json.load(f)
+        if 'period_year' not in ledger:  # 年越しリセット機能追加前に作った台帳との後方互換
+            ledger['period_year'] = int(ledger['start_date'][:4])
+        return ledger
+    if start_date is None:
+        start_date = datetime.now().strftime('%Y-%m-%d')
+    return _new_ledger(start_date)
 
 
 def save_ledger(ledger):
@@ -114,6 +126,54 @@ def _mark_to_market(pos, rec):
     pos['last_price'] = last_price
     pos['unrealized'] = round(pos['invested'] * unrealized_pct / 100, 0)
     pos['unrealized_pct'] = round(unrealized_pct, 2)
+
+
+ARCHIVE_DIR = os.getenv('CAPITAL_LEDGER_ARCHIVE_DIR') or 'data/capital_ledger_archive'
+
+
+def rollover_if_new_year(ledger, trade_log, today_str):
+    """
+    年が変わっていたら、保有中ポジションを年末時価で「注記上の決済」として前年分に
+    含めてアーカイブし（data/capital_ledger_archive/<年>.json）、新年の台帳を
+    500万円・保有0件から作り直す（ユーザー要望：「年始になったらまた500万から
+    スタート」。年をまたいだポジションは新年の台帳では引き継がず追跡を打ち切る、
+    という単純な仕様で合意済み・2026-09-24）。
+    実際のbot側（trade_log.json）のポジションはこれとは無関係にそのまま追跡が続く
+    （本関数はcapital_tracker.py独自の「資金の帳簿」だけをリセットする）。
+    """
+    current_year = int(today_str[:4])
+    period_year = ledger.get('period_year') or int(ledger['start_date'][:4])
+    if current_year <= period_year:
+        return ledger
+
+    by_key = {_position_key(t): t for t in trade_log}
+    for key, pos in list(ledger['open_positions'].items()):
+        rec = by_key.get(key)
+        if rec is not None:
+            _mark_to_market(pos, rec)
+        unrealized = pos.get('unrealized') or 0
+        proceeds = pos['invested'] + unrealized
+        ledger['cash'] += proceeds
+        ledger['closed_trades'].append({
+            'ticker': pos['ticker'], 'name': pos.get('name'), 'signal': pos['signal'],
+            'entry_date': pos['entry_date'], 'entry_price': pos['entry_price'],
+            'close_date': f'{period_year}-12-31', 'close_price': pos.get('last_price'),
+            'invested': pos['invested'], 'pnl': round(unrealized, 0),
+            'return_pct': pos.get('unrealized_pct'),
+            'close_reason': 'year_end_rollover',
+        })
+        del ledger['open_positions'][key]
+
+    os.makedirs(ARCHIVE_DIR, exist_ok=True)
+    ledger['final_equity'] = round(ledger['cash'], 0)
+    ledger['rolled_over_at'] = today_str
+    archive_path = os.path.join(ARCHIVE_DIR, f'{period_year}.json')
+    with open(archive_path, 'w', encoding='utf-8') as f:
+        json.dump(ledger, f, ensure_ascii=False, indent=2)
+    print(f'[capital_tracker] {period_year}年分を{archive_path}にアーカイブしました'
+          f'（年末時点の資産: {ledger["final_equity"]:,.0f}円）。{current_year}年の台帳を500万円で開始します。')
+
+    return _new_ledger(f'{current_year}-01-01')
 
 
 def sync(ledger, trade_log, today_str):
@@ -234,6 +294,7 @@ def main():
     trade_log = load_trade_log()
     ledger = load_ledger()
     today_str = datetime.now().strftime('%Y-%m-%d')
+    ledger = rollover_if_new_year(ledger, trade_log, today_str)
     sync(ledger, trade_log, today_str)
     save_ledger(ledger)
     print_report(ledger)
