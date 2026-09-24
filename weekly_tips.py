@@ -39,6 +39,7 @@ from datetime import datetime, timedelta, timezone
 
 import yfinance as yf
 
+import market_calendar
 import poster
 from theme_news import fetch_feed_entries
 from tracking import load_trade_log, compute_performance_stats
@@ -363,6 +364,14 @@ def build_weekly_news_text():
     return "\n".join(lines)
 
 
+def build_next_week_text():
+    """【2026-09-24追加・初心者向け】来週（月〜日）の休場日・SQ日・権利付き最終日・権利落ち日・
+    経済イベントの一覧。土曜朝の投稿を前提に、次の月曜日から7日分（market_calendar.py）。"""
+    today = datetime.now(timezone(timedelta(hours=9))).date()
+    next_monday = today + timedelta(days=(7 - today.weekday()) % 7 or 7)
+    return market_calendar.build_week_text(next_monday)
+
+
 def pick_weekly_tip():
     week_number = datetime.now(timezone.utc).isocalendar()[1]
     return TIPS[week_number % len(TIPS)]
@@ -379,6 +388,7 @@ def build_payload():
         {'title': '⚡ 今週あった速報', 'description': build_breaking_recap_text(), 'color': 0xE67E22},
         {'title': '👀 直近の注目シグナル', 'description': build_signal_highlight_text(snapshot), 'color': 0x3498DB},
         {'title': '🎯 シグナル成績（累計）', 'description': build_performance_recap_text(), 'color': 0x9B59B6},
+        {'title': '🗓 来週の予定', 'description': build_next_week_text(), 'color': 0xF1C40F},
         {'title': tip['title'], 'description': tip['body'], 'color': 0x95A5A6},
     ]
     return {

@@ -141,42 +141,58 @@ def _rights_month_note(month):
     return ''
 
 
+SQ_EXPLAIN = ('先物・オプション取引の清算日。朝の寄り付きに大きな売買が出て、'
+              '値動きが荒くなることがあります')
+EX_RIGHTS_EXPLAIN = ('前日で配当・優待の権利が確定したため、配当の分ほど株価が下がって始まりやすい日です。'
+                     '値下がりに見えても、多くは権利の分が差し引かれただけです')
+HOLIDAY_EXPLAIN = '日本株の売買はできません。注文は次の営業日に持ち越されます'
+
+
+def market_day_flags(d):
+    """その日の株式市場の出来事を (種類, 付加情報) のリストで返す（今日の予定・来週の予定で共通）。
+    種類: 'holiday'(祝日名) / 'sq'(メジャーならTrue) / 'rights_last'(対象の月) / 'ex_rights'(None)"""
+    reason = closed_reason(d)
+    if reason:
+        return [] if reason == '土日' else [('holiday', reason)]
+
+    flags = []
+    if d == sq_day(d.year, d.month):
+        flags.append(('sq', d.month in (3, 6, 9, 12)))
+    if d == rights_last_day(d.year, d.month):
+        flags.append(('rights_last', d.month))
+    prev_month = (d.year, d.month - 1) if d.month > 1 else (d.year - 1, 12)
+    for ym in (prev_month, (d.year, d.month)):
+        if add_business_days(rights_last_day(*ym), 1) == d:
+            flags.append(('ex_rights', None))
+    return flags
+
+
 def build_morning_items(today, calendar=None):
     """(見出し, 解説) のリスト。何も無い日は空リスト。"""
     if calendar is None:
         calendar = load_economic_calendar()
     items = []
 
-    reason = closed_reason(today)
-    if reason and reason != '土日':
-        items.append((f'🏖 今日は東証はお休みです（{reason}）',
-                      '日本株の売買はできません。注文は次の営業日に持ち越されます'))
+    for kind, extra in market_day_flags(today):
+        if kind == 'holiday':
+            items.append((f'🏖 今日は東証はお休みです（{extra}）', HOLIDAY_EXPLAIN))
+        elif kind == 'sq':
+            label = 'メジャーSQ' if extra else 'SQ'
+            items.append((f'⚖️ 今日は{label}日です',
+                          SQ_EXPLAIN + ('（3・6・9・12月は特に大きい）' if extra else '')))
+        elif kind == 'rights_last':
+            items.append((f'🎁 今日は{extra}月末の配当・株主優待の「権利付き最終日」です',
+                          '今日の取引終了（15:30）までに買って持っていれば、配当・優待をもらう権利が得られます。'
+                          + _rights_month_note(extra)))
+        elif kind == 'ex_rights':
+            items.append(('📉 今日は「権利落ち日」です', EX_RIGHTS_EXPLAIN))
 
     if is_market_open(today):
-        if today == sq_day(today.year, today.month):
-            kind = 'メジャーSQ' if today.month in (3, 6, 9, 12) else 'SQ'
-            items.append((f'⚖️ 今日は{kind}日です',
-                          '先物・オプション取引の清算日。朝の寄り付きに大きな売買が出て、'
-                          '値動きが荒くなることがあります'
-                          + ('（3・6・9・12月は特に大きい）' if kind == 'メジャーSQ' else '')))
-
         rl = rights_last_day(today.year, today.month)
-        month = today.month
-        if today == rl:
-            items.append((f'🎁 今日は{month}月末の配当・株主優待の「権利付き最終日」です',
-                          '今日の取引終了（15:30）までに買って持っていれば、配当・優待をもらう権利が得られます。'
-                          + _rights_month_note(month)))
-        elif add_business_days(today, 2) == rl:
-            items.append((f'🎁 {rl.month}/{rl.day}（{WEEKDAY_JA[rl.weekday()]}）が{month}月末の配当・優待の「権利付き最終日」です（あと2営業日）',
+        if today != rl and add_business_days(today, 2) == rl:
+            items.append((f'🎁 {rl.month}/{rl.day}（{WEEKDAY_JA[rl.weekday()]}）が{today.month}月末の配当・優待の「権利付き最終日」です（あと2営業日）',
                           'その日の取引終了までに買って持っている必要があります。'
-                          + _rights_month_note(month)))
-
-        prev_rl = rights_last_day(*((today.year, today.month - 1) if today.month > 1 else (today.year - 1, 12)))
-        for candidate in (prev_rl, rl):
-            if add_business_days(candidate, 1) == today:
-                items.append(('📉 今日は「権利落ち日」です',
-                              '昨日で配当・優待の権利が確定したため、配当の分ほど株価が下がって始まりやすい日です。'
-                              '値下がりに見えても、多くは権利の分が差し引かれただけです'))
+                          + _rights_month_note(today.month)))
 
     for when, ev in economic_events_for_morning(today, calendar):
         info = calendar.get('event_types', {}).get(ev.get('type'), {})
@@ -196,6 +212,50 @@ def format_morning_message(today, items):
         lines.append(f'・**{headline}**')
         if explain:
             lines.append(f'　💡 {explain}')
+    return '\n'.join(lines)
+
+
+def build_week_text(start, days=7, calendar=None):
+    """「来週の予定」（weekly_tips.py用）。start から days 日分を日付ごとに1行で並べ、
+    出てきた用語の解説を最後にまとめる。何も無ければその旨の1文。"""
+    if calendar is None:
+        calendar = load_economic_calendar()
+    event_types = calendar.get('event_types', {})
+    lines = []
+    glossary = {}
+
+    for offset in range(days):
+        d = start + timedelta(days=offset)
+        entries = []
+        for kind, extra in market_day_flags(d):
+            if kind == 'holiday':
+                entries.append(f'🏖 東証休場（{extra}）')
+            elif kind == 'sq':
+                entries.append('⚖️ メジャーSQ日' if extra else '⚖️ SQ日')
+                glossary['SQ日'] = SQ_EXPLAIN
+            elif kind == 'rights_last':
+                entries.append(f'🎁 {extra}月末の権利付き最終日')
+                glossary['権利付き最終日'] = 'この日の取引終了までに買って持っていれば、配当・株主優待をもらう権利が得られる'
+            elif kind == 'ex_rights':
+                entries.append('📉 権利落ち日')
+                glossary['権利落ち日'] = EX_RIGHTS_EXPLAIN
+        day_events = [ev for ev in calendar.get('events', []) if ev.get('date_jst') == d.isoformat()]
+        for ev in sorted(day_events, key=lambda e: e.get('time_jst', '')):
+            info = event_types.get(ev.get('type'), {})
+            title = info.get('title', ev.get('type', '予定'))
+            if ev.get('note'):
+                title += f'（{ev["note"]}）'
+            entries.append(f'🗓 {ev.get("time_jst", "")} {title}')
+            if info.get('explain'):
+                glossary[info.get('title', ev.get('type'))] = info['explain']
+        if entries:
+            lines.append(f'**{d.month}/{d.day}（{WEEKDAY_JA[d.weekday()]}）** ' + ' ／ '.join(entries))
+
+    if not lines:
+        return '来週は、休場日や大きな経済指標の発表などの予定はありません。'
+    lines.append('')
+    lines += [f'💡 {term}：{explain}' for term, explain in glossary.items()]
+    lines.append('※時刻は日本時間。米国の発表は日本時間の夜〜早朝です')
     return '\n'.join(lines)
 
 
