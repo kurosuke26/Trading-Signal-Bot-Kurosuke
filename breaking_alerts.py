@@ -4,7 +4,7 @@
 breaking_alerts.py — 「速報」チャンネル向けの急変動アラート（15分おきに実行する想定）
 
 collector.py/poster.py（1日1回、朝のシグナル投稿）とは別の、日中ずっと動く軽量バッチ。
-以下4種類を「速報」チャンネルにのみ投稿する。
+以下6種類を「速報」チャンネルにのみ投稿する。
 
   1. 為替（USD/JPY）の急変動：直近チェック（約15分前）比、および本日(JST)の
      累計変化率がしきい値を超えたら投稿。二重通知を防ぐためクールダウンあり。
@@ -12,6 +12,11 @@ collector.py/poster.py（1日1回、朝のシグナル投稿）とは別の、�
   3. 日銀・FRBの金融政策発表：公式RSSをポーリングし、未読の新着記事があれば投稿。
   4. 米国主要指数（NYダウ・S&P500・ナスダック）の朝の速報：JST 7時台に1日1回だけ、
      前日終値の騰落率をまとめて投稿（しきい値なし。「朝に届けばよい」という運用要望のため）。
+  5. 【2026-09-24追加・初心者向け】今日の予定：JST 7時台に1日1回、休場日・SQ日・
+     権利付き最終日／権利落ち日・米雇用統計/CPI/FOMC/日銀会合を1行解説付きで投稿
+     （該当が無い日は投稿しない。計算はmarket_calendar.py、日程はeconomic_calendar.json）。
+  6. 【2026-09-24追加・初心者向け】VIX（恐怖指数）：25・30を超えたら速報、その後20を
+     下回ったら「落ち着いた」ことを1回だけ投稿。
 
 【正直な注意点】
 - GitHub Actionsのschedule cronは実行時刻が数分ずれることがある前提の設計
@@ -30,6 +35,7 @@ from datetime import datetime, timezone, timedelta
 
 import yfinance as yf
 
+import market_calendar
 import poster
 from theme_news import fetch_feed_entries
 from util import env_float, json_default
@@ -64,6 +70,15 @@ US_INDEX_TICKERS = [
     ('^GSPC', 'S&P500'),
     ('^IXIC', 'ナスダック'),
 ]
+
+# 【2026-09-24追加】VIX（恐怖指数）。水準がこれらを上回ったら速報し、落ち着き水準を
+# 下回ったら「落ち着いた」ことを1回だけ知らせる
+VIX_TICKER = '^VIX'
+VIX_WARN_LEVEL = env_float('BREAKING_VIX_WARN_LEVEL', 25)
+VIX_HIGH_LEVEL = env_float('BREAKING_VIX_HIGH_LEVEL', 30)
+VIX_CALM_LEVEL = env_float('BREAKING_VIX_CALM_LEVEL', 20)
+# 登録済みの経済イベント日程の残りがこの日数を切ったら、ログで追記を促す
+CALENDAR_MIN_DAYS_LEFT = 30
 
 
 # ---------------------------------------------------------------------------
@@ -269,6 +284,66 @@ def check_us_morning_report(state, now_jst, today_jst_str):
 
 
 # ---------------------------------------------------------------------------
+# 5. 今日の予定（JST 7時台に1日1回。休場日・SQ日・権利付き最終日・経済イベント）
+# ---------------------------------------------------------------------------
+def check_morning_calendar(state, now_jst, today_jst_str):
+    if now_jst.hour != 7:
+        return []
+    if state.get('calendar_post_date_jst') == today_jst_str:
+        return []
+    state['calendar_post_date_jst'] = today_jst_str
+
+    today = now_jst.date()
+    calendar = market_calendar.load_economic_calendar()
+    days_left = market_calendar.days_of_calendar_left(today, calendar)
+    if days_left < CALENDAR_MIN_DAYS_LEFT:
+        print(f'[breaking_alerts] 警告: economic_calendar.json の登録済み日程が残り{days_left}日です。'
+              '公式サイトから翌年分を追記してください', file=sys.stderr)
+
+    items = market_calendar.build_morning_items(today, calendar)
+    if not items:
+        return []
+    return [('calendar', market_calendar.format_morning_message(today, items))]
+
+
+# ---------------------------------------------------------------------------
+# 6. VIX（恐怖指数）の水準チェック
+# ---------------------------------------------------------------------------
+def check_vix(state, now_utc):
+    value = fetch_last_price(VIX_TICKER)
+    if value is None:
+        return []
+
+    vix = state.get('vix')
+    if vix is None:
+        # 初回は現在の水準を記録するだけ（既に高い状態でも、いきなり速報しない）
+        state['vix'] = {'last': value, 'alerted_level': 0, 'last_check_at_utc': now_utc.isoformat()}
+        return []
+
+    results = []
+    explain = '💡 VIXは「米国株の恐怖指数」。投資家が先行きを不安に思うほど上がります（普段は10〜20程度）'
+    alerted = vix.get('alerted_level', 0)
+    level = 2 if value >= VIX_HIGH_LEVEL else 1 if value >= VIX_WARN_LEVEL else 0
+    if level > alerted:
+        if level == 2:
+            text = (f'😨 **VIXが{VIX_HIGH_LEVEL:g}を超えました**：{value:.1f}\n'
+                    f'市場がかなり不安定な状態です。慌てて売らず、値動きが落ち着くのを待つのも選択肢です\n{explain}')
+        else:
+            text = (f'⚠️ **VIXが{VIX_WARN_LEVEL:g}を超えました**：{value:.1f}\n'
+                    f'市場の不安が高まり、株価が大きく動きやすくなっています\n{explain}')
+        results.append(('vix', text))
+        vix['alerted_level'] = level
+    elif alerted and value < VIX_CALM_LEVEL:
+        results.append(('vix', f'😌 **VIXが{VIX_CALM_LEVEL:g}を下回りました**：{value:.1f}\n'
+                               f'市場の不安はひとまず落ち着いてきています\n{explain}'))
+        vix['alerted_level'] = 0
+
+    vix['last'] = value
+    vix['last_check_at_utc'] = now_utc.isoformat()
+    return results
+
+
+# ---------------------------------------------------------------------------
 # メイン処理
 # ---------------------------------------------------------------------------
 def build_payload(text):
@@ -292,7 +367,9 @@ def run():
         NIKKEI_RAPID_THRESHOLD_PCT, NIKKEI_DAILY_THRESHOLD_PCT, NIKKEI_COOLDOWN_MINUTES,
         now_utc, today_jst_str,
     )
+    all_results += check_vix(state, now_utc)
     all_results += check_policy_feeds(state)
+    all_results += check_morning_calendar(state, now_jst, today_jst_str)
     all_results += check_us_morning_report(state, now_jst, today_jst_str)
 
     save_state(state)
