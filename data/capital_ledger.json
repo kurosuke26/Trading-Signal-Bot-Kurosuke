@@ -6,7 +6,7 @@
     "LONG"
   ],
   "start_date": "2026-09-24",
-  "cash": 3000000.0,
+  "cash": 1000000.0,
   "open_positions": {
     "2173.T|LONG|2026-09-24": {
       "ticker": "2173.T",
@@ -16,10 +16,10 @@
       "entry_price": 763.0,
       "invested": 500000.0,
       "shares": 655.308,
-      "last_price_date": "2026-09-24",
-      "last_price": 763.0,
-      "unrealized": 0.0,
-      "unrealized_pct": 0.0,
+      "last_price_date": "2026-09-25",
+      "last_price": 771.0,
+      "unrealized": 5242.0,
+      "unrealized_pct": 1.05,
       "caution": false
     },
     "3447.T|LONG|2026-09-24": {
@@ -30,10 +30,10 @@
       "entry_price": 1023.0,
       "invested": 500000.0,
       "shares": 488.7586,
-      "last_price_date": "2026-09-24",
-      "last_price": 1023.0,
-      "unrealized": 0.0,
-      "unrealized_pct": 0.0,
+      "last_price_date": "2026-09-25",
+      "last_price": 1014.0,
+      "unrealized": -4399.0,
+      "unrealized_pct": -0.88,
       "caution": false
     },
     "5391.T|LONG|2026-09-24": {
@@ -44,10 +44,10 @@
       "entry_price": 1522.0,
       "invested": 500000.0,
       "shares": 328.5151,
-      "last_price_date": "2026-09-24",
-      "last_price": 1522.0,
-      "unrealized": 0.0,
-      "unrealized_pct": 0.0,
+      "last_price_date": "2026-09-25",
+      "last_price": 1525.0,
+      "unrealized": 986.0,
+      "unrealized_pct": 0.2,
       "caution": false
     },
     "6418.T|LONG|2026-09-24": {
@@ -58,15 +58,73 @@
       "entry_price": 1268.0,
       "invested": 500000.0,
       "shares": 394.3218,
-      "last_price_date": "2026-09-24",
-      "last_price": 1268.0,
+      "last_price_date": "2026-09-25",
+      "last_price": 1294.0,
+      "unrealized": 10252.0,
+      "unrealized_pct": 2.05,
+      "caution": false
+    },
+    "1814.T|LONG|2026-09-25": {
+      "ticker": "1814.T",
+      "name": "大末建設",
+      "signal": "LONG",
+      "entry_date": "2026-09-25",
+      "entry_price": 3680.0,
+      "invested": 500000.0,
+      "shares": 135.8696,
+      "last_price_date": "2026-09-25",
+      "last_price": 3680.0,
+      "unrealized": 0.0,
+      "unrealized_pct": 0.0,
+      "caution": false
+    },
+    "3297.T|LONG|2026-09-25": {
+      "ticker": "3297.T",
+      "name": "東武住販",
+      "signal": "LONG",
+      "entry_date": "2026-09-25",
+      "entry_price": 1185.0,
+      "invested": 500000.0,
+      "shares": 421.9409,
+      "last_price_date": "2026-09-25",
+      "last_price": 1185.0,
+      "unrealized": 0.0,
+      "unrealized_pct": 0.0,
+      "caution": false
+    },
+    "4410.T|LONG|2026-09-25": {
+      "ticker": "4410.T",
+      "name": "ハリマ化成グループ",
+      "signal": "LONG",
+      "entry_date": "2026-09-25",
+      "entry_price": 1158.0,
+      "invested": 500000.0,
+      "shares": 431.7789,
+      "last_price_date": "2026-09-25",
+      "last_price": 1158.0,
+      "unrealized": 0.0,
+      "unrealized_pct": 0.0,
+      "caution": false
+    },
+    "6505.T|LONG|2026-09-25": {
+      "ticker": "6505.T",
+      "name": "東洋電機製造",
+      "signal": "LONG",
+      "entry_date": "2026-09-25",
+      "entry_price": 2463.0,
+      "invested": 500000.0,
+      "shares": 203.0045,
+      "last_price_date": "2026-09-25",
+      "last_price": 2463.0,
       "unrealized": 0.0,
       "unrealized_pct": 0.0,
       "caution": false
     }
   },
   "closed_trades": [],
-  "skipped_entries": [],
-  "last_synced_at": "2026-09-24",
+  "skipped_entries": [
+    "9312.T|LONG|2026-09-25"
+  ],
+  "last_synced_at": "2026-09-25",
   "period_year": 2026
 }
