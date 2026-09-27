@@ -88,5 +88,38 @@
   "stop": 1290.14,
   "last_price": 1398.0,
   "last_price_date": "2026-09-25"
+ },
+ {
+  "series": "DIVIDEND_HIKE",
+  "ticker": "8346.T",
+  "name": "東邦銀",
+  "signal_date": "2026-09-25",
+  "reason": "2027年３月期中間配当予想および期末配当予想の修正（増配）に関するお知らせ",
+  "disclosure_url": "https://webapi.yanoshin.jp/rd.php?https://www.release.tdnet.info/inbs/140120260924539703.pdf",
+  "atr_at_signal": 34.3547,
+  "market_level_at_signal": 1.1258673110868402,
+  "state": "pending_entry"
+ },
+ {
+  "series": "DIVIDEND_HIKE",
+  "ticker": "7322.T",
+  "name": "３３ＦＧ",
+  "signal_date": "2026-09-25",
+  "reason": "業績予想の修正及び配当予想の修正（増配）に関するお知らせ",
+  "disclosure_url": "https://webapi.yanoshin.jp/rd.php?https://www.release.tdnet.info/inbs/140120260914536153.pdf",
+  "atr_at_signal": 92.5,
+  "market_level_at_signal": 1.1258673110868402,
+  "state": "pending_entry"
+ },
+ {
+  "series": "DIVIDEND_HIKE",
+  "ticker": "8154.T",
+  "name": "加賀電子",
+  "signal_date": "2026-09-25",
+  "reason": "2027年３月期通期業績予想の修正（上方修正）、配当予想の修正（増配）ならびに特別利益（負ののれん発生益）の計上に関するお知らせ",
+  "disclosure_url": "https://webapi.yanoshin.jp/rd.php?https://www.release.tdnet.info/inbs/140120260924539188.pdf",
+  "atr_at_signal": 148.7326,
+  "market_level_at_signal": 1.1258673110868402,
+  "state": "pending_entry"
  }
 ]
