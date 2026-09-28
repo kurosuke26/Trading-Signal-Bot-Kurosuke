@@ -6,16 +6,19 @@
   "signal_date": "2026-09-14",
   "reason": "2027年３月期第２四半期（中間期）業績予想及び配当予想の修正（増配）に関するお知らせ",
   "disclosure_url": "https://webapi.yanoshin.jp/rd.php?https://www.release.tdnet.info/inbs/140120260910533968.pdf",
-  "atr_at_signal": 48.0988,
+  "atr_at_signal": 47.429067246574974,
   "market_level_at_signal": 1.0799048557382809,
   "state": "open",
   "entry_date": "2026-09-15",
-  "entry_price": 1191.0,
+  "entry_price": 1174.42,
   "held_days": 0,
-  "last_processed": "2026-09-25",
-  "stop": 1100.38,
-  "last_price": 1173.0,
-  "last_price_date": "2026-09-25"
+  "last_processed": "2026-09-28",
+  "stop": 1085.06,
+  "last_price": 1168.5,
+  "last_price_date": "2026-09-28",
+  "adjustments": [
+   0.986076
+  ]
  },
  {
   "series": "DIVIDEND_HIKE",
@@ -30,10 +33,10 @@
   "entry_date": "2026-09-15",
   "entry_price": 2200.0,
   "held_days": 0,
-  "last_processed": "2026-09-25",
+  "last_processed": "2026-09-28",
   "stop": 1950.94,
-  "last_price": 1982.0,
-  "last_price_date": "2026-09-25"
+  "last_price": 2032.0,
+  "last_price_date": "2026-09-28"
  },
  {
   "series": "DIVIDEND_HIKE",
@@ -48,10 +51,10 @@
   "entry_date": "2026-09-15",
   "entry_price": 2195.0,
   "held_days": 0,
-  "last_processed": "2026-09-25",
+  "last_processed": "2026-09-28",
   "stop": 1776.07,
-  "last_price": 1802.0,
-  "last_price_date": "2026-09-25"
+  "last_price": 1778.0,
+  "last_price_date": "2026-09-28"
  },
  {
   "series": "DIVIDEND_HIKE",
@@ -60,16 +63,19 @@
   "signal_date": "2026-09-16",
   "reason": "配当予想の修正（増配）に関するお知らせ",
   "disclosure_url": "https://webapi.yanoshin.jp/rd.php?https://www.release.tdnet.info/inbs/140120260904532169.pdf",
-  "atr_at_signal": 28.0067,
+  "atr_at_signal": 27.854940161756833,
   "market_level_at_signal": 1.0843809141088205,
   "state": "open",
   "entry_date": "2026-09-17",
-  "entry_price": 1027.0,
+  "entry_price": 1021.43,
   "held_days": 0,
-  "last_processed": "2026-09-25",
-  "stop": 944.23,
-  "last_price": 1014.0,
-  "last_price_date": "2026-09-25"
+  "last_processed": "2026-09-28",
+  "stop": 939.11,
+  "last_price": 1009.5,
+  "last_price_date": "2026-09-28",
+  "adjustments": [
+   0.994581
+  ]
  },
  {
   "series": "DIVIDEND_HIKE",
@@ -78,16 +84,19 @@
   "signal_date": "2026-09-18",
   "reason": "第２四半期業績予想の修正並びに通期業績予想の修正および配当予想の修正（増配）に関するお知らせ",
   "disclosure_url": "https://webapi.yanoshin.jp/rd.php?https://www.release.tdnet.info/inbs/140120260916536942.pdf",
-  "atr_at_signal": 69.9535,
+  "atr_at_signal": 69.20507210366557,
   "market_level_at_signal": 1.1054075301902244,
   "state": "open",
   "entry_date": "2026-09-24",
-  "entry_price": 1500.0,
+  "entry_price": 1483.95,
   "held_days": 0,
-  "last_processed": "2026-09-25",
-  "stop": 1290.14,
-  "last_price": 1398.0,
-  "last_price_date": "2026-09-25"
+  "last_processed": "2026-09-28",
+  "stop": 1276.34,
+  "last_price": 1387.0,
+  "last_price_date": "2026-09-28",
+  "adjustments": [
+   0.989301
+  ]
  },
  {
   "series": "DIVIDEND_HIKE",
@@ -98,7 +107,14 @@
   "disclosure_url": "https://webapi.yanoshin.jp/rd.php?https://www.release.tdnet.info/inbs/140120260924539703.pdf",
   "atr_at_signal": 34.3547,
   "market_level_at_signal": 1.1258673110868402,
-  "state": "pending_entry"
+  "state": "open",
+  "entry_date": "2026-09-28",
+  "entry_price": 1101.54,
+  "held_days": 0,
+  "last_processed": "2026-09-28",
+  "stop": 1002.84,
+  "last_price": 1105.5,
+  "last_price_date": "2026-09-28"
  },
  {
   "series": "DIVIDEND_HIKE",
@@ -109,7 +125,14 @@
   "disclosure_url": "https://webapi.yanoshin.jp/rd.php?https://www.release.tdnet.info/inbs/140120260914536153.pdf",
   "atr_at_signal": 92.5,
   "market_level_at_signal": 1.1258673110868402,
-  "state": "pending_entry"
+  "state": "open",
+  "entry_date": "2026-09-28",
+  "entry_price": 2233.54,
+  "held_days": 0,
+  "last_processed": "2026-09-28",
+  "stop": 2013.76,
+  "last_price": 2290.0,
+  "last_price_date": "2026-09-28"
  },
  {
   "series": "DIVIDEND_HIKE",
@@ -120,6 +143,24 @@
   "disclosure_url": "https://webapi.yanoshin.jp/rd.php?https://www.release.tdnet.info/inbs/140120260924539188.pdf",
   "atr_at_signal": 148.7326,
   "market_level_at_signal": 1.1258673110868402,
+  "state": "open",
+  "entry_date": "2026-09-28",
+  "entry_price": 5431.62,
+  "held_days": 0,
+  "last_processed": "2026-09-28",
+  "stop": 5070.41,
+  "last_price": 5560.0,
+  "last_price_date": "2026-09-28"
+ },
+ {
+  "series": "DIVIDEND_HIKE",
+  "ticker": "9759.T",
+  "name": "ＮＳＤ",
+  "signal_date": "2026-09-28",
+  "reason": "2027年３月期 期末配当予想の修正（増配）に関するお知らせ",
+  "disclosure_url": "https://webapi.yanoshin.jp/rd.php?https://www.release.tdnet.info/inbs/140120260925540368.pdf",
+  "atr_at_signal": 58.5753,
+  "market_level_at_signal": 1.1197337251293429,
   "state": "pending_entry"
  }
 ]
