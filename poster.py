@@ -22,6 +22,7 @@ import io
 import json
 import os
 import sys
+import time
 from datetime import datetime, timezone
 
 import requests
@@ -308,6 +309,22 @@ MAX_EMBED_TOTAL_CHARS = 5800  # 6,000の手前で余裕を持たせる
 # 【2026-09-16】実測：8フィールドのEmbedを10件（合計80フィールド）送ると500エラー、9件（72）なら成功。
 # 公式には明記が無いが、1投稿あたりのフィールド総数にも上限があるとみられるため余裕を持って72で止める。
 MAX_EMBED_TOTAL_FIELDS = 72
+# 【2026-09-28追加】上の上限内（Embed8件・71フィールド・3,934文字）でも500が返り、9/23〜9/28の
+# #ロング-シグナルが毎朝全滅していた（テスト用Webhookで再現：7件なら成功、8件で500）。
+# Discordの実際の上限は公開値より厳しく一定しないため、1投稿のEmbedを5件までに分けて送る。
+# 分けた分は2通目以降として続けて投稿するので、以前のように上限で省略されることもない。
+MAX_EMBEDS_PER_POST = 5
+
+
+def split_embeds(embeds):
+    """Embedを1投稿あたりMAX_EMBEDS_PER_POST件以内（かつ文字数・フィールド数の上限内）の束に分ける。"""
+    chunks, rest = [], list(embeds or [])
+    while rest:
+        kept, _ = limit_embeds(rest[:MAX_EMBEDS_PER_POST])
+        kept = kept or rest[:1]  # 1件で上限を超える場合もそのまま1件で送る（無限ループ防止）
+        chunks.append(kept)
+        rest = rest[len(kept):]
+    return chunks
 
 
 def _embed_chars(embed):
@@ -338,13 +355,18 @@ def send_discord_message(channel, payload, file_bytes=None, filename=None):
     if payload is None:
         return True
 
-    if payload.get('embeds'):
-        kept, dropped = limit_embeds(payload['embeds'])
-        if dropped:
-            payload = dict(payload, embeds=kept)
-            note = f"（表示は{len(kept)}件まで。残り{dropped}件はDiscordの表示上限のため省略しています）"
-            payload['content'] = ((payload.get('content') or '') + chr(10) + note)[:2000]
-            print(f"[{CHANNEL_LABELS[channel]}] Embedが上限を超えたため{dropped}件を省略しました")
+    # 1通目＝本文＋最初の束＋添付CSV、2通目以降＝残りのEmbedだけ
+    chunks = split_embeds(payload.get('embeds')) if payload.get('embeds') else [None]
+    posts = []
+    for i, chunk in enumerate(chunks):
+        post = {k: v for k, v in payload.items() if k not in ('embeds', 'content')}
+        if i == 0 and payload.get('content'):
+            post['content'] = payload['content']
+        if chunk is not None:
+            post['embeds'] = chunk
+        posts.append((post, file_bytes if i == 0 else None))
+    if len(posts) > 1:
+        print(f"[{CHANNEL_LABELS[channel]}] Embed {len(payload['embeds'])}件を{len(posts)}通に分けて送ります")
 
     urls = get_webhook_urls(channel)
     if not urls:
@@ -356,24 +378,27 @@ def send_discord_message(channel, payload, file_bytes=None, filename=None):
 
     all_ok = True
     for env_label, url in urls:
-        try:
-            body = json.dumps(payload, ensure_ascii=False, default=json_default)
-            if file_bytes is not None:
-                files = {'file': (filename or 'data.csv', io.BytesIO(file_bytes), 'text/csv')}
-                data = {'payload_json': body}
-                response = requests.post(url, data=data, files=files)
-            else:
-                response = requests.post(url, data=body.encode('utf-8'),
-                                          headers={'Content-Type': 'application/json'})
+        for n, (post, attach) in enumerate(posts, start=1):
+            part = f"（{n}/{len(posts)}通目）" if len(posts) > 1 else ''
+            try:
+                body = json.dumps(post, ensure_ascii=False, default=json_default)
+                if attach is not None:
+                    files = {'file': (filename or 'data.csv', io.BytesIO(attach), 'text/csv')}
+                    response = requests.post(url, data={'payload_json': body}, files=files)
+                else:
+                    response = requests.post(url, data=body.encode('utf-8'),
+                                             headers={'Content-Type': 'application/json'})
 
-            if response.status_code in (200, 204):
-                print(f"[{CHANNEL_LABELS[channel]}/{env_label}] 送信しました")
-            else:
-                print(f"[{CHANNEL_LABELS[channel]}/{env_label}] 送信失敗：{response.status_code}：{response.text[:200]}")
+                if response.status_code in (200, 204):
+                    print(f"[{CHANNEL_LABELS[channel]}/{env_label}] 送信しました{part}")
+                else:
+                    print(f"[{CHANNEL_LABELS[channel]}/{env_label}] 送信失敗{part}：{response.status_code}：{response.text[:200]}")
+                    all_ok = False
+            except Exception as e:
+                print(f"[{CHANNEL_LABELS[channel]}/{env_label}] Error{part}: {str(e)}")
                 all_ok = False
-        except Exception as e:
-            print(f"[{CHANNEL_LABELS[channel]}/{env_label}] Error: {str(e)}")
-            all_ok = False
+            if len(posts) > 1:
+                time.sleep(1)  # 連投によるレート制限を避ける
 
     return all_ok
 
