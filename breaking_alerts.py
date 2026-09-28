@@ -10,27 +10,27 @@ collector.py/poster.py（1日1回、朝のシグナル投稿）とは別の、�
      累計変化率がしきい値を超えたら投稿。二重通知を防ぐためクールダウンあり。
   2. 日経平均の急変動：仕組みは為替と同じ。
   3. 日銀・FRBの金融政策発表：公式RSSをポーリングし、未読の新着記事があれば投稿。
-  4. 米国主要指数（NYダウ・S&P500・ナスダック）の朝の速報：JST 7時台に1日1回だけ、
+  4. 米国主要指数（NYダウ・S&P500・ナスダック）の朝の速報：JST 6〜11時台の最初の回で1日1回だけ、
      前日終値の騰落率をまとめて投稿（しきい値なし。「朝に届けばよい」という運用要望のため）。
-  5. 【2026-09-24追加・初心者向け】今日の予定：JST 7時台に1日1回、休場日・SQ日・
+  5. 【2026-09-24追加・初心者向け】今日の予定：JST 6〜11時台の最初の回で1日1回、休場日・SQ日・
      権利付き最終日／権利落ち日・米雇用統計/CPI/FOMC/日銀会合を1行解説付きで投稿
      （該当が無い日は投稿しない。計算はmarket_calendar.py、日程はeconomic_calendar.json）。
   6. 【2026-09-24追加・初心者向け】VIX（恐怖指数）：25・30を超えたら速報、その後20を
      下回ったら「落ち着いた」ことを1回だけ投稿。
   7. 【2026-09-24追加・初心者向け】米10年国債利回り・原油・金：朝の米国市場サマリーに
      1行解説付きで追加し、1日で大きく動いたら（利回り0.15ポイント／原油・金3%）速報。
-  8. 【2026-09-24追加・初心者向け】大引け後（JST 16時台）の国内市場まとめ：日経平均・
+  8. 【2026-09-24追加・初心者向け】大引け後（JST 15:40以降の最初の回）の国内市場まとめ：日経平均・
      TOPIX・グロース250（後の2つは連動ETFで代用）。東証の営業日のみ。
   9. 【2026-09-24追加・初心者向け】金融庁の新着のうち、NISA・投資詐欺の注意喚起・
      金融経済教育など個人投資家に関係が深いものだけを投稿。
  10. 【2026-09-24追加】月末の最後の5日間、会員提出フォーム（Googleフォーム）の案内を
-     1日1回（JST12時台）投稿。URLはSecretsのMEMBER_FORM_URLで渡し、未設定なら何もしない。
+     1日1回（JST12時以降の最初の回）投稿。URLはSecretsのMEMBER_FORM_URLで渡し、未設定なら何もしない。
   ※国内CPI・GDP速報・日銀短観は、公表予定日を economic_calendar.json に登録して
     5.の「今日の予定」で知らせる（統計局・内閣府にRSSが無いため）。
 
 【正直な注意点】
 - GitHub Actionsのschedule cronは実行時刻が数分ずれることがある前提の設計
-  （厳密な時刻一致ではなく「JST 7時台の回」を対象にしている）。
+  （実際は2〜5時間おきになることもあるため、時刻指定の投稿は「その時刻を過ぎた最初の回」で出す）。
 - 為替・日経平均は「前回チェック時からの変化率」を見る設計のため、休場中（夜間・
   週末等）はほぼ変化がなく静かに投稿されない。取引時間外を明示的に除外する処理は
   入れていない（値が動かなければ自然にしきい値を超えないため、実害は無い想定）。
@@ -147,7 +147,7 @@ MEMBER_FORM_URL = os.getenv('MEMBER_FORM_URL', '').strip()
 MEMBER_FORM_WEBHOOK_URL = os.getenv('MEMBER_FORM_WEBHOOK_URL', '').strip()
 MEMBER_FORM_TITLE = os.getenv('MEMBER_FORM_TITLE', '').strip() or '会員提出フォーム'
 MEMBER_FORM_LAST_DAYS = int(env_float('MEMBER_FORM_LAST_DAYS', 5))
-MEMBER_FORM_POST_HOUR = int(env_float('MEMBER_FORM_POST_HOUR', 12))  # JST。朝7時台の投稿と重ならない昼に
+MEMBER_FORM_POST_HOUR = int(env_float('MEMBER_FORM_POST_HOUR', 12))  # JST。この時刻を過ぎた最初の回で出す
 # 投稿者として表示する名前（速報の「Kurosuke速報」とは分ける）
 MEMBER_FORM_USERNAME = os.getenv('MEMBER_FORM_USERNAME', '').strip() or '【フォーム入力のリマインド】'
 
@@ -334,10 +334,21 @@ def check_policy_feeds(state):
 
 
 # ---------------------------------------------------------------------------
-# 4. 米国主要指数の朝の速報（JST 7時台に1日1回）
+# 4. 米国主要指数の朝の速報（JST 6〜11時台の最初の回で1日1回）
 # ---------------------------------------------------------------------------
+# 【2026-09-28変更】GitHub Actionsの定時実行は「15分おき」の指定でも実際は2〜5時間おきに
+# なることがあり、「7時台だけ」「12時台だけ」のような1時間の枠だと丸ごと飛ぶ日があった
+# （9/26・9/27の会員フォーム案内と大引けまとめが一度も出なかった）。そのため、
+# 「その時刻を過ぎてから最初に動いた回で1日1回」出す方式にする。
+MORNING_WINDOW = (6, 12)  # 朝の投稿（米国まとめ・今日の予定）はJST 6:00〜11:59の最初の回
+
+
+def _in_morning_window(now_jst):
+    return MORNING_WINDOW[0] <= now_jst.hour < MORNING_WINDOW[1]
+
+
 def check_us_morning_report(state, now_jst, today_jst_str):
-    if now_jst.hour != 7:
+    if not _in_morning_window(now_jst):
         return []
     if state.get('us_morning_report_date_jst') == today_jst_str:
         return []  # 本日分は投稿済み
@@ -436,7 +447,9 @@ def check_macro_moves(state, now_utc, today_jst_str):
 # 8. 大引け後の国内市場まとめ（JST 16時台、東証の営業日に1回）
 # ---------------------------------------------------------------------------
 def check_close_summary(state, now_jst, today_jst_str):
-    if now_jst.hour != 16 or state.get('close_summary_date_jst') == today_jst_str:
+    # 大引け(15:30)の値が反映される15:40以降、その日のうちの最初の回で出す
+    after_close = now_jst.hour > 15 or (now_jst.hour == 15 and now_jst.minute >= 40)
+    if not after_close or state.get('close_summary_date_jst') == today_jst_str:
         return []
     today = now_jst.date()
     if not market_calendar.is_market_open(today):
@@ -456,8 +469,8 @@ def check_close_summary(state, now_jst, today_jst_str):
         lines.append(f'{arrow} {label} {value}{change_pct:+.2f}%\n　💡 {explain}')
 
     if len(lines) < len(CLOSE_SUMMARY_TICKERS):
-        # 一部しかそろっていない時は16時台の次の回を待つ。16:45の回（最後）なら取れた分で出す
-        if now_jst.minute < 45 or not lines:
+        # 一部しかそろっていない時は次の回を待つ。17時を過ぎたら取れた分で出す
+        if now_jst.hour < 17 or not lines:
             return []
     state['close_summary_date_jst'] = today_jst_str
 
@@ -483,7 +496,8 @@ def build_member_form_message(today):
 
 def post_member_form_if_due(state, now_jst, today_jst_str):
     """投稿先が速報チャンネルと違うことがあるため、他の速報とは別に直接送る。"""
-    if now_jst.hour != MEMBER_FORM_POST_HOUR or state.get('member_form_post_date_jst') == today_jst_str:
+    # MEMBER_FORM_POST_HOUR時を過ぎてから、その日の最初の回で1回だけ出す
+    if now_jst.hour < MEMBER_FORM_POST_HOUR or state.get('member_form_post_date_jst') == today_jst_str:
         return True
     text = build_member_form_message(now_jst.date())
     if text is None:
@@ -526,10 +540,10 @@ def check_fsa_feed(state):
 
 
 # ---------------------------------------------------------------------------
-# 5. 今日の予定（JST 7時台に1日1回。休場日・SQ日・権利付き最終日・経済イベント）
+# 5. 今日の予定（JST 6〜11時台の最初の回で1日1回。休場日・SQ日・権利付き最終日・経済イベント）
 # ---------------------------------------------------------------------------
 def check_morning_calendar(state, now_jst, today_jst_str):
-    if now_jst.hour != 7:
+    if not _in_morning_window(now_jst):
         return []
     if state.get('calendar_post_date_jst') == today_jst_str:
         return []
