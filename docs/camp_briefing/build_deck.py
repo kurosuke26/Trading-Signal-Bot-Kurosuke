@@ -8,6 +8,10 @@ kurosuke式資産運用キャンプ 会員向けBot説明会のスライド(.ppt
 出力:
   docs/camp_briefing/camp_briefing.pptx   … Googleドライブにアップロードすると Googleスライドに変換される
   docs/camp_briefing/説明会台本.md         … スライドごとの台本（話す言葉）
+  docs/camp_briefing/video/narration/      … 動画用の読み上げ台本（video/make_video.py が使う）
+
+AIチームの画像: images/hayate.png・tamaki.png・nagi.png・saku.png（jpgも可）を置いて再実行すると
+スライドに貼られる。無ければ貼り付け用の枠を描く（PowerPoint上で差し替えてもよい）。
 
 投稿例は 2026-09-29 朝にBotが実際に流した内容（data/latest_scan.json・breaking_alert_log.json・
 capital_ledger.json から再現）。数字を差し替えるときは SLIDES の中身だけを直せばよい。
@@ -270,14 +274,13 @@ Botが届く時間です。
 """,
     ),
     dict(
-        layout='table', minutes=2,
+        layout='team', minutes=2,
         title='AIチーム4人の役割',
-        header=['メンバー', '担当', '見ているところ'],
-        rows=[
-            ['⚡ 颯（はやて）', '短期トレード', '値動きの大きさ・急な変動への備え'],
-            ['📈 環（たまき）', '割安度の分析', '割安さと、利益が伸びているか'],
-            ['🔎 凪（なぎ）', '企業リサーチ', 'どんな会社か・売上や利益の推移'],
-            ['🛡 朔（さく）', 'まとめ・チェック', '全体のまとめと注意点（最後に投稿）'],
+        members=[
+            dict(key='hayate', name='⚡ 颯（はやて）', role='短期トレード担当', desc='値動きの大きさ・急な変動への備え', color='red'),
+            dict(key='tamaki', name='📈 環（たまき）', role='割安度の分析担当', desc='割安さと、利益が伸びているか', color='blue'),
+            dict(key='nagi', name='🔎 凪（なぎ）', role='企業リサーチ担当', desc='どんな会社か・売上や利益の推移', color='navy'),
+            dict(key='saku', name='🛡 朔（さく）', role='まとめ・チェック担当', desc='全体のまとめと注意点（最後に投稿）', color='amber'),
         ],
         footer='候補一覧のあとに、4人が順番にコメントします。忙しい日は「朔」だけ読めばOK',
         script="""
@@ -959,7 +962,49 @@ def render_post(slide, d, idx, total):
         p.space_before = Pt(8)
 
 
+IMAGE_DIR = os.path.join(OUT_DIR, 'images')
+
+
+def _member_image(key):
+    for ext in ('png', 'jpg', 'jpeg', 'webp'):
+        path = os.path.join(IMAGE_DIR, f'{key}.{ext}')
+        if os.path.exists(path):
+            return path
+    return None
+
+
+def render_team(slide, d, idx, total):
+    """AIチームの紹介。images/<key>.png があれば貼り、無ければ貼り付け用の枠を描く。"""
+    _header(slide, d['title'], idx, total)
+    for i, m in enumerate(d['members']):
+        x = 0.6 + i * 3.08
+        accent = ACCENTS[m['color']]
+        _box(slide, x, 1.5, 2.86, 4.85, fill=LIGHT, shape=MSO_SHAPE.ROUNDED_RECTANGLE).adjustments[0] = 0.05
+        _box(slide, x, 1.5, 2.86, 0.1, fill=accent)
+        img = _member_image(m['key'])
+        ix, iy, isz = x + 0.43, 1.8, 2.0
+        if img:
+            slide.shapes.add_picture(img, Inches(ix), Inches(iy), Inches(isz), Inches(isz))
+        else:
+            ph = _box(slide, ix, iy, isz, isz, fill=WHITE, line=accent, shape=MSO_SHAPE.ROUNDED_RECTANGLE)
+            ph.line.dash_style = 4  # 破線
+            tf = ph.text_frame
+            tf.word_wrap = True
+            _text(tf, m['name'].split(' ', 1)[1].split('（')[0] + 'の画像', 15, accent, bold=True, align=PP_ALIGN.CENTER)
+            _text(tf, 'ここに貼り付け', 11, MUTED, align=PP_ALIGN.CENTER, first=False)
+        tf = _textbox(slide, x + 0.15, 3.95, 2.56, 0.5)
+        _text(tf, m['name'], 18, NAVY, bold=True, align=PP_ALIGN.CENTER)
+        tf = _textbox(slide, x + 0.15, 4.45, 2.56, 0.45)
+        _text(tf, m['role'], 14, accent, bold=True, align=PP_ALIGN.CENTER)
+        tf = _textbox(slide, x + 0.15, 4.95, 2.56, 1.2)
+        _text(tf, m['desc'], 14, INK, align=PP_ALIGN.CENTER)
+    if d.get('footer'):
+        tf = _textbox(slide, 0.6, 6.45, 12.1, 0.5)
+        _text(tf, d['footer'], 15, MUTED)
+
+
 RENDERERS = {
+    'team': render_team,
     'title': render_title, 'section': render_section, 'bullets': render_bullets,
     'two': render_two, 'table': render_table, 'post': render_post,
 }
@@ -1029,7 +1074,43 @@ def build_script_md(path):
         f.write('\n'.join(lines))
 
 
+# 音声合成で読み間違えやすい語の読み（動画用ナレーションだけに適用）
+TTS_READINGS = [
+    ('kurosuke', 'クロスケ'), ('Q&A', 'キューアンドエー'), ('1on1', 'ワンオンワン'), ('Bot', 'ボット'),
+    ('Discord', 'ディスコード'), ('NISA', 'ニーサ'), ('TOPIX', 'トピックス'), ('VIX', 'ビックス'),
+    ('FRB', 'エフアールビー'), ('FIRE', 'ファイア'), ('PER', 'ピーイーアール'), ('PBR', 'ピービーアール'),
+    ('EPS', 'イーピーエス'), ('ATR', 'エーティーアール'), ('RSI', 'アールエスアイ'), ('IR', 'アイアール'),
+    ('S&P500', 'エスアンドピー500'), ('NY', 'ニューヨーク'), ('AI', 'エーアイ'), ('tips', 'ティップス'),
+    ('SQ', 'エスキュー'), ('@mentions', 'メンション'),
+    ('颯', 'はやて'), ('環', 'たまき'), ('凪', 'なぎ'), ('朔', 'さく'),
+]
+
+
+def to_narration(text):
+    import re
+    t = text.strip()
+    for src, dst in TTS_READINGS:
+        t = t.replace(src, dst)
+    t = re.sub(r'[\U0001F000-\U0001FFFF\u2600-\u27BF\uFE0F]', '', t)  # 絵文字
+    t = t.replace('【', '').replace('】', '').replace('#', '')
+    return t
+
+
+def build_narration(dir_path):
+    os.makedirs(dir_path, exist_ok=True)
+    for f in os.listdir(dir_path):
+        if f.endswith('.txt'):
+            os.remove(os.path.join(dir_path, f))
+    for i, d in enumerate(SLIDES, 1):
+        with open(os.path.join(dir_path, f'slide{i:02d}.txt'), 'w', encoding='utf-8') as f:
+            f.write(to_narration(d['script']) + '\n')
+    import json
+    with open(os.path.join(os.path.dirname(dir_path), 'slide_titles.json'), 'w', encoding='utf-8') as f:
+        json.dump({i: d['title'] for i, d in enumerate(SLIDES, 1)}, f, ensure_ascii=False, indent=1)
+
+
 if __name__ == '__main__':
+    build_narration(os.path.join(OUT_DIR, 'video', 'narration'))
     build_pptx(os.path.join(OUT_DIR, 'camp_briefing.pptx'))
     build_script_md(os.path.join(OUT_DIR, '説明会台本.md'))
     print('done:', len(SLIDES), 'slides,', sum(d['minutes'] for d in SLIDES), 'min')
