@@ -6,7 +6,7 @@
     "LONG"
   ],
   "start_date": "2026-09-24",
-  "cash": 1000000.0,
+  "cash": 1480700.0,
   "open_positions": {
     "2173.T|LONG|2026-09-24": {
       "ticker": "2173.T",
@@ -16,24 +16,10 @@
       "entry_price": 763.0,
       "invested": 500000.0,
       "shares": 655.308,
-      "last_price_date": "2026-09-28",
-      "last_price": 786.0,
-      "unrealized": 15072.0,
-      "unrealized_pct": 3.01,
-      "caution": false
-    },
-    "3447.T|LONG|2026-09-24": {
-      "ticker": "3447.T",
-      "name": "信和",
-      "signal": "LONG",
-      "entry_date": "2026-09-24",
-      "entry_price": 1023.0,
-      "invested": 500000.0,
-      "shares": 488.7586,
-      "last_price_date": "2026-09-28",
-      "last_price": 1010.0,
-      "unrealized": -6354.0,
-      "unrealized_pct": -1.27,
+      "last_price_date": "2026-09-29",
+      "last_price": 782.0,
+      "unrealized": 12451.0,
+      "unrealized_pct": 2.49,
       "caution": false
     },
     "5391.T|LONG|2026-09-24": {
@@ -44,10 +30,10 @@
       "entry_price": 1522.0,
       "invested": 500000.0,
       "shares": 328.5151,
-      "last_price_date": "2026-09-28",
-      "last_price": 1534.0,
-      "unrealized": 3942.0,
-      "unrealized_pct": 0.79,
+      "last_price_date": "2026-09-29",
+      "last_price": 1488.0,
+      "unrealized": -11170.0,
+      "unrealized_pct": -2.23,
       "caution": false
     },
     "6418.T|LONG|2026-09-24": {
@@ -58,10 +44,10 @@
       "entry_price": 1268.0,
       "invested": 500000.0,
       "shares": 394.3218,
-      "last_price_date": "2026-09-28",
-      "last_price": 1277.0,
-      "unrealized": 3549.0,
-      "unrealized_pct": 0.71,
+      "last_price_date": "2026-09-29",
+      "last_price": 1238.0,
+      "unrealized": -11830.0,
+      "unrealized_pct": -2.37,
       "caution": false
     },
     "1814.T|LONG|2026-09-25": {
@@ -72,10 +58,10 @@
       "entry_price": 3680.0,
       "invested": 500000.0,
       "shares": 135.8696,
-      "last_price_date": "2026-09-28",
-      "last_price": 3615.0,
-      "unrealized": -8832.0,
-      "unrealized_pct": -1.77,
+      "last_price_date": "2026-09-29",
+      "last_price": 3525.0,
+      "unrealized": -21060.0,
+      "unrealized_pct": -4.21,
       "caution": false
     },
     "3297.T|LONG|2026-09-25": {
@@ -86,10 +72,10 @@
       "entry_price": 1185.0,
       "invested": 500000.0,
       "shares": 421.9409,
-      "last_price_date": "2026-09-28",
-      "last_price": 1189.0,
-      "unrealized": 1688.0,
-      "unrealized_pct": 0.34,
+      "last_price_date": "2026-09-29",
+      "last_price": 1205.0,
+      "unrealized": 8439.0,
+      "unrealized_pct": 1.69,
       "caution": false
     },
     "4410.T|LONG|2026-09-25": {
@@ -100,10 +86,10 @@
       "entry_price": 1158.0,
       "invested": 500000.0,
       "shares": 431.7789,
-      "last_price_date": "2026-09-28",
-      "last_price": 1149.0,
-      "unrealized": -3886.0,
-      "unrealized_pct": -0.78,
+      "last_price_date": "2026-09-29",
+      "last_price": 1116.0,
+      "unrealized": -18135.0,
+      "unrealized_pct": -3.63,
       "caution": false
     },
     "6505.T|LONG|2026-09-25": {
@@ -114,21 +100,38 @@
       "entry_price": 2463.0,
       "invested": 500000.0,
       "shares": 203.0045,
-      "last_price_date": "2026-09-28",
-      "last_price": 2494.0,
-      "unrealized": 6293.0,
-      "unrealized_pct": 1.26,
+      "last_price_date": "2026-09-29",
+      "last_price": 2449.0,
+      "unrealized": -2842.0,
+      "unrealized_pct": -0.57,
       "caution": false
     }
   },
-  "closed_trades": [],
+  "closed_trades": [
+    {
+      "ticker": "3447.T",
+      "name": "信和",
+      "signal": "LONG",
+      "entry_date": "2026-09-24",
+      "entry_price": 1023.0,
+      "close_date": "2026-09-29",
+      "close_price": 966.0,
+      "invested": 500000.0,
+      "pnl": -19300.0,
+      "return_pct": -3.86
+    }
+  ],
   "skipped_entries": [
     "9312.T|LONG|2026-09-25",
     "3023.T|LONG|2026-09-27",
     "1967.T|LONG|2026-09-28",
     "3946.T|LONG|2026-09-28",
-    "463A.T|LONG|2026-09-28"
+    "463A.T|LONG|2026-09-28",
+    "6485.T|LONG|2026-09-29",
+    "7670.T|LONG|2026-09-29",
+    "9857.T|LONG|2026-09-29",
+    "9932.T|LONG|2026-09-29"
   ],
-  "last_synced_at": "2026-09-28",
+  "last_synced_at": "2026-09-29",
   "period_year": 2026
 }
