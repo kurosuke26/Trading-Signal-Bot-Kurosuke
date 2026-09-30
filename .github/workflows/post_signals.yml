@@ -30,7 +30,8 @@ concurrency:
 jobs:
   post:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    # 【2026-09-30】07:45 JSTまで最大5時間待つことがあるため（下のeligibility参照）
+    timeout-minutes: 320
     # collect_data.ymlの自動実行（scheduleトリガー、日〜金曜の夜）が完了した時だけ
     # 自動投稿の判定対象にする。同ワークフローをworkflow_dispatchで手動・テスト実行
     # （銘柄数を絞った動作確認など）した場合はここではじいて、テストデータが本番
@@ -72,6 +73,7 @@ jobs:
         min=$(TZ='Asia/Tokyo' date +%-M)
         now_minutes=$((hour * 60 + min))
         target_minutes=$((7 * 60 + 45))
+        MAX_WAIT_MINUTES=300
 
         already_posted=false
         if [ -f data/_last_posted_date.txt ]; then
@@ -90,8 +92,18 @@ jobs:
         elif [ "$now_minutes" -ge "$target_minutes" ]; then
           should_post=true
           reason="収集完了検知時点で既に07:45 JSTを過ぎている（現在${hour}時$(printf '%02d' "$min")分）ため即時投稿します"
+        elif [ $((target_minutes - now_minutes)) -le "$MAX_WAIT_MINUTES" ]; then
+          # 【2026-09-30変更】見張り役（watch_and_post.yml）の定時実行はGitHub側の混雑で
+          # 間引かれ、9/23〜9/30は毎朝9時前後に1回しか動かなかった（9/30は6:21に収集完了→
+          # 投稿は9:49）。収集完了の検知（workflow_run）は遅れないので、07:45まで5時間以内なら
+          # このジョブのまま待って投稿する。公開リポジトリのためActionsの実行時間は無料。
+          wait=$((target_minutes - now_minutes))
+          echo "[eligibility] 07:45 JSTまで${wait}分待ってから投稿します"
+          sleep $((wait * 60))
+          should_post=true
+          reason="07:45 JSTまで${wait}分待ったので投稿します"
         else
-          reason="まだ07:45 JST前（現在${hour}時$(printf '%02d' "$min")分）のため見張り役ワークフローに委ねてスキップします"
+          reason="まだ07:45 JSTまで5時間以上ある（現在${hour}時$(printf '%02d' "$min")分）ため見張り役ワークフローに委ねてスキップします"
         fi
 
         echo "should_post=$should_post" >> "$GITHUB_OUTPUT"
