@@ -284,10 +284,10 @@ Botが届く時間です。
         layout='team', minutes=2,
         title='AIチーム4人の役割',
         members=[
-            dict(key='hayate', name='⚡ 颯（はやて）', role='短期トレード担当', desc='値動きの大きさ・急な変動への備え', color='red'),
-            dict(key='tamaki', name='📈 環（たまき）', role='割安度の分析担当', desc='割安さと、利益が伸びているか', color='blue'),
-            dict(key='nagi', name='🔎 凪（なぎ）', role='企業リサーチ担当', desc='どんな会社か・売上や利益の推移', color='navy'),
-            dict(key='saku', name='🛡 朔（さく）', role='まとめ・チェック担当', desc='全体のまとめと注意点（最後に投稿）', color='amber'),
+            dict(key='hayate', name='⚡ 颯（はやて）', role='短期トレード担当', desc='値動きの大きさと\n急な変動への備え', color='red'),
+            dict(key='tamaki', name='📈 環（たまき）', role='割安度の分析担当', desc='割安さと\n利益が伸びているか', color='blue'),
+            dict(key='nagi', name='🔎 凪（なぎ）', role='企業リサーチ担当', desc='どんな会社か\n売上や利益の推移', color='navy'),
+            dict(key='saku', name='🛡 朔（さく）', role='まとめ・チェック担当', desc='全体のまとめと注意点\n（最後に投稿）', color='amber'),
         ],
         footer='候補一覧のあとに、4人が順番にコメントします。忙しい日は「朔」だけ読めばOK',
         script="""
@@ -1018,7 +1018,9 @@ def render_team(slide, d, idx, total):
         tf = _textbox(slide, x + 0.15, 4.45, 2.56, 0.45)
         _text(tf, m['role'], 14, accent, bold=True, align=PP_ALIGN.CENTER)
         tf = _textbox(slide, x + 0.15, 4.95, 2.56, 1.2)
-        _text(tf, m['desc'], 14, INK, align=PP_ALIGN.CENTER)
+        # 言葉の途中で折り返さないよう、desc の改行ごとに行を分ける
+        for j, line in enumerate(m['desc'].split('\n')):
+            _text(tf, line, 14, INK, align=PP_ALIGN.CENTER, first=(j == 0))
     if d.get('footer'):
         tf = _textbox(slide, 0.6, 6.45, 12.1, 0.5)
         _text(tf, d['footer'], 15, MUTED)
@@ -1105,6 +1107,11 @@ def build_script_md(path):
 
 # 音声合成で読み間違えやすい語の読み（動画用ナレーションだけに適用）
 TTS_READINGS = [
+    # 【2026-09-30 ユーザー指摘・読み確認】VOICEVOXの誤読（下の英字の置き換えより先に行う）
+    ('【tips】、それぞれ', '【tips】の3つ、それぞれ'),  # 「ティップス、」が「ティップ／ス」と分かれて読まれる
+    ('】【', '】、【'),              # 【速報】【今朝のシグナル】が続けて読まれる
+    ('月次（週間）tips', '週間ティップス'), ('長押し', 'ナガオシ'), ('黄色', 'きいろ'),
+    ('日本株', 'にほんかぶ'), ('3〜4時間', '3時間から4時間'), ('💡', '電球のマーク'),
     ('kurosuke', 'クロスケ'), ('Q&A', 'キューアンドエー'), ('1on1', 'ワンオンワン'), ('Bot', 'ボット'),
     ('Discord', 'ディスコード'), ('NISA', 'ニーサ'), ('TOPIX', 'トピックス'), ('VIX', 'ビックス'),
     ('FRB', 'エフアールビー'), ('FIRE', 'ファイア'), ('PER', 'ピーイーアール'), ('PBR', 'ピービーアール'),
@@ -1115,6 +1122,10 @@ TTS_READINGS = [
     ('🎯', 'まとのマーク'), ('⏸', '一時停止のマーク'), ('👀', '目のマーク'),
     ('颯', 'はやて'), ('環', 'たまき'), ('凪', 'なぎ'), ('朔', 'さく'),
 ]
+# 「〇〇な方も」「目指す方が」の「方」は「かた」と読む（「一方」「考え方」「読み方」は対象外）
+TTS_READING_PATTERNS = [
+    (r'(?<=[なるたいすうく])方(?=[がはもにをの])', 'かた'),
+]
 
 
 def to_narration(text):
@@ -1122,6 +1133,8 @@ def to_narration(text):
     t = text.strip()
     for src, dst in TTS_READINGS:
         t = t.replace(src, dst)
+    for pat, dst in TTS_READING_PATTERNS:
+        t = re.sub(pat, dst, t)
     t = re.sub(r'[\U0001F000-\U0001FFFF\u2600-\u27BF\uFE0F]', '', t)  # 絵文字
     t = t.replace('【', '').replace('】', '').replace('#', '')
     return t
