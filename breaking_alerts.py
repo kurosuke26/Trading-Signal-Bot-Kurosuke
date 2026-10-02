@@ -146,6 +146,9 @@ CLOSE_SUMMARY_TICKERS = [
 MEMBER_FORM_URL = os.getenv('MEMBER_FORM_URL', '').strip()
 MEMBER_FORM_WEBHOOK_URL = os.getenv('MEMBER_FORM_WEBHOOK_URL', '').strip()
 MEMBER_FORM_TITLE = os.getenv('MEMBER_FORM_TITLE', '').strip() or '会員提出フォーム'
+# 2つ目のフォーム（任意）。MEMBER_FORM2_URL が未設定なら従来どおり1つだけ案内する
+MEMBER_FORM2_URL = os.getenv('MEMBER_FORM2_URL', '').strip()
+MEMBER_FORM2_TITLE = os.getenv('MEMBER_FORM2_TITLE', '').strip() or '会員提出フォーム②'
 MEMBER_FORM_LAST_DAYS = int(env_float('MEMBER_FORM_LAST_DAYS', 5))
 MEMBER_FORM_POST_HOUR = int(env_float('MEMBER_FORM_POST_HOUR', 12))  # JST。この時刻を過ぎた最初の回で出す
 # 投稿者として表示する名前（速報の「Kurosuke速報」とは分ける）
@@ -490,8 +493,14 @@ def build_member_form_message(today):
     if days_left >= MEMBER_FORM_LAST_DAYS:
         return None
     when = '今日が締切です！' if days_left == 0 else f'締切まであと{days_left}日'
-    return (f'📝 **{today.month}月の{MEMBER_FORM_TITLE}**（締切：{month_end.month}/{month_end.day}、{when}）\n'
-            f'まだの方は、月末までに提出をお願いします。\n{MEMBER_FORM_URL}')
+    forms = [(MEMBER_FORM_TITLE, MEMBER_FORM_URL)]
+    if MEMBER_FORM2_URL:
+        forms.append((MEMBER_FORM2_TITLE, MEMBER_FORM2_URL))
+    lines = [f'📝 **{today.month}月の提出フォーム**（締切：{month_end.month}/{month_end.day}、{when}）',
+             'まだの方は、月末までに提出をお願いします。']
+    for title, url in forms:
+        lines.append(f'■ {title}\n{url}')
+    return '\n'.join(lines)
 
 
 def post_member_form_if_due(state, now_jst, today_jst_str):

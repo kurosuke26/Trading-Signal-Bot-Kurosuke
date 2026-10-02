@@ -47,6 +47,9 @@ jobs:
         # 月末の会員提出フォーム案内（未設定なら無効）。公開リポジトリのためURLはSecretsで渡す
         MEMBER_FORM_URL: ${{ secrets.MEMBER_FORM_URL }}
         MEMBER_FORM_WEBHOOK_URL: ${{ secrets.MEMBER_FORM_WEBHOOK_URL }}
+        MEMBER_FORM_TITLE: ${{ vars.MEMBER_FORM_TITLE }}
+        MEMBER_FORM2_URL: ${{ secrets.MEMBER_FORM2_URL }}
+        MEMBER_FORM2_TITLE: ${{ vars.MEMBER_FORM2_TITLE }}
       run: python breaking_alerts.py ${{ inputs.check_member_form && '--check-member-form' || '' }}
 
     - name: Commit and push state
