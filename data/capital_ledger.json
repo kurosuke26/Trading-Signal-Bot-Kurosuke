@@ -6,7 +6,7 @@
     "LONG"
   ],
   "start_date": "2026-09-24",
-  "cash": 1480700.0,
+  "cash": 1475295.0,
   "open_positions": {
     "2173.T|LONG|2026-09-24": {
       "ticker": "2173.T",
@@ -16,24 +16,10 @@
       "entry_price": 763.0,
       "invested": 500000.0,
       "shares": 655.308,
-      "last_price_date": "2026-10-01",
-      "last_price": 785.0,
-      "unrealized": 14417.0,
-      "unrealized_pct": 2.88,
-      "caution": false
-    },
-    "5391.T|LONG|2026-09-24": {
-      "ticker": "5391.T",
-      "name": "エーアンドエーマテリアル",
-      "signal": "LONG",
-      "entry_date": "2026-09-24",
-      "entry_price": 1522.0,
-      "invested": 500000.0,
-      "shares": 328.5151,
-      "last_price_date": "2026-10-01",
-      "last_price": 1487.0,
-      "unrealized": -11498.0,
-      "unrealized_pct": -2.3,
+      "last_price_date": "2026-10-02",
+      "last_price": 781.0,
+      "unrealized": 11796.0,
+      "unrealized_pct": 2.36,
       "caution": false
     },
     "6418.T|LONG|2026-09-24": {
@@ -44,7 +30,7 @@
       "entry_price": 1268.0,
       "invested": 500000.0,
       "shares": 394.3218,
-      "last_price_date": "2026-10-01",
+      "last_price_date": "2026-10-02",
       "last_price": 1251.0,
       "unrealized": -6703.0,
       "unrealized_pct": -1.34,
@@ -58,10 +44,10 @@
       "entry_price": 3680.0,
       "invested": 500000.0,
       "shares": 135.8696,
-      "last_price_date": "2026-10-01",
-      "last_price": 3520.0,
-      "unrealized": -21739.0,
-      "unrealized_pct": -4.35,
+      "last_price_date": "2026-10-02",
+      "last_price": 3475.0,
+      "unrealized": -27853.0,
+      "unrealized_pct": -5.57,
       "caution": false
     },
     "3297.T|LONG|2026-09-25": {
@@ -72,10 +58,10 @@
       "entry_price": 1185.0,
       "invested": 500000.0,
       "shares": 421.9409,
-      "last_price_date": "2026-10-01",
-      "last_price": 1197.0,
-      "unrealized": 5063.0,
-      "unrealized_pct": 1.01,
+      "last_price_date": "2026-10-02",
+      "last_price": 1187.0,
+      "unrealized": 844.0,
+      "unrealized_pct": 0.17,
       "caution": false
     },
     "4410.T|LONG|2026-09-25": {
@@ -86,10 +72,10 @@
       "entry_price": 1158.0,
       "invested": 500000.0,
       "shares": 431.7789,
-      "last_price_date": "2026-10-01",
-      "last_price": 1150.0,
-      "unrealized": -3454.0,
-      "unrealized_pct": -0.69,
+      "last_price_date": "2026-10-02",
+      "last_price": 1122.0,
+      "unrealized": -15544.0,
+      "unrealized_pct": -3.11,
       "caution": false
     },
     "6505.T|LONG|2026-09-25": {
@@ -100,10 +86,24 @@
       "entry_price": 2463.0,
       "invested": 500000.0,
       "shares": 203.0045,
-      "last_price_date": "2026-10-01",
-      "last_price": 2413.0,
-      "unrealized": -10150.0,
-      "unrealized_pct": -2.03,
+      "last_price_date": "2026-10-02",
+      "last_price": 2374.0,
+      "unrealized": -18067.0,
+      "unrealized_pct": -3.61,
+      "caution": false
+    },
+    "2108.T|LONG|2026-10-02": {
+      "ticker": "2108.T",
+      "name": "日本甜菜製糖",
+      "signal": "LONG",
+      "entry_date": "2026-10-02",
+      "entry_price": 1793.0,
+      "invested": 497255.0,
+      "shares": 277.3313,
+      "last_price_date": "2026-10-02",
+      "last_price": 1793.0,
+      "unrealized": 0.0,
+      "unrealized_pct": 0.0,
       "caution": false
     }
   },
@@ -119,6 +119,18 @@
       "invested": 500000.0,
       "pnl": -19300.0,
       "return_pct": -3.86
+    },
+    {
+      "ticker": "5391.T",
+      "name": "エーアンドエーマテリアル",
+      "signal": "LONG",
+      "entry_date": "2026-09-24",
+      "entry_price": 1522.0,
+      "close_date": "2026-10-02",
+      "close_price": 1463.0,
+      "invested": 500000.0,
+      "pnl": -8150.0,
+      "return_pct": -1.63
     }
   ],
   "skipped_entries": [
@@ -135,8 +147,9 @@
     "9511.T|LONG|2026-09-30",
     "415A.T|LONG|2026-10-01",
     "7217.T|LONG|2026-10-01",
-    "8150.T|LONG|2026-10-01"
+    "8150.T|LONG|2026-10-01",
+    "8996.T|LONG|2026-10-02"
   ],
-  "last_synced_at": "2026-10-01",
+  "last_synced_at": "2026-10-02",
   "period_year": 2026
 }
