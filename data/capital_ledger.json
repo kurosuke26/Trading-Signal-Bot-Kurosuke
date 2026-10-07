@@ -16,10 +16,10 @@
       "entry_price": 763.0,
       "invested": 500000.0,
       "shares": 655.308,
-      "last_price_date": "2026-10-06",
-      "last_price": 782.0,
-      "unrealized": 12451.0,
-      "unrealized_pct": 2.49,
+      "last_price_date": "2026-10-07",
+      "last_price": 781.0,
+      "unrealized": 11796.0,
+      "unrealized_pct": 2.36,
       "caution": false
     },
     "6418.T|LONG|2026-09-24": {
@@ -30,10 +30,10 @@
       "entry_price": 1268.0,
       "invested": 500000.0,
       "shares": 394.3218,
-      "last_price_date": "2026-10-06",
-      "last_price": 1268.0,
-      "unrealized": 0.0,
-      "unrealized_pct": 0.0,
+      "last_price_date": "2026-10-07",
+      "last_price": 1258.0,
+      "unrealized": -3943.0,
+      "unrealized_pct": -0.79,
       "caution": false
     },
     "1814.T|LONG|2026-09-25": {
@@ -44,10 +44,10 @@
       "entry_price": 3680.0,
       "invested": 500000.0,
       "shares": 135.8696,
-      "last_price_date": "2026-10-06",
-      "last_price": 3430.0,
-      "unrealized": -33967.0,
-      "unrealized_pct": -6.79,
+      "last_price_date": "2026-10-07",
+      "last_price": 3425.0,
+      "unrealized": -34647.0,
+      "unrealized_pct": -6.93,
       "caution": false
     },
     "4410.T|LONG|2026-09-25": {
@@ -58,10 +58,10 @@
       "entry_price": 1158.0,
       "invested": 500000.0,
       "shares": 431.7789,
-      "last_price_date": "2026-10-06",
-      "last_price": 1146.0,
-      "unrealized": -5181.0,
-      "unrealized_pct": -1.04,
+      "last_price_date": "2026-10-07",
+      "last_price": 1137.0,
+      "unrealized": -9067.0,
+      "unrealized_pct": -1.81,
       "caution": false
     },
     "6505.T|LONG|2026-09-25": {
@@ -72,10 +72,10 @@
       "entry_price": 2463.0,
       "invested": 500000.0,
       "shares": 203.0045,
-      "last_price_date": "2026-10-06",
-      "last_price": 2370.0,
-      "unrealized": -18879.0,
-      "unrealized_pct": -3.78,
+      "last_price_date": "2026-10-07",
+      "last_price": 2359.0,
+      "unrealized": -21112.0,
+      "unrealized_pct": -4.22,
       "caution": false
     },
     "2108.T|LONG|2026-10-02": {
@@ -86,10 +86,10 @@
       "entry_price": 1793.0,
       "invested": 497255.0,
       "shares": 277.3313,
-      "last_price_date": "2026-10-06",
-      "last_price": 1796.0,
-      "unrealized": 832.0,
-      "unrealized_pct": 0.17,
+      "last_price_date": "2026-10-07",
+      "last_price": 1753.0,
+      "unrealized": -11093.0,
+      "unrealized_pct": -2.23,
       "caution": false
     },
     "4463.T|LONG|2026-10-06": {
@@ -100,10 +100,10 @@
       "entry_price": 2020.0,
       "invested": 496620.0,
       "shares": 245.8515,
-      "last_price_date": "2026-10-06",
-      "last_price": 2020.0,
-      "unrealized": 0.0,
-      "unrealized_pct": 0.0,
+      "last_price_date": "2026-10-07",
+      "last_price": 2000.0,
+      "unrealized": -4917.0,
+      "unrealized_pct": -0.99,
       "caution": false
     }
   },
@@ -160,8 +160,9 @@
     "415A.T|LONG|2026-10-01",
     "7217.T|LONG|2026-10-01",
     "8150.T|LONG|2026-10-01",
-    "8996.T|LONG|2026-10-02"
+    "8996.T|LONG|2026-10-02",
+    "6493.T|LONG|2026-10-07"
   ],
-  "last_synced_at": "2026-10-06",
+  "last_synced_at": "2026-10-07",
   "period_year": 2026
 }
