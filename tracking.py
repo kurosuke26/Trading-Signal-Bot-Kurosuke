@@ -328,7 +328,7 @@ def _has_open(trade_log, ticker, signal):
     # 成績集計から除外しているのに、ここでは「保有中」として新規エントリーを塞いでいた。
     # 割安株ほど一括分が残っており、スコア上位の銘柄が9/14以降ほぼ建てられなくなっていたため、判定から外す
     # （一括分の記録自体は履歴として残し、決済判定も続ける）。
-    return any(p['ticker'] == ticker and p['signal'] == signal and p['status'] == 'open'
+    return any(p['ticker'] == ticker and p['signal'] == signal and p['status'] in ('open', 'pending_entry')
                and p.get('entry_date') not in LEGACY_BULK_LOAD_ENTRY_DATES for p in trade_log)
 
 
@@ -421,7 +421,7 @@ def record_roman_watchlist(results, today_str, path=None):
     return len(picks)
 
 
-def open_new_positions(trade_log, results, today_str, top_n=TOP_N_TRACKED):
+def open_new_positions(trade_log, results, today_str, top_n=TOP_N_TRACKED, entry_next_open=True):
     """
     今回の収集でLONG/SHORT判定になった銘柄のうち、「自信度が高い」候補だけを
     対象に、まだ建玉中(open)のものが無い銘柄について新規の仮想ポジションを1件開く。
@@ -433,6 +433,11 @@ def open_new_positions(trade_log, results, today_str, top_n=TOP_N_TRACKED):
     1件のポジションにつき、同じエントリー価格・同じATR値に対してATR_MULTIPLIER_VARIANTS
     の全倍率のストップを同時に設定する。「建玉中かどうか」「決済判定」は
     シグナル別のプライマリ倍率（ATR_MULTIPLIER_BY_SIGNAL）のみで行う。
+
+    【2026-10-08変更】entry_next_open=True（本番の既定）では、シグナル日の終値では建てず
+    「約定待ち（status='pending_entry'）」として記録し、翌営業日の始値で約定させる
+    （update_open_positions→_fill_pending_entry）。実際に買えるのは翌朝の始値であり、
+    検証（evaluate_strategy.py）とも条件を揃えるため。旧backtest.pyはFalseで従来どおり。
     """
     opened = 0
     top_candidates = [(r, 'LONG') for r in _select_top_candidates(results, 'LONG', LONG_TOP_N)]
@@ -449,6 +454,22 @@ def open_new_positions(trade_log, results, today_str, top_n=TOP_N_TRACKED):
         if not entry_price or entry_price <= 0:
             continue
         atr_value = (r.get('tech_snapshot') or {}).get('atr')
+
+        if entry_next_open:
+            trade_log.append({
+                'ticker': ticker, 'name': r.get('name'), 'signal': signal,
+                'signal_date': today_str, 'signal_price': round(entry_price, 2),
+                'entry_date': None, 'entry_price': None,
+                'atr_at_entry': round(atr_value, 4) if atr_value else None,
+                'sector_code': (r.get('fundamental_snapshot') or {}).get('sector_code'),
+                'sector_name': (r.get('fundamental_snapshot') or {}).get('sector_name'),
+                'status': 'pending_entry',
+                'last_price': round(entry_price, 2), 'last_price_date': today_str,
+                'variants': {},
+            })
+            _attach_vg_entry_info(trade_log[-1], r, signal)
+            opened += 1
+            continue
 
         variants = {}
         for m in ATR_MULTIPLIER_VARIANTS:
@@ -478,22 +499,90 @@ def open_new_positions(trade_log, results, today_str, top_n=TOP_N_TRACKED):
             'last_price_date': today_str,
             'variants': variants,
         })
-        if signal in MAX_HOLD_BDAYS_BY_SIGNAL:
-            # 後から「何点で入った取引がどうだったか」を振り返れるよう、エントリー時のスコアを残す
-            vg = r.get('vg') or {}
-            trade_log[-1]['max_hold_bdays'] = MAX_HOLD_BDAYS_BY_SIGNAL[signal]
-            trade_log[-1]['vg_at_entry'] = {k: vg.get(k) for k in ('value_score', 'growth_score', 'financial_score',
-                                                                   'per_pbr_calc', 'peg', 'sec_per_pbr_ratio')}
+        _attach_vg_entry_info(trade_log[-1], r, signal)
         opened += 1
     return opened
 
 
-def _close_on(hist, date_str):
-    """日足データフレームから、指定日の終値を取り出す（無ければNone）。"""
-    if hist is None or getattr(hist, 'empty', True) or 'Close' not in hist:
+def _attach_vg_entry_info(p, r, signal):
+    if signal in MAX_HOLD_BDAYS_BY_SIGNAL:
+        # 後から「何点で入った取引がどうだったか」を振り返れるよう、エントリー時のスコアを残す
+        vg = r.get('vg') or {}
+        p['max_hold_bdays'] = MAX_HOLD_BDAYS_BY_SIGNAL[signal]
+        p['vg_at_entry'] = {k: vg.get(k) for k in ('value_score', 'growth_score', 'financial_score',
+                                                   'per_pbr_calc', 'peg', 'sec_per_pbr_ratio')}
+
+
+# 【2026-10-08追加】翌営業日の始値での約定・手仕舞い（実際に売買できる価格に揃える）
+PENDING_ENTRY_EXPIRE_BDAYS = env_int('PENDING_ENTRY_EXPIRE_BDAYS', 5)  # 始値が取れないまま過ぎたら取り消し
+EXIT_FALLBACK_BDAYS = env_int('EXIT_FALLBACK_BDAYS', 5)  # 翌日以降の始値が取れないまま過ぎたら抵触日の終値で確定
+
+
+def _first_open_after(hist, date_str):
+    """date_strより後の最初の営業日の (日付, 始値)。取れなければ (None, None)。"""
+    if hist is None or getattr(hist, 'empty', True) or 'Open' not in hist:
+        return None, None
+    try:
+        idx = hist.index.strftime('%Y-%m-%d')
+        sub = hist['Open'][idx > date_str]
+        for d, o in zip(sub.index.strftime('%Y-%m-%d'), sub.values):
+            o = float(o)
+            if o == o and o > 0:
+                return d, o
+    except (AttributeError, KeyError, TypeError, ValueError):
+        pass
+    return None, None
+
+
+def _fill_pending_entry(p, hist, today_str):
+    """約定待ちのポジションを、シグナル日の翌営業日の始値で約定させる。約定したらTrue。"""
+    d, o = _first_open_after(hist, p['signal_date'])
+    if d is None:
+        if _business_days_between(p['signal_date'], today_str) > PENDING_ENTRY_EXPIRE_BDAYS:
+            p['status'] = 'cancelled'
+            p['cancel_reason'] = '翌営業日以降の始値が取得できなかった'
+        return False
+    p['entry_date'], p['entry_price'] = d, round(o, 2)
+    p['variants'] = {
+        _variant_key(m): {'stop': round(_initial_stop(o, p.get('atr_at_entry'), p['signal'], m), 2),
+                          'status': 'open', 'close_date': None, 'close_price': None, 'return_pct': None}
+        for m in ATR_MULTIPLIER_VARIANTS
+    }
+    p['status'] = 'open'
+    return True
+
+
+def _return_pct(signal, entry, price):
+    return ((price - entry) if _is_long(signal) else (entry - price)) / entry * 100
+
+
+def _fill_pending_exits(p, hist, today_str):
+    """終値でストップに抵触した（exit_pending）バリエーションを、翌営業日の始値で決済する。
+    プライマリが決済されたらTrueを返す。"""
+    closed_primary = False
+    for key, v in (p.get('variants') or {}).items():
+        if v.get('status') != 'exit_pending':
+            continue
+        d, o = _first_open_after(hist, v['exit_signal_date'])
+        if d is None:
+            if _business_days_between(v['exit_signal_date'], today_str) <= EXIT_FALLBACK_BDAYS:
+                continue
+            d, o = v['exit_signal_date'], v['exit_signal_close']
+            v['close_note'] = '翌営業日以降の始値が取得できず、抵触日の終値で確定'
+        v.update(status='closed', close_date=d, close_price=round(o, 2),
+                 return_pct=round(_return_pct(p['signal'], p['entry_price'], o), 2))
+        if key == PRIMARY_VARIANT_KEY_BY_SIGNAL.get(p['signal']):
+            p['status'] = 'closed'
+            closed_primary = True
+    return closed_primary
+
+
+def _close_on(hist, date_str, col='Close'):
+    """日足データフレームから、指定日の終値（col='Open'なら始値）を取り出す（無ければNone）。"""
+    if hist is None or getattr(hist, 'empty', True) or col not in hist:
         return None
     try:
-        s = hist['Close']
+        s = hist[col]
         idx = s.index.strftime('%Y-%m-%d')
         hit = s[idx == date_str]
         if len(hit) == 0:
@@ -525,7 +614,7 @@ def _close_if_delisted(p, today_str, missing_days=DELISTED_MISSING_BDAYS):
         return False
     ret = ((last_price - entry) if _is_long(p['signal']) else (entry - last_price)) / entry * 100
     for v in (p.get('variants') or {}).values():
-        if v.get('status') == 'open':
+        if v.get('status') in ('open', 'exit_pending'):
             v.update(status='closed', close_date=last_date, close_price=round(last_price, 2),
                      return_pct=round(ret, 2), close_reason='delisted')
     p['status'] = 'closed'
@@ -541,8 +630,14 @@ def apply_split_adjustment(p, hist, today_str):
     倍率を求め、取得価格・ATR・前回終値・建玉中のストップをまとめて掛け直す。決済済みのバリエーションは
     当時の水準どうしで完結しているため触らない。調整した履歴は 'adjustments' に残す。
     """
-    close_at_entry = _close_on(hist, p.get('entry_date'))
-    f = price_adjust_factor(p.get('entry_price'), close_at_entry)
+    if not p.get('entry_date') or not p.get('entry_price'):
+        return None  # 約定待ち
+    if p.get('signal_date'):
+        # 【2026-10-08】翌営業日始値で約定した記録は、エントリー日の「始値」と比べる
+        ref_at_entry = _close_on(hist, p['entry_date'], col='Open')
+    else:
+        ref_at_entry = _close_on(hist, p.get('entry_date'))
+    f = price_adjust_factor(p.get('entry_price'), ref_at_entry)
     if f is None:
         return None
     p['entry_price'] = round(p['entry_price'] * f, 2)
@@ -551,8 +646,10 @@ def apply_split_adjustment(p, hist, today_str):
     if p.get('last_price'):
         p['last_price'] = round(p['last_price'] * f, 2)
     for v in (p.get('variants') or {}).values():
-        if v.get('status') == 'open' and v.get('stop') is not None:
+        if v.get('status') in ('open', 'exit_pending') and v.get('stop') is not None:
             v['stop'] = round(v['stop'] * f, 2)
+        if v.get('status') == 'exit_pending' and v.get('exit_signal_close'):
+            v['exit_signal_close'] = round(v['exit_signal_close'] * f, 2)
     p.setdefault('adjustments', []).append({'date': today_str, 'factor': round(f, 6)})
     return f
 
@@ -572,7 +669,13 @@ def update_open_positions(trade_log, results, today_str, histories=None):
     collector.pyの実行ログ表示に使われる）。
     """
     closed_primary = 0
+    next_open = histories is not None  # 日足（始値）が渡された本番は翌営業日始値で約定・決済する
     for p in trade_log:
+        if p.get('status') == 'pending_entry':
+            if not next_open or not _fill_pending_entry(p, histories.get(p['ticker']), today_str):
+                continue
+        if next_open and _fill_pending_exits(p, histories.get(p['ticker']), today_str):
+            closed_primary += 1
         variants = p.get('variants') or {}
         if not any(v.get('status') == 'open' for v in variants.values()):
             continue
@@ -630,6 +733,12 @@ def update_open_positions(trade_log, results, today_str, histories=None):
                 v['close_reason'] = 'max_hold'
             hit = hit or time_up
 
+            if hit and next_open:
+                # 終値で抵触 → 実際に売れるのは翌営業日の始値（次回の収集で_fill_pending_exitsが確定させる）
+                v['status'] = 'exit_pending'
+                v['exit_signal_date'] = today_str
+                v['exit_signal_close'] = round(current_price, 2)
+                continue
             if hit:
                 entry = p['entry_price']
                 if _is_long(p['signal']):
@@ -717,6 +826,7 @@ def compute_performance_stats(trade_log):
     closed_primary_short = _closed_variant_trades(filtered_log, PRIMARY_VARIANT_KEY_BY_SIGNAL['SHORT'], 'SHORT')
     closed_primary_all = closed_primary_long + closed_primary_short
     open_count = len([p for p in filtered_log if p.get('status') == 'open'])
+    pending_entry_count = len([p for p in filtered_log if p.get('status') == 'pending_entry'])
 
     # ATR倍率比較は従来どおりLONG＋SHORTのみ（保有期間に上限があるVALUE/GROWTHを混ぜると比較の前提が変わるため）
     atr_variants = {
@@ -735,6 +845,7 @@ def compute_performance_stats(trade_log):
         'financial_only': _stats_for(_closed_variant_trades(filtered_log, PRIMARY_VARIANT_KEY_BY_SIGNAL['FINANCIAL'],
                                                             'FINANCIAL')),
         'open_positions': open_count,
+        'pending_entries': pending_entry_count,
         'atr_variants': atr_variants,
         'excluded_legacy_bulk_load_closed_count': excluded_closed_count,
         'valuation': compute_valuation(trade_log),
@@ -815,3 +926,18 @@ def _valuation(trade_log, lot=VALUATION_LOT_SHARES, legacy=False):
     out['price_date'] = latest_date or None
     return out
 
+
+def rule_constants():
+    """
+    【2026-10-08追加】売買ルールの定数を1か所にまとめて返す。collector.py が latest_scan.json の 'rules' に書き出し、
+    discord-ai-team 側はそこから読む（倍率等を両リポジトリに手書きで複製するとズレるため）。
+    """
+    return {
+        'atr_multiplier_by_signal': dict(ATR_MULTIPLIER_BY_SIGNAL),
+        'long_entry_score_threshold': LONG_ENTRY_SCORE_THRESHOLD,
+        'long_top_n': LONG_TOP_N,
+        'long_display_min_score': env_float('LONG_DISPLAY_MIN_SCORE', 70),  # poster.pyと同じ環境変数
+        'max_hold_bdays_by_signal': dict(MAX_HOLD_BDAYS_BY_SIGNAL),
+        'entry': 'next_open',   # シグナル日の翌営業日の始値で約定
+        'exit': 'next_open',    # 終値がストップに抵触した翌営業日の始値で決済
+    }

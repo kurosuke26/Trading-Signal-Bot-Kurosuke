@@ -37,6 +37,7 @@ from tracking import (
 )
 from value_growth_scoring import financial_band_label, growth_band_label, roman_band_label, value_band_label
 from util import env_float, json_default
+from holdings_report import build_holdings_payload, load_trade_log as load_trade_log_file
 
 SNAPSHOT_PATH = os.getenv('SCAN_OUTPUT_PATH') or 'data/latest_scan.json'
 MAX_SNAPSHOT_AGE_HOURS = env_float('MAX_SNAPSHOT_AGE_HOURS', 12)
@@ -806,8 +807,17 @@ def build_payloads(snapshot, stale, age_hours):
         'embeds': strategy_embeds[:10],
     }
 
+    # 【2026-10-08追加】保有中ポジションの売りチェック（ロングチャンネルの3通目）
+    trade_log = load_trade_log_file()
+    as_of = max((p.get('last_price_date') or '' for p in (trade_log or [])), default='') or None
+    holdings_payload = build_holdings_payload(
+        trade_log, {t: r.get('signal') for t, r in results.items()}, as_of, stale_note)
+    long_posts = [(long_payload, long_csv, 'long_candidates.csv'), (vg_payload, None, None)]
+    if holdings_payload:
+        long_posts.append((holdings_payload, None, None))
+
     return {
-        'LONG': [(long_payload, long_csv, 'long_candidates.csv'), (vg_payload, None, None)],
+        'LONG': long_posts,
         'SHORT': (short_payload, short_csv, 'short_candidates.csv'),
         'WARNING': (warning_payload, warning_csv, 'fetch_errors.csv'),
         'PERFORMANCE': (performance_payload, None, None),

@@ -203,7 +203,8 @@ def sync(ledger, trade_log, today_str):
     candidates = [
         t for t in trade_log
         if t.get('signal') in SIGNAL_FILTER
-        and t.get('entry_date', '') >= ledger['start_date']
+        and t.get('status') != 'pending_entry' and t.get('entry_date')  # 約定待ちは翌営業日の約定後に取り込む
+        and t['entry_date'] >= ledger['start_date']
         and t.get('entry_date') not in LEGACY_BULK_LOAD_ENTRY_DATES
         and _position_key(t) not in already_seen
     ]

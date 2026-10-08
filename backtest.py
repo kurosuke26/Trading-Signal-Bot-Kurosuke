@@ -215,7 +215,7 @@ def run_backtest():
 
         today_str = date.strftime('%Y-%m-%d')
         closed_n = tracking.update_open_positions(trade_log, results, today_str)
-        opened_n = tracking.open_new_positions(trade_log, results, today_str)
+        opened_n = tracking.open_new_positions(trade_log, results, today_str, entry_next_open=False)
 
         if (di + 1) % 20 == 0 or di == len(all_dates) - 1:
             print(f'[backtest] 進捗 {di + 1}/{len(all_dates)}日目（{today_str}）'

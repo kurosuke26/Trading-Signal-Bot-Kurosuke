@@ -93,7 +93,7 @@ from universe import get_all_tse_tickers, FALLBACK_TICKERS
 from fundamentals_jquants import build_fundamental_snapshot
 from util import env_int, env_float, json_default, pace_to_target, safe_num
 from tracking import (load_trade_log, save_trade_log, open_new_positions,
-                       update_open_positions, compute_performance_stats)
+                       update_open_positions, compute_performance_stats, rule_constants)
 
 # ---------------------------------------------------------------------------
 # 実行パラメータ（環境変数で調整可能）
@@ -621,6 +621,8 @@ def build_snapshot(results, fund_failed, hist_failed, tickers, used_fallback, st
         'performance_stats': performance_stats,
         # 【2026-09-16追加】別枠のイベント型仮想売買（増配修正・暴落後。event_strategies.py）
         'event_strategies': event_summary,
+        # 【2026-10-08追加】売買ルールの定数（discord-ai-team側はここから読む。tracking.rule_constants参照）
+        'rules': rule_constants(),
     }
 
 

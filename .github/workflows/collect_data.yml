@@ -11,7 +11,15 @@ on:
     # 収集する。土曜夜（＝日曜朝投稿用）は取引が無く収集の意味が無いためスキップ
     # （day-of-weekは0=日曜〜5=金曜。UTCでの曜日評価だが、この時刻ならJSTの曜日と
     # 一致するため実質「日〜金曜の夜」を指定している）。
-    - cron: '0 12 * * 0-5'
+    # 【2026-10-08変更】12:00 UTC（毎時0分）は混雑し、9/21以降は開始が4.5〜7.5時間遅れ、
+    # 10/5は実行自体が飛ばされた（投稿が9:16・10:57＝寄り付き後になった）。
+    # 混雑しにくい半端な分に移し、さらに予備の起動を1本追加する。
+    #   本命: 15:23 UTC = 00:23 JST（翌日）… 約3.5時間で04:00 JST頃に完了
+    #   予備: 17:47 UTC = 02:47 JST（翌日）… 本命が既に完了/実行中なら何もしない（guardジョブ）
+    # 曜日はUTC日〜金＝JST月〜土の未明。従来（JST日〜金の21:00）と同じ取引日を対象にする。
+    # 完了後は post_signals.yml が 07:45 JST まで待って投稿する（5時間以内なら待機）。
+    - cron: '23 15 * * 0-5'
+    - cron: '47 17 * * 0-5'
   workflow_dispatch:
     inputs:
       max_tickers:
@@ -26,8 +34,47 @@ on:
 permissions:
   contents: write  # data/latest_scan.json をリポジトリにコミットするために必要
 
+# 本命と予備の起動が重なっても同時に走らせない（後から来た方は先の完了を待ってからguardで判定）
+concurrency:
+  group: kurosuke-collect
+  cancel-in-progress: false
+
 jobs:
+  # 【2026-10-08追加】予備の起動用。直近10時間以内に収集済みなら、今回は収集しない。
+  # 手動実行（workflow_dispatch）は常に収集する。
+  guard:
+    runs-on: ubuntu-latest
+    outputs:
+      run: ${{ steps.g.outputs.run }}
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+    - name: Check whether today's scan already exists
+      id: g
+      run: |
+        if [ "${{ github.event_name }}" != "schedule" ]; then
+          echo "run=true" >> "$GITHUB_OUTPUT"; echo "[guard] 手動実行のため収集します"; exit 0
+        fi
+        python3 - <<'PY' >> "$GITHUB_OUTPUT"
+        import json, sys
+        from datetime import datetime, timezone
+        try:
+            gen = json.load(open('data/latest_scan.json')).get('generated_at_utc')
+            age_h = (datetime.now(timezone.utc) - datetime.fromisoformat(gen)).total_seconds() / 3600
+        except Exception as e:
+            print(f"[guard] 前回の収集時刻を読めませんでした（{e}）。収集します", file=sys.stderr)
+            print("run=true"); sys.exit(0)
+        if age_h < 10:
+            print(f"[guard] {age_h:.1f}時間前に収集済み（本命の起動で完了）。今回はスキップします", file=sys.stderr)
+            print("run=false")
+        else:
+            print(f"[guard] 前回の収集から{age_h:.1f}時間経過。収集します", file=sys.stderr)
+            print("run=true")
+        PY
+
   collect:
+    needs: guard
+    if: needs.guard.outputs.run == 'true'
     runs-on: ubuntu-latest
     # ペーシングにより意図的に時間をかけるため、ジョブのタイムアウトにも余裕を持たせる
     timeout-minutes: 280

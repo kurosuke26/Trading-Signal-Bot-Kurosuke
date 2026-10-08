@@ -33,7 +33,7 @@ def make_position(signal, entry_price, atr, entry_date='2026-09-01'):
     # SHORTの新規建ては2026-10-08に停止したが、保有中SHORTの扱い（分割・異常値）は引き続き確かめる
     saved, tracking.SHORT_NEW_ENTRIES = tracking.SHORT_NEW_ENTRIES, True
     try:
-        tracking.open_new_positions(log, results, entry_date)
+        tracking.open_new_positions(log, results, entry_date, entry_next_open=False)
     finally:
         tracking.SHORT_NEW_ENTRIES = saved
     assert len(log) == 1, '前提：テスト用のポジションが1件開くこと'

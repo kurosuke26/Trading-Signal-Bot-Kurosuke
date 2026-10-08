@@ -96,7 +96,7 @@ def test_candidates_and_entries():
     g = tracking.vg_display_candidates(res, 'GROWTH', 3)
     assert [r['ticker'] for r in g] == ['1000.T', '1002.T', '1004.T']
     log = []
-    n = tracking.open_new_positions(log, res, '2026-10-08')
+    n = tracking.open_new_positions(log, res, '2026-10-08', entry_next_open=False)
     sigs = [p['signal'] for p in log]
     assert n == len(log) and sigs.count('VALUE') == tracking.VALUE_TOP_N and sigs.count('GROWTH') == tracking.GROWTH_TOP_N
     assert 'SHORT' not in sigs
@@ -111,7 +111,7 @@ def test_candidates_and_entries():
 def test_max_hold_closes_position():
     res = _results()
     log = []
-    tracking.open_new_positions(log, res, '2026-07-01')
+    tracking.open_new_positions(log, res, '2026-07-01', entry_next_open=False)
     g = [p for p in log if p['signal'] == 'GROWTH']
     for r in res.values():
         r['current_price'] = 1100.0  # 値上がりしてストップには触れない
