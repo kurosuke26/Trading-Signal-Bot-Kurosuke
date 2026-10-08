@@ -175,8 +175,9 @@ VG_MIN_AVG_VALUE_YEN = env_float('VG_MIN_AVG_VALUE_YEN', 50_000_000)
 # 種類 -> (スコアの列, 入口の列)。ROMANはロマン枠v2（監視のみ。仮想エントリーはしない）
 VG_KINDS = {'VALUE': ('value_score', 'value_gate'), 'GROWTH': ('growth_score', 'growth_gate'),
             'FINANCIAL': ('financial_score', 'financial_gate'), 'ROMAN': ('roman2_score', 'roman2_gate')}
-# 【2026-10-08】SHORTの新規の仮想エントリーは停止（kurosukeさんの方針：ショートは考えない）。保有中の分は決済まで追跡する。
-SHORT_NEW_ENTRIES = env_int('SHORT_NEW_ENTRIES', 0) == 1
+# SHORTの新規の仮想エントリーを行うか。2026-10-08に一度停止したが、同日kurosukeさんの方針で再開
+# （成績はLONG・SHORT・VALUE・GROWTH・FINANCIALを分けて集計・報告する）。止めたい場合は SHORT_NEW_ENTRIES=0
+SHORT_NEW_ENTRIES = env_int('SHORT_NEW_ENTRIES', 1) == 1
 LONG_SIDE_SIGNALS = ('LONG', 'VALUE', 'GROWTH', 'FINANCIAL')
 
 
