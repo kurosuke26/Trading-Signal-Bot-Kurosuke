@@ -36,6 +36,8 @@
   実際に売買できる価格に揃え、検証（evaluate_strategy.py）とも条件を合わせた。旧`backtest.py`は従来どおり
 - **保有ポジションの売りチェック**（`holdings_report.py`）：ロングチャンネルの3通目に、
   🔴本日の寄り付きで手仕舞い／⏳本日の寄り付きで買い／🟡ストップ接近（3%以内）／🟢保有継続 を銘柄ごとに投稿
+- **SHORTは撤退の目安として使う**（kurosukeさんの方針）：SHORTの新規仮想エントリーを停止（`SHORT_NEW_ENTRIES=0`、保有分は決済まで追跡）。
+  保有中のロング銘柄にSHORT判定が出たら、売りチェックの「⚠️撤退検討」に表示する（自動では売らない）
 - **売買ルールの定数を`latest_scan.json`の`rules`に書き出す**（`tracking.rule_constants`）。discord-ai-team側はここから読む
 - テスト：`python test_next_open.py`
 

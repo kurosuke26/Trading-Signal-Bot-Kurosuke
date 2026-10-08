@@ -6,6 +6,7 @@
 銘柄ごとに次の4区分で毎朝知らせる。
 
   🔴 本日手仕舞い … 前日の終値がストップを割った／保有期間の上限に達した → 本日の寄り付きで売る
+  ⚠️ 撤退検討 … 保有中のロング銘柄に、前日のスキャンでSHORT判定が出た（2026-10-08〜。SHORTは撤退の目安として使う）
   ⏳ 本日約定（買い）… 前日のシグナルで建てる → 本日の寄り付きで買う
   🟡 ストップ接近 … 終値とストップの差が NEAR_STOP_PCT（既定3%）以内
   🟢 保有継続 … それ以外
@@ -25,7 +26,7 @@ TRADE_LOG_PATH = os.getenv('TRADE_LOG_PATH') or 'data/trade_log.json'
 NEAR_STOP_PCT = env_float('NEAR_STOP_PCT', 3.0)
 
 KIND_LABEL = {'LONG': '複合', 'VALUE': '割安', 'GROWTH': '成長', 'FINANCIAL': '金融', 'SHORT': '空売り'}
-COLOR = {'exit': 0xE74C3C, 'entry': 0x3498DB, 'near': 0xF1C40F, 'hold': 0x2ECC71}
+COLOR = {'exit': 0xE74C3C, 'caution': 0xE67E22, 'entry': 0x3498DB, 'near': 0xF1C40F, 'hold': 0x2ECC71}
 MAX_DESC = 3900  # Discordのdescription上限4096字に余裕を持たせる
 
 
@@ -62,7 +63,7 @@ def classify(trade_log, today_signals=None):
     各要素は表示用の辞書。today_signals は {ticker: 'LONG'/'SHORT'/...}（当日の判定。警戒表示用）。
     """
     today_signals = today_signals or {}
-    out = {'exit': [], 'entry': [], 'near': [], 'hold': []}
+    out = {'exit': [], 'caution': [], 'entry': [], 'near': [], 'hold': []}
     for p in trade_log or []:
         if p.get('entry_date') in LEGACY_BULK_LOAD_ENTRY_DATES:
             continue  # 立ち上げ時の一括分は成績集計と同じく対象外
@@ -91,9 +92,11 @@ def classify(trade_log, today_signals=None):
                              else f"終値{_yen(v.get('exit_signal_close'))}がストップ{_yen(stop)}を割った")
             out['exit'].append(row)
             continue
-        if stop:
-            # ストップまでの距離（買いは下、空売りは上）。終値基準
+        if stop:  # ストップまでの距離（買いは下、空売りは上）。終値基準
             row['gap_pct'] = ((price - stop) if _is_long(sig) else (stop - price)) / price * 100
+        if row['caution']:
+            out['caution'].append(row)
+            continue
         if row.get('gap_pct') is not None and row['gap_pct'] <= NEAR_STOP_PCT:
             out['near'].append(row)
         else:
@@ -145,6 +148,7 @@ def build_holdings_payload(trade_log, today_signals=None, as_of=None, stale_note
     c = classify(trade_log, today_signals)
     embeds = []
     embeds += _embeds_for(f"🔴 本日の寄り付きで手仕舞い（{len(c['exit'])}件）", c['exit'], COLOR['exit'])
+    embeds += _embeds_for(f"⚠️ 撤退検討・本日SHORT判定（{len(c['caution'])}件）", c['caution'], COLOR['caution'])
     embeds += _embeds_for(f"⏳ 本日の寄り付きで買い（{len(c['entry'])}件）", c['entry'], COLOR['entry'])
     embeds += _embeds_for(f"🟡 ストップ接近・{NEAR_STOP_PCT:g}%以内（{len(c['near'])}件）", c['near'], COLOR['near'])
     embeds += _embeds_for(f"🟢 保有継続（{len(c['hold'])}件）", c['hold'], COLOR['hold'])
@@ -152,5 +156,6 @@ def build_holdings_payload(trade_log, today_signals=None, as_of=None, stale_note
         embeds = [{'description': '保有中・約定待ちの仮想ポジションはありません。', 'color': COLOR['hold']}]
     head = (f"🔔 保有ポジションの売りチェック（{as_of}終値時点）" if as_of else "🔔 保有ポジションの売りチェック")
     rule = ("ルール：終値がストップ（終値−ATR×倍率、上げのみ）を割った翌営業日の寄り付きで手仕舞い。"
+            "⚠️はロング保有中の銘柄にSHORT判定が出たもの（撤退の目安。自動では売らない）。"
             "数字は data/trade_log.json（仮想売買の記録）より。実際の売買は各自の判断で。")
     return {'content': (stale_note + "\n" if stale_note else '') + head + "\n" + rule, 'embeds': embeds}

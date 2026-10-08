@@ -122,6 +122,13 @@ def test_holdings_report_sections():
     tracking.update_open_positions(log, results(980.0), '2026-10-05', {'X.T': h})
     c = hr.classify(log, {'X.T': 'SHORT'})
     assert len(c['exit']) == 1 and 'ストップ' in c['exit'][0]['reason'] and c['exit'][0]['caution']
+    # 手仕舞い待ちでない保有中のロングにSHORT判定 → ⚠️撤退検討
+    log2 = opened_log()
+    tracking.update_open_positions(log2, results(1020.0), '2026-10-02', {'X.T': h})
+    c2 = hr.classify(log2, {'X.T': 'SHORT'})
+    assert len(c2['caution']) == 1 and not c2['near'] and not c2['hold']
+    assert '撤退検討' in hr.build_holdings_payload(log2, {'X.T': 'SHORT'}, '2026-10-02')['embeds'][0]['title']
+    assert not tracking.SHORT_NEW_ENTRIES, 'SHORTの新規仮想エントリーは既定で停止'
     payload = hr.build_holdings_payload(log, {}, '2026-10-05')
     assert '手仕舞い（1件）' in payload['embeds'][0]['title']
     print('ok test_holdings_report_sections')
