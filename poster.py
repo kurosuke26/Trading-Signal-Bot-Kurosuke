@@ -32,7 +32,10 @@ from scoring import score_band_label, suggested_trade_levels
 from tracking import (
     ATR_MULTIPLIER_BY_SIGNAL, ATR_MULTIPLIER_VARIANTS, _variant_key,
     LONG_ENTRY_SCORE_THRESHOLD, LONG_TOP_N, LONG_REQUIRE_SECTOR_MOMENTUM,
+    MAX_HOLD_BDAYS_BY_SIGNAL, VALUE_TOP_N, GROWTH_TOP_N, FINANCIAL_TOP_N, SHORT_NEW_ENTRIES, TOP_N_BY_KIND, VG_KINDS,
+    vg_display_candidates,
 )
+from value_growth_scoring import financial_band_label, growth_band_label, roman_band_label, value_band_label
 from util import env_float, json_default
 
 SNAPSHOT_PATH = os.getenv('SCAN_OUTPUT_PATH') or 'data/latest_scan.json'
@@ -229,6 +232,98 @@ def build_long_payload(long_results, total_long, stale_note=''):
                [dict(r, band=f'{lo}〜{hi}点未満（参考）') for r in watch]
         csv_bytes = build_csv_bytes(rows, LONG_CSV_COLUMNS)
     return {'content': content[:2000], 'embeds': embeds[:10]}, csv_bytes
+
+
+# ---------------------------------------------------------------------------
+# 【2026-10-08追加】種類別スコア（割安・成長・金融・ロマン枠。value_growth_scoring.py・tracking.vg_display_candidates）
+# 1銘柄2〜3行のコンパクトな一覧にして、種類ごとに1つのEmbedにまとめる（Discordの件数上限対策）。
+# ---------------------------------------------------------------------------
+def _pct(v, signed=True, digits=0):
+    if v is None:
+        return '—'
+    return f"{v * 100:+.{digits}f}%" if signed else f"{v * 100:.{digits}f}%"
+
+
+def _sector_line(r):
+    """同業種との比較（PER×PBRの業種中央値比・60日リターンの業種平均との差）。"""
+    vg = r.get('vg') or {}
+    sec = (r.get('fundamental_snapshot') or {}).get('sector_name') or '同業種'
+    parts = []
+    ratio = vg.get('sec_per_pbr_ratio')
+    if ratio is not None:
+        parts.append(f"PER×PBRは{sec}の中央値の{ratio * 100:.0f}%（{'割安' if ratio < 1 else '割高'}）")
+    diff = vg.get('sec_ret60_diff')
+    if diff is not None:
+        parts.append(f"60日騰落は{sec}平均より{diff * 100:+.0f}pt")
+    return '業種内：' + '／'.join(parts) if parts else ''
+
+
+def _vg_line(rank, r, kind, top_n):
+    vg = r.get('vg') or {}
+    price = r.get('current_price') or 0
+    mark = ('🎯' if rank <= top_n else '・') if top_n else '🌱'
+    head = f"{mark}{rank}. **{r['ticker']} {r.get('name') or ''}** ¥{price:,.0f}"
+    div = f" ／ 配当{(r.get('dividend_yield') or 0):.1f}%"
+    if kind == 'VALUE':
+        pp = vg.get('per_pbr_calc')
+        body = f"割安{vg['value_score']:.0f}点" + (f" ／ PER×PBR {pp:.1f}" if pp is not None else '')
+        body += div + f" ／ 現金÷時価総額 {_pct(vg.get('cash_to_mktcap'), signed=False)}"
+    elif kind == 'GROWTH':
+        body = (f"成長{vg['growth_score']:.0f}点 ／ 売上{_pct(vg.get('sales_yoy'))}・営業益{_pct(vg.get('op_yoy'))}（前年同期比）"
+                + (f" ／ PEG {vg['peg']:.2f}" if vg.get('peg') is not None else '')
+                + (f" ／ 売買代金×{vg['value_ratio_20_60']:.1f}" if vg.get('value_ratio_20_60') is not None else ''))
+    elif kind == 'FINANCIAL':
+        body = (f"金融{vg['financial_score']:.0f}点" + (f" ／ PBR {r['pbr']:.2f}" if r.get('pbr') else '')
+                + f" ／ ROE {_pct(vg.get('roe'), signed=False, digits=1)}" + div)
+    else:  # ROMAN
+        mc = vg.get('mktcap_oku')
+        body = (f"ロマン{vg['roman2_score']:.0f}点" + (f" ／ 時価総額{mc:,.0f}億円" if mc else '')
+                + f" ／ 営業益予想の上方修正{_pct(vg.get('op_revision_from_initial'))}（期初比）"
+                + f" ／ 120日{_pct(vg.get('ret_120'))}")
+    if kind in ATR_MULTIPLIER_BY_SIGNAL and top_n and rank <= top_n:
+        atr = (r.get('tech_snapshot') or {}).get('atr')
+        stop = suggested_trade_levels(price, atr, atr_multiplier=ATR_MULTIPLIER_BY_SIGNAL[kind]).get('initial_stop')
+        if stop is not None:
+            body += f" ／ 初期損切り¥{stop:,.0f}"
+    sector = _sector_line(r)
+    return f"{head}\n　{body}" + (f"\n　{sector}" if sector else '')
+
+
+VG_SPECS = (
+    ('VALUE', value_band_label, 0x16A085, '💎 割安（VALUE）※試験運用',
+     'PER×PBR（≦14で高得点）・業種内の割安さ・ネットキャッシュ・配当・自己資本比率・業種内の勢いで採点。'
+     '金融業を除き、株価が50日線より上の銘柄だけを並べています'),
+    ('GROWTH', growth_band_label, 0x2980B9, '🚀 成長（GROWTH）※試験運用',
+     '増収増益10%以上（会社予想が減益でない）の銘柄を、割安さ（PEG・PER）と需給・トレンド（売買代金の増加・高値への近さ・120日リターン）で採点'),
+    ('FINANCIAL', financial_band_label, 0xD4AC0D, '🏦 金融（FINANCIAL）※試験運用',
+     '銀行・証券・保険・その他金融を、金融業の中だけで比較（PBR÷ROE＝稼ぐ力の割に安いか・PBR・ROE・配当・業種内の勢い）'),
+    ('ROMAN', roman_band_label, 0x8E44AD, '🌱 ロマン枠（10倍株の候補・監視のみ）',
+     '時価総額50〜1,500億円で、会社予想の営業利益が期初から上方修正された銘柄を、規模の小ささ・120日の上昇・業種内の勢いで並べています。'
+     '過去の検証では、半年以内に2倍になった割合が約7%（同じ規模の全銘柄は約5%）、1.5倍は約22%（同17%）。'
+     '大半は大化けしない「宝くじ枠」なので、仮想売買はせず記録だけ残しています'),
+)
+
+
+def build_vg_embeds(results):
+    """戻り値: 種類ごとのEmbedのリスト（候補が無い種類は「本日の該当なし」）"""
+    full = {t: r for t, r in results.items() if r.get('detail') == 'full'}
+    embeds = []
+    for kind, band, color, title, desc in VG_SPECS:
+        top_n = TOP_N_BY_KIND.get(kind, 0)
+        score_key = VG_KINDS[kind][0]
+        cands = vg_display_candidates(full, kind)
+        rule = ''
+        if top_n:
+            rule = (f"\n🎯＝上位{top_n}銘柄は仮想エントリーの対象（翌営業日に建て、終値−ATR×{ATR_MULTIPLIER_BY_SIGNAL[kind]}の"
+                    f"トレーリングストップ・最長{MAX_HOLD_BDAYS_BY_SIGNAL[kind]}営業日で手仕舞い）")
+        if not cands:
+            embeds.append({'title': f'{title}：本日の該当なし', 'description': desc, 'color': color})
+            continue
+        top_score = (cands[0].get('vg') or {}).get(score_key)
+        lines = [_vg_line(i, r, kind, top_n) for i, r in enumerate(cands, start=1)]
+        embeds.append({'title': f'{title}：上位{len(cands)}銘柄（最高{top_score:.0f}点・{band(top_score)}）',
+                       'description': (desc + rule + '\n\n' + '\n'.join(lines))[:4000], 'color': color})
+    return embeds
 
 
 def _fmt_num(v, suffix='%', signed=True):
@@ -485,6 +580,10 @@ def build_payloads(snapshot, stale, age_hours):
     long_buy_signals = [r for r in long_results if _score_of(r) >= LONG_ENTRY_SCORE_THRESHOLD
                         and sector_relative.passes(r, require_momentum=LONG_REQUIRE_SECTOR_MOMENTUM)]
     event_embeds = build_event_embeds(snapshot.get('event_strategies'))
+    # 【2026-10-08追加】割安（VALUE）／成長（GROWTH）の一覧。ロングチャンネルに、従来の一覧の後の2通目として送る
+    vg_embeds = build_vg_embeds(results)
+    vg_payload = {'content': (((stale_note + ' ') if stale_note else '')
+                              + '🧭 種類別スコア：割安／成長／金融／ロマン枠（2026-10-08から試験運用）'), 'embeds': vg_embeds}
 
     # ---- SHORT ----
     short_payload = None
@@ -573,6 +672,8 @@ def build_payloads(snapshot, stale, age_hours):
             parts.append(f"平均利益：+{s['avg_win_pct']}%")
         if s.get('avg_loss_pct') is not None:
             parts.append(f"平均損失：{s['avg_loss_pct']}%")
+        if s.get('expectancy_pct') is not None:
+            parts.append(f"期待値：{s['expectancy_pct']:+.2f}%/回")
         return " ／ ".join(parts)
 
     def _fmt_valuation(val):
@@ -590,7 +691,8 @@ def build_payloads(snapshot, stale, age_hours):
                 parts.append(f"確定 {v['realized']:+,}円（決済{v['closed_count']}件）")
             return f"{label}：**{v['profit']:+,}円**　" + "／".join(parts)
 
-        lines = [line('LONG', val.get('LONG')), line('SHORT', val.get('SHORT'))]
+        lines = [line('LONG', val.get('LONG')), line('SHORT', val.get('SHORT')),
+                 line('VALUE', val.get('VALUE')), line('GROWTH', val.get('GROWTH')), line('FINANCIAL', val.get('FINANCIAL'))]
         t = val.get('TOTAL') or {}
         lines.append(f"合計：**{t.get('profit', 0):+,}円**"
                      + (f"　※価格データ異常の{t['bad_price_count']}件は除外" if t.get('bad_price_count') else ''))
@@ -649,7 +751,14 @@ def build_payloads(snapshot, stale, age_hours):
             'fields': [
                 {'name': 'LONG＋SHORT合算', 'value': _fmt_perf_stats(performance_stats.get('long_short')), 'inline': False},
                 {'name': f'LONGのみ（{LONG_ENTRY_SCORE_THRESHOLD}点以上＋業種内モメンタム・上位{LONG_TOP_N}）', 'value': _fmt_perf_stats(performance_stats.get('long_only')), 'inline': False},
-                {'name': 'SHORTのみ（PER×PBR上位10）', 'value': _fmt_perf_stats(performance_stats.get('short_only')), 'inline': False},
+                {'name': 'SHORTのみ（PER×PBR上位10）' + ('' if SHORT_NEW_ENTRIES else '※2026-10-08で新規停止・保有分のみ追跡'),
+                 'value': _fmt_perf_stats(performance_stats.get('short_only')), 'inline': False},
+                {'name': f'💎 割安VALUEのみ（上位{VALUE_TOP_N}・50日線より上／ATR×{ATR_MULTIPLIER_BY_SIGNAL["VALUE"]}・最長{MAX_HOLD_BDAYS_BY_SIGNAL["VALUE"]}営業日）',
+                 'value': _fmt_perf_stats(performance_stats.get('value_only')), 'inline': False},
+                {'name': f'🚀 成長GROWTHのみ（上位{GROWTH_TOP_N}／ATR×{ATR_MULTIPLIER_BY_SIGNAL["GROWTH"]}・最長{MAX_HOLD_BDAYS_BY_SIGNAL["GROWTH"]}営業日）',
+                 'value': _fmt_perf_stats(performance_stats.get('growth_only')), 'inline': False},
+                {'name': f'🏦 金融FINANCIALのみ（上位{FINANCIAL_TOP_N}／ATR×{ATR_MULTIPLIER_BY_SIGNAL["FINANCIAL"]}・最長{MAX_HOLD_BDAYS_BY_SIGNAL["FINANCIAL"]}営業日）',
+                 'value': _fmt_perf_stats(performance_stats.get('financial_only')), 'inline': False},
                 {'name': '現在保有中（未決済）', 'value': f"{performance_stats.get('open_positions', 0)}件", 'inline': True},
                 {'name': f"💰 損益（1銘柄{(performance_stats.get('valuation') or {}).get('lot_shares', 100)}株で換算・"
                          f"{(performance_stats.get('valuation') or {}).get('price_date') or '—'}の終値）",
@@ -698,7 +807,7 @@ def build_payloads(snapshot, stale, age_hours):
     }
 
     return {
-        'LONG': (long_payload, long_csv, 'long_candidates.csv'),
+        'LONG': [(long_payload, long_csv, 'long_candidates.csv'), (vg_payload, None, None)],
         'SHORT': (short_payload, short_csv, 'short_candidates.csv'),
         'WARNING': (warning_payload, warning_csv, 'fetch_errors.csv'),
         'PERFORMANCE': (performance_payload, None, None),
@@ -737,8 +846,12 @@ def post():
 
     print("\nDiscord に投稿中...")
     send_results = {}
-    for channel, (payload, csv_bytes, filename) in payloads.items():
-        send_results[channel] = send_discord_message(channel, payload, csv_bytes, filename)
+    for channel, item in payloads.items():
+        # 1チャンネルに複数の投稿を送る場合はリストで渡す（2026-10-08：ロングに割安・成長の一覧を追加）
+        ok = True
+        for payload, csv_bytes, filename in (item if isinstance(item, list) else [item]):
+            ok = send_discord_message(channel, payload, csv_bytes, filename) and ok
+        send_results[channel] = ok
 
     if all(send_results.values()):
         print("投稿完了！全チャネルへの投稿に成功しました。")

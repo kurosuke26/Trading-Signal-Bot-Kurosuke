@@ -508,6 +508,9 @@ def analyze_ticker(ticker, fund, price_df):
         'current_price': fund.get('current_price'),
         'market_cap': fund.get('market_cap'),
         'dividend_yield': div,
+        # 【2026-10-08追加】割安（VALUE）スコアでPERとPBRを別々に順位付けするため個別にも残す
+        'per': per or None,
+        'pbr': pbr or None,
         'per_pbr': per_pbr,
         'super_cheap': super_cheap,
         'dividend_ok': dividend_ok,
@@ -573,10 +576,13 @@ def serialize_results(results):
         key=lambda r: (r['score'] if r['score'] is not None else -1), reverse=True,
     )
     top_neutral_tickers = {r['ticker'] for r in neutrals[:TOP_NEUTRAL_KEEP]}
+    # 【2026-10-08追加】割安・成長スコアの上位（投稿に並べる候補）は、LONG/SHORT判定でなくても詳細を残す
+    from tracking import VG_KINDS, vg_display_candidates
+    vg_tickers = {r['ticker'] for kind in VG_KINDS for r in vg_display_candidates(results, kind)}
 
     out = {}
     for ticker, r in results.items():
-        if r['signal'] in ('LONG', 'SHORT') or ticker in top_neutral_tickers:
+        if r['signal'] in ('LONG', 'SHORT') or ticker in top_neutral_tickers or ticker in vg_tickers:
             entry = dict(r)
             entry['detail'] = 'full'
         else:
@@ -585,6 +591,10 @@ def serialize_results(results):
                 'dividend_yield': r['dividend_yield'], 'per_pbr': r['per_pbr'],
                 'score': r['score'], 'signal': r['signal'], 'detail': 'slim',
             }
+            vg = r.get('vg') or {}
+            if vg:
+                entry['vg'] = {k: vg.get(k) for k in ('value_score', 'growth_score', 'financial_score', 'roman2_score',
+                                                      'value_gate', 'growth_gate', 'financial_gate', 'roman2_gate')}
         out[ticker] = entry
     return out
 
@@ -612,6 +622,47 @@ def build_snapshot(results, fund_failed, hist_failed, tickers, used_fallback, st
         # 【2026-09-16追加】別枠のイベント型仮想売買（増配修正・暴落後。event_strategies.py）
         'event_strategies': event_summary,
     }
+
+
+# 【2026-10-08追加】毎晩取得している日足を捨てずに保存する（後から検証に使うため）。
+# J-Quants無料プランは12週間遅れで、直近の株価が検証に使えなかった（2026-06〜08が欠けた）ことへの対応。
+DAILY_BARS_DIR = os.getenv('DAILY_BARS_DIR') or 'data/daily_bars'
+DAILY_BARS_KEEP_DAYS = env_int('DAILY_BARS_KEEP_DAYS', 3)
+
+
+def save_daily_bars(histories, fundamentals, today_str, out_dir=None, keep_days=None):
+    """
+    各銘柄の日足の直近 keep_days 営業日分を data/daily_bars/YYYY/YYYY-MM-DD.csv.gz に保存する（today_str＝収集日）。
+    数日分を重ねて保存するのは、収集が失敗した日があっても翌日の分で埋められるようにするため（読むときは
+    同じ銘柄・同じ日付の行を、後の収集日のもので上書きすればよい）。
+    株価は collector と同じ分割・配当調整済み（auto_adjust=True）で、保存した日時点の調整値。
+    最新の日の行には、その日にyfinanceから取ったPER・PBR・配当利回り・時価総額も付ける（再取得できないため）。
+    戻り値は保存した行数（保存先が作れない等の失敗時は0）。
+    """
+    out_dir = out_dir or DAILY_BARS_DIR
+    keep_days = keep_days or DAILY_BARS_KEEP_DAYS
+    frames = []
+    for t, df in (histories or {}).items():
+        if df is None or getattr(df, 'empty', True):
+            continue
+        cols = [c for c in ('Open', 'High', 'Low', 'Close', 'Volume') if c in df.columns]
+        part = df[cols].tail(keep_days).copy()
+        part.columns = [c.lower() for c in cols]
+        part.insert(0, 'date', pd.to_datetime(part.index).strftime('%Y-%m-%d'))
+        part.insert(0, 'ticker', t)
+        f = fundamentals.get(t) or {}
+        for k in ('per', 'pbr', 'dividend_yield', 'market_cap'):
+            part[k] = None
+            part.iloc[-1, part.columns.get_loc(k)] = f.get(k)
+        frames.append(part)
+    if not frames:
+        return 0
+    out = pd.concat(frames, ignore_index=True)
+    path = os.path.join(out_dir, today_str[:4], f'{today_str}.csv.gz')
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+    out.to_csv(path, index=False, compression='gzip', float_format='%.6g')
+    print(f'[daily-bars] {len(out):,}行を保存しました: {path}')
+    return len(out)
 
 
 def write_snapshot(snapshot, path=None):
@@ -751,6 +802,20 @@ def collect():
     except Exception as e:  # noqa: BLE001
         print(f"[sector] 業種内の相対評価でエラー（条件なしで続行）: {e}")
 
+    # 【2026-10-08追加】種類別のスコア（割安・成長・金融・ロマン枠。value_growth_scoring.py）。
+    # tracking.py の仮想エントリーと、Discord投稿の表示に使う。失敗しても他の処理は続ける。
+    print("\n--- 種類別スコア（割安／成長／金融／ロマン枠） ---")
+    try:
+        import value_growth_scoring
+        from tracking import VG_KINDS
+        n_vg = value_growth_scoring.annotate(results, histories, started_at_utc.astimezone(JST).strftime('%Y-%m-%d'))
+        gates = {k: sum(1 for r in results.values() if (r.get('vg') or {}).get(g)) for k, (_, g) in VG_KINDS.items()}
+        print(f"[vg] {n_vg}銘柄を採点（入口を通過：" + '／'.join(f'{k} {n}' for k, n in gates.items()) + '）')
+    except Exception as e:  # noqa: BLE001
+        import traceback
+        traceback.print_exc()
+        print(f"[vg] 割安／成長スコアでエラー（スコアなしで続行）: {e}")
+
     # MAX_TICKERSを絞ったテスト実行では、対象銘柄が本番と異なる一部分になり、
     # 本番用の勝率・ペイオフレシオ集計（data/trade_log.json）にノイズが混ざって
     # しまうため、テスト実行時は追跡をスキップする（画面表示は「集計対象外」とする）。
@@ -767,6 +832,15 @@ def collect():
         save_trade_log(trade_log)
         performance_stats = compute_performance_stats(trade_log)
         print(f"[tracking] 新規建玉{opened_n}件／決済{closed_n}件／保有中{performance_stats['open_positions']}件")
+        try:
+            save_daily_bars(histories, fundamentals, today_str)
+        except Exception as e:  # noqa: BLE001
+            print(f"[daily-bars] 日足の保存でエラー（続行）: {e}")
+        try:
+            from tracking import record_roman_watchlist
+            print(f"[roman] ロマン枠の一覧を記録しました（{record_roman_watchlist(results, today_str)}件）")
+        except Exception as e:  # noqa: BLE001
+            print(f"[roman] ロマン枠の記録でエラー（続行）: {e}")
 
     # 【2026-09-16追加】別枠のイベント型仮想売買（増配修正の発表翌日・暴落後の行動ルール）。
     # 本番LONG/SHORTの記録（data/trade_log.json）とは別ファイルに記録する。失敗しても収集結果は保存する。
