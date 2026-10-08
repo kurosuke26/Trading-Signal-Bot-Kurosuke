@@ -1,0 +1,549 @@
+{
+  "horizons": [
+    120,
+    250
+  ],
+  "top_n": 10,
+  "split": "2025-08-08",
+  "mktcap_band_oku": [
+    50,
+    1500
+  ],
+  "candidates_per_date": 58.2,
+  "results": {
+    "ロマン枠 上位10｜120営業日": {
+      "全期間": {
+        "n": 252,
+        "unique_tickers": 62,
+        "end_ret_mean_pct": -1.19,
+        "end_ret_median_pct": -0.67,
+        "excess_vs_band_pct": -12.56,
+        "hit_1.5x_pct": 9.9,
+        "base_1.5x_pct": 16.6,
+        "lift_1.5x": 0.6,
+        "hit_2.0x_pct": 0.8,
+        "base_2.0x_pct": 4.7,
+        "lift_2.0x": 0.17,
+        "hit_3.0x_pct": 0.0,
+        "base_3.0x_pct": 1.0,
+        "lift_3.0x": 0.0
+      },
+      "前半": {
+        "n": 92,
+        "unique_tickers": 26,
+        "end_ret_mean_pct": -1.57,
+        "end_ret_median_pct": 0.66,
+        "excess_vs_band_pct": -15.87,
+        "hit_1.5x_pct": 6.5,
+        "base_1.5x_pct": 15.9,
+        "lift_1.5x": 0.41,
+        "hit_2.0x_pct": 0.0,
+        "base_2.0x_pct": 3.8,
+        "lift_2.0x": 0.0,
+        "hit_3.0x_pct": 0.0,
+        "base_3.0x_pct": 0.7,
+        "lift_3.0x": 0.0
+      },
+      "後半": {
+        "n": 160,
+        "unique_tickers": 48,
+        "end_ret_mean_pct": -0.97,
+        "end_ret_median_pct": -1.36,
+        "excess_vs_band_pct": -10.66,
+        "hit_1.5x_pct": 11.9,
+        "base_1.5x_pct": 17.0,
+        "lift_1.5x": 0.7,
+        "hit_2.0x_pct": 1.2,
+        "base_2.0x_pct": 5.3,
+        "lift_2.0x": 0.24,
+        "hit_3.0x_pct": 0.0,
+        "base_3.0x_pct": 1.2,
+        "lift_3.0x": 0.0
+      }
+    },
+    "ロマン枠 入口の条件を通った全銘柄｜120営業日": {
+      "全期間": {
+        "n": 1483,
+        "unique_tickers": 149,
+        "end_ret_mean_pct": -2.96,
+        "end_ret_median_pct": -6.51,
+        "excess_vs_band_pct": -13.25,
+        "hit_1.5x_pct": 11.6,
+        "base_1.5x_pct": 16.9,
+        "lift_1.5x": 0.69,
+        "hit_2.0x_pct": 1.8,
+        "base_2.0x_pct": 5.2,
+        "lift_2.0x": 0.34,
+        "hit_3.0x_pct": 0.3,
+        "base_3.0x_pct": 1.2,
+        "lift_3.0x": 0.23
+      },
+      "前半": {
+        "n": 173,
+        "unique_tickers": 46,
+        "end_ret_mean_pct": -0.15,
+        "end_ret_median_pct": -0.64,
+        "excess_vs_band_pct": -14.21,
+        "hit_1.5x_pct": 9.8,
+        "base_1.5x_pct": 15.7,
+        "lift_1.5x": 0.63,
+        "hit_2.0x_pct": 1.2,
+        "base_2.0x_pct": 4.1,
+        "lift_2.0x": 0.29,
+        "hit_3.0x_pct": 0.6,
+        "base_3.0x_pct": 0.8,
+        "lift_3.0x": 0.77
+      },
+      "後半": {
+        "n": 1310,
+        "unique_tickers": 142,
+        "end_ret_mean_pct": -3.33,
+        "end_ret_median_pct": -7.05,
+        "excess_vs_band_pct": -13.12,
+        "hit_1.5x_pct": 11.8,
+        "base_1.5x_pct": 17.1,
+        "lift_1.5x": 0.69,
+        "hit_2.0x_pct": 1.8,
+        "base_2.0x_pct": 5.3,
+        "lift_2.0x": 0.34,
+        "hit_3.0x_pct": 0.2,
+        "base_3.0x_pct": 1.2,
+        "lift_3.0x": 0.19
+      }
+    },
+    "ロマン枠 上位10（初めて入った日だけ）｜120営業日": {
+      "全期間": {
+        "n": 62,
+        "unique_tickers": 62,
+        "end_ret_mean_pct": 4.09,
+        "end_ret_median_pct": 3.06,
+        "excess_vs_band_pct": -7.93,
+        "hit_1.5x_pct": 16.1,
+        "base_1.5x_pct": 16.4,
+        "lift_1.5x": 0.99,
+        "hit_2.0x_pct": 1.6,
+        "base_2.0x_pct": 4.6,
+        "lift_2.0x": 0.35,
+        "hit_3.0x_pct": 0.0,
+        "base_3.0x_pct": 1.0,
+        "lift_3.0x": 0.0
+      },
+      "前半": {
+        "n": 26,
+        "unique_tickers": 26,
+        "end_ret_mean_pct": 1.61,
+        "end_ret_median_pct": 1.86,
+        "excess_vs_band_pct": -12.78,
+        "hit_1.5x_pct": 11.5,
+        "base_1.5x_pct": 15.9,
+        "lift_1.5x": 0.73,
+        "hit_2.0x_pct": 0.0,
+        "base_2.0x_pct": 3.9,
+        "lift_2.0x": 0.0,
+        "hit_3.0x_pct": 0.0,
+        "base_3.0x_pct": 0.7,
+        "lift_3.0x": 0.0
+      },
+      "後半": {
+        "n": 36,
+        "unique_tickers": 36,
+        "end_ret_mean_pct": 5.88,
+        "end_ret_median_pct": 3.63,
+        "excess_vs_band_pct": -4.43,
+        "hit_1.5x_pct": 19.4,
+        "base_1.5x_pct": 16.7,
+        "lift_1.5x": 1.16,
+        "hit_2.0x_pct": 2.8,
+        "base_2.0x_pct": 5.2,
+        "lift_2.0x": 0.53,
+        "hit_3.0x_pct": 0.0,
+        "base_3.0x_pct": 1.2,
+        "lift_3.0x": 0.0
+      }
+    },
+    "ロマン枠v2 上位10｜120営業日": {
+      "全期間": {
+        "n": 570,
+        "unique_tickers": 128,
+        "end_ret_mean_pct": 12.92,
+        "end_ret_median_pct": 2.53,
+        "excess_vs_band_pct": 0.79,
+        "hit_1.5x_pct": 28.2,
+        "base_1.5x_pct": 15.2,
+        "lift_1.5x": 1.86,
+        "hit_2.0x_pct": 9.8,
+        "base_2.0x_pct": 3.9,
+        "lift_2.0x": 2.55,
+        "hit_3.0x_pct": 4.6,
+        "base_3.0x_pct": 0.7,
+        "lift_3.0x": 6.18
+      },
+      "前半": {
+        "n": 410,
+        "unique_tickers": 94,
+        "end_ret_mean_pct": 18.11,
+        "end_ret_median_pct": 3.77,
+        "excess_vs_band_pct": 5.02,
+        "hit_1.5x_pct": 29.0,
+        "base_1.5x_pct": 14.4,
+        "lift_1.5x": 2.01,
+        "hit_2.0x_pct": 12.2,
+        "base_2.0x_pct": 3.3,
+        "lift_2.0x": 3.69,
+        "hit_3.0x_pct": 5.9,
+        "base_3.0x_pct": 0.6,
+        "lift_3.0x": 10.32
+      },
+      "後半": {
+        "n": 160,
+        "unique_tickers": 46,
+        "end_ret_mean_pct": -0.37,
+        "end_ret_median_pct": -3.0,
+        "excess_vs_band_pct": -10.06,
+        "hit_1.5x_pct": 26.2,
+        "base_1.5x_pct": 17.0,
+        "lift_1.5x": 1.55,
+        "hit_2.0x_pct": 3.8,
+        "base_2.0x_pct": 5.3,
+        "lift_2.0x": 0.71,
+        "hit_3.0x_pct": 1.2,
+        "base_3.0x_pct": 1.2,
+        "lift_3.0x": 1.06
+      }
+    },
+    "ロマン枠v2 上位10（初めて入った日だけ）｜120営業日": {
+      "全期間": {
+        "n": 128,
+        "unique_tickers": 128,
+        "end_ret_mean_pct": 9.84,
+        "end_ret_median_pct": 0.11,
+        "excess_vs_band_pct": -0.38,
+        "hit_1.5x_pct": 18.8,
+        "base_1.5x_pct": 13.9,
+        "lift_1.5x": 1.35,
+        "hit_2.0x_pct": 8.6,
+        "base_2.0x_pct": 3.5,
+        "lift_2.0x": 2.45,
+        "hit_3.0x_pct": 3.1,
+        "base_3.0x_pct": 0.7,
+        "lift_3.0x": 4.7
+      },
+      "前半": {
+        "n": 94,
+        "unique_tickers": 94,
+        "end_ret_mean_pct": 14.19,
+        "end_ret_median_pct": 0.95,
+        "excess_vs_band_pct": 3.78,
+        "hit_1.5x_pct": 19.1,
+        "base_1.5x_pct": 12.9,
+        "lift_1.5x": 1.49,
+        "hit_2.0x_pct": 9.6,
+        "base_2.0x_pct": 2.9,
+        "lift_2.0x": 3.34,
+        "hit_3.0x_pct": 4.3,
+        "base_3.0x_pct": 0.5,
+        "lift_3.0x": 8.58
+      },
+      "後半": {
+        "n": 34,
+        "unique_tickers": 34,
+        "end_ret_mean_pct": -2.19,
+        "end_ret_median_pct": -7.8,
+        "excess_vs_band_pct": -11.87,
+        "hit_1.5x_pct": 17.6,
+        "base_1.5x_pct": 16.8,
+        "lift_1.5x": 1.05,
+        "hit_2.0x_pct": 5.9,
+        "base_2.0x_pct": 5.3,
+        "lift_2.0x": 1.11,
+        "hit_3.0x_pct": 0.0,
+        "base_3.0x_pct": 1.1,
+        "lift_3.0x": 0.0
+      }
+    },
+    "ロマン枠v2 入口の条件を通った全銘柄｜120営業日": {
+      "全期間": {
+        "n": 8425,
+        "unique_tickers": 684,
+        "end_ret_mean_pct": 16.68,
+        "end_ret_median_pct": 8.79,
+        "excess_vs_band_pct": 2.75,
+        "hit_1.5x_pct": 20.5,
+        "base_1.5x_pct": 16.2,
+        "lift_1.5x": 1.26,
+        "hit_2.0x_pct": 5.6,
+        "base_2.0x_pct": 4.2,
+        "lift_2.0x": 1.32,
+        "hit_3.0x_pct": 1.2,
+        "base_3.0x_pct": 0.8,
+        "lift_3.0x": 1.45
+      },
+      "前半": {
+        "n": 5825,
+        "unique_tickers": 513,
+        "end_ret_mean_pct": 20.14,
+        "end_ret_median_pct": 12.28,
+        "excess_vs_band_pct": 4.33,
+        "hit_1.5x_pct": 20.1,
+        "base_1.5x_pct": 15.8,
+        "lift_1.5x": 1.27,
+        "hit_2.0x_pct": 5.0,
+        "base_2.0x_pct": 3.7,
+        "lift_2.0x": 1.34,
+        "hit_3.0x_pct": 1.3,
+        "base_3.0x_pct": 0.6,
+        "lift_3.0x": 2.29
+      },
+      "後半": {
+        "n": 2600,
+        "unique_tickers": 364,
+        "end_ret_mean_pct": 8.92,
+        "end_ret_median_pct": 0.82,
+        "excess_vs_band_pct": -0.78,
+        "hit_1.5x_pct": 21.5,
+        "base_1.5x_pct": 17.2,
+        "lift_1.5x": 1.25,
+        "hit_2.0x_pct": 6.9,
+        "base_2.0x_pct": 5.4,
+        "lift_2.0x": 1.27,
+        "hit_3.0x_pct": 0.8,
+        "base_3.0x_pct": 1.3,
+        "lift_3.0x": 0.61
+      }
+    },
+    "参考：120営業日で2倍以上になった銘柄×日のうち、その日に入口を通っていた割合": {
+      "全期間": {
+        "n": 2761,
+        "caught_pct": 0.9
+      }
+    },
+    "ロマン枠 上位10｜250営業日": {
+      "全期間": {
+        "n": 13,
+        "unique_tickers": 2,
+        "end_ret_mean_pct": 10.66,
+        "end_ret_median_pct": 12.04,
+        "excess_vs_band_pct": -22.77,
+        "hit_1.5x_pct": 0.0,
+        "base_1.5x_pct": 40.0,
+        "lift_1.5x": 0.0,
+        "hit_2.0x_pct": 0.0,
+        "base_2.0x_pct": 16.6,
+        "lift_2.0x": 0.0,
+        "hit_3.0x_pct": 0.0,
+        "base_3.0x_pct": 4.8,
+        "lift_3.0x": 0.0
+      },
+      "前半": {
+        "n": 13,
+        "unique_tickers": 2,
+        "end_ret_mean_pct": 10.66,
+        "end_ret_median_pct": 12.04,
+        "excess_vs_band_pct": -22.77,
+        "hit_1.5x_pct": 0.0,
+        "base_1.5x_pct": 40.0,
+        "lift_1.5x": 0.0,
+        "hit_2.0x_pct": 0.0,
+        "base_2.0x_pct": 16.6,
+        "lift_2.0x": 0.0,
+        "hit_3.0x_pct": 0.0,
+        "base_3.0x_pct": 4.8,
+        "lift_3.0x": 0.0
+      },
+      "後半": {
+        "n": 0
+      }
+    },
+    "ロマン枠 入口の条件を通った全銘柄｜250営業日": {
+      "全期間": {
+        "n": 13,
+        "unique_tickers": 2,
+        "end_ret_mean_pct": 10.66,
+        "end_ret_median_pct": 12.04,
+        "excess_vs_band_pct": -22.77,
+        "hit_1.5x_pct": 0.0,
+        "base_1.5x_pct": 40.0,
+        "lift_1.5x": 0.0,
+        "hit_2.0x_pct": 0.0,
+        "base_2.0x_pct": 16.6,
+        "lift_2.0x": 0.0,
+        "hit_3.0x_pct": 0.0,
+        "base_3.0x_pct": 4.8,
+        "lift_3.0x": 0.0
+      },
+      "前半": {
+        "n": 13,
+        "unique_tickers": 2,
+        "end_ret_mean_pct": 10.66,
+        "end_ret_median_pct": 12.04,
+        "excess_vs_band_pct": -22.77,
+        "hit_1.5x_pct": 0.0,
+        "base_1.5x_pct": 40.0,
+        "lift_1.5x": 0.0,
+        "hit_2.0x_pct": 0.0,
+        "base_2.0x_pct": 16.6,
+        "lift_2.0x": 0.0,
+        "hit_3.0x_pct": 0.0,
+        "base_3.0x_pct": 4.8,
+        "lift_3.0x": 0.0
+      },
+      "後半": {
+        "n": 0
+      }
+    },
+    "ロマン枠 上位10（初めて入った日だけ）｜250営業日": {
+      "全期間": {
+        "n": 2,
+        "unique_tickers": 2,
+        "end_ret_mean_pct": 15.89,
+        "end_ret_median_pct": 15.89,
+        "excess_vs_band_pct": -16.72,
+        "hit_1.5x_pct": 0.0,
+        "base_1.5x_pct": 39.7,
+        "lift_1.5x": 0.0,
+        "hit_2.0x_pct": 0.0,
+        "base_2.0x_pct": 15.9,
+        "lift_2.0x": 0.0,
+        "hit_3.0x_pct": 0.0,
+        "base_3.0x_pct": 4.6,
+        "lift_3.0x": 0.0
+      },
+      "前半": {
+        "n": 2,
+        "unique_tickers": 2,
+        "end_ret_mean_pct": 15.89,
+        "end_ret_median_pct": 15.89,
+        "excess_vs_band_pct": -16.72,
+        "hit_1.5x_pct": 0.0,
+        "base_1.5x_pct": 39.7,
+        "lift_1.5x": 0.0,
+        "hit_2.0x_pct": 0.0,
+        "base_2.0x_pct": 15.9,
+        "lift_2.0x": 0.0,
+        "hit_3.0x_pct": 0.0,
+        "base_3.0x_pct": 4.6,
+        "lift_3.0x": 0.0
+      },
+      "後半": {
+        "n": 0
+      }
+    },
+    "ロマン枠v2 上位10｜250営業日": {
+      "全期間": {
+        "n": 310,
+        "unique_tickers": 84,
+        "end_ret_mean_pct": 24.54,
+        "end_ret_median_pct": 15.75,
+        "excess_vs_band_pct": -5.16,
+        "hit_1.5x_pct": 46.5,
+        "base_1.5x_pct": 36.9,
+        "lift_1.5x": 1.26,
+        "hit_2.0x_pct": 23.9,
+        "base_2.0x_pct": 14.3,
+        "lift_2.0x": 1.67,
+        "hit_3.0x_pct": 4.2,
+        "base_3.0x_pct": 3.7,
+        "lift_3.0x": 1.12
+      },
+      "前半": {
+        "n": 310,
+        "unique_tickers": 84,
+        "end_ret_mean_pct": 24.54,
+        "end_ret_median_pct": 15.75,
+        "excess_vs_band_pct": -5.16,
+        "hit_1.5x_pct": 46.5,
+        "base_1.5x_pct": 36.9,
+        "lift_1.5x": 1.26,
+        "hit_2.0x_pct": 23.9,
+        "base_2.0x_pct": 14.3,
+        "lift_2.0x": 1.67,
+        "hit_3.0x_pct": 4.2,
+        "base_3.0x_pct": 3.7,
+        "lift_3.0x": 1.12
+      },
+      "後半": {
+        "n": 0
+      }
+    },
+    "ロマン枠v2 上位10（初めて入った日だけ）｜250営業日": {
+      "全期間": {
+        "n": 84,
+        "unique_tickers": 84,
+        "end_ret_mean_pct": 22.2,
+        "end_ret_median_pct": 15.28,
+        "excess_vs_band_pct": -5.37,
+        "hit_1.5x_pct": 46.4,
+        "base_1.5x_pct": 34.9,
+        "lift_1.5x": 1.33,
+        "hit_2.0x_pct": 23.8,
+        "base_2.0x_pct": 13.0,
+        "lift_2.0x": 1.83,
+        "hit_3.0x_pct": 4.8,
+        "base_3.0x_pct": 3.4,
+        "lift_3.0x": 1.42
+      },
+      "前半": {
+        "n": 84,
+        "unique_tickers": 84,
+        "end_ret_mean_pct": 22.2,
+        "end_ret_median_pct": 15.28,
+        "excess_vs_band_pct": -5.37,
+        "hit_1.5x_pct": 46.4,
+        "base_1.5x_pct": 34.9,
+        "lift_1.5x": 1.33,
+        "hit_2.0x_pct": 23.8,
+        "base_2.0x_pct": 13.0,
+        "lift_2.0x": 1.83,
+        "hit_3.0x_pct": 4.8,
+        "base_3.0x_pct": 3.4,
+        "lift_3.0x": 1.42
+      },
+      "後半": {
+        "n": 0
+      }
+    },
+    "ロマン枠v2 入口の条件を通った全銘柄｜250営業日": {
+      "全期間": {
+        "n": 5133,
+        "unique_tickers": 462,
+        "end_ret_mean_pct": 46.65,
+        "end_ret_median_pct": 27.61,
+        "excess_vs_band_pct": 14.27,
+        "hit_1.5x_pct": 48.3,
+        "base_1.5x_pct": 39.4,
+        "lift_1.5x": 1.22,
+        "hit_2.0x_pct": 23.4,
+        "base_2.0x_pct": 15.8,
+        "lift_2.0x": 1.48,
+        "hit_3.0x_pct": 6.6,
+        "base_3.0x_pct": 4.2,
+        "lift_3.0x": 1.58
+      },
+      "前半": {
+        "n": 5133,
+        "unique_tickers": 462,
+        "end_ret_mean_pct": 46.65,
+        "end_ret_median_pct": 27.61,
+        "excess_vs_band_pct": 14.27,
+        "hit_1.5x_pct": 48.3,
+        "base_1.5x_pct": 39.4,
+        "lift_1.5x": 1.22,
+        "hit_2.0x_pct": 23.4,
+        "base_2.0x_pct": 15.8,
+        "lift_2.0x": 1.48,
+        "hit_3.0x_pct": 6.6,
+        "base_3.0x_pct": 4.2,
+        "lift_3.0x": 1.58
+      },
+      "後半": {
+        "n": 0
+      }
+    },
+    "参考：250営業日で2倍以上になった銘柄×日のうち、その日に入口を通っていた割合": {
+      "全期間": {
+        "n": 5357,
+        "caught_pct": 0.0
+      }
+    }
+  }
+}

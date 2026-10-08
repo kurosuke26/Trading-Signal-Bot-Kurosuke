@@ -101,7 +101,7 @@ def run():
     snapshot_path = os.path.join(tmpdir, 'latest_scan.json')
 
     # 本番の仮想売買記録（data/trade_log.json）にテスト用の架空ポジションが書き込まれないよう、一時ファイルに差し替える
-    with mock.patch.object(col, 'OUTPUT_PATH', snapshot_path),          mock.patch.object(tracking, 'TRADE_LOG_PATH', os.path.join(tmpdir, 'trade_log.json')),          mock.patch.object(event_strategies, 'EVENT_TRADE_LOG_PATH', os.path.join(tmpdir, 'event_trade_log.json')),          mock.patch.object(event_strategies, 'EVENT_STATE_PATH', os.path.join(tmpdir, 'event_state.json')),          mock.patch.object(event_strategies, 'fetch_tdnet_dividend_hikes', return_value=[]),          mock.patch.object(event_strategies, 'fetch_missing_histories', return_value={}):
+    with mock.patch.object(col, 'OUTPUT_PATH', snapshot_path),          mock.patch.object(tracking, 'TRADE_LOG_PATH', os.path.join(tmpdir, 'trade_log.json')),          mock.patch.object(tracking, 'ROMAN_WATCHLIST_PATH', os.path.join(tmpdir, 'roman_watchlist.json')),          mock.patch.object(col, 'DAILY_BARS_DIR', os.path.join(tmpdir, 'daily_bars')),          mock.patch.object(event_strategies, 'EVENT_TRADE_LOG_PATH', os.path.join(tmpdir, 'event_trade_log.json')),          mock.patch.object(event_strategies, 'EVENT_STATE_PATH', os.path.join(tmpdir, 'event_state.json')),          mock.patch.object(event_strategies, 'fetch_tdnet_dividend_hikes', return_value=[]),          mock.patch.object(event_strategies, 'fetch_missing_histories', return_value={}):
         tickers = run_collector_stage(25)
 
     assert os.path.exists(snapshot_path), 'スナップショットファイルが作成されていない'

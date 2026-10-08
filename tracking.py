@@ -89,7 +89,7 @@ import os
 
 import numpy as np
 
-from util import env_int, json_default, price_adjust_factor
+from util import env_float, env_int, json_default, price_adjust_factor
 
 TRADE_LOG_PATH = os.getenv('TRADE_LOG_PATH') or 'data/trade_log.json'
 FALLBACK_STOP_PCT = 0.03  # ATRが算出できない銘柄向けの簡易フォールバック（±3%相当）
@@ -147,8 +147,41 @@ ATR_MULTIPLIER = 1.5  # 過去形式ポジションのマイグレーション�
 # 1日あたりの市場平均との差はLONG（スコア70点以上）で3.0倍が最大（後半：勝率46%・ペイオフ2.5・
 # 平均保有27日）。SHORTは1.8倍が前半・後半とも1日あたりの差が最大で、従来どおり。
 # 詳細: data/backtest_out/strategy_eval_final.md
-ATR_MULTIPLIER_BY_SIGNAL = {'LONG': 3.0, 'SHORT': 1.8}  # 本番のプライマリ倍率（シグナル別）
+ATR_MULTIPLIER_BY_SIGNAL = {'LONG': 3.0, 'SHORT': 1.8, 'VALUE': 3.0, 'GROWTH': 3.0, 'FINANCIAL': 3.0}  # 本番のプライマリ倍率
 ATR_MULTIPLIER_VARIANTS = [1.5, 1.8, 2.0, 2.2, 2.5, 2.7, 3.0, 3.5, 4.0, 4.5, 5.0, 6.0]
+
+# 【2026-10-08追加】種類別のスコア（value_growth_scoring.py）による仮想エントリー。すべて試験運用。
+# 先読みなしの検証（evaluate_value_growth.py → data/backtest_out/value_growth_eval.md）。前半（〜2025-08-07）で選び
+# 後半（2025-08-08〜2026-06）で確かめた。手仕舞いはいずれもトレーリングATR×3.0＋保有期間の上限
+# （長く持つほど上昇相場に乗るだけで成績が良く見えるため。kurosukeさんと合意）。市場との差は1回あたり:
+#   VALUE    ：割安スコア上位5（金融業を除く）＋株価が50日線より上、最長60営業日
+#              前半+1.4%／後半−0.7%。金融業を除くと後半は市場平均を上回れなかった（後半の上昇は銀行株が中心）。
+#              配点はPER・PBR系に偏らないよう分散させた案（PER・PBR系45点。旧配点は70点）。旧配点は後半−1.7%。
+#   GROWTH   ：増収増益10%以上の銘柄を割安さ＋需給・トレンドで順位付け、上位5、最長20営業日
+#              前半−1.4%（件数35）／後半+1.9%（件数86）
+#   FINANCIAL：金融業（銀行・証券・保険・その他金融）を金融業の中だけで採点（PBR÷ROE・PBR・ROE・配当・業種内の勢い）、
+#              上位3、最長60営業日。前半+7.3%（件数30）／後半+2.4%（件数27）
+# LONG（従来の複合スコア）は比較のため従来どおり記録を続ける。
+MAX_HOLD_BDAYS_BY_SIGNAL = {'VALUE': env_int('VALUE_MAX_HOLD_DAYS', 60), 'GROWTH': env_int('GROWTH_MAX_HOLD_DAYS', 20),
+                            'FINANCIAL': env_int('FINANCIAL_MAX_HOLD_DAYS', 60)}
+VALUE_TOP_N = env_int('VALUE_TOP_N', 5)
+GROWTH_TOP_N = env_int('GROWTH_TOP_N', 5)
+FINANCIAL_TOP_N = env_int('FINANCIAL_TOP_N', 3)
+TOP_N_BY_KIND = {'VALUE': VALUE_TOP_N, 'GROWTH': GROWTH_TOP_N, 'FINANCIAL': FINANCIAL_TOP_N}
+VALUE_REQUIRE_ABOVE_MA50 = env_int('VALUE_REQUIRE_ABOVE_MA50', 1) == 1
+VG_DISPLAY_TOP_N = env_int('VG_DISPLAY_TOP_N', 10)  # 投稿に並べる件数（仮想エントリーはこのうち上位TOP_N）
+# 検証（universe_filters.py）と同じく、直近20日の平均売買代金がこれ未満の銘柄は候補にしない（売買が成立しにくい）
+VG_MIN_AVG_VALUE_YEN = env_float('VG_MIN_AVG_VALUE_YEN', 50_000_000)
+# 種類 -> (スコアの列, 入口の列)。ROMANはロマン枠v2（監視のみ。仮想エントリーはしない）
+VG_KINDS = {'VALUE': ('value_score', 'value_gate'), 'GROWTH': ('growth_score', 'growth_gate'),
+            'FINANCIAL': ('financial_score', 'financial_gate'), 'ROMAN': ('roman2_score', 'roman2_gate')}
+# 【2026-10-08】SHORTの新規の仮想エントリーは停止（kurosukeさんの方針：ショートは考えない）。保有中の分は決済まで追跡する。
+SHORT_NEW_ENTRIES = env_int('SHORT_NEW_ENTRIES', 0) == 1
+LONG_SIDE_SIGNALS = ('LONG', 'VALUE', 'GROWTH', 'FINANCIAL')
+
+
+def _is_long(signal):
+    return signal in LONG_SIDE_SIGNALS
 
 # 【2026-09-15追記：初回起動時の一括ロード汚染を集計から除外】
 # 2026-08-25はcollector.pyの初回実行日で、TOP_N_TRACKEDによる絞り込み
@@ -301,7 +334,7 @@ def _has_open(trade_log, ticker, signal):
 def _initial_stop(entry_price, atr_value, signal, multiplier):
     if atr_value is None or atr_value <= 0:
         atr_value = entry_price * FALLBACK_STOP_PCT
-    if signal == 'LONG':
+    if _is_long(signal):
         return entry_price - atr_value * multiplier
     return entry_price + atr_value * multiplier  # SHORT
 
@@ -332,6 +365,61 @@ def _select_top_candidates(results, signal, top_n=TOP_N_TRACKED):
     return candidates[:top_n]
 
 
+def vg_display_candidates(results, kind, top_n=None):
+    """
+    【2026-10-08追加】種類別スコア（VG_KINDS）の上位候補（スコアの高い順）。
+    VALUE    ：PER×PBR≦22.5・金融業以外（入口）＋株価が50日線より上（VALUE_REQUIRE_ABOVE_MA50）
+    GROWTH   ：増収増益10%以上・会社予想が減益でない・金融業以外（入口）
+    FINANCIAL：金融業でPBR・ROEがプラス（入口）
+    ROMAN    ：ロマン枠v2（時価総額50〜1,500億円・上方修正あり）。監視のみ
+    上位TOP_N_BY_KIND件が仮想エントリーの対象（ROMANを除く）、VG_DISPLAY_TOP_N件までを投稿に並べる。
+    """
+    top_n = VG_DISPLAY_TOP_N if top_n is None else top_n
+    score_key, gate_key = VG_KINDS[kind]
+    cands = []
+    for r in results.values():
+        vg = r.get('vg') or {}
+        if not vg.get(gate_key) or vg.get(score_key) is None:
+            continue
+        if kind == 'VALUE' and VALUE_REQUIRE_ABOVE_MA50 and vg.get('above_ma50') is not True:
+            continue
+        if vg.get('avg_value_20') is not None and vg['avg_value_20'] < VG_MIN_AVG_VALUE_YEN:
+            continue
+        cands.append(r)
+    cands.sort(key=lambda r: (-r['vg'][score_key], r['ticker']))
+    return cands[:top_n]
+
+
+ROMAN_WATCHLIST_PATH = os.getenv('ROMAN_WATCHLIST_PATH') or 'data/roman_watchlist.json'
+
+
+def record_roman_watchlist(results, today_str, path=None):
+    """
+    【2026-10-08追加】ロマン枠（監視のみ）の毎日の一覧を data/roman_watchlist.json に積み上げる。
+    10倍株は検証に何年もかかるため、その日に一覧に載った銘柄と株価を残しておき、後から
+    「載った銘柄がその後どうなったか」（半年・1年で1.5倍／2倍に達した割合）を測れるようにする。
+    同じ日付で再実行した場合は上書きする。戻り値は記録した件数。
+    """
+    path = path or ROMAN_WATCHLIST_PATH
+    hist = []
+    if os.path.exists(path):
+        try:
+            with open(path, encoding='utf-8') as f:
+                hist = json.load(f)
+        except (OSError, json.JSONDecodeError):
+            hist = []
+    picks = [{'ticker': r['ticker'], 'name': r.get('name'), 'price': r.get('current_price'),
+              'score': (r.get('vg') or {}).get('roman2_score'), 'mktcap_oku': (r.get('vg') or {}).get('mktcap_oku'),
+              'op_revision': (r.get('vg') or {}).get('op_revision_from_initial')}
+             for r in vg_display_candidates(results, 'ROMAN')]
+    hist = [h for h in hist if h.get('date') != today_str] + [{'date': today_str, 'picks': picks}]
+    tmp = path + '.tmp'
+    with open(tmp, 'w', encoding='utf-8') as f:
+        json.dump(hist, f, ensure_ascii=False, default=json_default)
+    os.replace(tmp, path)
+    return len(picks)
+
+
 def open_new_positions(trade_log, results, today_str, top_n=TOP_N_TRACKED):
     """
     今回の収集でLONG/SHORT判定になった銘柄のうち、「自信度が高い」候補だけを
@@ -346,10 +434,14 @@ def open_new_positions(trade_log, results, today_str, top_n=TOP_N_TRACKED):
     シグナル別のプライマリ倍率（ATR_MULTIPLIER_BY_SIGNAL）のみで行う。
     """
     opened = 0
-    top_candidates = _select_top_candidates(results, 'LONG', LONG_TOP_N) + _select_top_candidates(results, 'SHORT', top_n)
-    for r in top_candidates:
+    top_candidates = [(r, 'LONG') for r in _select_top_candidates(results, 'LONG', LONG_TOP_N)]
+    if SHORT_NEW_ENTRIES:
+        top_candidates += [(r, 'SHORT') for r in _select_top_candidates(results, 'SHORT', top_n)]
+    # 【2026-10-08追加】割安（VALUE）・成長（GROWTH）。同じ銘柄がLONGと重なっても別の系列として記録する
+    for kind, n in TOP_N_BY_KIND.items():
+        top_candidates += [(r, kind) for r in vg_display_candidates(results, kind, n)]
+    for r, signal in top_candidates:
         ticker = r['ticker']
-        signal = r.get('signal')
         if _has_open(trade_log, ticker, signal):
             continue
         entry_price = r.get('current_price')
@@ -385,6 +477,12 @@ def open_new_positions(trade_log, results, today_str, top_n=TOP_N_TRACKED):
             'last_price_date': today_str,
             'variants': variants,
         })
+        if signal in MAX_HOLD_BDAYS_BY_SIGNAL:
+            # 後から「何点で入った取引がどうだったか」を振り返れるよう、エントリー時のスコアを残す
+            vg = r.get('vg') or {}
+            trade_log[-1]['max_hold_bdays'] = MAX_HOLD_BDAYS_BY_SIGNAL[signal]
+            trade_log[-1]['vg_at_entry'] = {k: vg.get(k) for k in ('value_score', 'growth_score', 'financial_score',
+                                                                   'per_pbr_calc', 'peg', 'sec_per_pbr_ratio')}
         opened += 1
     return opened
 
@@ -424,7 +522,7 @@ def _close_if_delisted(p, today_str, missing_days=DELISTED_MISSING_BDAYS):
     entry = p.get('entry_price')
     if not entry:
         return False
-    ret = ((last_price - entry) if p['signal'] == 'LONG' else (entry - last_price)) / entry * 100
+    ret = ((last_price - entry) if _is_long(p['signal']) else (entry - last_price)) / entry * 100
     for v in (p.get('variants') or {}).values():
         if v.get('status') == 'open':
             v.update(status='closed', close_date=last_date, close_price=round(last_price, 2),
@@ -512,7 +610,7 @@ def update_open_positions(trade_log, results, today_str, histories=None):
             if atr_value is None or atr_value <= 0:
                 atr_value = current_price * FALLBACK_STOP_PCT
 
-            if p['signal'] == 'LONG':
+            if _is_long(p['signal']):
                 candidate_stop = current_price - atr_value * m
                 new_stop = max(v['stop'], candidate_stop) if v.get('stop') is not None else candidate_stop
                 hit = current_price <= new_stop
@@ -523,9 +621,17 @@ def update_open_positions(trade_log, results, today_str, histories=None):
 
             v['stop'] = round(new_stop, 2)
 
+            # 【2026-10-08追加】保有期間の上限（VALUE/GROWTH）。営業日数は土日のみ除外で数えるため、
+            # 祝日をはさむと実際の取引日数より1〜2日早く手仕舞うことがある（安全側）。
+            max_hold = p.get('max_hold_bdays')
+            time_up = bool(max_hold) and _business_days_between(p.get('entry_date'), today_str) >= max_hold
+            if time_up and not hit:
+                v['close_reason'] = 'max_hold'
+            hit = hit or time_up
+
             if hit:
                 entry = p['entry_price']
-                if p['signal'] == 'LONG':
+                if _is_long(p['signal']):
                     ret_pct = (current_price - entry) / entry * 100
                 else:
                     ret_pct = (entry - current_price) / entry * 100
@@ -554,9 +660,11 @@ def _stats_for(closed_trades):
     payoff = None
     if avg_win is not None and avg_loss is not None and avg_loss != 0:
         payoff = round(avg_win / abs(avg_loss), 2)
+    rets = [t['return_pct'] for t in closed_trades if t['return_pct'] is not None]
     return {
         'closed_count': n, 'win_count': len(wins), 'win_rate': win_rate,
         'avg_win_pct': avg_win, 'avg_loss_pct': avg_loss, 'payoff_ratio': payoff,
+        'expectancy_pct': round(sum(rets) / len(rets), 2) if rets else None,
     }
 
 
@@ -609,8 +717,10 @@ def compute_performance_stats(trade_log):
     closed_primary_all = closed_primary_long + closed_primary_short
     open_count = len([p for p in filtered_log if p.get('status') == 'open'])
 
+    # ATR倍率比較は従来どおりLONG＋SHORTのみ（保有期間に上限があるVALUE/GROWTHを混ぜると比較の前提が変わるため）
     atr_variants = {
-        _variant_key(m): _stats_for(_closed_variant_trades(filtered_log, _variant_key(m)))
+        _variant_key(m): _stats_for(_closed_variant_trades(filtered_log, _variant_key(m), 'LONG')
+                                    + _closed_variant_trades(filtered_log, _variant_key(m), 'SHORT'))
         for m in ATR_MULTIPLIER_VARIANTS
     }
 
@@ -618,6 +728,11 @@ def compute_performance_stats(trade_log):
         'long_short': _stats_for(closed_primary_all),
         'long_only': _stats_for(closed_primary_long),
         'short_only': _stats_for(closed_primary_short),
+        # 【2026-10-08追加】割安（VALUE）・成長（GROWTH）の2本立て
+        'value_only': _stats_for(_closed_variant_trades(filtered_log, PRIMARY_VARIANT_KEY_BY_SIGNAL['VALUE'], 'VALUE')),
+        'growth_only': _stats_for(_closed_variant_trades(filtered_log, PRIMARY_VARIANT_KEY_BY_SIGNAL['GROWTH'], 'GROWTH')),
+        'financial_only': _stats_for(_closed_variant_trades(filtered_log, PRIMARY_VARIANT_KEY_BY_SIGNAL['FINANCIAL'],
+                                                            'FINANCIAL')),
         'open_positions': open_count,
         'atr_variants': atr_variants,
         'excluded_legacy_bulk_load_closed_count': excluded_closed_count,
@@ -635,7 +750,7 @@ VALUATION_PRICE_SANITY_RATIO = 5.0
 def position_pnl_yen(signal, entry_price, price, lot=VALUATION_LOT_SHARES):
     """(投資元本, 評価額, 損益) を円で返す。SHORTは売った値段からの下落分が利益。"""
     principal = entry_price * lot
-    pnl = (price - entry_price) * lot if signal == 'LONG' else (entry_price - price) * lot
+    pnl = (price - entry_price) * lot if _is_long(signal) else (entry_price - price) * lot
     return principal, principal + pnl, pnl
 
 
@@ -655,7 +770,7 @@ def _valuation(trade_log, lot=VALUATION_LOT_SHARES, legacy=False):
     tot = {'open_count': 0, 'principal': 0, 'value': 0, 'unrealized': 0, 'closed_count': 0,
            'realized': 0, 'realized_principal': 0}
     latest_date = max((p.get('last_price_date') or '' for p in trade_log), default='')
-    for signal in ('LONG', 'SHORT'):
+    for signal in ('LONG', 'SHORT', 'VALUE', 'GROWTH', 'FINANCIAL'):
         key = PRIMARY_VARIANT_KEY_BY_SIGNAL[signal]
         v = {'open_count': 0, 'principal': 0.0, 'value': 0.0, 'unrealized': 0.0, 'stale_price_count': 0, 'bad_price_count': 0,
              'closed_count': 0, 'realized': 0.0, 'realized_principal': 0.0}

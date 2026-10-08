@@ -81,7 +81,12 @@ jobs:
         fi
         # 【2026-09-16追加】別枠のイベント型仮想売買（event_strategies.py）の記録と状態
         # 【2026-09-24追加】500万円スタートの資金台帳（capital_tracker.py）
-        for f in data/event_trade_log.json data/event_state.json data/capital_ledger.json; do
+        # 【2026-10-08追加】毎晩の日足（collector.save_daily_bars。検証用に保存）
+        if [ -d data/daily_bars ]; then
+          git add data/daily_bars
+        fi
+        # 【2026-10-08追加】ロマン枠（監視のみ）の毎日の一覧（tracking.record_roman_watchlist）
+        for f in data/event_trade_log.json data/event_state.json data/capital_ledger.json data/roman_watchlist.json; do
           if [ -f "$f" ]; then
             git add "$f"
           fi
