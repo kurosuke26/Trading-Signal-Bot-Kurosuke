@@ -6,7 +6,7 @@
     "LONG"
   ],
   "start_date": "2026-09-24",
-  "cash": 1472325.0,
+  "cash": 2405625.0,
   "open_positions": {
     "2173.T|LONG|2026-09-24": {
       "ticker": "2173.T",
@@ -16,10 +16,10 @@
       "entry_price": 763.0,
       "invested": 500000.0,
       "shares": 655.308,
-      "last_price_date": "2026-10-08",
-      "last_price": 772.0,
-      "unrealized": 5898.0,
-      "unrealized_pct": 1.18,
+      "last_price_date": "2026-10-09",
+      "last_price": 774.0,
+      "unrealized": 7208.0,
+      "unrealized_pct": 1.44,
       "caution": false
     },
     "6418.T|LONG|2026-09-24": {
@@ -30,24 +30,10 @@
       "entry_price": 1268.0,
       "invested": 500000.0,
       "shares": 394.3218,
-      "last_price_date": "2026-10-08",
-      "last_price": 1230.0,
-      "unrealized": -14984.0,
-      "unrealized_pct": -3.0,
-      "caution": false
-    },
-    "1814.T|LONG|2026-09-25": {
-      "ticker": "1814.T",
-      "name": "大末建設",
-      "signal": "LONG",
-      "entry_date": "2026-09-25",
-      "entry_price": 3680.0,
-      "invested": 500000.0,
-      "shares": 135.8696,
-      "last_price_date": "2026-10-08",
-      "last_price": 3355.0,
-      "unrealized": -44158.0,
-      "unrealized_pct": -8.83,
+      "last_price_date": "2026-10-09",
+      "last_price": 1257.0,
+      "unrealized": -4338.0,
+      "unrealized_pct": -0.87,
       "caution": false
     },
     "4410.T|LONG|2026-09-25": {
@@ -58,24 +44,10 @@
       "entry_price": 1158.0,
       "invested": 500000.0,
       "shares": 431.7789,
-      "last_price_date": "2026-10-08",
-      "last_price": 1106.0,
-      "unrealized": -22453.0,
-      "unrealized_pct": -4.49,
-      "caution": false
-    },
-    "6505.T|LONG|2026-09-25": {
-      "ticker": "6505.T",
-      "name": "東洋電機製造",
-      "signal": "LONG",
-      "entry_date": "2026-09-25",
-      "entry_price": 2463.0,
-      "invested": 500000.0,
-      "shares": 203.0045,
-      "last_price_date": "2026-10-08",
-      "last_price": 2304.0,
-      "unrealized": -32278.0,
-      "unrealized_pct": -6.46,
+      "last_price_date": "2026-10-09",
+      "last_price": 1098.0,
+      "unrealized": -25907.0,
+      "unrealized_pct": -5.18,
       "caution": false
     },
     "2108.T|LONG|2026-10-02": {
@@ -86,10 +58,10 @@
       "entry_price": 1793.0,
       "invested": 497255.0,
       "shares": 277.3313,
-      "last_price_date": "2026-10-08",
-      "last_price": 1756.0,
-      "unrealized": -10261.0,
-      "unrealized_pct": -2.06,
+      "last_price_date": "2026-10-09",
+      "last_price": 1837.0,
+      "unrealized": 12203.0,
+      "unrealized_pct": 2.45,
       "caution": false
     },
     "4463.T|LONG|2026-10-06": {
@@ -100,10 +72,10 @@
       "entry_price": 2020.0,
       "invested": 496620.0,
       "shares": 245.8515,
-      "last_price_date": "2026-10-08",
-      "last_price": 2007.0,
-      "unrealized": -3196.0,
-      "unrealized_pct": -0.64,
+      "last_price_date": "2026-10-09",
+      "last_price": 2006.0,
+      "unrealized": -3442.0,
+      "unrealized_pct": -0.69,
       "caution": false
     }
   },
@@ -143,6 +115,30 @@
       "invested": 500000.0,
       "pnl": -6350.0,
       "return_pct": -1.27
+    },
+    {
+      "ticker": "1814.T",
+      "name": "大末建設",
+      "signal": "LONG",
+      "entry_date": "2026-09-25",
+      "entry_price": 3680.0,
+      "close_date": "2026-10-09",
+      "close_price": 3340.0,
+      "invested": 500000.0,
+      "pnl": -34200.0,
+      "return_pct": -6.84
+    },
+    {
+      "ticker": "6505.T",
+      "name": "東洋電機製造",
+      "signal": "LONG",
+      "entry_date": "2026-09-25",
+      "entry_price": 2463.0,
+      "close_date": "2026-10-09",
+      "close_price": 2303.0,
+      "invested": 500000.0,
+      "pnl": -32500.0,
+      "return_pct": -6.5
     }
   ],
   "skipped_entries": [
