@@ -6,7 +6,7 @@
     "LONG"
   ],
   "start_date": "2026-09-24",
-  "cash": 1915675.0,
+  "cash": 1425725.0,
   "open_positions": {
     "2173.T|LONG|2026-09-24": {
       "ticker": "2173.T",
@@ -16,10 +16,10 @@
       "entry_price": 763.0,
       "invested": 500000.0,
       "shares": 655.308,
-      "last_price_date": "2026-10-12",
-      "last_price": 774.0,
-      "unrealized": 7208.0,
-      "unrealized_pct": 1.44,
+      "last_price_date": "2026-10-13",
+      "last_price": 778.0,
+      "unrealized": 9830.0,
+      "unrealized_pct": 1.97,
       "caution": false
     },
     "6418.T|LONG|2026-09-24": {
@@ -30,10 +30,10 @@
       "entry_price": 1268.0,
       "invested": 500000.0,
       "shares": 394.3218,
-      "last_price_date": "2026-10-12",
-      "last_price": 1257.0,
-      "unrealized": -4338.0,
-      "unrealized_pct": -0.87,
+      "last_price_date": "2026-10-13",
+      "last_price": 1286.0,
+      "unrealized": 7098.0,
+      "unrealized_pct": 1.42,
       "caution": false
     },
     "4410.T|LONG|2026-09-25": {
@@ -44,10 +44,10 @@
       "entry_price": 1158.0,
       "invested": 500000.0,
       "shares": 431.7789,
-      "last_price_date": "2026-10-12",
-      "last_price": 1098.0,
-      "unrealized": -25907.0,
-      "unrealized_pct": -5.18,
+      "last_price_date": "2026-10-13",
+      "last_price": 1110.0,
+      "unrealized": -20725.0,
+      "unrealized_pct": -4.15,
       "caution": false
     },
     "2108.T|LONG|2026-10-02": {
@@ -58,10 +58,10 @@
       "entry_price": 1793.0,
       "invested": 497255.0,
       "shares": 277.3313,
-      "last_price_date": "2026-10-12",
-      "last_price": 1837.0,
-      "unrealized": 12203.0,
-      "unrealized_pct": 2.45,
+      "last_price_date": "2026-10-13",
+      "last_price": 1825.0,
+      "unrealized": 8875.0,
+      "unrealized_pct": 1.78,
       "caution": false
     },
     "4463.T|LONG|2026-10-06": {
@@ -72,10 +72,10 @@
       "entry_price": 2020.0,
       "invested": 496620.0,
       "shares": 245.8515,
-      "last_price_date": "2026-10-12",
-      "last_price": 2006.0,
-      "unrealized": -3442.0,
-      "unrealized_pct": -0.69,
+      "last_price_date": "2026-10-13",
+      "last_price": 2036.0,
+      "unrealized": 3934.0,
+      "unrealized_pct": 0.79,
       "caution": false
     },
     "8014.T|LONG|2026-10-13": {
@@ -86,10 +86,24 @@
       "entry_price": 4240.0,
       "invested": 489950.0,
       "shares": 115.5542,
-      "last_price_date": "2026-10-12",
-      "last_price": 4215.0,
-      "unrealized": -2889.0,
-      "unrealized_pct": -0.59,
+      "last_price_date": "2026-10-13",
+      "last_price": 4255.0,
+      "unrealized": 1733.0,
+      "unrealized_pct": 0.35,
+      "caution": false
+    },
+    "6517.T|LONG|2026-10-13": {
+      "ticker": "6517.T",
+      "name": "デンヨー",
+      "signal": "LONG",
+      "entry_date": "2026-10-13",
+      "entry_price": 3995.0,
+      "invested": 489950.0,
+      "shares": 122.6408,
+      "last_price_date": "2026-10-13",
+      "last_price": 4095.0,
+      "unrealized": 12264.0,
+      "unrealized_pct": 2.5,
       "caution": false
     }
   },
@@ -171,8 +185,9 @@
     "7217.T|LONG|2026-10-01",
     "8150.T|LONG|2026-10-01",
     "8996.T|LONG|2026-10-02",
-    "6493.T|LONG|2026-10-07"
+    "6493.T|LONG|2026-10-07",
+    "7296.T|LONG|2026-10-13"
   ],
-  "last_synced_at": "2026-10-13",
+  "last_synced_at": "2026-10-14",
   "period_year": 2026
 }
