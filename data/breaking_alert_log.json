@@ -1,25 +1,5 @@
 [
   {
-    "at_utc": "2026-09-18T02:56:39.455173+00:00",
-    "category": "policy",
-    "text": "📜 **日銀発表**：（参考）金融市場調節方針の変更（2026年９月金融政策決定会合）\nhttp://www.boj.or.jp/mopo/mpmdeci/mpr_2026/k260918b.pdf"
-  },
-  {
-    "at_utc": "2026-09-18T02:56:39.455173+00:00",
-    "category": "policy",
-    "text": "📜 **日銀発表**：金融市場調節方針の変更について\nhttp://www.boj.or.jp/mopo/mpmdeci/mpr_2026/k260918a.pdf"
-  },
-  {
-    "at_utc": "2026-09-18T03:31:20.615843+00:00",
-    "category": "policy",
-    "text": "📜 **日銀発表**：「補完当座預金制度基本要領」の一部改正について\nhttp://www.boj.or.jp/mopo/mpmdeci/mpr_2026/mpr260918b.pdf"
-  },
-  {
-    "at_utc": "2026-09-18T03:31:20.615843+00:00",
-    "category": "policy",
-    "text": "📜 **日銀発表**：「気候変動対応を支援するための資金供給オペレーション基本要領」の一部改正等について\nhttp://www.boj.or.jp/mopo/mpmdeci/mpr_2026/mpr260918a.pdf"
-  },
-  {
     "at_utc": "2026-09-18T07:52:56.937750+00:00",
     "category": "policy",
     "text": "📜 **日銀発表**：総裁記者会見（9月18日）動画の配信開始\nhttp://www.boj.or.jp/about/release/sousaidouga.htm"
@@ -668,5 +648,10 @@
     "at_utc": "2026-10-23T01:32:31.940940+00:00",
     "category": "nikkei_daily",
     "text": "📉 **日経平均 本日大幅変動**：本日62,907.84 → 61,566.13（-2.13%、本日累計）"
+  },
+  {
+    "at_utc": "2026-10-23T06:30:43.172008+00:00",
+    "category": "nikkei_rapid",
+    "text": "📈 **日経平均 急変動**：61,566.13 → 62,670.09（+1.79%、直近15分程度）"
   }
 ]
