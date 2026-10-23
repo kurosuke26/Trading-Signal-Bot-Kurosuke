@@ -6,7 +6,7 @@
     "LONG"
   ],
   "start_date": "2026-09-24",
-  "cash": 1890593.1085,
+  "cash": 1387476.318171,
   "open_positions": {
     "2173.T|LONG|2026-09-24": {
       "ticker": "2173.T",
@@ -16,10 +16,10 @@
       "entry_price": 763.0,
       "invested": 500000.0,
       "shares": 655.308,
-      "last_price_date": "2026-10-22",
-      "last_price": 795.0,
-      "unrealized": 20970.0,
-      "unrealized_pct": 4.19,
+      "last_price_date": "2026-10-23",
+      "last_price": 790.0,
+      "unrealized": 17693.0,
+      "unrealized_pct": 3.54,
       "caution": false
     },
     "6418.T|LONG|2026-09-24": {
@@ -30,10 +30,10 @@
       "entry_price": 1268.0,
       "invested": 500000.0,
       "shares": 394.3218,
-      "last_price_date": "2026-10-22",
-      "last_price": 1297.0,
-      "unrealized": 11435.0,
-      "unrealized_pct": 2.29,
+      "last_price_date": "2026-10-23",
+      "last_price": 1291.0,
+      "unrealized": 9069.0,
+      "unrealized_pct": 1.81,
       "caution": false
     },
     "2108.T|LONG|2026-10-02": {
@@ -44,10 +44,10 @@
       "entry_price": 1793.0,
       "invested": 497255.0,
       "shares": 277.3313,
-      "last_price_date": "2026-10-22",
-      "last_price": 1831.0,
-      "unrealized": 10539.0,
-      "unrealized_pct": 2.12,
+      "last_price_date": "2026-10-23",
+      "last_price": 1863.0,
+      "unrealized": 19413.0,
+      "unrealized_pct": 3.9,
       "caution": false
     },
     "4463.T|LONG|2026-10-06": {
@@ -58,10 +58,10 @@
       "entry_price": 2020.0,
       "invested": 496620.0,
       "shares": 245.8515,
-      "last_price_date": "2026-10-22",
-      "last_price": 1969.0,
-      "unrealized": -12538.0,
-      "unrealized_pct": -2.52,
+      "last_price_date": "2026-10-23",
+      "last_price": 1960.0,
+      "unrealized": -14751.0,
+      "unrealized_pct": -2.97,
       "caution": false
     },
     "8014.T|LONG|2026-10-13": {
@@ -72,24 +72,38 @@
       "entry_price": 4240.0,
       "invested": 489950.0,
       "shares": 115.5542,
-      "last_price_date": "2026-10-22",
-      "last_price": 4245.0,
-      "unrealized": 578.0,
-      "unrealized_pct": 0.12,
+      "last_price_date": "2026-10-23",
+      "last_price": 4290.0,
+      "unrealized": 5778.0,
+      "unrealized_pct": 1.18,
       "caution": false
     },
-    "5576.T|LONG|2026-10-21": {
-      "ticker": "5576.T",
-      "name": "オービーシステム",
+    "1762.T|LONG|2026-10-23": {
+      "ticker": "1762.T",
+      "name": "高松コンストラクショングループ",
       "signal": "LONG",
-      "entry_date": "2026-10-21",
-      "entry_price": 3300.0,
-      "invested": 486046.0,
-      "shares": 147.2868,
-      "last_price_date": "2026-10-22",
-      "last_price": 3210.0,
-      "unrealized": -13256.0,
-      "unrealized_pct": -2.73,
+      "entry_date": "2026-10-23",
+      "entry_price": 4135.0,
+      "invested": 483913.0,
+      "shares": 117.0285,
+      "last_price_date": "2026-10-23",
+      "last_price": 4125.0,
+      "unrealized": -1170.0,
+      "unrealized_pct": -0.24,
+      "caution": false
+    },
+    "1870.T|LONG|2026-10-23": {
+      "ticker": "1870.T",
+      "name": "矢作建設工業",
+      "signal": "LONG",
+      "entry_date": "2026-10-23",
+      "entry_price": 2098.0,
+      "invested": 483913.0,
+      "shares": 230.6543,
+      "last_price_date": "2026-10-23",
+      "last_price": 2083.0,
+      "unrealized": -3460.0,
+      "unrealized_pct": -0.71,
       "caution": false
     }
   },
@@ -177,6 +191,18 @@
       "invested": 489950.0,
       "pnl": -15335.0,
       "return_pct": -3.13
+    },
+    {
+      "ticker": "5576.T",
+      "name": "オービーシステム",
+      "signal": "LONG",
+      "entry_date": "2026-10-21",
+      "entry_price": 3300.0,
+      "close_date": "2026-10-23",
+      "close_price": 3155.0,
+      "invested": 486046.0,
+      "pnl": -21337.0,
+      "return_pct": -4.39
     }
   ],
   "skipped_entries": [
@@ -212,6 +238,6 @@
     "9076.T|LONG|2026-10-20",
     "9991.T|LONG|2026-10-20"
   ],
-  "last_synced_at": "2026-10-22",
+  "last_synced_at": "2026-10-23",
   "period_year": 2026
 }
