@@ -25,6 +25,8 @@ collector.py/poster.py（1日1回、朝のシグナル投稿）とは別の、�
      金融経済教育など個人投資家に関係が深いものだけを投稿。
  10. 【2026-09-24追加】月末の最後の5日間、会員提出フォーム（Googleフォーム）の案内を
      1日1回（JST12時以降の最初の回）投稿。URLはSecretsのMEMBER_FORM_URLで渡し、未設定なら何もしない。
+  11. 【2026-10-23追加】ビットコイン・イーサリアム・XRP（円建て）の急変動：仕組みは為替・日経と
+     同じ（直近チェック比2%・本日累計5%、クールダウン2時間）。朝の米国市場サマリーにも価格と騰落率を追加。
   ※国内CPI・GDP速報・日銀短観は、公表予定日を economic_calendar.json に登録して
     5.の「今日の予定」で知らせる（統計局・内閣府にRSSが無いため）。
 
@@ -68,6 +70,19 @@ NIKKEI_TICKER = '^N225'
 NIKKEI_RAPID_THRESHOLD_PCT = env_float('BREAKING_NIKKEI_RAPID_THRESHOLD_PCT', 0.8)
 NIKKEI_DAILY_THRESHOLD_PCT = env_float('BREAKING_NIKKEI_DAILY_THRESHOLD_PCT', 2.0)
 NIKKEI_COOLDOWN_MINUTES = env_float('BREAKING_NIKKEI_COOLDOWN_MINUTES', 60)
+
+# 【2026-10-23追加】ビットコイン・イーサリアム・XRP。暗号資産は24時間動いて値動きも株・為替より
+# 大きいため、しきい値は高め（頻繁に通知が出ないように）。判定の仕組みはFX・日経と共通
+# 価格は円建て（yfinanceのBTC-JPY/ETH-JPY）。円建ての変化率にはドル円の動きも含まれる
+CRYPTO_INSTRUMENTS = [
+    {'key': 'btc', 'ticker': 'BTC-JPY', 'label': 'ビットコイン(BTC)', 'decimals': 0},
+    {'key': 'eth', 'ticker': 'ETH-JPY', 'label': 'イーサリアム(ETH)', 'decimals': 0},
+    {'key': 'xrp', 'ticker': 'XRP-JPY', 'label': 'リップル(XRP)', 'decimals': 2},  # 1枚約200円なので小数も出す
+]
+CRYPTO_RAPID_THRESHOLD_PCT = env_float('BREAKING_CRYPTO_RAPID_THRESHOLD_PCT', 2.0)
+CRYPTO_DAILY_THRESHOLD_PCT = env_float('BREAKING_CRYPTO_DAILY_THRESHOLD_PCT', 5.0)
+CRYPTO_COOLDOWN_MINUTES = env_float('BREAKING_CRYPTO_COOLDOWN_MINUTES', 120)
+CRYPTO_EXPLAIN = '暗号資産は24時間取引され、株よりも値動きが大きいのが特徴です'
 
 # 日銀・FRBの公式RSS（discord-ai-team側の適時開示調査(2026-09)で生存確認済みのURL）
 POLICY_FEEDS = [
@@ -240,7 +255,7 @@ def fetch_last_price(ticker):
 
 
 def check_instrument(state, key, ticker, label, rapid_threshold_pct, daily_threshold_pct,
-                      cooldown_minutes, now_utc, today_jst_str):
+                      cooldown_minutes, now_utc, today_jst_str, prefix='', decimals=2):
     """
     為替・日経平均共通の急変動チェック。stateを直接更新し、(category, text)のリスト
     （0〜2件）を返す。
@@ -270,7 +285,7 @@ def check_instrument(state, key, ticker, label, rapid_threshold_pct, daily_thres
         if abs(change_pct) >= rapid_threshold_pct:
             arrow = '📈' if change_pct > 0 else '📉'
             results.append((f'{key}_rapid',
-                f'{arrow} **{label} 急変動**：{last_price:,.2f} → {price:,.2f}'
+                f'{arrow} **{label} 急変動**：{prefix}{last_price:,.{decimals}f} → {prefix}{price:,.{decimals}f}'
                 f'（{change_pct:+.2f}%、直近15分程度）'
             ))
 
@@ -284,7 +299,7 @@ def check_instrument(state, key, ticker, label, rapid_threshold_pct, daily_thres
         if abs(daily_change_pct) >= daily_threshold_pct:
             arrow = '📈' if daily_change_pct > 0 else '📉'
             results.append((f'{key}_daily',
-                f'{arrow} **{label} 本日大幅変動**：本日{day_start_price:,.2f} → {price:,.2f}'
+                f'{arrow} **{label} 本日大幅変動**：本日{prefix}{day_start_price:,.{decimals}f} → {prefix}{price:,.{decimals}f}'
                 f'（{daily_change_pct:+.2f}%、本日累計）'
             ))
 
@@ -379,6 +394,20 @@ def check_us_morning_report(state, now_jst, today_jst_str):
             lines.append(f'{inst["label"]}：データ取得不可')
             continue
         lines.append(f'{_format_change(inst, *pair)}\n　💡 {inst["explain"]}')
+
+    # 【2026-10-23追加】ビットコイン・イーサリアム・XRP（円建て。前日終値＝UTC0時比）
+    crypto_lines = []
+    for inst in CRYPTO_INSTRUMENTS:
+        pair = _prev_and_latest_close(inst['ticker'])
+        if pair is None:
+            crypto_lines.append(f'{inst["label"]}：データ取得不可')
+            continue
+        prev, latest, _ = pair
+        change_pct = (latest - prev) / prev * 100
+        arrow = '📈' if change_pct >= 0 else '📉'
+        crypto_lines.append(f'{arrow} {inst["label"]} ¥{latest:,.{inst["decimals"]}f}（{change_pct:+.2f}%）')
+    if crypto_lines:
+        lines.append('\n🪙 **暗号資産**\n' + '\n'.join(crypto_lines) + f'\n　💡 {CRYPTO_EXPLAIN}')
 
     state['us_morning_report_date_jst'] = today_jst_str
     if not lines:
@@ -632,6 +661,12 @@ def run():
         NIKKEI_RAPID_THRESHOLD_PCT, NIKKEI_DAILY_THRESHOLD_PCT, NIKKEI_COOLDOWN_MINUTES,
         now_utc, today_jst_str,
     )
+    for inst in CRYPTO_INSTRUMENTS:
+        all_results += check_instrument(
+            state, inst['key'], inst['ticker'], inst['label'],
+            CRYPTO_RAPID_THRESHOLD_PCT, CRYPTO_DAILY_THRESHOLD_PCT, CRYPTO_COOLDOWN_MINUTES,
+            now_utc, today_jst_str, prefix='¥', decimals=inst['decimals'],
+        )
     all_results += check_vix(state, now_utc)
     all_results += check_macro_moves(state, now_utc, today_jst_str)
     all_results += check_policy_feeds(state)
