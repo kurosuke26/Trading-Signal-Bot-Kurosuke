@@ -325,6 +325,18 @@ def build_performance_recap_text():
         '📘 見方：勝率は「利益で終わった割合」。「勝ちの大きさ÷負けの大きさ」が1を超えると、'
         '1回あたりの勝ちが負けより大きいという意味です（勝率が低くても、これが大きければ全体でプラスになりえます）。',
     ]
+    # 【2026-10-28復活】ATR倍率の比較（ユーザー要望で残す）。各行は「その倍率を
+    # LONG・SHORT共通で使っていたら」という仮定の比較で、現在の本番設定
+    # （LONG・SHORTで別倍率、tracking.pyのATR_MULTIPLIER_BY_SIGNAL）とは前提が
+    # 異なる。本番設定そのものの成績は上の「割安かも／割高かも候補」の行を見ること。
+    atr_variants = stats.get('atr_variants') or {}
+    if atr_variants:
+        lines.append('')
+        lines.append('― 参考：損切りラインの幅を変えていたらどうなったか（ATR倍率の比較） ―')
+        lines.append('ATRは値動きの荒さの目安。倍率が大きいほど、損切りラインを遠くに置く設定です'
+                     '（買い・売り共通で使った場合の仮定の比較で、現在の本番設定とは異なります）。')
+        for key in ('1.8', '2.5', '5.0'):
+            lines.append(_fmt(f'ATR×{key}', atr_variants.get(key)))
     # 件数が少ないうちは、勝率が1件の結果で大きく変わる
     small = [s_ for s_ in (stats['long_only'], stats['short_only'])
              if s_ and s_.get('closed_count') and s_['closed_count'] < SMALL_SAMPLE_THRESHOLD]
@@ -512,11 +524,7 @@ def build_reading_guide_text(nikkei_change=None):
         blocks.append(f'**📈 今週の日経平均（毎日の終わり値）**\n{strip}\n上がった日 {ups}日・下がった日 {downs}日\n{comment}')
 
     # --- 2) 今週出た速報の読み解き ---
-    latest_by_group = {}
-    for e in sorted(entries, key=lambda x: x.get('at_utc', '')):
-        g = _CATEGORY_GROUP.get(e.get('category'))
-        if g:
-            latest_by_group[g] = e.get('text', '')
+    latest_by_group = _latest_text_by_group(entries)
     guides = [_guide_for(g, latest_by_group[g]) for g in READING_GUIDE_PRIORITY if g in latest_by_group]
     guides = [g for g in guides if g][:READING_GUIDE_MAX_ITEMS]
     if guides:
@@ -535,14 +543,10 @@ def build_reading_guide_text(nikkei_change=None):
     return '\n\n'.join(blocks)
 
 
-def build_weekly_news_text():
+def fetch_weekly_news_items():
     """
-    サロンメンバー向けの「今週の経済ニュース」。個別銘柄のシグナルとは別に、
-    一般的な経済ニュースの見出し・リンクをそのまま列挙する（当システムによる
-    要約・論評はしない。「出典が確認できない情報は載せない」方針に沿い、
-    見出し自体を一次情報として扱う）。直近7日分・重複タイトル除去・最大
-    WEEKLY_NEWS_MAX_ITEMS件。公開日が取れない記事も「取得できた時点で新着」と
-    みなして対象に含める（取れないことを理由に有用な見出しを落とさない）。
+    直近7日分の経済ニュース（重複タイトル除去）。公開日が取れない記事も「取得できた
+    時点で新着」とみなして対象に含める（取れないことを理由に有用な見出しを落とさない）。
     """
     cutoff = (datetime.now(timezone.utc) - timedelta(days=7)).date().isoformat()
     seen_titles = set()
@@ -557,13 +561,120 @@ def build_weekly_news_text():
                 continue
             seen_titles.add(title)
             items.append(entry)
+    return items
 
+
+def build_weekly_news_text(items=None):
+    """
+    サロンメンバー向けの「今週の経済ニュース」。個別銘柄のシグナルとは別に、
+    一般的な経済ニュースの見出し・リンクをそのまま列挙する（当システムによる
+    要約・論評はしない。「出典が確認できない情報は載せない」方針に沿い、
+    見出し自体を一次情報として扱う）。最大WEEKLY_NEWS_MAX_ITEMS件。
+    """
+    if items is None:
+        items = fetch_weekly_news_items()
     if not items:
         return '今週は経済ニュースの取得に失敗しました（フィード側の一時的な問題の可能性があります）。'
 
     lines = [f"・[{e['title']}]({e['link']})" if e.get('link') else f"・{e['title']}"
              for e in items[:WEEKLY_NEWS_MAX_ITEMS]]
     return "\n".join(lines)
+
+
+# ---------------------------------------------------------------------------
+# 【2026-10-28追加】連想ゲーム：実際の出来事から「次に何が起きそう？」と連想をつなげて
+# 遊ぶお題。予想を当てるゲームではなく「因果のつなげ方を考える練習」で、
+# 答え合わせ・売買のおすすめは含めない。遊ぶ場所はコミュニケーション板。
+# ---------------------------------------------------------------------------
+def _latest_text_by_group(entries):
+    latest = {}
+    for e in sorted(entries, key=lambda x: x.get('at_utc', '')):
+        g = _CATEGORY_GROUP.get(e.get('category'))
+        if g:
+            latest[g] = e.get('text', '')
+    return latest
+
+
+def _association_for(group, latest_text):
+    """(お題の見出し, 連想の一例) を返す。連想の一例は一般的な因果のつながりで、予想ではない。"""
+    went_up = latest_text.lstrip().startswith('📈')
+    if group == 'policy':
+        return ('日銀・FRBの発表',
+                '金利が上がる → 住宅ローンの金利は？ → 銀行の利益は？ → 円は買われる？売られる？ → ？')
+    if group == 'vix':
+        return ('VIX（恐怖指数）の動き',
+                '投資家の不安が高まる → 安全と言われる資産（金・円・国債）は？ → 株は？ → ？')
+    if group == 'usdjpy':
+        if went_up:
+            return ('円安方向の動き',
+                    '円安 → ガソリンや小麦の値段は？ → 家計は？ → 輸出企業の利益は？ → 海外から来る旅行者は？ → ？')
+        return ('円高方向の動き',
+                '円高 → 海外旅行や輸入品は？ → 輸出企業の利益は？ → 株価への影響は？ → ？')
+    if group == 'nikkei':
+        if went_up:
+            return ('日経平均の大きな上昇',
+                    '日経平均が大きく上がる → 理由は海外？為替？決算？ → 連動した業種は？ → 逆に動かなかった銘柄は？ → ？')
+        return ('日経平均の大きな下落',
+                '日経平均が大きく下がる → 理由は海外？為替？決算？ → 下げに強かった業種は？ → なぜ？ → ？')
+    if group == 'us10y':
+        return ('米国の長期金利の動き',
+                '米国の金利が動く → ドルの魅力は？ → 円は？ → 成長株は？ → 日本の銀行株は？ → ？')
+    if group == 'oil':
+        if went_up:
+            return ('原油の上昇',
+                    '原油が上がる → ガソリン・電気代は？ → 運送費は？ → 値上がりしそうな商品は？ → 得をしそうな会社は？ → ？')
+        return ('原油の下落',
+                '原油が下がる → ガソリン・電気代は？ → 運送費は？ → 助かりそうな業種は？ → 困りそうな会社は？ → ？')
+    if group == 'gold':
+        return ('金（ゴールド）の動き',
+                '金が動く → なぜ人は金を買う？ → 株は？ → ドルは？ → ？')
+    if group == 'crypto':
+        return ('暗号資産の動き',
+                '暗号資産が動く → 株やドルとの関係は？ → 規制や大企業の動きは？ → ？')
+    if group == 'us_morning':
+        if went_up:
+            return ('米国株の上昇',
+                    '米国株が上がる → 日本株の朝の寄り付きは？ → 為替は？ → 注目されそうな業種は？ → ？')
+        return ('米国株の下落',
+                '米国株が下がる → 日本株の朝の寄り付きは？ → 為替は？ → 注目されそうな業種は？ → ？')
+    if group == 'calendar':
+        return ('今日の予定（指標発表・SQ日など）',
+                '予定のある日 → どの市場が動きやすい？ → 動く前に確認しておくことは？ → ？')
+    return ('', '')
+
+
+def build_association_game_text(headlines=None):
+    """今週の速報・ニュースから「連想ゲーム」のお題を作る。"""
+    latest = _latest_text_by_group(_recent_breaking_entries())
+    blocks = []
+
+    for g in READING_GUIDE_PRIORITY:
+        if g in latest:
+            topic, chain = _association_for(g, latest[g])
+            if topic:
+                blocks.append(
+                    f'**🎲 今週のお題：{topic}**\n'
+                    f'（連想の一例）{chain}\n'
+                    '「？」には何が入りそう？ほかの道すじも考えてみましょう。'
+                )
+                break
+
+    if headlines:
+        blocks.append(
+            f'**📰 ニュースでも遊べます**\n『{headlines[0]}』\n'
+            'この出来事は、暮らし・ほかの会社・株価に、どうつながりそう？'
+        )
+
+    if not blocks:
+        blocks.append('今週は材料が少なめです。気になったニュースを1つ選んで、「次に何が起きそう？」を連想してみましょう。')
+
+    blocks.append(
+        '正解はありません。大事なのは「なぜそう思ったか」を言葉にすること。'
+        'ほかの人の連想を聞くと、見える範囲が広がります。'
+    )
+    blocks.append('💬 **連想ゲームはコミュニケーション板でやってみましょう。**')
+    blocks.append('※考える練習であり、今後の値動きの予想や売買のおすすめではありません。')
+    return '\n\n'.join(blocks)
 
 
 def build_next_week_text():
@@ -611,11 +722,14 @@ def build_payloads():
     nikkei_change = fetch_weekly_change(NIKKEI_TICKER)
     topix_change, _ = fetch_topix_change()
     snapshot = load_latest_snapshot()
+    news_items = fetch_weekly_news_items()
     embeds = [
         {'title': '📰 今週の市場サマリー', 'description': build_market_narrative_text(nikkei_change, topix_change, snapshot), 'color': 0x2ECC71},
-        {'title': '🌏 今週の経済ニュース', 'description': build_weekly_news_text(), 'color': 0x1ABC9C},
+        {'title': '🌏 今週の経済ニュース', 'description': build_weekly_news_text(news_items), 'color': 0x1ABC9C},
         {'title': '⚡ 今週あった速報', 'description': build_breaking_recap_text(), 'color': 0xE67E22},
         {'title': '🧭 今週の情報、どう考える？', 'description': build_reading_guide_text(nikkei_change), 'color': 0xE74C3C},
+        {'title': '🎮 連想ゲーム（実際の出来事から、次に何が起きそうか考えてみよう）',
+         'description': build_association_game_text([e['title'] for e in news_items]), 'color': 0x16A085},
         {'title': '👀 機械が選んだ注目銘柄', 'description': build_signal_highlight_text(snapshot), 'color': 0x3498DB},
         {'title': '🎯 このシステムの成績（これまでの累計）', 'description': build_performance_recap_text(), 'color': 0x9B59B6},
         {'title': '🗓 来週の予定', 'description': build_next_week_text(), 'color': 0xF1C40F},
