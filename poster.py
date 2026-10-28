@@ -401,7 +401,9 @@ def get_webhook_urls(channel):
 # 【2026-09-16追加】Discordの制限：1投稿あたりEmbedは10件まで、かつ全Embedの合計6,000文字まで。
 # 件数だけ守って文字数を超えると、Discordは400ではなく500を返す（2026-09-16にロング通知10件・8,071文字で発生）。
 MAX_EMBEDS_PER_MESSAGE = 10
-MAX_EMBED_TOTAL_CHARS = 5800  # 6,000の手前で余裕を持たせる
+# 【2026-10-28変更】5800→4000。10/8追加の割安・成長一覧（Embed5件・5,759文字）が毎朝
+# 413（Message size exceeds maximum allowed）で拒否されていた。実測：4,516文字は成功、5,759文字は413
+MAX_EMBED_TOTAL_CHARS = 4000
 # 【2026-09-16】実測：8フィールドのEmbedを10件（合計80フィールド）送ると500エラー、9件（72）なら成功。
 # 公式には明記が無いが、1投稿あたりのフィールド総数にも上限があるとみられるため余裕を持って72で止める。
 MAX_EMBED_TOTAL_FIELDS = 72
@@ -866,10 +868,15 @@ def post():
     if all(send_results.values()):
         print("投稿完了！全チャネルへの投稿に成功しました。")
         return True
-    else:
-        failed_channels = [CHANNEL_LABELS[c] for c, ok in send_results.items() if not ok]
-        print(f"投稿処理は完了しましたが、一部チャネルへの投稿に失敗しました：{', '.join(failed_channels)}")
-        return False
+    failed_channels = [CHANNEL_LABELS[c] for c, ok in send_results.items() if not ok]
+    if any(send_results.values()):
+        # 【2026-10-28変更】一部だけ失敗した時に失敗（終了コード1）で終えると「投稿済み」の記録が
+        # 残らず、見張り役が全チャンネルを丸ごと送り直して二重投稿になっていた（10/15〜10/26）。
+        # 1つでも届いたら成功扱いで記録させ、失敗はGitHubの注記（::warning::）で残す。
+        print(f"::warning::一部チャネルへの投稿に失敗しました（他は投稿済みのため再投稿しません）：{', '.join(failed_channels)}")
+        return True
+    print(f"全チャネルへの投稿に失敗しました：{', '.join(failed_channels)}")
+    return False
 
 
 if __name__ == "__main__":
