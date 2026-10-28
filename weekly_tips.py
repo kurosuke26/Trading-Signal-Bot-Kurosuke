@@ -34,6 +34,7 @@ collector.py / poster.py（毎日実行）とは独立した、週1回だけ動�
 
 import json
 import os
+import re
 import sys
 from datetime import datetime, timedelta, timezone
 
@@ -56,6 +57,10 @@ WEEKLY_NEWS_FEEDS = [
 ]
 WEEKLY_NEWS_MAX_ITEMS = 5
 
+JST = timezone(timedelta(hours=9))
+SMALL_SAMPLE_THRESHOLD = 30  # この件数未満の勝率は参考程度、と注記する
+WEEKDAY_JA = '月火水木金土日'
+
 NIKKEI_TICKER = '^N225'
 # TOPIX指数そのもの(998405.T)が取得できない環境向けに、連動ETF(1306.T)へ
 # フォールバックする。
@@ -63,46 +68,79 @@ TOPIX_TICKERS = ['998405.T', '1306.T']
 
 TIPS = [
     {
-        'title': '📖 TIPS：配当利回り 3.5〜5.8% に限定する理由',
+        'title': '📖 豆知識：日経平均とTOPIXは何が違う？',
         'body': (
-            '配当利回りが低すぎる銘柄は株価が既に評価されすぎている可能性が、'
-            '逆に高すぎる（8%超など）銘柄は業績悪化による株価下落や減配リスクを'
-            '織り込んでいる可能性があります。Kurosukeでは「割安さと持続性のバランス」'
-            'が取れやすい3.5〜5.8%のレンジをLONG候補の一次条件にしています。'
+            '日経平均は「日本を代表する225社の株価の平均」、TOPIXは「東証プライム市場のほぼ全社をまとめた'
+            '指数」です。日経平均は値段の高い一部の大型株に引っ張られやすく、TOPIXは日本株全体の体温に'
+            '近い、と言われます。2つの動きがズレた日は「一部の銘柄だけが動いたのかも」と考えるヒントになります。'
         ),
     },
     {
-        'title': '📖 TIPS：PER × PBR の組み合わせの意味',
+        'title': '📖 豆知識：円安・円高って結局どういうこと？',
         'body': (
-            'PER（株価収益率）は「利益に対する割安さ」、PBR（株価純資産倍率）は'
-            '「純資産に対する割安さ」を示します。片方だけでは業種特性に引っ張られ'
-            'やすいため、Kurosukeでは「PER×PBR ≦ 22.5」を目安にすることで、'
-            '収益面・資産面の両方から見て割安な銘柄を絞り込んでいます。'
+            '1ドル＝150円が160円になるのが「円安」（円の価値が下がる）、140円になるのが「円高」です。'
+            '円安は、海外で稼ぐ輸出企業には追い風になりやすい一方、輸入するガソリンや食料品は値上がりしやすい。'
+            '円高はその逆。良い悪いは立場で変わるので、「自分の生活・持っている株にどう関係するか」で見るのがコツです。'
         ),
     },
     {
-        'title': '📖 TIPS：酒田五法パターンの見方',
+        'title': '📖 豆知識：金利が上がると株が下がりやすい、と言われる理由',
         'body': (
-            '酒田五法は江戸時代の米相場から生まれたローソク足分析の体系で、'
-            '三山・三川・三兵・三空・三法など複数のパターンがあります。'
-            'Kurosukeが表示する「実測精度」は、過去約2年・全銘柄で「形が完成した翌日に買った'
-            '（売った）ら、20営業日後に当たる向きへ動いた割合」です。多くのパターンは五分五分に近く、'
-            '単独で売買を決める根拠にはなりにくいことが分かっています。あくまで「他の根拠'
-            '（テクニカル・ファンダメンタルズ）と組み合わせて補強材料にする」'
-            '使い方をおすすめします。'
+            '金利が上がると、預金や債券でも安全にお金が増えるので、リスクのある株から資金が移りやすくなります。'
+            'また、会社が借りるお金の利息も増えて利益が減りやすくなります。だから日銀・FRB（米国の中央銀行）の'
+            '発表は注目されます。ただし「予想より高いか低いか」で反応が変わるので、いつも同じ動きになるとは限りません。'
         ),
     },
     {
-        # 倍率はtracking.pyの本番値から埋め込む（2026-09-24、ATR×1.5のまま古くなっていたため）
-        'title': f'📖 TIPS：トレーリングストップ（ATR×{ATR_MULTIPLIER_BY_SIGNAL["LONG"]}）の考え方',
+        'title': '📖 豆知識：「割安」とは？（PER×PBRの見方）',
         'body': (
-            'ATR（Average True Range）は値動きの荒さを表す指標です。'
-            f'Kurosukeは買い（LONG）の場合「その日の終値 − ATR×{ATR_MULTIPLIER_BY_SIGNAL["LONG"]}」を'
-            '損切りラインとして毎日切り上げ、下げることはしません'
-            '（シャンデリア・ストップ方式）。値動きの荒い銘柄では損切り幅を'
-            '広めに、落ち着いた銘柄では狭めに、自動的に調整されます。'
-            f'倍率の{ATR_MULTIPLIER_BY_SIGNAL["LONG"]}倍は、過去約2年分のデータを'
-            '「その時点で知り得た情報だけ」で検証し直して決めた値です（2026年9月更新）。'
+            'PERは「会社の利益に対して株価が何倍か」、PBRは「会社の持つ資産に対して株価が何倍か」。'
+            'どちらも小さいほど「株価が安め」の目安です。このシステムは2つを掛け算して22.5以下を'
+            '「割安かも」の目安にしています。ただし安いのには理由がある場合もあるので、'
+            '「候補を見つける道具」であって「買えば儲かる印」ではありません。'
+        ),
+    },
+    {
+        'title': '📖 豆知識：配当利回りは高ければ良い？',
+        'body': (
+            '配当利回りは「株価に対して1年にもらえる配当の割合」です。高いほど魅力的に見えますが、'
+            '株価が大きく下がった結果、利回りだけ高く見えている場合や、将来配当が減る（減配）可能性もあります。'
+            '利回りだけでなく「利益が安定しているか」「配当を続けられる体力があるか」もセットで見るのが基本です。'
+        ),
+    },
+    {
+        'title': '📖 豆知識：損切りラインとは？',
+        'body': (
+            '損切りラインは「ここまで下がったら手放す」と、買う前に決めておく価格のことです。'
+            '決めておかないと、下がったときに「もう少し待てば戻るかも」と判断がブレやすくなります。'
+            # 倍率はtracking.pyの本番値から埋め込む
+            f'このシステムは値動きの荒さに合わせて自動で幅を変えています（買い候補は値動きの約{ATR_MULTIPLIER_BY_SIGNAL["LONG"]}倍分が目安）。'
+            '位置は人それぞれ。大事なのは「事前に決めること」です。'
+        ),
+    },
+    {
+        'title': '📖 豆知識：ローソク足と酒田五法をざっくり',
+        'body': (
+            'ローソク足は「その日の始値・終値・高値・安値」を1本の足で表したチャートです。酒田五法は江戸時代の'
+            '米相場から伝わる、ローソク足の並びで流れを読む方法。このシステムで過去約2年を検証した結果、'
+            '多くのパターンは当たり外れが五分五分に近く、単独で売買を決める根拠にはなりにくいと分かっています。'
+            '「他の材料の補強」くらいに使うのが現実的です。'
+        ),
+    },
+    {
+        'title': '📖 豆知識：ニュースの見出しと株価は、必ずしも同じ向きに動かない',
+        'body': (
+            '良いニュースが出ても株価が下がる、悪いニュースで上がる、ということは珍しくありません。'
+            '株価はニュースそのものより「事前の期待とのズレ」で動くことが多いからです。'
+            '見出しだけを見て慌てて動くより、「みんなは何を期待していたか」を一呼吸おいて考えるのが近道です。'
+        ),
+    },
+    {
+        'title': '📖 豆知識：分散投資って何をどう分けるの？',
+        'body': (
+            '「卵は1つのカゴに盛るな」という格言のとおり、1つの銘柄・1つの国・1つの時期に全部を'
+            '集中させないことです。銘柄を分ける、国内と海外に分ける、一括でなく時期をずらして買う、などがあります。'
+            '分散しても損をする場面はありますが、「1つの失敗で大きく崩れにくくする」ための考え方です。'
         ),
     },
 ]
@@ -166,38 +204,39 @@ def _index_trend_phrase(change):
 
 def _breadth_phrase(short_ratio, long_count, analyzed):
     """
-    ショートシグナル比率から、相場全体の過熱感・警戒感をひとことで表す文章を作る。
+    「割高かも」と判定された銘柄の割合から、相場全体の過熱感をひとことで表す。
     しきい値（15%/30%）はposter.py側の市場警戒ロジックと揃えている。
     """
     if short_ratio is None or not analyzed:
-        return '銘柄ごとのシグナル集計が取得できなかったため、相場全体の温度感は省略します。'
+        return '銘柄ごとの分析結果が取得できなかったため、相場全体の温度感は省略します。'
     if short_ratio >= 30:
-        mood = (f'分析できた{analyzed}銘柄中{short_ratio:.1f}%が割高警戒（ショート）シグナルとなっており、'
-                f'相場全体にやや過熱感がうかがえる1週間でした。')
+        mood = (f'機械で分析した{analyzed}銘柄のうち{short_ratio:.1f}%が「今は割高かも」と判定されました。'
+                '株価が上がりすぎている銘柄が多く、やや過熱気味の1週間でした。')
     elif short_ratio >= 15:
-        mood = (f'分析できた{analyzed}銘柄中{short_ratio:.1f}%が割高警戒（ショート）シグナルで、'
-                f'過熱感・割安感ともに標準的な範囲内の1週間でした。')
+        mood = (f'機械で分析した{analyzed}銘柄のうち{short_ratio:.1f}%が「今は割高かも」と判定されました。'
+                '過熱感も割安感も、ふつうの範囲の1週間でした。')
     else:
-        mood = (f'分析できた{analyzed}銘柄中、割高警戒（ショート）シグナルは{short_ratio:.1f}%にとどまり、'
-                f'過熱感は限定的な1週間でした。')
-    mood += f' 一方、割安候補（ロングシグナル）は{long_count}銘柄検出されています。'
+        mood = (f'機械で分析した{analyzed}銘柄のうち、「今は割高かも」と判定されたのは{short_ratio:.1f}%だけでした。'
+                '過熱感は小さめの1週間でした。')
+    mood += f'一方、「割安かも」と判定された銘柄は{long_count}銘柄でした。'
     return mood
 
 
 def build_market_narrative_text(nikkei_change, topix_change, snapshot):
     """
-    日経平均・TOPIXの週間騰落率と、直近収集時点のシグナル比率から、ルールベースで
+    日経平均・TOPIXの週間騰落率と、直近収集時点の判定比率から、ルールベースで
     「今週の市場サマリー」文章を自動生成する。
 
     【正直な注意点】
-    これは実際のニュース記事や市況解説の要約ではない。当システムが取得できる数値
-    （指数騰落率・自前のシグナル判定比率）だけから、あらかじめ用意した文章
-    テンプレートを機械的に組み合わせた文章であり、個別の決算・金融政策・海外市況
-    などの材料には一切触れていない。
+    これは実際のニュース記事の要約ではない。当システムが取得できる数値
+    （指数騰落率・自前の判定比率）だけから、あらかじめ用意した文章テンプレートを
+    機械的に組み合わせた文章であり、個別の決算・金融政策・海外市況などの
+    材料には一切触れていない。
     """
     lines = [
         f'日経平均は{_index_trend_phrase(nikkei_change)}、'
-        f'TOPIXは{_index_trend_phrase(topix_change)}という1週間でした。'
+        f'TOPIXは{_index_trend_phrase(topix_change)}という1週間でした。',
+        '（日経平均＝日本を代表する225社の株価の平均／TOPIX＝東証プライム市場のほぼ全社の動き）',
     ]
 
     counts = (snapshot or {}).get('counts', {})
@@ -208,15 +247,15 @@ def build_market_narrative_text(nikkei_change, topix_change, snapshot):
 
     lines.append(_breadth_phrase(short_ratio, long_count, analyzed))
     lines.append(
-        '※このサマリーは実際のニュースではなく、指数の騰落率とシグナル比率のみから'
-        '自動生成した文章です（個別の決算・金融政策・海外市況等は反映していません）。'
+        '※この文章はニュースの要約ではなく、株価の動きと機械的な判定の割合から自動で作っています'
+        '（個別の決算・金融政策・海外の動きは反映していません）。'
     )
     return "\n".join(lines)
 
 
 def build_signal_highlight_text(snapshot):
     if not snapshot:
-        return '直近の収集データが見つからないため、シグナル紹介は省略します。'
+        return '直近の収集データが見つからないため、注目銘柄の紹介は省略します。'
 
     results = snapshot.get('results', {})
     full_results = [r for r in results.values() if r.get('detail') == 'full']
@@ -229,68 +268,80 @@ def build_signal_highlight_text(snapshot):
     if long_results:
         top = long_results[0]
         score = top.get('score')
-        score_text = f"{score:.1f}点" if score is not None else '判定不能'
-        lines.append(f"注目LONG：{top['ticker']}（{top.get('name')}）スコア{score_text}")
+        score_text = f"{score:.0f}点（100点満点）" if score is not None else '判定不能'
+        lines.append(f"・「割安かも」の1位候補：{top['ticker']}（{top.get('name')}）総合スコア {score_text}")
     if short_results:
         top = short_results[0]
         per_pbr = top.get('per_pbr')
-        per_pbr_text = f"{per_pbr:.1f}" if per_pbr is not None else '不明'
-        lines.append(f"注目SHORT（警戒）：{top['ticker']}（{top.get('name')}）PER×PBR {per_pbr_text}")
+        if per_pbr is None:
+            per_pbr_text = '不明'
+        elif per_pbr > 100:
+            # 利益がほぼ無い会社だと数万の値になることがあり、そのまま出すと初心者が混乱する
+            per_pbr_text = '100超（利益が少なく、株価が極端に割高に見える状態）'
+        else:
+            per_pbr_text = f"{per_pbr:.1f}（数字が大きいほど割高な傾向）"
+        lines.append(
+            f"・「割高かも」で注意したい1位：{top['ticker']}（{top.get('name')}）"
+            f"割高さの目安（PER×PBR）{per_pbr_text}"
+        )
     if not lines:
-        lines.append('直近の収集では該当するLONG/SHORTシグナルがありませんでした。')
+        lines.append('直近の分析では、該当する候補はありませんでした。')
 
     counts = snapshot.get('counts', {})
     lines.append(
-        f"直近の収集：LONG {counts.get('LONG', 0)}銘柄／SHORT {counts.get('SHORT', 0)}銘柄"
-        f"／NEUTRAL {counts.get('NEUTRAL', 0)}銘柄"
+        f"直近の分析結果：割安かも {counts.get('LONG', 0)}銘柄／割高かも {counts.get('SHORT', 0)}銘柄"
+        f"／どちらでもない {counts.get('NEUTRAL', 0)}銘柄"
     )
-    lines.append('※直近の収集時点のスナップショットに基づく紹介です（1週間分の履歴集計ではありません）')
+    lines.append(
+        '※機械が数字だけで選んだ「候補」です。売買をすすめるものではありません。'
+        '直近1回の分析時点の結果で、1週間分の集計ではありません。'
+    )
     return "\n".join(lines)
 
 
 def build_performance_recap_text():
+    """
+    このシステムの成績（累計）。専門用語（ペイオフレシオ等）は使わず、
+    「勝率」と「勝ったときの利益÷負けたときの損失」を平易な言葉で説明する。
+    ATR倍率の比較表は初心者には難しすぎるため、週次の投稿からは外している
+    （数字はtracking.py・compute_performance_stats()側にはそのまま残っている）。
+    """
     trade_log = load_trade_log()
     stats = compute_performance_stats(trade_log)
 
     def _fmt(label, s):
         if not s or not s.get('closed_count'):
-            return f'{label}：決済済み取引がまだありません（集計中）'
-        parts = [f"決済{s['closed_count']}件", f"勝率{s['win_rate']}%"]
+            return f'・{label}：まだ結果が出ていません（集計中）'
+        parts = [f"結果が出たのは{s['closed_count']}件", f"勝率{s['win_rate']}%"]
         if s.get('payoff_ratio') is not None:
-            parts.append(f"ペイオフレシオ{s['payoff_ratio']}")
-        return f"{label}：" + "／".join(parts)
+            parts.append(f"勝ちの大きさ÷負けの大きさ＝{s['payoff_ratio']}")
+        return f"・{label}：" + "、".join(parts)
 
     lines = [
-        _fmt('LONG＋SHORT合算（累計）', stats['long_short']),
-        _fmt('LONGのみ（複合スコア90点以上・累計）', stats['long_only']),
-        _fmt('SHORTのみ（PER×PBR上位・累計）', stats['short_only']),
-        f"現在保有中（未決済）：{stats['open_positions']}件",
+        _fmt('割安かも候補（買い方向）', stats['long_only']),
+        _fmt('割高かも候補（売り方向）', stats['short_only']),
+        f"・まだ結果が出ていない（保有中）：{stats['open_positions']}件",
+        '',
+        '📘 見方：勝率は「利益で終わった割合」。「勝ちの大きさ÷負けの大きさ」が1を超えると、'
+        '1回あたりの勝ちが負けより大きいという意味です（勝率が低くても、これが大きければ全体でプラスになりえます）。',
     ]
+    # 件数が少ないうちは、勝率が1件の結果で大きく変わる
+    small = [s_ for s_ in (stats['long_only'], stats['short_only'])
+             if s_ and s_.get('closed_count') and s_['closed_count'] < SMALL_SAMPLE_THRESHOLD]
+    if small:
+        lines.append(
+            f"※結果が出た件数がまだ少ない（{SMALL_SAMPLE_THRESHOLD}件未満）ものは、勝率が大きくぶれます。"
+            "数字は参考程度に見てください。"
+        )
     # 【2026-09-15追加】初回起動日の一括ロード分（絞り込みロジック導入前の
     # 異常なコホート）を集計から除外している旨を明記する。理由の詳細は
     # tracking.pyのLEGACY_BULK_LOAD_ENTRY_DATESコメント参照。
     excluded = stats.get('excluded_legacy_bulk_load_closed_count') or 0
     if excluded:
         lines.append(
-            f"※初回起動日（絞り込み導入前）に一括で建てた{excluded}件の決済済み"
-            "ポジションは、集計対象から除外しています（単一日に相関した異常な"
-            "コホートのため）"
+            f"※システム稼働初日に一括で記録した{excluded}件は、特殊な偏りがあるため集計から外しています。"
         )
-
-    # 【2026-08-26追加、2026-09-15修正】トレーリングストップ幅の比較。
-    # 各行は「その倍率をLONG・SHORT共通で使っていたら」という仮定の比較で
-    # あり、現在の本番設定（LONGは5.0倍／SHORTは1.8倍と、シグナルごとに
-    # 別の倍率を使う。2026-09-11分離、tracking.pyのATR_MULTIPLIER_BY_SIGNAL
-    # 参照）とは前提が異なる点に注意。現在の本番設定そのものの成績は、上の
-    # 「LONGのみ」「SHORTのみ」の行を見ること。以前は「1.5（現行）」という
-    # 誤った表記だった（本番はLONG/SHORTで倍率が違うため、単一の「現行」は
-    # 存在しない）ため削除した。
-    atr_variants = stats.get('atr_variants') or {}
-    if atr_variants:
-        lines.append('― ATR倍率比較（LONG・SHORT共通で使った場合・参考） ―')
-        for key in ('1.8', '2.5', '5.0'):
-            lines.append(_fmt(f'ATR×{key}', atr_variants.get(key)))
-
+    lines.append('※過去の成績は将来の結果を約束するものではありません。')
     return "\n".join(lines)
 
 
@@ -345,6 +396,145 @@ def build_breaking_recap_text():
     return "\n".join(lines)
 
 
+# ---------------------------------------------------------------------------
+# 【2026-10-28追加】「毎日の情報から、どう考えればいいか」の視点（初心者向け）
+# 速報（breaking_alerts.py）のログから、今週実際に出た種類の速報にだけ
+# 「これは何？／どう考える？」を付ける。ルールベース（AI生成ではない）で、
+# 売買のおすすめ・将来の値動きの予想は書かず、「一般にこう言われる」という
+# 見方の紹介に留める。
+# ---------------------------------------------------------------------------
+_CATEGORY_GROUP = {
+    'usdjpy_rapid': 'usdjpy', 'usdjpy_daily': 'usdjpy',
+    'nikkei_rapid': 'nikkei', 'nikkei_daily': 'nikkei',
+    'policy': 'policy', 'vix': 'vix', 'us10y_daily': 'us10y',
+    'oil_daily': 'oil', 'gold_daily': 'gold',
+    'btc_rapid': 'crypto', 'btc_daily': 'crypto', 'eth_rapid': 'crypto',
+    'eth_daily': 'crypto', 'xrp_rapid': 'crypto', 'xrp_daily': 'crypto',
+    'us_morning': 'us_morning', 'calendar': 'calendar',
+}
+# 重要度順（先に出てきたものから、最大READING_GUIDE_MAX_ITEMS件だけ表示する）
+READING_GUIDE_PRIORITY = ['policy', 'vix', 'usdjpy', 'nikkei', 'us10y', 'oil', 'gold',
+                          'crypto', 'us_morning', 'calendar']
+READING_GUIDE_MAX_ITEMS = 4
+
+_CLOSE_NIKKEI_RE = re.compile(r'日経平均\s*([\d,]+)円\s*([+-]\d+(?:\.\d+)?)%')
+
+
+def _recent_breaking_entries(days=7):
+    """直近days日の速報ログ。読めなければ空リスト（読み解きは省略するだけ）。"""
+    if not os.path.exists(BREAKING_LOG_PATH):
+        return []
+    try:
+        with open(BREAKING_LOG_PATH, encoding='utf-8') as f:
+            log = json.load(f)
+    except (json.JSONDecodeError, OSError):
+        return []
+    cutoff = (datetime.now(timezone.utc) - timedelta(days=days)).isoformat()
+    return [e for e in log if e.get('at_utc', '') >= cutoff]
+
+
+def _nikkei_daily_moves(entries):
+    """大引けまとめの速報から、日ごとの日経平均の騰落率を取り出す。[(date, pct), ...]"""
+    by_day = {}
+    for e in sorted(entries, key=lambda x: x.get('at_utc', '')):
+        if e.get('category') != 'close_summary':
+            continue
+        m = _CLOSE_NIKKEI_RE.search(e.get('text', ''))
+        if not m:
+            continue
+        try:
+            day = datetime.fromisoformat(e['at_utc']).astimezone(JST).date()
+        except (ValueError, KeyError):
+            continue
+        by_day[day] = float(m.group(2))
+    return sorted(by_day.items())
+
+
+def _guide_for(group, latest_text):
+    """速報の種類ごとの「これは何？／どう考える？」。latest_textは方向（📈/📉）の判定に使う。"""
+    went_up = latest_text.lstrip().startswith('📈')
+    if group == 'policy':
+        return ('**日銀・FRB（米国の中央銀行）の発表**：金利の向きを知らせるものです。金利が上がると一般に株には重し、'
+                '為替は動きやすくなります。見出しだけでなく「市場の予想とどうズレたか」が大事と言われます。')
+    if group == 'vix':
+        return ('**VIX（恐怖指数）**：投資家の不安の大きさを表す数字で、高いほど市場がびくびくしている状態です。'
+                '急に上がると値動きも荒くなりやすいので、焦って動かず様子を見る人も多いです。')
+    if group == 'usdjpy':
+        if went_up:
+            return ('**ドル円（円安方向）**：円の価値が下がる動きです。海外で稼ぐ輸出企業には追い風になりやすい一方、'
+                    'ガソリンや食料品など輸入品は値上がりしやすくなります。「円安＝株高」と単純には決まりません。')
+        return ('**ドル円（円高方向）**：円の価値が上がる動きです。輸入品は安くなりやすい一方、輸出企業の利益には'
+                '逆風になりやすいと言われます。立場によって良し悪しが変わります。')
+    if group == 'nikkei':
+        return ('**日経平均の大きな動き**：まず「日本株全体の話」か「一部の大型株の話」かを切り分けると落ち着いて見られます。'
+                'TOPIX（日本株全体）と比べるのがコツです。')
+    if group == 'us10y':
+        return ('**米国の長期金利**：世界のお金の基準になる金利です。上がると株（特に成長株）の重しや円安の要因になりやすい、'
+                'と言われます。')
+    if group == 'oil':
+        return '**原油**：ガソリン・電気代・運送費を通じて、物価や企業の利益に響きます。'
+    if group == 'gold':
+        return '**金（ゴールド）**：不安なときに買われやすい「安全資産」と言われ、株が崩れる局面で上がることがあります。'
+    if group == 'crypto':
+        return ('**暗号資産**：株よりはるかに値動きが大きく、別の種類の資産として見るのが基本です。'
+                '株の判断材料にそのまま使うのは難しいです。')
+    if group == 'us_morning':
+        return ('**毎朝の米国市場サマリー**：前の夜の米国株の結果です。日本株は朝の寄り付きで影響を受けやすいので、'
+                '「今日の地合いのヒント」として読めます。')
+    if group == 'calendar':
+        return ('**今日の予定（権利付き最終日・SQ日・指標発表など）**：値が動きやすい日の目印です。'
+                '予定を知っているだけで、急な値動きに驚きにくくなります。')
+    return ''
+
+
+def build_reading_guide_text(nikkei_change=None):
+    """今週の流れ（日経平均の毎日の動き）＋今週出た速報の読み解き＋考え方の3ステップ。"""
+    entries = _recent_breaking_entries()
+    blocks = []
+
+    # --- 1) 今週の流れ ---
+    moves = _nikkei_daily_moves(entries)
+    if len(moves) >= 2:
+        strip = '／'.join(f'{d.month}/{d.day}({WEEKDAY_JA[d.weekday()]}) {pct:+.1f}%' for d, pct in moves)
+        ups = sum(1 for _, p in moves if p > 0)
+        downs = sum(1 for _, p in moves if p < 0)
+        biggest_day, biggest = max(moves, key=lambda x: abs(x[1]))
+        if abs(biggest) >= 2:
+            comment = (f'{biggest_day.month}/{biggest_day.day}は{biggest:+.1f}%と大きく動きました。'
+                       '1日で2%以上動く日は、国内の材料だけでなく海外市場・為替・金利などが重なっていることが多いです。')
+        elif all(abs(p) < 1 for _, p in moves):
+            comment = 'どの日も1%未満の小さな動きでした。こういう週は、日々の上下に一喜一憂しなくてよい週です。'
+        elif len(moves) >= 3 and (all(p > 0 for _, p in moves) or all(p < 0 for _, p in moves)):
+            comment = ('同じ向きの動きが続いた週です。続くときは背景に「理由」（金利・為替・ニュース）があることが多いので、'
+                       '速報の内容と見比べてみましょう。')
+        else:
+            comment = '上げ下げが混ざった週でした。毎日の動きより「週全体でどちらに傾いたか」を見ると落ち着いて判断できます。'
+        blocks.append(f'**📈 今週の日経平均（毎日の終わり値）**\n{strip}\n上がった日 {ups}日・下がった日 {downs}日\n{comment}')
+
+    # --- 2) 今週出た速報の読み解き ---
+    latest_by_group = {}
+    for e in sorted(entries, key=lambda x: x.get('at_utc', '')):
+        g = _CATEGORY_GROUP.get(e.get('category'))
+        if g:
+            latest_by_group[g] = e.get('text', '')
+    guides = [_guide_for(g, latest_by_group[g]) for g in READING_GUIDE_PRIORITY if g in latest_by_group]
+    guides = [g for g in guides if g][:READING_GUIDE_MAX_ITEMS]
+    if guides:
+        blocks.append('**🔍 今週の速報、こう読みます**\n' + '\n'.join(f'・{g}' for g in guides))
+    elif not moves:
+        blocks.append('今週は大きな動きの速報がありませんでした。「何も起きない週」もふつうにあります。')
+
+    # --- 3) 考え方の3ステップ（毎週共通） ---
+    blocks.append(
+        '**🧭 毎日の情報を見るときの3ステップ**\n'
+        '①何が動いた？（株・為替・金利・原油のどれか）\n'
+        '②なぜ？（ニュース・発表・海外の動き。分からなければ「分からない」でOK）\n'
+        '③自分に関係ある？（持っている銘柄・暮らしへの影響。関係なければ何もしない、も立派な選択です）'
+    )
+    blocks.append('※一般的な見方の紹介です。今後の値動きの予想や、売買のおすすめではありません。')
+    return '\n\n'.join(blocks)
+
+
 def build_weekly_news_text():
     """
     サロンメンバー向けの「今週の経済ニュース」。個別銘柄のシグナルとは別に、
@@ -389,7 +579,34 @@ def pick_weekly_tip():
     return TIPS[week_number % len(TIPS)]
 
 
-def build_payload():
+EMBED_TOTAL_LIMIT = 5800  # Discordは1メッセージ内のembed文字数の合計が6000字まで（余裕を持たせる）
+HEADER_CONTENT = '📅 Kurosuke割安チェッカー - 週次Tips（今週のまとめと、情報の考え方）'
+
+
+def _embed_len(embed):
+    return len(embed.get('title', '')) + len(embed.get('description', ''))
+
+
+def split_into_payloads(embeds, content=HEADER_CONTENT):
+    """embedの合計文字数が上限を超えないよう、必要なら複数メッセージに分けて投稿する。"""
+    groups, cur, cur_len = [], [], 0
+    for e in embeds:
+        n = _embed_len(e)
+        if cur and (cur_len + n > EMBED_TOTAL_LIMIT or len(cur) >= 10):
+            groups.append(cur)
+            cur, cur_len = [], 0
+        cur.append(e)
+        cur_len += n
+    if cur:
+        groups.append(cur)
+    payloads = []
+    for i, group in enumerate(groups):
+        text = content if i == 0 else f'{content}（続き {i + 1}/{len(groups)}）'
+        payloads.append({'content': text, 'embeds': group})
+    return payloads
+
+
+def build_payloads():
     tip = pick_weekly_tip()
     nikkei_change = fetch_weekly_change(NIKKEI_TICKER)
     topix_change, _ = fetch_topix_change()
@@ -398,23 +615,24 @@ def build_payload():
         {'title': '📰 今週の市場サマリー', 'description': build_market_narrative_text(nikkei_change, topix_change, snapshot), 'color': 0x2ECC71},
         {'title': '🌏 今週の経済ニュース', 'description': build_weekly_news_text(), 'color': 0x1ABC9C},
         {'title': '⚡ 今週あった速報', 'description': build_breaking_recap_text(), 'color': 0xE67E22},
-        {'title': '👀 直近の注目シグナル', 'description': build_signal_highlight_text(snapshot), 'color': 0x3498DB},
-        {'title': '🎯 シグナル成績（累計）', 'description': build_performance_recap_text(), 'color': 0x9B59B6},
+        {'title': '🧭 今週の情報、どう考える？', 'description': build_reading_guide_text(nikkei_change), 'color': 0xE74C3C},
+        {'title': '👀 機械が選んだ注目銘柄', 'description': build_signal_highlight_text(snapshot), 'color': 0x3498DB},
+        {'title': '🎯 このシステムの成績（これまでの累計）', 'description': build_performance_recap_text(), 'color': 0x9B59B6},
         {'title': '🗓 来週の予定', 'description': build_next_week_text(), 'color': 0xF1C40F},
         {'title': tip['title'], 'description': tip['body'], 'color': 0x95A5A6},
     ]
-    return {
-        'content': '📅 Kurosuke割安チェッカー - 週次Tips',
-        'embeds': embeds[:10],
-    }
+    return split_into_payloads(embeds)
 
 
 def post_weekly_tips():
     print("=" * 80)
     print("Kurosuke 週次Tips投稿バッチ（weekly_tips.py）")
     print("=" * 80)
-    payload = build_payload()
-    return poster.send_discord_message('TIPS', payload)
+    all_ok = True
+    for payload in build_payloads():
+        ok = poster.send_discord_message('TIPS', payload)
+        all_ok = all_ok and ok
+    return all_ok
 
 
 if __name__ == '__main__':
