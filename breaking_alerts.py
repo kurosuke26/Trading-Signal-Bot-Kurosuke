@@ -48,7 +48,7 @@ from datetime import date, datetime, timezone, timedelta
 import requests
 import yfinance as yf
 
-import dividend_hikes
+import disclosure_picks
 import market_calendar
 import poster
 from theme_news import fetch_feed_entries
@@ -512,34 +512,33 @@ def check_close_summary(state, now_jst, today_jst_str):
 
 
 # ---------------------------------------------------------------------------
-# 8b. 今日の増配のお知らせ（JST 17時以降の最初の回で1日1回、東証の営業日のみ。0件の日は投稿しない）
+# 8b. 今日の配当・優待のお知らせ（JST 17時以降の最初の回で1日1回、東証の営業日のみ。0件の日は投稿しない）
+#     増配／減配・無配／優待の拡充・新設／優待の廃止／優待の変更（方向不明）。分類はdisclosure_picks.py
 # ---------------------------------------------------------------------------
-DIVIDEND_HIKE_POST_HOUR = 17  # 日中の開示（15時台が多い）がほぼ出そろう時刻
-DIVIDEND_HIKE_DAILY_MAX = 8
+DISCLOSURE_PICKS_POST_HOUR = 17  # 日中の開示（15時台が多い）がほぼ出そろう時刻
+DISCLOSURE_PICKS_DAILY_CAPS = {'hike': 6, 'cut': 4, 'benefit_up': 4, 'benefit_down': 3, 'benefit_change': 3}
 
 
-def check_dividend_hikes_daily(state, now_jst, today_jst_str):
-    if now_jst.hour < DIVIDEND_HIKE_POST_HOUR or state.get('dividend_hike_date_jst') == today_jst_str:
+def check_disclosure_picks_daily(state, now_jst, today_jst_str):
+    if now_jst.hour < DISCLOSURE_PICKS_POST_HOUR or state.get('disclosure_picks_date_jst') == today_jst_str:
         return []
     today = now_jst.date()
     if not market_calendar.is_market_open(today):
         return []
 
-    disclosures = dividend_hikes.fetch_disclosures(today)
+    disclosures = disclosure_picks.fetch_disclosures(today)
     if disclosures is None:
         return []  # 取得失敗：投稿済みにせず、次の回で再試行する
-    state['dividend_hike_date_jst'] = today_jst_str
+    state['disclosure_picks_date_jst'] = today_jst_str
 
-    hikes = [h for h in dividend_hikes.extract_hikes(disclosures) if h.get('pubdate', '')[:10] == today.isoformat()]
-    if not hikes:
+    picks = disclosure_picks.filter_by_date(disclosure_picks.extract_picks(disclosures), today.isoformat())
+    if disclosure_picks.total_count(picks) == 0:
         return []
-    long_map = dividend_hikes.load_long_candidates()
-    lines, rest = dividend_hikes.build_hike_lines(hikes, long_map, DIVIDEND_HIKE_DAILY_MAX)
-    if rest:
-        lines.append(f'…ほか{rest}社（土曜の週間まとめでも確認できます）')
-    text = (f'💰 **今日の増配のお知らせ（{len(hikes)}社）**\n' + '\n'.join(lines) + '\n'
-            + dividend_hikes.HIKE_EXPLAIN + '\n' + dividend_hikes.HIKE_NOTE)
-    return [('dividend_hike', text)]
+    long_map = disclosure_picks.load_long_candidates()
+    body = disclosure_picks.build_sections(picks, long_map, DISCLOSURE_PICKS_DAILY_CAPS)
+    text = ('💰 **今日の配当・優待のお知らせ**\n' + body + '\n'
+            + disclosure_picks.EXPLAIN + '\n' + disclosure_picks.NOTE)
+    return [('disclosure_picks', text)]
 
 
 # ---------------------------------------------------------------------------
@@ -704,7 +703,7 @@ def run():
     all_results += check_policy_feeds(state)
     all_results += check_fsa_feed(state)
     all_results += check_close_summary(state, now_jst, today_jst_str)
-    all_results += check_dividend_hikes_daily(state, now_jst, today_jst_str)
+    all_results += check_disclosure_picks_daily(state, now_jst, today_jst_str)
     all_results += check_morning_calendar(state, now_jst, today_jst_str)
     all_results += check_us_morning_report(state, now_jst, today_jst_str)
     form_ok = post_member_form_if_due(state, now_jst, today_jst_str)
