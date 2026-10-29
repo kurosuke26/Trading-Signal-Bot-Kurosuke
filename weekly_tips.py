@@ -40,6 +40,7 @@ from datetime import datetime, timedelta, timezone
 
 import yfinance as yf
 
+import dividend_hikes
 import market_calendar
 import poster
 from theme_news import fetch_feed_entries
@@ -56,6 +57,7 @@ WEEKLY_NEWS_FEEDS = [
     {'source': 'Yahoo!ニュース 経済', 'url': 'https://news.yahoo.co.jp/rss/topics/business.xml'},
 ]
 WEEKLY_NEWS_MAX_ITEMS = 3
+WEEKLY_HIKE_MAX = 6
 
 JST = timezone(timedelta(hours=9))
 SMALL_SAMPLE_THRESHOLD = 30  # この件数未満の勝率は参考程度、と注記する
@@ -309,7 +311,7 @@ def build_breaking_recap_text():
         'policy': '日銀/FRB発表', 'us_morning': '米国市場サマリー',
         'calendar': '今日の予定', 'vix': 'VIX',
         'us10y_daily': '米金利の大きな動き', 'oil_daily': '原油の大きな動き', 'gold_daily': '金の大きな動き',
-        'close_summary': '大引けまとめ', 'fsa': '金融庁のお知らせ',
+        'close_summary': '大引けまとめ', 'fsa': '金融庁のお知らせ', 'dividend_hike': '増配のお知らせ',
         'btc_rapid': 'BTC急変動', 'btc_daily': 'BTCの大幅変動',
         'eth_rapid': 'ETH急変動', 'eth_daily': 'ETHの大幅変動',
         'xrp_rapid': 'XRP急変動', 'xrp_daily': 'XRPの大幅変動',
@@ -569,6 +571,23 @@ def build_association_game_text(headlines=None):
     return '\n\n'.join(lines[:-3]) + '\n\n' + '\n'.join(lines[-3:])
 
 
+def build_dividend_hike_weekly_text():
+    """【2026-10-29追加】今週（直近7日）の増配のお知らせ。「割安かも」と重なる銘柄を先に、最大WEEKLY_HIKE_MAX社。"""
+    today = datetime.now(JST).date()
+    disclosures = dividend_hikes.fetch_disclosures(today - timedelta(days=7), today)
+    if disclosures is None:
+        return '今週の増配は取得できませんでした（取得元の一時的な問題の可能性があります）。'
+    hikes = dividend_hikes.extract_hikes(disclosures)
+    if not hikes:
+        return '今週は、タイトルに「増配」と明記された開示はありませんでした。'
+    long_map = dividend_hikes.load_long_candidates()
+    lines, rest = dividend_hikes.build_hike_lines(hikes, long_map, WEEKLY_HIKE_MAX)
+    head = f'今週は{len(hikes)}社が増配を発表しました。'
+    if rest:
+        lines.append(f'…ほか{rest}社')
+    return head + '\n' + '\n'.join(lines) + '\n' + dividend_hikes.HIKE_EXPLAIN + '\n' + dividend_hikes.HIKE_NOTE
+
+
 def build_next_week_text():
     """【2026-09-24追加・初心者向け】来週（月〜日）の休場日・SQ日・権利付き最終日・権利落ち日・
     経済イベントの一覧。土曜朝の投稿を前提に、次の月曜日から7日分（market_calendar.py）。"""
@@ -618,6 +637,7 @@ def build_payloads():
     embeds = [
         {'title': '📰 今週の市場サマリー', 'description': build_market_narrative_text(nikkei_change, topix_change, snapshot), 'color': 0x2ECC71},
         {'title': '🌏 今週の経済ニュース', 'description': build_weekly_news_text(news_items), 'color': 0x1ABC9C},
+        {'title': '💰 今週の増配', 'description': build_dividend_hike_weekly_text(), 'color': 0xF39C12},
         {'title': '⚡ 今週あった速報', 'description': build_breaking_recap_text(), 'color': 0xE67E22},
         {'title': '🧭 今週の情報、どう考える？', 'description': build_reading_guide_text(nikkei_change), 'color': 0xE74C3C},
         {'title': '🎮 連想ゲーム',
