@@ -1001,5 +1001,93 @@
   "atr_at_signal": 64.8851,
   "market_level_at_signal": 1.0052721351706144,
   "state": "pending_entry"
+ },
+ {
+  "series": "DIVIDEND_HIKE",
+  "ticker": "6752.T",
+  "name": "パナソニックＨＤ",
+  "signal_date": "2026-10-30",
+  "reason": "配当予想の修正（増配）に関するお知らせ",
+  "disclosure_url": "https://webapi.yanoshin.jp/rd.php?https://www.release.tdnet.info/inbs/140120261030560650.pdf",
+  "atr_at_signal": 179.298,
+  "market_level_at_signal": 1.005174922597559,
+  "state": "pending_entry"
+ },
+ {
+  "series": "DIVIDEND_HIKE",
+  "ticker": "7483.T",
+  "name": "ドウシシャ",
+  "signal_date": "2026-10-30",
+  "reason": "剰余金の配当（中間配当・増配）に関するお知らせ",
+  "disclosure_url": "https://webapi.yanoshin.jp/rd.php?https://www.release.tdnet.info/inbs/140120261030560828.pdf",
+  "atr_at_signal": 51.4359,
+  "market_level_at_signal": 1.005174922597559,
+  "state": "pending_entry"
+ },
+ {
+  "series": "DIVIDEND_HIKE",
+  "ticker": "8137.T",
+  "name": "サンワテクノス",
+  "signal_date": "2026-10-30",
+  "reason": "通期連結業績予想の修正並びに剰余金の配当（中間配当）及び期末配当予想の修正（増配）に関するお知らせ",
+  "disclosure_url": "https://webapi.yanoshin.jp/rd.php?https://www.release.tdnet.info/inbs/140120261030560373.pdf",
+  "atr_at_signal": 162.1132,
+  "market_level_at_signal": 1.005174922597559,
+  "state": "pending_entry"
+ },
+ {
+  "series": "DIVIDEND_HIKE",
+  "ticker": "9020.T",
+  "name": "ＪＲ東",
+  "signal_date": "2026-10-30",
+  "reason": "2027年3月期剰余金の配当（増配）ならびに通期業績予想および配当予想の修正に関するお知らせ",
+  "disclosure_url": "https://webapi.yanoshin.jp/rd.php?https://www.release.tdnet.info/inbs/140120261030560956.pdf",
+  "atr_at_signal": 77.2687,
+  "market_level_at_signal": 1.005174922597559,
+  "state": "pending_entry"
+ },
+ {
+  "series": "DIVIDEND_HIKE",
+  "ticker": "5333.T",
+  "name": "ＮＧＫ",
+  "signal_date": "2026-10-30",
+  "reason": "剰余金の配当（中間配当）及び期末配当予想の修正（増配）に関するお知らせ",
+  "disclosure_url": "https://webapi.yanoshin.jp/rd.php?https://www.release.tdnet.info/inbs/140120261029559949.pdf",
+  "atr_at_signal": 203.2272,
+  "market_level_at_signal": 1.005174922597559,
+  "state": "pending_entry"
+ },
+ {
+  "series": "DIVIDEND_HIKE",
+  "ticker": "7537.T",
+  "name": "丸文",
+  "signal_date": "2026-10-30",
+  "reason": "配当予想の修正（増配）に関するお知らせ",
+  "disclosure_url": "https://webapi.yanoshin.jp/rd.php?https://www.release.tdnet.info/inbs/140120261028557644.pdf",
+  "atr_at_signal": 68.7996,
+  "market_level_at_signal": 1.005174922597559,
+  "state": "pending_entry"
+ },
+ {
+  "series": "DIVIDEND_HIKE",
+  "ticker": "8052.T",
+  "name": "椿本興",
+  "signal_date": "2026-10-30",
+  "reason": "剰余金の配当（中間配当の増配）に関するお知らせ",
+  "disclosure_url": "https://webapi.yanoshin.jp/rd.php?https://www.release.tdnet.info/inbs/140120261030561475.pdf",
+  "atr_at_signal": 60.1423,
+  "market_level_at_signal": 1.005174922597559,
+  "state": "pending_entry"
+ },
+ {
+  "series": "DIVIDEND_HIKE",
+  "ticker": "1939.T",
+  "name": "四電工",
+  "signal_date": "2026-10-30",
+  "reason": "業績予想の修正ならびに剰余金の配当（中間配当）および期末配当予想の修正（増配）に関するお知らせ",
+  "disclosure_url": "https://webapi.yanoshin.jp/rd.php?https://www.release.tdnet.info/inbs/140120261029558709.pdf",
+  "atr_at_signal": 61.2747,
+  "market_level_at_signal": 1.005174922597559,
+  "state": "pending_entry"
  }
 ]
