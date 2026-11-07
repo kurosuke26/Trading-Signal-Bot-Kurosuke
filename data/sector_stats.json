@@ -1,96 +1,15 @@
 {
-  "generated_at_utc": "2026-10-31T09:04:50.389639+00:00",
+  "generated_at_utc": "2026-11-07T09:25:39.400005+00:00",
   "sector_count": 33,
   "sectors": {
-    "3600": {
-      "sector_name": "機械",
-      "per_avg": 30.2,
-      "per_count": 191,
-      "pbr_avg": 1.6,
-      "pbr_count": 198,
-      "roe_avg": 6.0,
-      "roe_count": 199
-    },
-    "6100": {
-      "sector_name": "小売業",
-      "per_avg": 48.3,
-      "per_count": 278,
-      "pbr_avg": 3.21,
-      "pbr_count": 299,
-      "roe_avg": 2.2,
-      "roe_count": 304
-    },
-    "5250": {
-      "sector_name": "情報・通信業",
-      "per_avg": 52.2,
-      "per_count": 505,
-      "pbr_avg": 3.84,
-      "pbr_count": 544,
-      "roe_avg": 8.7,
-      "roe_count": 544
-    },
-    "3200": {
-      "sector_name": "化学",
-      "per_avg": 17.2,
-      "per_count": 184,
-      "pbr_avg": 1.27,
-      "pbr_count": 194,
-      "roe_avg": 7.6,
-      "roe_count": 195
-    },
-    "3400": {
-      "sector_name": "ガラス・土石製品",
-      "per_avg": 17.1,
-      "per_count": 41,
-      "pbr_avg": 1.37,
-      "pbr_count": 47,
-      "roe_avg": 4.4,
-      "roe_count": 47
-    },
-    "6050": {
-      "sector_name": "卸売業",
-      "per_avg": 15.6,
-      "per_count": 260,
-      "pbr_avg": 1.14,
-      "pbr_count": 257,
-      "roe_avg": 5.7,
-      "roe_count": 262
-    },
-    "3650": {
-      "sector_name": "電気機器",
-      "per_avg": 61.0,
-      "per_count": 198,
-      "pbr_avg": 2.46,
-      "pbr_count": 209,
-      "roe_avg": 4.6,
-      "roe_count": 209
-    },
-    "3800": {
-      "sector_name": "その他製品",
-      "per_avg": 17.0,
-      "per_count": 90,
-      "pbr_avg": 1.3,
-      "pbr_count": 96,
-      "roe_avg": 4.0,
-      "roe_count": 100
-    },
     "9050": {
       "sector_name": "サービス業",
       "per_avg": 29.0,
-      "per_count": 448,
+      "per_count": 447,
       "pbr_avg": 2.32,
       "pbr_count": 481,
-      "roe_avg": 9.6,
+      "roe_avg": 8.1,
       "roe_count": 483
-    },
-    "5050": {
-      "sector_name": "陸運業",
-      "per_avg": 13.8,
-      "per_count": 53,
-      "pbr_avg": 1.04,
-      "pbr_count": 52,
-      "roe_avg": 8.5,
-      "roe_count": 55
     },
     "8050": {
       "sector_name": "不動産業",
@@ -101,131 +20,32 @@
       "roe_avg": 13.6,
       "roe_count": 117
     },
-    "3100": {
-      "sector_name": "繊維製品",
-      "per_avg": 21.8,
-      "per_count": 39,
-      "pbr_avg": 0.92,
-      "pbr_count": 46,
-      "roe_avg": 6.4,
-      "roe_count": 45
-    },
-    "2050": {
-      "sector_name": "建設業",
-      "per_avg": 13.2,
-      "per_count": 128,
-      "pbr_avg": 1.38,
-      "pbr_count": 124,
-      "roe_avg": 11.5,
-      "roe_count": 126
-    },
-    "7100": {
-      "sector_name": "証券、商品先物取引業",
-      "per_avg": 12.1,
-      "per_count": 31,
-      "pbr_avg": 1.27,
-      "pbr_count": 34,
-      "roe_avg": 6.0,
-      "roe_count": 34
-    },
-    "3550": {
-      "sector_name": "金属製品",
-      "per_avg": 23.4,
-      "per_count": 73,
-      "pbr_avg": 1.12,
-      "pbr_count": 77,
-      "roe_avg": 4.6,
-      "roe_count": 82
-    },
-    "3700": {
-      "sector_name": "輸送用機器",
-      "per_avg": 18.1,
-      "per_count": 68,
-      "pbr_avg": 0.83,
-      "pbr_count": 74,
-      "roe_avg": 7.3,
-      "roe_count": 75
-    },
-    "3750": {
-      "sector_name": "精密機器",
-      "per_avg": 29.7,
-      "per_count": 44,
-      "pbr_avg": 3.52,
-      "pbr_count": 51,
-      "roe_avg": 5.1,
-      "roe_count": 50
+    "6050": {
+      "sector_name": "卸売業",
+      "per_avg": 15.5,
+      "per_count": 258,
+      "pbr_avg": 1.11,
+      "pbr_count": 253,
+      "roe_avg": 8.4,
+      "roe_count": 258
     },
     "7200": {
       "sector_name": "その他金融業",
-      "per_avg": 14.1,
-      "per_count": 37,
-      "pbr_avg": 1.71,
+      "per_avg": 14.0,
+      "per_count": 36,
+      "pbr_avg": 1.68,
       "pbr_count": 36,
-      "roe_avg": 11.4,
+      "roe_avg": 9.9,
       "roe_count": 35
     },
-    "3450": {
-      "sector_name": "鉄鋼",
-      "per_avg": 22.0,
-      "per_count": 35,
-      "pbr_avg": 0.68,
-      "pbr_count": 36,
-      "roe_avg": 4.7,
-      "roe_count": 37
-    },
-    "3300": {
-      "sector_name": "石油・石炭製品",
-      "per_avg": 11.2,
-      "per_count": 8,
-      "pbr_avg": 0.99,
-      "pbr_count": 9,
-      "roe_avg": 6.1,
-      "roe_count": 9
-    },
-    "7150": {
-      "sector_name": "保険業",
-      "per_avg": 16.9,
-      "per_count": 14,
-      "pbr_avg": 1.73,
-      "pbr_count": 13,
-      "roe_avg": 11.2,
-      "roe_count": 13
-    },
-    "3050": {
-      "sector_name": "食料品",
-      "per_avg": 26.9,
-      "per_count": 117,
-      "pbr_avg": 1.5,
-      "pbr_count": 117,
-      "roe_avg": 7.8,
-      "roe_count": 117
-    },
-    "5150": {
-      "sector_name": "空運業",
-      "per_avg": 19.5,
-      "per_count": 5,
-      "pbr_avg": 0.9,
-      "pbr_count": 4,
-      "roe_avg": 9.3,
-      "roe_count": 5
-    },
-    "7050": {
-      "sector_name": "銀行業",
-      "per_avg": 14.3,
-      "per_count": 78,
-      "pbr_avg": 0.88,
-      "pbr_count": 79,
-      "roe_avg": 6.1,
-      "roe_count": 79
-    },
-    "3150": {
-      "sector_name": "パルプ・紙",
-      "per_avg": 14.2,
-      "per_count": 23,
-      "pbr_avg": 0.69,
-      "pbr_count": 23,
-      "roe_avg": 5.8,
-      "roe_count": 24
+    "3650": {
+      "sector_name": "電気機器",
+      "per_avg": 61.3,
+      "per_count": 197,
+      "pbr_avg": 2.46,
+      "pbr_count": 208,
+      "roe_avg": 4.6,
+      "roe_count": 208
     },
     "3250": {
       "sector_name": "医薬品",
@@ -236,6 +56,186 @@
       "roe_avg": -38.2,
       "roe_count": 70
     },
+    "5250": {
+      "sector_name": "情報・通信業",
+      "per_avg": 52.3,
+      "per_count": 504,
+      "pbr_avg": 3.28,
+      "pbr_count": 541,
+      "roe_avg": 9.2,
+      "roe_count": 541
+    },
+    "7050": {
+      "sector_name": "銀行業",
+      "per_avg": 14.3,
+      "per_count": 78,
+      "pbr_avg": 0.88,
+      "pbr_count": 79,
+      "roe_avg": 6.1,
+      "roe_count": 79
+    },
+    "5050": {
+      "sector_name": "陸運業",
+      "per_avg": 13.8,
+      "per_count": 53,
+      "pbr_avg": 1.04,
+      "pbr_count": 52,
+      "roe_avg": 8.5,
+      "roe_count": 55
+    },
+    "3400": {
+      "sector_name": "ガラス・土石製品",
+      "per_avg": 17.2,
+      "per_count": 42,
+      "pbr_avg": 1.39,
+      "pbr_count": 48,
+      "roe_avg": 4.6,
+      "roe_count": 48
+    },
+    "6100": {
+      "sector_name": "小売業",
+      "per_avg": 48.1,
+      "per_count": 279,
+      "pbr_avg": 3.21,
+      "pbr_count": 300,
+      "roe_avg": 2.3,
+      "roe_count": 305
+    },
+    "3550": {
+      "sector_name": "金属製品",
+      "per_avg": 23.4,
+      "per_count": 72,
+      "pbr_avg": 1.14,
+      "pbr_count": 76,
+      "roe_avg": 4.6,
+      "roe_count": 81
+    },
+    "3600": {
+      "sector_name": "機械",
+      "per_avg": 30.1,
+      "per_count": 190,
+      "pbr_avg": 1.61,
+      "pbr_count": 196,
+      "roe_avg": 6.0,
+      "roe_count": 198
+    },
+    "2050": {
+      "sector_name": "建設業",
+      "per_avg": 13.2,
+      "per_count": 128,
+      "pbr_avg": 1.38,
+      "pbr_count": 124,
+      "roe_avg": 11.5,
+      "roe_count": 126
+    },
+    "3200": {
+      "sector_name": "化学",
+      "per_avg": 17.1,
+      "per_count": 185,
+      "pbr_avg": 1.27,
+      "pbr_count": 195,
+      "roe_avg": 7.9,
+      "roe_count": 196
+    },
+    "3800": {
+      "sector_name": "その他製品",
+      "per_avg": 17.2,
+      "per_count": 87,
+      "pbr_avg": 1.32,
+      "pbr_count": 93,
+      "roe_avg": 3.9,
+      "roe_count": 97
+    },
+    "3050": {
+      "sector_name": "食料品",
+      "per_avg": 26.9,
+      "per_count": 117,
+      "pbr_avg": 1.5,
+      "pbr_count": 117,
+      "roe_avg": 7.8,
+      "roe_count": 117
+    },
+    "3750": {
+      "sector_name": "精密機器",
+      "per_avg": 29.7,
+      "per_count": 44,
+      "pbr_avg": 9.49,
+      "pbr_count": 51,
+      "roe_avg": 4.0,
+      "roe_count": 50
+    },
+    "3700": {
+      "sector_name": "輸送用機器",
+      "per_avg": 18.9,
+      "per_count": 69,
+      "pbr_avg": 0.84,
+      "pbr_count": 75,
+      "roe_avg": 7.2,
+      "roe_count": 76
+    },
+    "3150": {
+      "sector_name": "パルプ・紙",
+      "per_avg": 14.2,
+      "per_count": 23,
+      "pbr_avg": 0.69,
+      "pbr_count": 23,
+      "roe_avg": 5.8,
+      "roe_count": 24
+    },
+    "3100": {
+      "sector_name": "繊維製品",
+      "per_avg": 22.3,
+      "per_count": 36,
+      "pbr_avg": 0.85,
+      "pbr_count": 43,
+      "roe_avg": 5.2,
+      "roe_count": 42
+    },
+    "50": {
+      "sector_name": "水産・農林業",
+      "per_avg": 38.1,
+      "per_count": 11,
+      "pbr_avg": 1.36,
+      "pbr_count": 10,
+      "roe_avg": 10.3,
+      "roe_count": 10
+    },
+    "3450": {
+      "sector_name": "鉄鋼",
+      "per_avg": 21.9,
+      "per_count": 34,
+      "pbr_avg": 0.67,
+      "pbr_count": 35,
+      "roe_avg": 4.8,
+      "roe_count": 36
+    },
+    "7100": {
+      "sector_name": "証券、商品先物取引業",
+      "per_avg": 12.7,
+      "per_count": 31,
+      "pbr_avg": 1.33,
+      "pbr_count": 34,
+      "roe_avg": 5.9,
+      "roe_count": 34
+    },
+    "7150": {
+      "sector_name": "保険業",
+      "per_avg": 16.9,
+      "per_count": 14,
+      "pbr_avg": 1.73,
+      "pbr_count": 13,
+      "roe_avg": 11.2,
+      "roe_count": 13
+    },
+    "5200": {
+      "sector_name": "倉庫・運輸関連業",
+      "per_avg": 13.4,
+      "per_count": 28,
+      "pbr_avg": 0.96,
+      "pbr_count": 29,
+      "roe_avg": 7.1,
+      "roe_count": 30
+    },
     "4050": {
       "sector_name": "電気・ガス業",
       "per_avg": 10.4,
@@ -245,22 +245,13 @@
       "roe_avg": 10.6,
       "roe_count": 27
     },
-    "1050": {
-      "sector_name": "鉱業",
-      "per_avg": 17.7,
-      "per_count": 5,
-      "pbr_avg": 0.87,
-      "pbr_count": 5,
-      "roe_avg": 8.9,
-      "roe_count": 5
-    },
-    "5200": {
-      "sector_name": "倉庫・運輸関連業",
-      "per_avg": 13.4,
-      "per_count": 28,
-      "pbr_avg": 0.96,
-      "pbr_count": 29,
-      "roe_avg": 7.0,
+    "3500": {
+      "sector_name": "非鉄金属",
+      "per_avg": 19.1,
+      "per_count": 31,
+      "pbr_avg": 1.75,
+      "pbr_count": 30,
+      "roe_avg": 7.9,
       "roe_count": 30
     },
     "3350": {
@@ -272,15 +263,6 @@
       "roe_avg": 7.6,
       "roe_count": 16
     },
-    "3500": {
-      "sector_name": "非鉄金属",
-      "per_avg": 19.1,
-      "per_count": 31,
-      "pbr_avg": 1.75,
-      "pbr_count": 30,
-      "roe_avg": 7.9,
-      "roe_count": 30
-    },
     "5100": {
       "sector_name": "海運業",
       "per_avg": 16.7,
@@ -290,14 +272,32 @@
       "roe_avg": 7.9,
       "roe_count": 10
     },
-    "50": {
-      "sector_name": "水産・農林業",
-      "per_avg": 38.1,
-      "per_count": 11,
-      "pbr_avg": 1.36,
-      "pbr_count": 10,
-      "roe_avg": 10.3,
-      "roe_count": 10
+    "1050": {
+      "sector_name": "鉱業",
+      "per_avg": 17.7,
+      "per_count": 5,
+      "pbr_avg": 0.87,
+      "pbr_count": 5,
+      "roe_avg": 8.9,
+      "roe_count": 5
+    },
+    "3300": {
+      "sector_name": "石油・石炭製品",
+      "per_avg": 11.2,
+      "per_count": 8,
+      "pbr_avg": 0.99,
+      "pbr_count": 9,
+      "roe_avg": 6.1,
+      "roe_count": 9
+    },
+    "5150": {
+      "sector_name": "空運業",
+      "per_avg": 19.5,
+      "per_count": 5,
+      "pbr_avg": 0.9,
+      "pbr_count": 4,
+      "roe_avg": 9.3,
+      "roe_count": 5
     }
   }
 }
