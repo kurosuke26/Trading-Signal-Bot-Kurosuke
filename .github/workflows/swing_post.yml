@@ -18,6 +18,14 @@ on:
         description: '試し投稿：その場で株価を取って判定し【テスト投稿】として投稿（記録は変えない・20〜40分）'
         type: boolean
         default: false
+      as_of:
+        description: '試し投稿のみ：この日（YYYY-MM-DD）の引けまでで判定（空欄なら最新）'
+        type: string
+        default: ''
+      ignore_regime:
+        description: '試し投稿のみ：地合いフィルターを外して候補を出す'
+        type: boolean
+        default: false
 
 permissions:
   contents: write
@@ -52,7 +60,7 @@ jobs:
       env:
         DISCORD_WEBHOOK_URL_SWING_TEST: ${{ secrets.DISCORD_WEBHOOK_URL_SWING_TEST }}
         DISCORD_WEBHOOK_URL_SWING_PROD: ${{ secrets.DISCORD_WEBHOOK_URL_SWING_PROD }}
-      run: python swing_test_run.py
+      run: python swing_test_run.py ${{ inputs.as_of && format('--as-of {0}', inputs.as_of) || '' }} ${{ inputs.ignore_regime && '--ignore-regime' || '' }}
 
     - name: Post swing candidates
       if: ${{ !inputs.test_run }}
