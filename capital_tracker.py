@@ -124,7 +124,10 @@ def _mark_to_market(pos, rec):
         pos['unrealized'] = None
         pos['unrealized_pct'] = None
         return
-    entry = pos['entry_price']
+    # 配当・分割の調整はtrade_log側のentry_priceに反映される（tracking.pyのadjustments）。台帳が
+    # 建てた時点の価格のままだと、権利落ちを跨いだ保有分の含み損益が決済済み分と食い違うため、
+    # 時価評価の基準はtrade_log側の最新のentry_priceにそろえる。
+    entry = rec.get('entry_price') or pos['entry_price']
     unrealized_pct = (last_price - entry) / entry * 100 if pos['signal'] == 'LONG' \
         else (entry - last_price) / entry * 100
     pos['last_price'] = last_price
@@ -252,7 +255,23 @@ def summarize(ledger):
     realized_total = sum(t['pnl'] for t in ledger['closed_trades'])
 
     wins = [t for t in ledger['closed_trades'] if t['return_pct'] > 0]
+
+    # 「今この時点で全部売却したら」の仮決済込み成績：決済済みの確定リターンと、
+    # 保有中の含み損益(%)を同じ1件として並べる（価格不明の保有分は除く）
+    prov = [t['return_pct'] for t in ledger['closed_trades']]         + [p['unrealized_pct'] for p in open_positions if p.get('unrealized_pct') is not None]
+    prov_w = [r for r in prov if r > 0]
+    prov_l = [r for r in prov if r <= 0]
+    provisional = {
+        'count': len(prov),
+        'win_count': len(prov_w),
+        'win_rate_pct': round(len(prov_w) / len(prov) * 100, 1) if prov else None,
+        'avg_win_pct': round(sum(prov_w) / len(prov_w), 2) if prov_w else None,
+        'avg_loss_pct': round(sum(prov_l) / len(prov_l), 2) if prov_l else None,
+        'payoff_ratio': round((sum(prov_w) / len(prov_w)) / abs(sum(prov_l) / len(prov_l)), 2) if prov_w and prov_l else None,
+        'expectancy_pct': round(sum(prov) / len(prov), 2) if prov else None,
+    }
     return {
+        'provisional': provisional,
         'start_date': ledger['start_date'],
         'initial_capital': ledger['initial_capital'],
         'cash': round(ledger['cash'], 0),
@@ -310,6 +329,13 @@ def print_report(ledger):
           f"（元本{s['invested_book']:,.0f}円・含み損益{s['unrealized_pnl']:+,.0f}円）")
     print(f"確定損益（累計）: {s['realized_pnl']:+,.0f}円（決済{s['closed_count']}件"
           + (f"・勝率{s['win_rate_pct']}%" if s['win_rate_pct'] is not None else '') + '）')
+    pv = s['provisional']
+    if pv['count']:
+        print(f"仮決済込み（今売却した場合）: {pv['count']}件中{pv['win_count']}勝・勝率{pv['win_rate_pct']}%"
+              f"・1件あたり平均{pv['expectancy_pct']:+.2f}%"
+              + (f"・平均利益{pv['avg_win_pct']:+.2f}%" if pv['avg_win_pct'] is not None else '')
+              + (f"・平均損失{pv['avg_loss_pct']:+.2f}%" if pv['avg_loss_pct'] is not None else '')
+              + (f"・ペイオフ{pv['payoff_ratio']}" if pv['payoff_ratio'] is not None else ''))
     print(f"保有中ポジション: {s['open_count']}件 / 資金不足で見送り: {s['skipped_count']}件"
           + (f" / 価格不明: {s['price_unknown_count']}件" if s['price_unknown_count'] else ''))
     if ledger['open_positions']:
