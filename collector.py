@@ -862,6 +862,22 @@ def collect():
             traceback.print_exc()
             print(f"[event] 別枠の仮想売買の処理でエラー（収集結果の保存は続行します）: {e}")
 
+        # 【2026-11-11追加】スイング3型（押し目買い・高値ブレイク・上方修正後）の判定と仮想売買（swing_live.py）。
+        # 結果は data/swing_scan.json・data/swing_trade_log.json に保存し、投稿は swing_poster.py（別チャンネル）が行う。
+        # 本番の判定・記録には一切影響しない。失敗しても収集結果は保存する。
+        print("\n--- スイング3型（別枠）：Yahoo Financeの日足とTDnetで判定 ---")
+        try:
+            import swing_live
+            names = {t: (r or {}).get('name') for t, r in results.items()}
+            sw_out = swing_live.run(histories, names=names)
+            print(f"[swing] {sw_out['date']} 地合い{'良好' if sw_out['regime']['ok'] else '悪化'}／"
+                  + ' ／ '.join(f"{s['label']}：該当{s['total_hits']}件" for s in sw_out['signals'].values())
+                  + f"／保有{len(sw_out['open_positions'])}件")
+        except Exception as e:  # noqa: BLE001
+            import traceback
+            traceback.print_exc()
+            print(f"[swing] スイング3型の処理でエラー（収集結果の保存は続行します）: {e}")
+
     snapshot = build_snapshot(results, fund_failed, hist_failed, tickers, used_fallback, started_at_utc,
                                performance_stats=performance_stats, event_summary=event_summary)
     write_snapshot(snapshot)

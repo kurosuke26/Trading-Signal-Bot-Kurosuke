@@ -133,7 +133,8 @@ jobs:
           git add data/daily_bars
         fi
         # 【2026-10-08追加】ロマン枠（監視のみ）の毎日の一覧（tracking.record_roman_watchlist）
-        for f in data/event_trade_log.json data/event_state.json data/capital_ledger.json data/roman_watchlist.json; do
+        # 【2026-11-11追加】スイング3型（swing_live.py）の判定結果と仮想売買の記録
+        for f in data/event_trade_log.json data/event_state.json data/capital_ledger.json data/roman_watchlist.json data/swing_scan.json data/swing_trade_log.json; do
           if [ -f "$f" ]; then
             git add "$f"
           fi

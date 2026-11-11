@@ -1,0 +1,2783 @@
+{
+  "period": [
+    "2025-01-10",
+    "2026-06-29"
+  ],
+  "oos_period": [
+    "2025-07-16",
+    "2026-06-29"
+  ],
+  "folds": [
+    [
+      "2025-07-16",
+      "2025-10-17"
+    ],
+    [
+      "2025-10-20",
+      "2026-01-22"
+    ],
+    [
+      "2026-01-23",
+      "2026-04-24"
+    ],
+    [
+      "2026-04-27",
+      "2026-06-29"
+    ]
+  ],
+  "tickers": 3884,
+  "signal_counts": {
+    "PULLBACK|False": 1037,
+    "PULLBACK|True": 892,
+    "BREAKOUT|False": 1487,
+    "BREAKOUT|True": 1314,
+    "REVISION|False": 524,
+    "REVISION|True": 463
+  },
+  "families": {
+    "0.1": [
+      {
+        "name": "① 上昇トレンドの押し目買い（手仕舞い・保有期間・地合いを毎回選ぶ）",
+        "excess": {
+          "days": 231,
+          "active_days": 216,
+          "mean_daily_pct": -0.0284,
+          "annual_pct": -6.97,
+          "ir_annual": -0.64,
+          "total_pct": -6.57,
+          "max_drawdown_pct": -12.14
+        },
+        "raw": {
+          "days": 231,
+          "active_days": null,
+          "mean_daily_pct": 0.02,
+          "annual_pct": 4.91,
+          "ir_annual": 0.27,
+          "total_pct": 4.63,
+          "max_drawdown_pct": -17.46
+        },
+        "test": {
+          "mean_daily_pct": -0.0284,
+          "ci95_daily_pct": [
+            -0.0823,
+            0.0285
+          ],
+          "p_value": 0.8415,
+          "p_holm": 1.0,
+          "q_bh": 0.8415
+        },
+        "folds": [
+          {
+            "period": [
+              "2025-07-16",
+              "2025-10-17"
+            ],
+            "picked": "5日・ATR×2・地合いなし",
+            "excess_total_pct": -1.39
+          },
+          {
+            "period": [
+              "2025-10-20",
+              "2026-01-22"
+            ],
+            "picked": "5日・ATR×3・地合いなし",
+            "excess_total_pct": -2.66
+          },
+          {
+            "period": [
+              "2026-01-23",
+              "2026-04-24"
+            ],
+            "picked": "20日・25日線割れ・地合いなし",
+            "excess_total_pct": -3.72
+          },
+          {
+            "period": [
+              "2026-04-27",
+              "2026-06-29"
+            ],
+            "picked": "20日・ATR×2・地合いなし",
+            "excess_total_pct": 1.21
+          }
+        ]
+      },
+      {
+        "name": "① 上昇トレンドの押し目買い（標準設定で固定）",
+        "excess": {
+          "days": 231,
+          "active_days": 215,
+          "mean_daily_pct": 0.0866,
+          "annual_pct": 21.23,
+          "ir_annual": 1.93,
+          "total_pct": 20.02,
+          "max_drawdown_pct": -3.77
+        },
+        "raw": {
+          "days": 231,
+          "active_days": null,
+          "mean_daily_pct": 0.1136,
+          "annual_pct": 27.84,
+          "ir_annual": 1.9,
+          "total_pct": 26.25,
+          "max_drawdown_pct": -15.76
+        },
+        "test": {
+          "mean_daily_pct": 0.0866,
+          "ci95_daily_pct": [
+            0.001,
+            0.1869
+          ],
+          "p_value": 0.0495,
+          "p_holm": 0.297,
+          "q_bh": 0.297
+        },
+        "folds": [
+          {
+            "period": [
+              "2025-07-16",
+              "2025-10-17"
+            ],
+            "picked": "10日・25日線割れ・地合いあり",
+            "excess_total_pct": 3.17
+          },
+          {
+            "period": [
+              "2025-10-20",
+              "2026-01-22"
+            ],
+            "picked": "10日・25日線割れ・地合いあり",
+            "excess_total_pct": 16.95
+          },
+          {
+            "period": [
+              "2026-01-23",
+              "2026-04-24"
+            ],
+            "picked": "10日・25日線割れ・地合いあり",
+            "excess_total_pct": -1.56
+          },
+          {
+            "period": [
+              "2026-04-27",
+              "2026-06-29"
+            ],
+            "picked": "10日・25日線割れ・地合いあり",
+            "excess_total_pct": 1.46
+          }
+        ]
+      },
+      {
+        "name": "② 高値ブレイク（手仕舞い・保有期間・地合いを毎回選ぶ）",
+        "excess": {
+          "days": 231,
+          "active_days": 217,
+          "mean_daily_pct": -0.014,
+          "annual_pct": -3.44,
+          "ir_annual": -0.33,
+          "total_pct": -3.24,
+          "max_drawdown_pct": -17.23
+        },
+        "raw": {
+          "days": 231,
+          "active_days": null,
+          "mean_daily_pct": 0.0696,
+          "annual_pct": 17.05,
+          "ir_annual": 0.95,
+          "total_pct": 16.07,
+          "max_drawdown_pct": -16.53
+        },
+        "test": {
+          "mean_daily_pct": -0.014,
+          "ci95_daily_pct": [
+            -0.1211,
+            0.0797
+          ],
+          "p_value": 0.625,
+          "p_holm": 1.0,
+          "q_bh": 0.8415
+        },
+        "folds": [
+          {
+            "period": [
+              "2025-07-16",
+              "2025-10-17"
+            ],
+            "picked": "5日・25日線割れ・地合いなし",
+            "excess_total_pct": -16.13
+          },
+          {
+            "period": [
+              "2025-10-20",
+              "2026-01-22"
+            ],
+            "picked": "20日・25日線割れ・地合いなし",
+            "excess_total_pct": 4.59
+          },
+          {
+            "period": [
+              "2026-01-23",
+              "2026-04-24"
+            ],
+            "picked": "20日・25日線割れ・地合いなし",
+            "excess_total_pct": 4.96
+          },
+          {
+            "period": [
+              "2026-04-27",
+              "2026-06-29"
+            ],
+            "picked": "20日・25日線割れ・地合いなし",
+            "excess_total_pct": 3.35
+          }
+        ]
+      },
+      {
+        "name": "② 高値ブレイク（標準設定で固定）",
+        "excess": {
+          "days": 231,
+          "active_days": 217,
+          "mean_daily_pct": -0.0247,
+          "annual_pct": -6.05,
+          "ir_annual": -0.57,
+          "total_pct": -5.71,
+          "max_drawdown_pct": -10.4
+        },
+        "raw": {
+          "days": 231,
+          "active_days": null,
+          "mean_daily_pct": 0.0533,
+          "annual_pct": 13.06,
+          "ir_annual": 0.76,
+          "total_pct": 12.31,
+          "max_drawdown_pct": -11.27
+        },
+        "test": {
+          "mean_daily_pct": -0.0247,
+          "ci95_daily_pct": [
+            -0.0951,
+            0.0517
+          ],
+          "p_value": 0.7325,
+          "p_holm": 1.0,
+          "q_bh": 0.8415
+        },
+        "folds": [
+          {
+            "period": [
+              "2025-07-16",
+              "2025-10-17"
+            ],
+            "picked": "10日・25日線割れ・地合いあり",
+            "excess_total_pct": -8.94
+          },
+          {
+            "period": [
+              "2025-10-20",
+              "2026-01-22"
+            ],
+            "picked": "10日・25日線割れ・地合いあり",
+            "excess_total_pct": 0.69
+          },
+          {
+            "period": [
+              "2026-01-23",
+              "2026-04-24"
+            ],
+            "picked": "10日・25日線割れ・地合いあり",
+            "excess_total_pct": 5.28
+          },
+          {
+            "period": [
+              "2026-04-27",
+              "2026-06-29"
+            ],
+            "picked": "10日・25日線割れ・地合いあり",
+            "excess_total_pct": -2.73
+          }
+        ]
+      },
+      {
+        "name": "③ 上方修正後の継続（手仕舞い・保有期間・地合いを毎回選ぶ）",
+        "excess": {
+          "days": 231,
+          "active_days": 217,
+          "mean_daily_pct": -0.0297,
+          "annual_pct": -7.28,
+          "ir_annual": -0.69,
+          "total_pct": -6.87,
+          "max_drawdown_pct": -20.23
+        },
+        "raw": {
+          "days": 231,
+          "active_days": null,
+          "mean_daily_pct": 0.0296,
+          "annual_pct": 7.26,
+          "ir_annual": 0.41,
+          "total_pct": 6.85,
+          "max_drawdown_pct": -18.5
+        },
+        "test": {
+          "mean_daily_pct": -0.0297,
+          "ci95_daily_pct": [
+            -0.1563,
+            0.0911
+          ],
+          "p_value": 0.679,
+          "p_holm": 1.0,
+          "q_bh": 0.8415
+        },
+        "folds": [
+          {
+            "period": [
+              "2025-07-16",
+              "2025-10-17"
+            ],
+            "picked": "20日・ATR×3・地合いあり",
+            "excess_total_pct": -11.55
+          },
+          {
+            "period": [
+              "2025-10-20",
+              "2026-01-22"
+            ],
+            "picked": "10日・25日線割れ・地合いなし",
+            "excess_total_pct": -7.32
+          },
+          {
+            "period": [
+              "2026-01-23",
+              "2026-04-24"
+            ],
+            "picked": "10日・25日線割れ・地合いなし",
+            "excess_total_pct": 1.95
+          },
+          {
+            "period": [
+              "2026-04-27",
+              "2026-06-29"
+            ],
+            "picked": "10日・25日線割れ・地合いなし",
+            "excess_total_pct": 10.05
+          }
+        ]
+      },
+      {
+        "name": "③ 上方修正後の継続（標準設定で固定）",
+        "excess": {
+          "days": 231,
+          "active_days": 216,
+          "mean_daily_pct": -0.0178,
+          "annual_pct": -4.36,
+          "ir_annual": -0.39,
+          "total_pct": -4.11,
+          "max_drawdown_pct": -18.84
+        },
+        "raw": {
+          "days": 231,
+          "active_days": null,
+          "mean_daily_pct": 0.0284,
+          "annual_pct": 6.96,
+          "ir_annual": 0.39,
+          "total_pct": 6.56,
+          "max_drawdown_pct": -17.25
+        },
+        "test": {
+          "mean_daily_pct": -0.0178,
+          "ci95_daily_pct": [
+            -0.1381,
+            0.096
+          ],
+          "p_value": 0.621,
+          "p_holm": 1.0,
+          "q_bh": 0.8415
+        },
+        "folds": [
+          {
+            "period": [
+              "2025-07-16",
+              "2025-10-17"
+            ],
+            "picked": "10日・25日線割れ・地合いあり",
+            "excess_total_pct": -7.07
+          },
+          {
+            "period": [
+              "2025-10-20",
+              "2026-01-22"
+            ],
+            "picked": "10日・25日線割れ・地合いあり",
+            "excess_total_pct": -7.61
+          },
+          {
+            "period": [
+              "2026-01-23",
+              "2026-04-24"
+            ],
+            "picked": "10日・25日線割れ・地合いあり",
+            "excess_total_pct": 2.49
+          },
+          {
+            "period": [
+              "2026-04-27",
+              "2026-06-29"
+            ],
+            "picked": "10日・25日線割れ・地合いあり",
+            "excess_total_pct": 8.08
+          }
+        ]
+      }
+    ],
+    "0.3": [
+      {
+        "name": "① 上昇トレンドの押し目買い（手仕舞い・保有期間・地合いを毎回選ぶ）",
+        "excess": {
+          "days": 231,
+          "active_days": 216,
+          "mean_daily_pct": -0.0653,
+          "annual_pct": -15.99,
+          "ir_annual": -1.47,
+          "total_pct": -15.07,
+          "max_drawdown_pct": -19.43
+        },
+        "raw": {
+          "days": 231,
+          "active_days": null,
+          "mean_daily_pct": -0.0168,
+          "annual_pct": -4.11,
+          "ir_annual": -0.23,
+          "total_pct": -3.88,
+          "max_drawdown_pct": -18.63
+        },
+        "test": {
+          "mean_daily_pct": -0.0653,
+          "ci95_daily_pct": [
+            -0.1235,
+            -0.0066
+          ],
+          "p_value": 0.986,
+          "p_holm": 1.0,
+          "q_bh": 0.986
+        },
+        "folds": [
+          {
+            "period": [
+              "2025-07-16",
+              "2025-10-17"
+            ],
+            "picked": "5日・ATR×2・地合いなし",
+            "excess_total_pct": -4.0
+          },
+          {
+            "period": [
+              "2025-10-20",
+              "2026-01-22"
+            ],
+            "picked": "5日・ATR×3・地合いなし",
+            "excess_total_pct": -4.95
+          },
+          {
+            "period": [
+              "2026-01-23",
+              "2026-04-24"
+            ],
+            "picked": "20日・25日線割れ・地合いなし",
+            "excess_total_pct": -6.91
+          },
+          {
+            "period": [
+              "2026-04-27",
+              "2026-06-29"
+            ],
+            "picked": "20日・ATR×2・地合いなし",
+            "excess_total_pct": 0.79
+          }
+        ]
+      },
+      {
+        "name": "① 上昇トレンドの押し目買い（標準設定で固定）",
+        "excess": {
+          "days": 231,
+          "active_days": 215,
+          "mean_daily_pct": 0.0412,
+          "annual_pct": 10.1,
+          "ir_annual": 0.91,
+          "total_pct": 9.52,
+          "max_drawdown_pct": -6.39
+        },
+        "raw": {
+          "days": 231,
+          "active_days": null,
+          "mean_daily_pct": 0.0682,
+          "annual_pct": 16.71,
+          "ir_annual": 1.14,
+          "total_pct": 15.75,
+          "max_drawdown_pct": -18.1
+        },
+        "test": {
+          "mean_daily_pct": 0.0412,
+          "ci95_daily_pct": [
+            -0.0416,
+            0.1388
+          ],
+          "p_value": 0.193,
+          "p_holm": 1.0,
+          "q_bh": 0.986
+        },
+        "folds": [
+          {
+            "period": [
+              "2025-07-16",
+              "2025-10-17"
+            ],
+            "picked": "10日・25日線割れ・地合いあり",
+            "excess_total_pct": -0.48
+          },
+          {
+            "period": [
+              "2025-10-20",
+              "2026-01-22"
+            ],
+            "picked": "10日・25日線割れ・地合いあり",
+            "excess_total_pct": 13.96
+          },
+          {
+            "period": [
+              "2026-01-23",
+              "2026-04-24"
+            ],
+            "picked": "10日・25日線割れ・地合いあり",
+            "excess_total_pct": -4.78
+          },
+          {
+            "period": [
+              "2026-04-27",
+              "2026-06-29"
+            ],
+            "picked": "10日・25日線割れ・地合いあり",
+            "excess_total_pct": 0.82
+          }
+        ]
+      },
+      {
+        "name": "② 高値ブレイク（手仕舞い・保有期間・地合いを毎回選ぶ）",
+        "excess": {
+          "days": 231,
+          "active_days": 217,
+          "mean_daily_pct": 0.0078,
+          "annual_pct": 1.9,
+          "ir_annual": 0.2,
+          "total_pct": 1.79,
+          "max_drawdown_pct": -10.27
+        },
+        "raw": {
+          "days": 231,
+          "active_days": null,
+          "mean_daily_pct": 0.0914,
+          "annual_pct": 22.38,
+          "ir_annual": 1.29,
+          "total_pct": 21.11,
+          "max_drawdown_pct": -10.18
+        },
+        "test": {
+          "mean_daily_pct": 0.0078,
+          "ci95_daily_pct": [
+            -0.0634,
+            0.0738
+          ],
+          "p_value": 0.424,
+          "p_holm": 1.0,
+          "q_bh": 0.986
+        },
+        "folds": [
+          {
+            "period": [
+              "2025-07-16",
+              "2025-10-17"
+            ],
+            "picked": "20日・ATR×3・地合いなし",
+            "excess_total_pct": -9.12
+          },
+          {
+            "period": [
+              "2025-10-20",
+              "2026-01-22"
+            ],
+            "picked": "20日・25日線割れ・地合いなし",
+            "excess_total_pct": 3.81
+          },
+          {
+            "period": [
+              "2026-01-23",
+              "2026-04-24"
+            ],
+            "picked": "20日・25日線割れ・地合いなし",
+            "excess_total_pct": 4.16
+          },
+          {
+            "period": [
+              "2026-04-27",
+              "2026-06-29"
+            ],
+            "picked": "20日・25日線割れ・地合いなし",
+            "excess_total_pct": 2.94
+          }
+        ]
+      },
+      {
+        "name": "② 高値ブレイク（標準設定で固定）",
+        "excess": {
+          "days": 231,
+          "active_days": 217,
+          "mean_daily_pct": -0.0445,
+          "annual_pct": -10.91,
+          "ir_annual": -1.02,
+          "total_pct": -10.29,
+          "max_drawdown_pct": -11.88
+        },
+        "raw": {
+          "days": 231,
+          "active_days": null,
+          "mean_daily_pct": 0.0335,
+          "annual_pct": 8.2,
+          "ir_annual": 0.48,
+          "total_pct": 7.73,
+          "max_drawdown_pct": -12.03
+        },
+        "test": {
+          "mean_daily_pct": -0.0445,
+          "ci95_daily_pct": [
+            -0.1155,
+            0.0312
+          ],
+          "p_value": 0.88,
+          "p_holm": 1.0,
+          "q_bh": 0.986
+        },
+        "folds": [
+          {
+            "period": [
+              "2025-07-16",
+              "2025-10-17"
+            ],
+            "picked": "10日・25日線割れ・地合いあり",
+            "excess_total_pct": -10.34
+          },
+          {
+            "period": [
+              "2025-10-20",
+              "2026-01-22"
+            ],
+            "picked": "10日・25日線割れ・地合いあり",
+            "excess_total_pct": -0.65
+          },
+          {
+            "period": [
+              "2026-01-23",
+              "2026-04-24"
+            ],
+            "picked": "10日・25日線割れ・地合いあり",
+            "excess_total_pct": 3.99
+          },
+          {
+            "period": [
+              "2026-04-27",
+              "2026-06-29"
+            ],
+            "picked": "10日・25日線割れ・地合いあり",
+            "excess_total_pct": -3.28
+          }
+        ]
+      },
+      {
+        "name": "③ 上方修正後の継続（手仕舞い・保有期間・地合いを毎回選ぶ）",
+        "excess": {
+          "days": 231,
+          "active_days": 217,
+          "mean_daily_pct": -0.0689,
+          "annual_pct": -16.89,
+          "ir_annual": -1.57,
+          "total_pct": -15.92,
+          "max_drawdown_pct": -22.05
+        },
+        "raw": {
+          "days": 231,
+          "active_days": null,
+          "mean_daily_pct": -0.015,
+          "annual_pct": -3.68,
+          "ir_annual": -0.2,
+          "total_pct": -3.47,
+          "max_drawdown_pct": -19.3
+        },
+        "test": {
+          "mean_daily_pct": -0.0689,
+          "ci95_daily_pct": [
+            -0.1828,
+            0.0412
+          ],
+          "p_value": 0.874,
+          "p_holm": 1.0,
+          "q_bh": 0.986
+        },
+        "folds": [
+          {
+            "period": [
+              "2025-07-16",
+              "2025-10-17"
+            ],
+            "picked": "20日・ATR×3・地合いあり",
+            "excess_total_pct": -12.48
+          },
+          {
+            "period": [
+              "2025-10-20",
+              "2026-01-22"
+            ],
+            "picked": "10日・25日線割れ・地合いなし",
+            "excess_total_pct": -8.33
+          },
+          {
+            "period": [
+              "2026-01-23",
+              "2026-04-24"
+            ],
+            "picked": "10日・25日線割れ・地合いなし",
+            "excess_total_pct": 0.82
+          },
+          {
+            "period": [
+              "2026-04-27",
+              "2026-06-29"
+            ],
+            "picked": "20日・25日線割れ・地合いなし",
+            "excess_total_pct": 4.06
+          }
+        ]
+      },
+      {
+        "name": "③ 上方修正後の継続（標準設定で固定）",
+        "excess": {
+          "days": 231,
+          "active_days": 216,
+          "mean_daily_pct": -0.0338,
+          "annual_pct": -8.29,
+          "ir_annual": -0.73,
+          "total_pct": -7.82,
+          "max_drawdown_pct": -20.37
+        },
+        "raw": {
+          "days": 231,
+          "active_days": null,
+          "mean_daily_pct": 0.0124,
+          "annual_pct": 3.03,
+          "ir_annual": 0.17,
+          "total_pct": 2.85,
+          "max_drawdown_pct": -18.14
+        },
+        "test": {
+          "mean_daily_pct": -0.0338,
+          "ci95_daily_pct": [
+            -0.1572,
+            0.0803
+          ],
+          "p_value": 0.708,
+          "p_holm": 1.0,
+          "q_bh": 0.986
+        },
+        "folds": [
+          {
+            "period": [
+              "2025-07-16",
+              "2025-10-17"
+            ],
+            "picked": "10日・25日線割れ・地合いあり",
+            "excess_total_pct": -8.31
+          },
+          {
+            "period": [
+              "2025-10-20",
+              "2026-01-22"
+            ],
+            "picked": "10日・25日線割れ・地合いあり",
+            "excess_total_pct": -8.62
+          },
+          {
+            "period": [
+              "2026-01-23",
+              "2026-04-24"
+            ],
+            "picked": "10日・25日線割れ・地合いあり",
+            "excess_total_pct": 1.42
+          },
+          {
+            "period": [
+              "2026-04-27",
+              "2026-06-29"
+            ],
+            "picked": "10日・25日線割れ・地合いあり",
+            "excess_total_pct": 7.69
+          }
+        ]
+      }
+    ],
+    "0.5": [
+      {
+        "name": "① 上昇トレンドの押し目買い（手仕舞い・保有期間・地合いを毎回選ぶ）",
+        "excess": {
+          "days": 231,
+          "active_days": 216,
+          "mean_daily_pct": -0.0556,
+          "annual_pct": -13.62,
+          "ir_annual": -1.45,
+          "total_pct": -12.84,
+          "max_drawdown_pct": -16.07
+        },
+        "raw": {
+          "days": 231,
+          "active_days": null,
+          "mean_daily_pct": -0.0048,
+          "annual_pct": -1.17,
+          "ir_annual": -0.07,
+          "total_pct": -1.1,
+          "max_drawdown_pct": -20.6
+        },
+        "test": {
+          "mean_daily_pct": -0.0556,
+          "ci95_daily_pct": [
+            -0.118,
+            0.0076
+          ],
+          "p_value": 0.954,
+          "p_holm": 1.0,
+          "q_bh": 0.9615
+        },
+        "folds": [
+          {
+            "period": [
+              "2025-07-16",
+              "2025-10-17"
+            ],
+            "picked": "5日・ATR×2・地合いなし",
+            "excess_total_pct": -6.61
+          },
+          {
+            "period": [
+              "2025-10-20",
+              "2026-01-22"
+            ],
+            "picked": "20日・ATR×3・地合いなし",
+            "excess_total_pct": 3.5
+          },
+          {
+            "period": [
+              "2026-01-23",
+              "2026-04-24"
+            ],
+            "picked": "20日・25日線割れ・地合いなし",
+            "excess_total_pct": -10.11
+          },
+          {
+            "period": [
+              "2026-04-27",
+              "2026-06-29"
+            ],
+            "picked": "20日・ATR×2・地合いなし",
+            "excess_total_pct": 0.38
+          }
+        ]
+      },
+      {
+        "name": "① 上昇トレンドの押し目買い（標準設定で固定）",
+        "excess": {
+          "days": 231,
+          "active_days": 215,
+          "mean_daily_pct": -0.0042,
+          "annual_pct": -1.03,
+          "ir_annual": -0.09,
+          "total_pct": -0.97,
+          "max_drawdown_pct": -9.76
+        },
+        "raw": {
+          "days": 231,
+          "active_days": null,
+          "mean_daily_pct": 0.0228,
+          "annual_pct": 5.58,
+          "ir_annual": 0.38,
+          "total_pct": 5.26,
+          "max_drawdown_pct": -20.55
+        },
+        "test": {
+          "mean_daily_pct": -0.0042,
+          "ci95_daily_pct": [
+            -0.0856,
+            0.0923
+          ],
+          "p_value": 0.527,
+          "p_holm": 1.0,
+          "q_bh": 0.9615
+        },
+        "folds": [
+          {
+            "period": [
+              "2025-07-16",
+              "2025-10-17"
+            ],
+            "picked": "10日・25日線割れ・地合いあり",
+            "excess_total_pct": -4.12
+          },
+          {
+            "period": [
+              "2025-10-20",
+              "2026-01-22"
+            ],
+            "picked": "10日・25日線割れ・地合いあり",
+            "excess_total_pct": 10.98
+          },
+          {
+            "period": [
+              "2026-01-23",
+              "2026-04-24"
+            ],
+            "picked": "10日・25日線割れ・地合いあり",
+            "excess_total_pct": -8.0
+          },
+          {
+            "period": [
+              "2026-04-27",
+              "2026-06-29"
+            ],
+            "picked": "10日・25日線割れ・地合いあり",
+            "excess_total_pct": 0.18
+          }
+        ]
+      },
+      {
+        "name": "② 高値ブレイク（手仕舞い・保有期間・地合いを毎回選ぶ）",
+        "excess": {
+          "days": 231,
+          "active_days": 217,
+          "mean_daily_pct": -0.0042,
+          "annual_pct": -1.03,
+          "ir_annual": -0.11,
+          "total_pct": -0.97,
+          "max_drawdown_pct": -11.11
+        },
+        "raw": {
+          "days": 231,
+          "active_days": null,
+          "mean_daily_pct": 0.0794,
+          "annual_pct": 19.45,
+          "ir_annual": 1.12,
+          "total_pct": 18.34,
+          "max_drawdown_pct": -10.46
+        },
+        "test": {
+          "mean_daily_pct": -0.0042,
+          "ci95_daily_pct": [
+            -0.076,
+            0.0613
+          ],
+          "p_value": 0.557,
+          "p_holm": 1.0,
+          "q_bh": 0.9615
+        },
+        "folds": [
+          {
+            "period": [
+              "2025-07-16",
+              "2025-10-17"
+            ],
+            "picked": "20日・ATR×3・地合いなし",
+            "excess_total_pct": -9.9
+          },
+          {
+            "period": [
+              "2025-10-20",
+              "2026-01-22"
+            ],
+            "picked": "20日・25日線割れ・地合いなし",
+            "excess_total_pct": 3.03
+          },
+          {
+            "period": [
+              "2026-01-23",
+              "2026-04-24"
+            ],
+            "picked": "20日・25日線割れ・地合いなし",
+            "excess_total_pct": 3.37
+          },
+          {
+            "period": [
+              "2026-04-27",
+              "2026-06-29"
+            ],
+            "picked": "20日・25日線割れ・地合いなし",
+            "excess_total_pct": 2.53
+          }
+        ]
+      },
+      {
+        "name": "② 高値ブレイク（標準設定で固定）",
+        "excess": {
+          "days": 231,
+          "active_days": 217,
+          "mean_daily_pct": -0.0644,
+          "annual_pct": -15.78,
+          "ir_annual": -1.48,
+          "total_pct": -14.87,
+          "max_drawdown_pct": -14.87
+        },
+        "raw": {
+          "days": 231,
+          "active_days": null,
+          "mean_daily_pct": 0.0136,
+          "annual_pct": 3.34,
+          "ir_annual": 0.19,
+          "total_pct": 3.15,
+          "max_drawdown_pct": -12.78
+        },
+        "test": {
+          "mean_daily_pct": -0.0644,
+          "ci95_daily_pct": [
+            -0.1347,
+            0.0112
+          ],
+          "p_value": 0.9615,
+          "p_holm": 1.0,
+          "q_bh": 0.9615
+        },
+        "folds": [
+          {
+            "period": [
+              "2025-07-16",
+              "2025-10-17"
+            ],
+            "picked": "10日・25日線割れ・地合いあり",
+            "excess_total_pct": -11.74
+          },
+          {
+            "period": [
+              "2025-10-20",
+              "2026-01-22"
+            ],
+            "picked": "10日・25日線割れ・地合いあり",
+            "excess_total_pct": -1.99
+          },
+          {
+            "period": [
+              "2026-01-23",
+              "2026-04-24"
+            ],
+            "picked": "10日・25日線割れ・地合いあり",
+            "excess_total_pct": 2.7
+          },
+          {
+            "period": [
+              "2026-04-27",
+              "2026-06-29"
+            ],
+            "picked": "10日・25日線割れ・地合いあり",
+            "excess_total_pct": -3.84
+          }
+        ]
+      },
+      {
+        "name": "③ 上方修正後の継続（手仕舞い・保有期間・地合いを毎回選ぶ）",
+        "excess": {
+          "days": 231,
+          "active_days": 217,
+          "mean_daily_pct": -0.0921,
+          "annual_pct": -22.55,
+          "ir_annual": -2.02,
+          "total_pct": -21.26,
+          "max_drawdown_pct": -25.39
+        },
+        "raw": {
+          "days": 231,
+          "active_days": null,
+          "mean_daily_pct": -0.04,
+          "annual_pct": -9.81,
+          "ir_annual": -0.54,
+          "total_pct": -9.25,
+          "max_drawdown_pct": -21.12
+        },
+        "test": {
+          "mean_daily_pct": -0.0921,
+          "ci95_daily_pct": [
+            -0.2063,
+            0.0154
+          ],
+          "p_value": 0.9435,
+          "p_holm": 1.0,
+          "q_bh": 0.9615
+        },
+        "folds": [
+          {
+            "period": [
+              "2025-07-16",
+              "2025-10-17"
+            ],
+            "picked": "20日・ATR×3・地合いあり",
+            "excess_total_pct": -13.4
+          },
+          {
+            "period": [
+              "2025-10-20",
+              "2026-01-22"
+            ],
+            "picked": "10日・25日線割れ・地合いなし",
+            "excess_total_pct": -9.35
+          },
+          {
+            "period": [
+              "2026-01-23",
+              "2026-04-24"
+            ],
+            "picked": "10日・25日線割れ・地合いなし",
+            "excess_total_pct": -0.3
+          },
+          {
+            "period": [
+              "2026-04-27",
+              "2026-06-29"
+            ],
+            "picked": "20日・25日線割れ・地合いあり",
+            "excess_total_pct": 1.79
+          }
+        ]
+      },
+      {
+        "name": "③ 上方修正後の継続（標準設定で固定）",
+        "excess": {
+          "days": 231,
+          "active_days": 216,
+          "mean_daily_pct": -0.0499,
+          "annual_pct": -12.22,
+          "ir_annual": -1.08,
+          "total_pct": -11.52,
+          "max_drawdown_pct": -22.11
+        },
+        "raw": {
+          "days": 231,
+          "active_days": null,
+          "mean_daily_pct": -0.0037,
+          "annual_pct": -0.91,
+          "ir_annual": -0.05,
+          "total_pct": -0.85,
+          "max_drawdown_pct": -19.47
+        },
+        "test": {
+          "mean_daily_pct": -0.0499,
+          "ci95_daily_pct": [
+            -0.1752,
+            0.0651
+          ],
+          "p_value": 0.7925,
+          "p_holm": 1.0,
+          "q_bh": 0.9615
+        },
+        "folds": [
+          {
+            "period": [
+              "2025-07-16",
+              "2025-10-17"
+            ],
+            "picked": "10日・25日線割れ・地合いあり",
+            "excess_total_pct": -9.55
+          },
+          {
+            "period": [
+              "2025-10-20",
+              "2026-01-22"
+            ],
+            "picked": "10日・25日線割れ・地合いあり",
+            "excess_total_pct": -9.63
+          },
+          {
+            "period": [
+              "2026-01-23",
+              "2026-04-24"
+            ],
+            "picked": "10日・25日線割れ・地合いあり",
+            "excess_total_pct": 0.35
+          },
+          {
+            "period": [
+              "2026-04-27",
+              "2026-06-29"
+            ],
+            "picked": "10日・25日線割れ・地合いあり",
+            "excess_total_pct": 7.3
+          }
+        ]
+      }
+    ]
+  },
+  "grid_trades": {
+    "② 高値ブレイク 10日・ATR×2・地合いなし": {
+      "全期間": {
+        "n": 1355,
+        "win_rate_pct": 43.8,
+        "avg_win_pct": 6.0,
+        "avg_loss_pct": -4.56,
+        "payoff_ratio": 1.32,
+        "expectancy_pct": 0.062,
+        "excess_expectancy_pct": -0.622,
+        "avg_hold_days": 8.4,
+        "open_at_end": 20
+      },
+      "検証期間": {
+        "n": 849,
+        "win_rate_pct": 44.3,
+        "avg_win_pct": 6.7,
+        "avg_loss_pct": -4.53,
+        "payoff_ratio": 1.48,
+        "expectancy_pct": 0.441,
+        "excess_expectancy_pct": -0.216,
+        "avg_hold_days": 8.3,
+        "open_at_end": 20
+      }
+    },
+    "② 高値ブレイク 10日・ATR×2・地合いあり": {
+      "全期間": {
+        "n": 1221,
+        "win_rate_pct": 42.8,
+        "avg_win_pct": 5.94,
+        "avg_loss_pct": -4.64,
+        "payoff_ratio": 1.28,
+        "expectancy_pct": -0.119,
+        "excess_expectancy_pct": -0.649,
+        "avg_hold_days": 8.4,
+        "open_at_end": 5
+      },
+      "検証期間": {
+        "n": 791,
+        "win_rate_pct": 43.7,
+        "avg_win_pct": 6.53,
+        "avg_loss_pct": -4.62,
+        "payoff_ratio": 1.41,
+        "expectancy_pct": 0.259,
+        "excess_expectancy_pct": -0.345,
+        "avg_hold_days": 8.3,
+        "open_at_end": 5
+      }
+    },
+    "② 高値ブレイク 10日・ATR×3・地合いなし": {
+      "全期間": {
+        "n": 1352,
+        "win_rate_pct": 46.4,
+        "avg_win_pct": 6.0,
+        "avg_loss_pct": -4.96,
+        "payoff_ratio": 1.21,
+        "expectancy_pct": 0.121,
+        "excess_expectancy_pct": -0.632,
+        "avg_hold_days": 9.3,
+        "open_at_end": 22
+      },
+      "検証期間": {
+        "n": 847,
+        "win_rate_pct": 47.5,
+        "avg_win_pct": 6.62,
+        "avg_loss_pct": -4.89,
+        "payoff_ratio": 1.35,
+        "expectancy_pct": 0.57,
+        "excess_expectancy_pct": -0.228,
+        "avg_hold_days": 9.2,
+        "open_at_end": 22
+      }
+    },
+    "② 高値ブレイク 10日・ATR×3・地合いあり": {
+      "全期間": {
+        "n": 1219,
+        "win_rate_pct": 45.1,
+        "avg_win_pct": 5.89,
+        "avg_loss_pct": -5.08,
+        "payoff_ratio": 1.16,
+        "expectancy_pct": -0.129,
+        "excess_expectancy_pct": -0.72,
+        "avg_hold_days": 9.4,
+        "open_at_end": 6
+      },
+      "検証期間": {
+        "n": 790,
+        "win_rate_pct": 47.0,
+        "avg_win_pct": 6.45,
+        "avg_loss_pct": -5.02,
+        "payoff_ratio": 1.28,
+        "expectancy_pct": 0.366,
+        "excess_expectancy_pct": -0.394,
+        "avg_hold_days": 9.3,
+        "open_at_end": 6
+      }
+    },
+    "② 高値ブレイク 10日・25日線割れ・地合いなし": {
+      "全期間": {
+        "n": 1353,
+        "win_rate_pct": 46.1,
+        "avg_win_pct": 6.04,
+        "avg_loss_pct": -4.78,
+        "payoff_ratio": 1.26,
+        "expectancy_pct": 0.207,
+        "excess_expectancy_pct": -0.515,
+        "avg_hold_days": 9.1,
+        "open_at_end": 22
+      },
+      "検証期間": {
+        "n": 847,
+        "win_rate_pct": 47.2,
+        "avg_win_pct": 6.63,
+        "avg_loss_pct": -4.75,
+        "payoff_ratio": 1.4,
+        "expectancy_pct": 0.623,
+        "excess_expectancy_pct": -0.107,
+        "avg_hold_days": 9.0,
+        "open_at_end": 22
+      }
+    },
+    "② 高値ブレイク 10日・25日線割れ・地合いあり": {
+      "全期間": {
+        "n": 1220,
+        "win_rate_pct": 44.8,
+        "avg_win_pct": 5.94,
+        "avg_loss_pct": -4.89,
+        "payoff_ratio": 1.21,
+        "expectancy_pct": -0.036,
+        "excess_expectancy_pct": -0.592,
+        "avg_hold_days": 9.2,
+        "open_at_end": 6
+      },
+      "検証期間": {
+        "n": 790,
+        "win_rate_pct": 46.7,
+        "avg_win_pct": 6.47,
+        "avg_loss_pct": -4.87,
+        "payoff_ratio": 1.33,
+        "expectancy_pct": 0.425,
+        "excess_expectancy_pct": -0.265,
+        "avg_hold_days": 9.1,
+        "open_at_end": 6
+      }
+    },
+    "② 高値ブレイク 20日・ATR×2・地合いなし": {
+      "全期間": {
+        "n": 1343,
+        "win_rate_pct": 42.4,
+        "avg_win_pct": 8.04,
+        "avg_loss_pct": -5.16,
+        "payoff_ratio": 1.56,
+        "expectancy_pct": 0.432,
+        "excess_expectancy_pct": -0.57,
+        "avg_hold_days": 13.0,
+        "open_at_end": 25
+      },
+      "検証期間": {
+        "n": 841,
+        "win_rate_pct": 42.7,
+        "avg_win_pct": 8.84,
+        "avg_loss_pct": -5.03,
+        "payoff_ratio": 1.76,
+        "expectancy_pct": 0.894,
+        "excess_expectancy_pct": 0.029,
+        "avg_hold_days": 12.5,
+        "open_at_end": 25
+      }
+    },
+    "② 高値ブレイク 20日・ATR×2・地合いあり": {
+      "全期間": {
+        "n": 1209,
+        "win_rate_pct": 41.8,
+        "avg_win_pct": 8.01,
+        "avg_loss_pct": -5.23,
+        "payoff_ratio": 1.53,
+        "expectancy_pct": 0.296,
+        "excess_expectancy_pct": -0.519,
+        "avg_hold_days": 13.0,
+        "open_at_end": 6
+      },
+      "検証期間": {
+        "n": 783,
+        "win_rate_pct": 42.0,
+        "avg_win_pct": 8.67,
+        "avg_loss_pct": -5.1,
+        "payoff_ratio": 1.7,
+        "expectancy_pct": 0.687,
+        "excess_expectancy_pct": -0.165,
+        "avg_hold_days": 12.6,
+        "open_at_end": 6
+      }
+    },
+    "② 高値ブレイク 20日・ATR×3・地合いなし": {
+      "全期間": {
+        "n": 1338,
+        "win_rate_pct": 48.5,
+        "avg_win_pct": 8.63,
+        "avg_loss_pct": -6.42,
+        "payoff_ratio": 1.34,
+        "expectancy_pct": 0.882,
+        "excess_expectancy_pct": -0.366,
+        "avg_hold_days": 16.3,
+        "open_at_end": 36
+      },
+      "検証期間": {
+        "n": 838,
+        "win_rate_pct": 50.0,
+        "avg_win_pct": 9.23,
+        "avg_loss_pct": -6.34,
+        "payoff_ratio": 1.46,
+        "expectancy_pct": 1.447,
+        "excess_expectancy_pct": 0.234,
+        "avg_hold_days": 15.9,
+        "open_at_end": 36
+      }
+    },
+    "② 高値ブレイク 20日・ATR×3・地合いあり": {
+      "全期間": {
+        "n": 1206,
+        "win_rate_pct": 47.3,
+        "avg_win_pct": 8.58,
+        "avg_loss_pct": -6.54,
+        "payoff_ratio": 1.31,
+        "expectancy_pct": 0.606,
+        "excess_expectancy_pct": -0.393,
+        "avg_hold_days": 16.3,
+        "open_at_end": 13
+      },
+      "検証期間": {
+        "n": 781,
+        "win_rate_pct": 49.3,
+        "avg_win_pct": 9.18,
+        "avg_loss_pct": -6.42,
+        "payoff_ratio": 1.43,
+        "expectancy_pct": 1.268,
+        "excess_expectancy_pct": 0.045,
+        "avg_hold_days": 16.1,
+        "open_at_end": 13
+      }
+    },
+    "② 高値ブレイク 20日・25日線割れ・地合いなし": {
+      "全期間": {
+        "n": 1340,
+        "win_rate_pct": 45.3,
+        "avg_win_pct": 8.83,
+        "avg_loss_pct": -5.85,
+        "payoff_ratio": 1.51,
+        "expectancy_pct": 0.8,
+        "excess_expectancy_pct": -0.372,
+        "avg_hold_days": 15.5,
+        "open_at_end": 34
+      },
+      "検証期間": {
+        "n": 838,
+        "win_rate_pct": 46.7,
+        "avg_win_pct": 9.31,
+        "avg_loss_pct": -5.66,
+        "payoff_ratio": 1.64,
+        "expectancy_pct": 1.322,
+        "excess_expectancy_pct": 0.186,
+        "avg_hold_days": 15.2,
+        "open_at_end": 34
+      }
+    },
+    "② 高値ブレイク 20日・25日線割れ・地合いあり": {
+      "全期間": {
+        "n": 1207,
+        "win_rate_pct": 44.1,
+        "avg_win_pct": 8.76,
+        "avg_loss_pct": -5.94,
+        "payoff_ratio": 1.48,
+        "expectancy_pct": 0.542,
+        "excess_expectancy_pct": -0.397,
+        "avg_hold_days": 15.5,
+        "open_at_end": 12
+      },
+      "検証期間": {
+        "n": 781,
+        "win_rate_pct": 46.0,
+        "avg_win_pct": 9.23,
+        "avg_loss_pct": -5.77,
+        "payoff_ratio": 1.6,
+        "expectancy_pct": 1.126,
+        "excess_expectancy_pct": -0.017,
+        "avg_hold_days": 15.5,
+        "open_at_end": 12
+      }
+    },
+    "② 高値ブレイク 5日・ATR×2・地合いなし": {
+      "全期間": {
+        "n": 1369,
+        "win_rate_pct": 42.8,
+        "avg_win_pct": 4.73,
+        "avg_loss_pct": -3.68,
+        "payoff_ratio": 1.29,
+        "expectancy_pct": -0.079,
+        "excess_expectancy_pct": -0.467,
+        "avg_hold_days": 4.8,
+        "open_at_end": 12
+      },
+      "検証期間": {
+        "n": 858,
+        "win_rate_pct": 43.8,
+        "avg_win_pct": 5.1,
+        "avg_loss_pct": -3.76,
+        "payoff_ratio": 1.36,
+        "expectancy_pct": 0.124,
+        "excess_expectancy_pct": -0.272,
+        "avg_hold_days": 4.7,
+        "open_at_end": 12
+      }
+    },
+    "② 高値ブレイク 5日・ATR×2・地合いあり": {
+      "全期間": {
+        "n": 1231,
+        "win_rate_pct": 41.0,
+        "avg_win_pct": 4.59,
+        "avg_loss_pct": -3.67,
+        "payoff_ratio": 1.25,
+        "expectancy_pct": -0.283,
+        "excess_expectancy_pct": -0.596,
+        "avg_hold_days": 4.8,
+        "open_at_end": 0
+      },
+      "検証期間": {
+        "n": 797,
+        "win_rate_pct": 42.2,
+        "avg_win_pct": 4.85,
+        "avg_loss_pct": -3.76,
+        "payoff_ratio": 1.29,
+        "expectancy_pct": -0.132,
+        "excess_expectancy_pct": -0.441,
+        "avg_hold_days": 4.8,
+        "open_at_end": 0
+      }
+    },
+    "② 高値ブレイク 5日・ATR×3・地合いなし": {
+      "全期間": {
+        "n": 1368,
+        "win_rate_pct": 43.6,
+        "avg_win_pct": 4.74,
+        "avg_loss_pct": -3.75,
+        "payoff_ratio": 1.26,
+        "expectancy_pct": -0.045,
+        "excess_expectancy_pct": -0.455,
+        "avg_hold_days": 4.9,
+        "open_at_end": 12
+      },
+      "検証期間": {
+        "n": 857,
+        "win_rate_pct": 44.9,
+        "avg_win_pct": 5.13,
+        "avg_loss_pct": -3.83,
+        "payoff_ratio": 1.34,
+        "expectancy_pct": 0.193,
+        "excess_expectancy_pct": -0.244,
+        "avg_hold_days": 4.9,
+        "open_at_end": 12
+      }
+    },
+    "② 高値ブレイク 5日・ATR×3・地合いあり": {
+      "全期間": {
+        "n": 1231,
+        "win_rate_pct": 41.8,
+        "avg_win_pct": 4.56,
+        "avg_loss_pct": -3.76,
+        "payoff_ratio": 1.21,
+        "expectancy_pct": -0.29,
+        "excess_expectancy_pct": -0.627,
+        "avg_hold_days": 5.0,
+        "open_at_end": 0
+      },
+      "検証期間": {
+        "n": 797,
+        "win_rate_pct": 43.2,
+        "avg_win_pct": 4.81,
+        "avg_loss_pct": -3.84,
+        "payoff_ratio": 1.25,
+        "expectancy_pct": -0.106,
+        "excess_expectancy_pct": -0.463,
+        "avg_hold_days": 4.9,
+        "open_at_end": 0
+      }
+    },
+    "② 高値ブレイク 5日・25日線割れ・地合いなし": {
+      "全期間": {
+        "n": 1368,
+        "win_rate_pct": 43.5,
+        "avg_win_pct": 4.7,
+        "avg_loss_pct": -3.65,
+        "payoff_ratio": 1.29,
+        "expectancy_pct": -0.02,
+        "excess_expectancy_pct": -0.428,
+        "avg_hold_days": 4.9,
+        "open_at_end": 12
+      },
+      "検証期間": {
+        "n": 857,
+        "win_rate_pct": 44.8,
+        "avg_win_pct": 5.05,
+        "avg_loss_pct": -3.74,
+        "payoff_ratio": 1.35,
+        "expectancy_pct": 0.201,
+        "excess_expectancy_pct": -0.225,
+        "avg_hold_days": 4.8,
+        "open_at_end": 12
+      }
+    },
+    "② 高値ブレイク 5日・25日線割れ・地合いあり": {
+      "全期間": {
+        "n": 1231,
+        "win_rate_pct": 41.8,
+        "avg_win_pct": 4.5,
+        "avg_loss_pct": -3.66,
+        "payoff_ratio": 1.23,
+        "expectancy_pct": -0.252,
+        "excess_expectancy_pct": -0.584,
+        "avg_hold_days": 4.9,
+        "open_at_end": 0
+      },
+      "検証期間": {
+        "n": 797,
+        "win_rate_pct": 43.2,
+        "avg_win_pct": 4.73,
+        "avg_loss_pct": -3.72,
+        "payoff_ratio": 1.27,
+        "expectancy_pct": -0.074,
+        "excess_expectancy_pct": -0.418,
+        "avg_hold_days": 4.9,
+        "open_at_end": 0
+      }
+    },
+    "① 上昇トレンドの押し目買い 10日・ATR×2・地合いなし": {
+      "全期間": {
+        "n": 913,
+        "win_rate_pct": 50.3,
+        "avg_win_pct": 7.15,
+        "avg_loss_pct": -5.41,
+        "payoff_ratio": 1.32,
+        "expectancy_pct": 0.906,
+        "excess_expectancy_pct": 0.257,
+        "avg_hold_days": 9.0,
+        "open_at_end": 22
+      },
+      "検証期間": {
+        "n": 626,
+        "win_rate_pct": 49.8,
+        "avg_win_pct": 7.84,
+        "avg_loss_pct": -5.44,
+        "payoff_ratio": 1.44,
+        "expectancy_pct": 1.182,
+        "excess_expectancy_pct": 0.643,
+        "avg_hold_days": 9.0,
+        "open_at_end": 22
+      }
+    },
+    "① 上昇トレンドの押し目買い 10日・ATR×2・地合いあり": {
+      "全期間": {
+        "n": 785,
+        "win_rate_pct": 48.0,
+        "avg_win_pct": 7.06,
+        "avg_loss_pct": -5.3,
+        "payoff_ratio": 1.33,
+        "expectancy_pct": 0.636,
+        "excess_expectancy_pct": 0.052,
+        "avg_hold_days": 9.2,
+        "open_at_end": 1
+      },
+      "検証期間": {
+        "n": 555,
+        "win_rate_pct": 47.4,
+        "avg_win_pct": 7.82,
+        "avg_loss_pct": -5.31,
+        "payoff_ratio": 1.47,
+        "expectancy_pct": 0.915,
+        "excess_expectancy_pct": 0.451,
+        "avg_hold_days": 9.1,
+        "open_at_end": 1
+      }
+    },
+    "① 上昇トレンドの押し目買い 10日・ATR×3・地合いなし": {
+      "全期間": {
+        "n": 912,
+        "win_rate_pct": 51.5,
+        "avg_win_pct": 7.21,
+        "avg_loss_pct": -5.58,
+        "payoff_ratio": 1.29,
+        "expectancy_pct": 1.01,
+        "excess_expectancy_pct": 0.26,
+        "avg_hold_days": 9.6,
+        "open_at_end": 24
+      },
+      "検証期間": {
+        "n": 625,
+        "win_rate_pct": 51.2,
+        "avg_win_pct": 7.85,
+        "avg_loss_pct": -5.57,
+        "payoff_ratio": 1.41,
+        "expectancy_pct": 1.298,
+        "excess_expectancy_pct": 0.627,
+        "avg_hold_days": 9.5,
+        "open_at_end": 24
+      }
+    },
+    "① 上昇トレンドの押し目買い 10日・ATR×3・地合いあり": {
+      "全期間": {
+        "n": 784,
+        "win_rate_pct": 49.0,
+        "avg_win_pct": 7.07,
+        "avg_loss_pct": -5.43,
+        "payoff_ratio": 1.3,
+        "expectancy_pct": 0.693,
+        "excess_expectancy_pct": 0.002,
+        "avg_hold_days": 9.7,
+        "open_at_end": 3
+      },
+      "検証期間": {
+        "n": 554,
+        "win_rate_pct": 48.7,
+        "avg_win_pct": 7.73,
+        "avg_loss_pct": -5.4,
+        "payoff_ratio": 1.43,
+        "expectancy_pct": 1.002,
+        "excess_expectancy_pct": 0.381,
+        "avg_hold_days": 9.7,
+        "open_at_end": 3
+      }
+    },
+    "① 上昇トレンドの押し目買い 10日・25日線割れ・地合いなし": {
+      "全期間": {
+        "n": 969,
+        "win_rate_pct": 38.8,
+        "avg_win_pct": 3.64,
+        "avg_loss_pct": -2.01,
+        "payoff_ratio": 1.81,
+        "expectancy_pct": 0.182,
+        "excess_expectancy_pct": 0.078,
+        "avg_hold_days": 3.1,
+        "open_at_end": 6
+      },
+      "検証期間": {
+        "n": 661,
+        "win_rate_pct": 39.6,
+        "avg_win_pct": 4.31,
+        "avg_loss_pct": -2.03,
+        "payoff_ratio": 2.12,
+        "expectancy_pct": 0.482,
+        "excess_expectancy_pct": 0.313,
+        "avg_hold_days": 3.2,
+        "open_at_end": 6
+      }
+    },
+    "① 上昇トレンドの押し目買い 10日・25日線割れ・地合いあり": {
+      "全期間": {
+        "n": 837,
+        "win_rate_pct": 37.9,
+        "avg_win_pct": 3.27,
+        "avg_loss_pct": -1.9,
+        "payoff_ratio": 1.72,
+        "expectancy_pct": 0.058,
+        "excess_expectancy_pct": -0.079,
+        "avg_hold_days": 3.0,
+        "open_at_end": 1
+      },
+      "検証期間": {
+        "n": 587,
+        "win_rate_pct": 39.4,
+        "avg_win_pct": 3.84,
+        "avg_loss_pct": -1.98,
+        "payoff_ratio": 1.94,
+        "expectancy_pct": 0.31,
+        "excess_expectancy_pct": 0.212,
+        "avg_hold_days": 3.1,
+        "open_at_end": 1
+      }
+    },
+    "① 上昇トレンドの押し目買い 20日・ATR×2・地合いなし": {
+      "全期間": {
+        "n": 897,
+        "win_rate_pct": 47.2,
+        "avg_win_pct": 11.03,
+        "avg_loss_pct": -6.1,
+        "payoff_ratio": 1.81,
+        "expectancy_pct": 1.981,
+        "excess_expectancy_pct": 0.843,
+        "avg_hold_days": 14.6,
+        "open_at_end": 30
+      },
+      "検証期間": {
+        "n": 617,
+        "win_rate_pct": 47.8,
+        "avg_win_pct": 11.87,
+        "avg_loss_pct": -6.06,
+        "payoff_ratio": 1.96,
+        "expectancy_pct": 2.512,
+        "excess_expectancy_pct": 1.58,
+        "avg_hold_days": 14.4,
+        "open_at_end": 30
+      }
+    },
+    "① 上昇トレンドの押し目買い 20日・ATR×2・地合いあり": {
+      "全期間": {
+        "n": 771,
+        "win_rate_pct": 45.4,
+        "avg_win_pct": 11.15,
+        "avg_loss_pct": -6.16,
+        "payoff_ratio": 1.81,
+        "expectancy_pct": 1.699,
+        "excess_expectancy_pct": 0.651,
+        "avg_hold_days": 14.9,
+        "open_at_end": 7
+      },
+      "検証期間": {
+        "n": 546,
+        "win_rate_pct": 45.6,
+        "avg_win_pct": 12.14,
+        "avg_loss_pct": -6.06,
+        "payoff_ratio": 2.0,
+        "expectancy_pct": 2.241,
+        "excess_expectancy_pct": 1.341,
+        "avg_hold_days": 14.7,
+        "open_at_end": 7
+      }
+    },
+    "① 上昇トレンドの押し目買い 20日・ATR×3・地合いなし": {
+      "全期間": {
+        "n": 886,
+        "win_rate_pct": 51.6,
+        "avg_win_pct": 11.37,
+        "avg_loss_pct": -7.48,
+        "payoff_ratio": 1.52,
+        "expectancy_pct": 2.242,
+        "excess_expectancy_pct": 0.861,
+        "avg_hold_days": 17.2,
+        "open_at_end": 43
+      },
+      "検証期間": {
+        "n": 613,
+        "win_rate_pct": 51.4,
+        "avg_win_pct": 11.9,
+        "avg_loss_pct": -7.2,
+        "payoff_ratio": 1.65,
+        "expectancy_pct": 2.617,
+        "excess_expectancy_pct": 1.393,
+        "avg_hold_days": 17.1,
+        "open_at_end": 43
+      }
+    },
+    "① 上昇トレンドの押し目買い 20日・ATR×3・地合いあり": {
+      "全期間": {
+        "n": 763,
+        "win_rate_pct": 49.5,
+        "avg_win_pct": 11.33,
+        "avg_loss_pct": -7.54,
+        "payoff_ratio": 1.5,
+        "expectancy_pct": 1.807,
+        "excess_expectancy_pct": 0.532,
+        "avg_hold_days": 17.6,
+        "open_at_end": 16
+      },
+      "検証期間": {
+        "n": 543,
+        "win_rate_pct": 49.9,
+        "avg_win_pct": 11.98,
+        "avg_loss_pct": -7.25,
+        "payoff_ratio": 1.65,
+        "expectancy_pct": 2.346,
+        "excess_expectancy_pct": 1.089,
+        "avg_hold_days": 17.6,
+        "open_at_end": 16
+      }
+    },
+    "① 上昇トレンドの押し目買い 20日・25日線割れ・地合いなし": {
+      "全期間": {
+        "n": 969,
+        "win_rate_pct": 38.3,
+        "avg_win_pct": 4.15,
+        "avg_loss_pct": -2.01,
+        "payoff_ratio": 2.06,
+        "expectancy_pct": 0.346,
+        "excess_expectancy_pct": 0.183,
+        "avg_hold_days": 3.8,
+        "open_at_end": 6
+      },
+      "検証期間": {
+        "n": 661,
+        "win_rate_pct": 39.0,
+        "avg_win_pct": 5.02,
+        "avg_loss_pct": -2.03,
+        "payoff_ratio": 2.48,
+        "expectancy_pct": 0.724,
+        "excess_expectancy_pct": 0.476,
+        "avg_hold_days": 4.1,
+        "open_at_end": 6
+      }
+    },
+    "① 上昇トレンドの押し目買い 20日・25日線割れ・地合いあり": {
+      "全期間": {
+        "n": 837,
+        "win_rate_pct": 37.5,
+        "avg_win_pct": 3.85,
+        "avg_loss_pct": -1.91,
+        "payoff_ratio": 2.02,
+        "expectancy_pct": 0.253,
+        "excess_expectancy_pct": 0.052,
+        "avg_hold_days": 3.7,
+        "open_at_end": 1
+      },
+      "検証期間": {
+        "n": 587,
+        "win_rate_pct": 38.8,
+        "avg_win_pct": 4.64,
+        "avg_loss_pct": -1.98,
+        "payoff_ratio": 2.34,
+        "expectancy_pct": 0.591,
+        "excess_expectancy_pct": 0.403,
+        "avg_hold_days": 3.9,
+        "open_at_end": 1
+      }
+    },
+    "① 上昇トレンドの押し目買い 5日・ATR×2・地合いなし": {
+      "全期間": {
+        "n": 921,
+        "win_rate_pct": 52.2,
+        "avg_win_pct": 4.53,
+        "avg_loss_pct": -4.09,
+        "payoff_ratio": 1.11,
+        "expectancy_pct": 0.411,
+        "excess_expectancy_pct": -0.016,
+        "avg_hold_days": 4.9,
+        "open_at_end": 15
+      },
+      "検証期間": {
+        "n": 633,
+        "win_rate_pct": 52.3,
+        "avg_win_pct": 4.54,
+        "avg_loss_pct": -4.19,
+        "payoff_ratio": 1.08,
+        "expectancy_pct": 0.374,
+        "excess_expectancy_pct": -0.083,
+        "avg_hold_days": 4.9,
+        "open_at_end": 15
+      }
+    },
+    "① 上昇トレンドの押し目買い 5日・ATR×2・地合いあり": {
+      "全期間": {
+        "n": 793,
+        "win_rate_pct": 51.2,
+        "avg_win_pct": 4.38,
+        "avg_loss_pct": -4.08,
+        "payoff_ratio": 1.07,
+        "expectancy_pct": 0.252,
+        "excess_expectancy_pct": -0.184,
+        "avg_hold_days": 4.9,
+        "open_at_end": 0
+      },
+      "検証期間": {
+        "n": 562,
+        "win_rate_pct": 50.5,
+        "avg_win_pct": 4.38,
+        "avg_loss_pct": -4.2,
+        "payoff_ratio": 1.04,
+        "expectancy_pct": 0.133,
+        "excess_expectancy_pct": -0.236,
+        "avg_hold_days": 4.9,
+        "open_at_end": 0
+      }
+    },
+    "① 上昇トレンドの押し目買い 5日・ATR×3・地合いなし": {
+      "全期間": {
+        "n": 921,
+        "win_rate_pct": 52.7,
+        "avg_win_pct": 4.5,
+        "avg_loss_pct": -4.13,
+        "payoff_ratio": 1.09,
+        "expectancy_pct": 0.415,
+        "excess_expectancy_pct": -0.005,
+        "avg_hold_days": 4.9,
+        "open_at_end": 15
+      },
+      "検証期間": {
+        "n": 633,
+        "win_rate_pct": 52.4,
+        "avg_win_pct": 4.53,
+        "avg_loss_pct": -4.18,
+        "payoff_ratio": 1.09,
+        "expectancy_pct": 0.391,
+        "excess_expectancy_pct": -0.087,
+        "avg_hold_days": 4.9,
+        "open_at_end": 15
+      }
+    },
+    "① 上昇トレンドの押し目買い 5日・ATR×3・地合いあり": {
+      "全期間": {
+        "n": 793,
+        "win_rate_pct": 51.5,
+        "avg_win_pct": 4.37,
+        "avg_loss_pct": -4.08,
+        "payoff_ratio": 1.07,
+        "expectancy_pct": 0.27,
+        "excess_expectancy_pct": -0.181,
+        "avg_hold_days": 5.0,
+        "open_at_end": 0
+      },
+      "検証期間": {
+        "n": 562,
+        "win_rate_pct": 50.7,
+        "avg_win_pct": 4.37,
+        "avg_loss_pct": -4.18,
+        "payoff_ratio": 1.05,
+        "expectancy_pct": 0.158,
+        "excess_expectancy_pct": -0.236,
+        "avg_hold_days": 5.0,
+        "open_at_end": 0
+      }
+    },
+    "① 上昇トレンドの押し目買い 5日・25日線割れ・地合いなし": {
+      "全期間": {
+        "n": 969,
+        "win_rate_pct": 40.0,
+        "avg_win_pct": 3.05,
+        "avg_loss_pct": -1.99,
+        "payoff_ratio": 1.53,
+        "expectancy_pct": 0.029,
+        "excess_expectancy_pct": -0.063,
+        "avg_hold_days": 2.6,
+        "open_at_end": 5
+      },
+      "検証期間": {
+        "n": 661,
+        "win_rate_pct": 40.5,
+        "avg_win_pct": 3.36,
+        "avg_loss_pct": -2.0,
+        "payoff_ratio": 1.68,
+        "expectancy_pct": 0.171,
+        "excess_expectancy_pct": 0.022,
+        "avg_hold_days": 2.6,
+        "open_at_end": 5
+      }
+    },
+    "① 上昇トレンドの押し目買い 5日・25日線割れ・地合いあり": {
+      "全期間": {
+        "n": 837,
+        "win_rate_pct": 39.3,
+        "avg_win_pct": 2.78,
+        "avg_loss_pct": -1.89,
+        "payoff_ratio": 1.48,
+        "expectancy_pct": -0.05,
+        "excess_expectancy_pct": -0.194,
+        "avg_hold_days": 2.5,
+        "open_at_end": 0
+      },
+      "検証期間": {
+        "n": 587,
+        "win_rate_pct": 40.4,
+        "avg_win_pct": 3.08,
+        "avg_loss_pct": -1.95,
+        "payoff_ratio": 1.58,
+        "expectancy_pct": 0.084,
+        "excess_expectancy_pct": -0.002,
+        "avg_hold_days": 2.6,
+        "open_at_end": 0
+      }
+    },
+    "③ 上方修正後の継続 10日・ATR×2・地合いなし": {
+      "全期間": {
+        "n": 524,
+        "win_rate_pct": 50.4,
+        "avg_win_pct": 7.87,
+        "avg_loss_pct": -5.52,
+        "payoff_ratio": 1.42,
+        "expectancy_pct": 1.224,
+        "excess_expectancy_pct": 0.283,
+        "avg_hold_days": 8.5,
+        "open_at_end": 3
+      },
+      "検証期間": {
+        "n": 348,
+        "win_rate_pct": 53.2,
+        "avg_win_pct": 8.96,
+        "avg_loss_pct": -5.85,
+        "payoff_ratio": 1.53,
+        "expectancy_pct": 2.022,
+        "excess_expectancy_pct": 0.988,
+        "avg_hold_days": 8.4,
+        "open_at_end": 3
+      }
+    },
+    "③ 上方修正後の継続 10日・ATR×2・地合いあり": {
+      "全期間": {
+        "n": 463,
+        "win_rate_pct": 48.4,
+        "avg_win_pct": 7.75,
+        "avg_loss_pct": -5.56,
+        "payoff_ratio": 1.39,
+        "expectancy_pct": 0.877,
+        "excess_expectancy_pct": 0.083,
+        "avg_hold_days": 8.4,
+        "open_at_end": 0
+      },
+      "検証期間": {
+        "n": 319,
+        "win_rate_pct": 52.4,
+        "avg_win_pct": 8.68,
+        "avg_loss_pct": -5.93,
+        "payoff_ratio": 1.47,
+        "expectancy_pct": 1.722,
+        "excess_expectancy_pct": 0.712,
+        "avg_hold_days": 8.3,
+        "open_at_end": 0
+      }
+    },
+    "③ 上方修正後の継続 10日・ATR×3・地合いなし": {
+      "全期間": {
+        "n": 524,
+        "win_rate_pct": 52.9,
+        "avg_win_pct": 7.99,
+        "avg_loss_pct": -6.1,
+        "payoff_ratio": 1.31,
+        "expectancy_pct": 1.353,
+        "excess_expectancy_pct": 0.283,
+        "avg_hold_days": 9.5,
+        "open_at_end": 3
+      },
+      "検証期間": {
+        "n": 348,
+        "win_rate_pct": 55.5,
+        "avg_win_pct": 9.01,
+        "avg_loss_pct": -6.36,
+        "payoff_ratio": 1.42,
+        "expectancy_pct": 2.163,
+        "excess_expectancy_pct": 0.962,
+        "avg_hold_days": 9.4,
+        "open_at_end": 3
+      }
+    },
+    "③ 上方修正後の継続 10日・ATR×3・地合いあり": {
+      "全期間": {
+        "n": 463,
+        "win_rate_pct": 51.0,
+        "avg_win_pct": 7.93,
+        "avg_loss_pct": -6.16,
+        "payoff_ratio": 1.29,
+        "expectancy_pct": 1.02,
+        "excess_expectancy_pct": 0.099,
+        "avg_hold_days": 9.5,
+        "open_at_end": 0
+      },
+      "検証期間": {
+        "n": 319,
+        "win_rate_pct": 54.5,
+        "avg_win_pct": 8.79,
+        "avg_loss_pct": -6.44,
+        "payoff_ratio": 1.37,
+        "expectancy_pct": 1.87,
+        "excess_expectancy_pct": 0.674,
+        "avg_hold_days": 9.4,
+        "open_at_end": 0
+      }
+    },
+    "③ 上方修正後の継続 10日・25日線割れ・地合いなし": {
+      "全期間": {
+        "n": 524,
+        "win_rate_pct": 51.9,
+        "avg_win_pct": 8.0,
+        "avg_loss_pct": -5.93,
+        "payoff_ratio": 1.35,
+        "expectancy_pct": 1.299,
+        "excess_expectancy_pct": 0.28,
+        "avg_hold_days": 9.3,
+        "open_at_end": 2
+      },
+      "検証期間": {
+        "n": 348,
+        "win_rate_pct": 54.9,
+        "avg_win_pct": 8.92,
+        "avg_loss_pct": -6.01,
+        "payoff_ratio": 1.48,
+        "expectancy_pct": 2.181,
+        "excess_expectancy_pct": 0.995,
+        "avg_hold_days": 9.2,
+        "open_at_end": 2
+      }
+    },
+    "③ 上方修正後の継続 10日・25日線割れ・地合いあり": {
+      "全期間": {
+        "n": 463,
+        "win_rate_pct": 50.5,
+        "avg_win_pct": 8.01,
+        "avg_loss_pct": -6.02,
+        "payoff_ratio": 1.33,
+        "expectancy_pct": 1.071,
+        "excess_expectancy_pct": 0.198,
+        "avg_hold_days": 9.4,
+        "open_at_end": 0
+      },
+      "検証期間": {
+        "n": 319,
+        "win_rate_pct": 54.9,
+        "avg_win_pct": 8.79,
+        "avg_loss_pct": -6.17,
+        "payoff_ratio": 1.42,
+        "expectancy_pct": 2.035,
+        "excess_expectancy_pct": 0.87,
+        "avg_hold_days": 9.3,
+        "open_at_end": 0
+      }
+    },
+    "③ 上方修正後の継続 20日・ATR×2・地合いなし": {
+      "全期間": {
+        "n": 524,
+        "win_rate_pct": 47.5,
+        "avg_win_pct": 9.01,
+        "avg_loss_pct": -5.99,
+        "payoff_ratio": 1.51,
+        "expectancy_pct": 1.142,
+        "excess_expectancy_pct": 0.041,
+        "avg_hold_days": 13.2,
+        "open_at_end": 6
+      },
+      "検証期間": {
+        "n": 348,
+        "win_rate_pct": 49.4,
+        "avg_win_pct": 10.19,
+        "avg_loss_pct": -6.19,
+        "payoff_ratio": 1.65,
+        "expectancy_pct": 1.909,
+        "excess_expectancy_pct": 0.803,
+        "avg_hold_days": 13.0,
+        "open_at_end": 6
+      }
+    },
+    "③ 上方修正後の継続 20日・ATR×2・地合いあり": {
+      "全期間": {
+        "n": 463,
+        "win_rate_pct": 46.4,
+        "avg_win_pct": 8.89,
+        "avg_loss_pct": -6.02,
+        "payoff_ratio": 1.48,
+        "expectancy_pct": 0.906,
+        "excess_expectancy_pct": -0.009,
+        "avg_hold_days": 13.1,
+        "open_at_end": 2
+      },
+      "検証期間": {
+        "n": 319,
+        "win_rate_pct": 48.6,
+        "avg_win_pct": 10.16,
+        "avg_loss_pct": -6.2,
+        "payoff_ratio": 1.64,
+        "expectancy_pct": 1.748,
+        "excess_expectancy_pct": 0.668,
+        "avg_hold_days": 13.0,
+        "open_at_end": 2
+      }
+    },
+    "③ 上方修正後の継続 20日・ATR×3・地合いなし": {
+      "全期間": {
+        "n": 524,
+        "win_rate_pct": 53.6,
+        "avg_win_pct": 9.96,
+        "avg_loss_pct": -7.51,
+        "payoff_ratio": 1.33,
+        "expectancy_pct": 1.861,
+        "excess_expectancy_pct": 0.413,
+        "avg_hold_days": 16.7,
+        "open_at_end": 11
+      },
+      "検証期間": {
+        "n": 348,
+        "win_rate_pct": 56.3,
+        "avg_win_pct": 10.8,
+        "avg_loss_pct": -7.9,
+        "payoff_ratio": 1.37,
+        "expectancy_pct": 2.629,
+        "excess_expectancy_pct": 1.144,
+        "avg_hold_days": 16.4,
+        "open_at_end": 11
+      }
+    },
+    "③ 上方修正後の継続 20日・ATR×3・地合いあり": {
+      "全期間": {
+        "n": 463,
+        "win_rate_pct": 52.7,
+        "avg_win_pct": 9.77,
+        "avg_loss_pct": -7.55,
+        "payoff_ratio": 1.29,
+        "expectancy_pct": 1.579,
+        "excess_expectancy_pct": 0.339,
+        "avg_hold_days": 16.7,
+        "open_at_end": 7
+      },
+      "検証期間": {
+        "n": 319,
+        "win_rate_pct": 56.1,
+        "avg_win_pct": 10.54,
+        "avg_loss_pct": -7.96,
+        "payoff_ratio": 1.32,
+        "expectancy_pct": 2.423,
+        "excess_expectancy_pct": 0.931,
+        "avg_hold_days": 16.5,
+        "open_at_end": 7
+      }
+    },
+    "③ 上方修正後の継続 20日・25日線割れ・地合いなし": {
+      "全期間": {
+        "n": 524,
+        "win_rate_pct": 48.5,
+        "avg_win_pct": 10.37,
+        "avg_loss_pct": -7.01,
+        "payoff_ratio": 1.48,
+        "expectancy_pct": 1.418,
+        "excess_expectancy_pct": 0.304,
+        "avg_hold_days": 16.2,
+        "open_at_end": 8
+      },
+      "検証期間": {
+        "n": 348,
+        "win_rate_pct": 50.3,
+        "avg_win_pct": 11.36,
+        "avg_loss_pct": -7.14,
+        "payoff_ratio": 1.59,
+        "expectancy_pct": 2.164,
+        "excess_expectancy_pct": 1.034,
+        "avg_hold_days": 16.1,
+        "open_at_end": 8
+      }
+    },
+    "③ 上方修正後の継続 20日・25日線割れ・地合いあり": {
+      "全期間": {
+        "n": 463,
+        "win_rate_pct": 47.5,
+        "avg_win_pct": 10.28,
+        "avg_loss_pct": -7.16,
+        "payoff_ratio": 1.44,
+        "expectancy_pct": 1.127,
+        "excess_expectancy_pct": 0.227,
+        "avg_hold_days": 16.4,
+        "open_at_end": 5
+      },
+      "検証期間": {
+        "n": 319,
+        "win_rate_pct": 50.2,
+        "avg_win_pct": 11.24,
+        "avg_loss_pct": -7.29,
+        "payoff_ratio": 1.54,
+        "expectancy_pct": 2.006,
+        "excess_expectancy_pct": 0.897,
+        "avg_hold_days": 16.5,
+        "open_at_end": 5
+      }
+    },
+    "③ 上方修正後の継続 5日・ATR×2・地合いなし": {
+      "全期間": {
+        "n": 524,
+        "win_rate_pct": 49.6,
+        "avg_win_pct": 5.29,
+        "avg_loss_pct": -4.56,
+        "payoff_ratio": 1.16,
+        "expectancy_pct": 0.327,
+        "excess_expectancy_pct": -0.227,
+        "avg_hold_days": 4.8,
+        "open_at_end": 2
+      },
+      "検証期間": {
+        "n": 348,
+        "win_rate_pct": 52.3,
+        "avg_win_pct": 5.91,
+        "avg_loss_pct": -5.0,
+        "payoff_ratio": 1.18,
+        "expectancy_pct": 0.708,
+        "excess_expectancy_pct": 0.127,
+        "avg_hold_days": 4.8,
+        "open_at_end": 2
+      }
+    },
+    "③ 上方修正後の継続 5日・ATR×2・地合いあり": {
+      "全期間": {
+        "n": 463,
+        "win_rate_pct": 48.2,
+        "avg_win_pct": 5.24,
+        "avg_loss_pct": -4.71,
+        "payoff_ratio": 1.11,
+        "expectancy_pct": 0.082,
+        "excess_expectancy_pct": -0.359,
+        "avg_hold_days": 4.8,
+        "open_at_end": 0
+      },
+      "検証期間": {
+        "n": 319,
+        "win_rate_pct": 51.4,
+        "avg_win_pct": 5.78,
+        "avg_loss_pct": -5.22,
+        "payoff_ratio": 1.11,
+        "expectancy_pct": 0.435,
+        "excess_expectancy_pct": -0.043,
+        "avg_hold_days": 4.8,
+        "open_at_end": 0
+      }
+    },
+    "③ 上方修正後の継続 5日・ATR×3・地合いなし": {
+      "全期間": {
+        "n": 524,
+        "win_rate_pct": 50.2,
+        "avg_win_pct": 5.3,
+        "avg_loss_pct": -4.54,
+        "payoff_ratio": 1.17,
+        "expectancy_pct": 0.399,
+        "excess_expectancy_pct": -0.194,
+        "avg_hold_days": 5.0,
+        "open_at_end": 2
+      },
+      "検証期間": {
+        "n": 348,
+        "win_rate_pct": 52.9,
+        "avg_win_pct": 5.92,
+        "avg_loss_pct": -4.95,
+        "payoff_ratio": 1.2,
+        "expectancy_pct": 0.798,
+        "excess_expectancy_pct": 0.173,
+        "avg_hold_days": 4.9,
+        "open_at_end": 2
+      }
+    },
+    "③ 上方修正後の継続 5日・ATR×3・地合いあり": {
+      "全期間": {
+        "n": 463,
+        "win_rate_pct": 48.8,
+        "avg_win_pct": 5.26,
+        "avg_loss_pct": -4.71,
+        "payoff_ratio": 1.12,
+        "expectancy_pct": 0.153,
+        "excess_expectancy_pct": -0.328,
+        "avg_hold_days": 5.0,
+        "open_at_end": 0
+      },
+      "検証期間": {
+        "n": 319,
+        "win_rate_pct": 52.0,
+        "avg_win_pct": 5.79,
+        "avg_loss_pct": -5.17,
+        "payoff_ratio": 1.12,
+        "expectancy_pct": 0.534,
+        "excess_expectancy_pct": 0.009,
+        "avg_hold_days": 4.9,
+        "open_at_end": 0
+      }
+    },
+    "③ 上方修正後の継続 5日・25日線割れ・地合いなし": {
+      "全期間": {
+        "n": 524,
+        "win_rate_pct": 50.0,
+        "avg_win_pct": 5.28,
+        "avg_loss_pct": -4.41,
+        "payoff_ratio": 1.2,
+        "expectancy_pct": 0.438,
+        "excess_expectancy_pct": -0.139,
+        "avg_hold_days": 4.9,
+        "open_at_end": 1
+      },
+      "検証期間": {
+        "n": 348,
+        "win_rate_pct": 52.6,
+        "avg_win_pct": 5.9,
+        "avg_loss_pct": -4.77,
+        "payoff_ratio": 1.24,
+        "expectancy_pct": 0.839,
+        "excess_expectancy_pct": 0.214,
+        "avg_hold_days": 4.8,
+        "open_at_end": 1
+      }
+    },
+    "③ 上方修正後の継続 5日・25日線割れ・地合いあり": {
+      "全期間": {
+        "n": 463,
+        "win_rate_pct": 48.8,
+        "avg_win_pct": 5.26,
+        "avg_loss_pct": -4.58,
+        "payoff_ratio": 1.15,
+        "expectancy_pct": 0.219,
+        "excess_expectancy_pct": -0.265,
+        "avg_hold_days": 4.9,
+        "open_at_end": 0
+      },
+      "検証期間": {
+        "n": 319,
+        "win_rate_pct": 52.0,
+        "avg_win_pct": 5.79,
+        "avg_loss_pct": -5.02,
+        "payoff_ratio": 1.15,
+        "expectancy_pct": 0.608,
+        "excess_expectancy_pct": 0.08,
+        "avg_hold_days": 4.9,
+        "open_at_end": 0
+      }
+    }
+  },
+  "reality_check": {
+    "n_configs": 54,
+    "p_best": 0.695,
+    "cost_pct": 0.3,
+    "top": [
+      {
+        "name": "① 上昇トレンドの押し目買い 20日・ATR×2・地合いなし",
+        "t": 1.06,
+        "p_adjusted": 0.695,
+        "summary": {
+          "days": 357,
+          "active_days": null,
+          "mean_daily_pct": 0.0334,
+          "annual_pct": 8.19,
+          "ir_annual": 0.88,
+          "total_pct": 11.94,
+          "max_drawdown_pct": -9.28
+        }
+      },
+      {
+        "name": "① 上昇トレンドの押し目買い 20日・ATR×3・地合いなし",
+        "t": 0.95,
+        "p_adjusted": 0.745,
+        "summary": {
+          "days": 357,
+          "active_days": null,
+          "mean_daily_pct": 0.0269,
+          "annual_pct": 6.58,
+          "ir_annual": 0.79,
+          "total_pct": 9.59,
+          "max_drawdown_pct": -8.49
+        }
+      },
+      {
+        "name": "① 上昇トレンドの押し目買い 20日・25日線割れ・地合いなし",
+        "t": 0.67,
+        "p_adjusted": 0.8505,
+        "summary": {
+          "days": 357,
+          "active_days": null,
+          "mean_daily_pct": 0.0303,
+          "annual_pct": 7.42,
+          "ir_annual": 0.56,
+          "total_pct": 10.81,
+          "max_drawdown_pct": -18.72
+        }
+      },
+      {
+        "name": "① 上昇トレンドの押し目買い 10日・ATR×2・地合いなし",
+        "t": 0.23,
+        "p_adjusted": 0.956,
+        "summary": {
+          "days": 357,
+          "active_days": null,
+          "mean_daily_pct": 0.0083,
+          "annual_pct": 2.04,
+          "ir_annual": 0.19,
+          "total_pct": 2.97,
+          "max_drawdown_pct": -11.95
+        }
+      },
+      {
+        "name": "① 上昇トレンドの押し目買い 10日・ATR×3・地合いなし",
+        "t": 0.23,
+        "p_adjusted": 0.956,
+        "summary": {
+          "days": 357,
+          "active_days": null,
+          "mean_daily_pct": 0.0079,
+          "annual_pct": 1.93,
+          "ir_annual": 0.19,
+          "total_pct": 2.81,
+          "max_drawdown_pct": -11.8
+        }
+      },
+      {
+        "name": "① 上昇トレンドの押し目買い 10日・25日線割れ・地合いなし",
+        "t": 0.16,
+        "p_adjusted": 0.962,
+        "summary": {
+          "days": 357,
+          "active_days": null,
+          "mean_daily_pct": 0.0067,
+          "annual_pct": 1.64,
+          "ir_annual": 0.13,
+          "total_pct": 2.39,
+          "max_drawdown_pct": -21.38
+        }
+      },
+      {
+        "name": "① 上昇トレンドの押し目買い 20日・ATR×2・地合いあり",
+        "t": 0.09,
+        "p_adjusted": 0.9745,
+        "summary": {
+          "days": 357,
+          "active_days": null,
+          "mean_daily_pct": 0.0028,
+          "annual_pct": 0.7,
+          "ir_annual": 0.08,
+          "total_pct": 1.01,
+          "max_drawdown_pct": -13.05
+        }
+      },
+      {
+        "name": "① 上昇トレンドの押し目買い 20日・25日線割れ・地合いあり",
+        "t": 0.06,
+        "p_adjusted": 0.979,
+        "summary": {
+          "days": 357,
+          "active_days": null,
+          "mean_daily_pct": 0.0021,
+          "annual_pct": 0.52,
+          "ir_annual": 0.05,
+          "total_pct": 0.76,
+          "max_drawdown_pct": -21.61
+        }
+      },
+      {
+        "name": "① 上昇トレンドの押し目買い 20日・ATR×3・地合いあり",
+        "t": -0.12,
+        "p_adjusted": 0.989,
+        "summary": {
+          "days": 357,
+          "active_days": null,
+          "mean_daily_pct": -0.0034,
+          "annual_pct": -0.83,
+          "ir_annual": -0.1,
+          "total_pct": -1.2,
+          "max_drawdown_pct": -12.87
+        }
+      },
+      {
+        "name": "① 上昇トレンドの押し目買い 5日・25日線割れ・地合いなし",
+        "t": -0.47,
+        "p_adjusted": 0.999,
+        "summary": {
+          "days": 357,
+          "active_days": null,
+          "mean_daily_pct": -0.0177,
+          "annual_pct": -4.34,
+          "ir_annual": -0.39,
+          "total_pct": -6.32,
+          "max_drawdown_pct": -21.84
+        }
+      },
+      {
+        "name": "① 上昇トレンドの押し目買い 5日・ATR×2・地合いなし",
+        "t": -0.51,
+        "p_adjusted": 0.999,
+        "summary": {
+          "days": 357,
+          "active_days": null,
+          "mean_daily_pct": -0.0217,
+          "annual_pct": -5.32,
+          "ir_annual": -0.42,
+          "total_pct": -7.75,
+          "max_drawdown_pct": -18.18
+        }
+      },
+      {
+        "name": "① 上昇トレンドの押し目買い 5日・ATR×3・地合いなし",
+        "t": -0.53,
+        "p_adjusted": 0.999,
+        "summary": {
+          "days": 357,
+          "active_days": null,
+          "mean_daily_pct": -0.0222,
+          "annual_pct": -5.44,
+          "ir_annual": -0.44,
+          "total_pct": -7.93,
+          "max_drawdown_pct": -17.58
+        }
+      },
+      {
+        "name": "① 上昇トレンドの押し目買い 10日・ATR×2・地合いあり",
+        "t": -0.53,
+        "p_adjusted": 0.999,
+        "summary": {
+          "days": 357,
+          "active_days": null,
+          "mean_daily_pct": -0.0184,
+          "annual_pct": -4.5,
+          "ir_annual": -0.44,
+          "total_pct": -6.55,
+          "max_drawdown_pct": -15.55
+        }
+      },
+      {
+        "name": "① 上昇トレンドの押し目買い 10日・25日線割れ・地合いあり",
+        "t": -0.6,
+        "p_adjusted": 0.999,
+        "summary": {
+          "days": 357,
+          "active_days": null,
+          "mean_daily_pct": -0.021,
+          "annual_pct": -5.15,
+          "ir_annual": -0.5,
+          "total_pct": -7.5,
+          "max_drawdown_pct": -23.66
+        }
+      },
+      {
+        "name": "① 上昇トレンドの押し目買い 10日・ATR×3・地合いあり",
+        "t": -0.66,
+        "p_adjusted": 0.999,
+        "summary": {
+          "days": 357,
+          "active_days": null,
+          "mean_daily_pct": -0.0227,
+          "annual_pct": -5.57,
+          "ir_annual": -0.55,
+          "total_pct": -8.11,
+          "max_drawdown_pct": -15.61
+        }
+      }
+    ]
+  },
+  "meta": {
+    "code": {
+      "git_commit": "b5015cfa58a56c747cd962f6a9b3cb2ca37302f9",
+      "git_dirty": true,
+      "file_sha256": {
+        "evaluate_swing.py": "0f0efe4061af53e9",
+        "evaluate_walkforward.py": "5fb09379515e5bfa",
+        "swing_strategies.py": "6acb422ca6730ab1",
+        "universe_filters.py": "18dfc67a76342458",
+        "validation.py": "abb011a0ded47008"
+      }
+    },
+    "data_fingerprint_sha256": "5d497ce1b31bea578678b645e9ff7b60c4f2dbf3b21e58a8e144e1576ad8cfd1",
+    "tickers": 3979,
+    "environment": {
+      "python": "3.11.9",
+      "pandas": "3.0.5",
+      "numpy": "2.4.6",
+      "platform": "Windows-10-10.0.26300-SP0"
+    },
+    "params": {
+      "top_n": 5,
+      "hold_grid": [
+        5,
+        10,
+        20
+      ],
+      "stop_grid": [
+        "atr2",
+        "atr3",
+        "ma25"
+      ],
+      "regime_grid": [
+        false,
+        true
+      ],
+      "default_cfg": [
+        10,
+        "ma25",
+        true
+      ],
+      "revision_min_pct": 5.0,
+      "warmup_rows": 140,
+      "costs": [
+        0.1,
+        0.3,
+        0.5
+      ],
+      "slots": 10,
+      "n_boot": 2000,
+      "mean_block": 20
+    }
+  }
+}

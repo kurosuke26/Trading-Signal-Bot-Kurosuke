@@ -1,0 +1,6535 @@
+{
+  "families": {
+    "0.1": [
+      {
+        "name": "スクリーニングLONG（スコア下限×ATR倍率を毎回選ぶ）",
+        "excess": {
+          "days": 291,
+          "active_days": 245,
+          "mean_daily_pct": 0.0535,
+          "annual_pct": 13.1,
+          "ir_annual": 0.96,
+          "total_pct": 15.56,
+          "max_drawdown_pct": -8.44
+        },
+        "raw": {
+          "days": 291,
+          "active_days": null,
+          "mean_daily_pct": 0.1639,
+          "annual_pct": 40.16,
+          "ir_annual": 2.21,
+          "total_pct": 47.7,
+          "max_drawdown_pct": -10.78
+        },
+        "test": {
+          "mean_daily_pct": 0.0535,
+          "ci95_daily_pct": [
+            -0.0383,
+            0.1587
+          ],
+          "p_value": 0.155,
+          "p_holm": 1.0,
+          "q_bh": 0.4342
+        },
+        "folds": [
+          {
+            "period": [
+              "2025-04-18",
+              "2025-07-18"
+            ],
+            "picked": "('なし', 0, 1.0)",
+            "excess_total_pct": -3.86
+          },
+          {
+            "period": [
+              "2025-07-22",
+              "2025-10-22"
+            ],
+            "picked": "('なし', 0, 1.0)",
+            "excess_total_pct": -1.46
+          },
+          {
+            "period": [
+              "2025-10-23",
+              "2026-01-27"
+            ],
+            "picked": "('なし', 85, 2.0)",
+            "excess_total_pct": 17.55
+          },
+          {
+            "period": [
+              "2026-01-28",
+              "2026-04-30"
+            ],
+            "picked": "('なし', 85, 2.0)",
+            "excess_total_pct": -1.7
+          },
+          {
+            "period": [
+              "2026-05-01",
+              "2026-06-29"
+            ],
+            "picked": "('なし', 85, 2.0)",
+            "excess_total_pct": 5.04
+          }
+        ]
+      },
+      {
+        "name": "スクリーニングLONG＋売りパターン除外（当日）（スコア下限×ATR倍率を毎回選ぶ）",
+        "excess": {
+          "days": 291,
+          "active_days": 245,
+          "mean_daily_pct": 0.0499,
+          "annual_pct": 12.23,
+          "ir_annual": 0.9,
+          "total_pct": 14.52,
+          "max_drawdown_pct": -8.44
+        },
+        "raw": {
+          "days": 291,
+          "active_days": null,
+          "mean_daily_pct": 0.1604,
+          "annual_pct": 39.29,
+          "ir_annual": 2.16,
+          "total_pct": 46.66,
+          "max_drawdown_pct": -10.78
+        },
+        "test": {
+          "mean_daily_pct": 0.0499,
+          "ci95_daily_pct": [
+            -0.0407,
+            0.156
+          ],
+          "p_value": 0.167,
+          "p_holm": 1.0,
+          "q_bh": 0.4342
+        },
+        "folds": [
+          {
+            "period": [
+              "2025-04-18",
+              "2025-07-18"
+            ],
+            "picked": "('当日', 0, 1.0)",
+            "excess_total_pct": -4.13
+          },
+          {
+            "period": [
+              "2025-07-22",
+              "2025-10-22"
+            ],
+            "picked": "('当日', 0, 1.0)",
+            "excess_total_pct": -2.23
+          },
+          {
+            "period": [
+              "2025-10-23",
+              "2026-01-27"
+            ],
+            "picked": "('当日', 85, 2.0)",
+            "excess_total_pct": 17.55
+          },
+          {
+            "period": [
+              "2026-01-28",
+              "2026-04-30"
+            ],
+            "picked": "('当日', 85, 2.0)",
+            "excess_total_pct": -1.7
+          },
+          {
+            "period": [
+              "2026-05-01",
+              "2026-06-29"
+            ],
+            "picked": "('当日', 85, 2.0)",
+            "excess_total_pct": 5.04
+          }
+        ]
+      },
+      {
+        "name": "スクリーニングLONG＋売りパターン除外（直近5日）（スコア下限×ATR倍率を毎回選ぶ）",
+        "excess": {
+          "days": 291,
+          "active_days": 271,
+          "mean_daily_pct": 0.0153,
+          "annual_pct": 3.74,
+          "ir_annual": 0.38,
+          "total_pct": 4.44,
+          "max_drawdown_pct": -11.21
+        },
+        "raw": {
+          "days": 291,
+          "active_days": null,
+          "mean_daily_pct": 0.1193,
+          "annual_pct": 29.24,
+          "ir_annual": 1.69,
+          "total_pct": 34.73,
+          "max_drawdown_pct": -14.7
+        },
+        "test": {
+          "mean_daily_pct": 0.0153,
+          "ci95_daily_pct": [
+            -0.0554,
+            0.0881
+          ],
+          "p_value": 0.343,
+          "p_holm": 1.0,
+          "q_bh": 0.6269
+        },
+        "folds": [
+          {
+            "period": [
+              "2025-04-18",
+              "2025-07-18"
+            ],
+            "picked": "('直近5日', 0, 1.0)",
+            "excess_total_pct": -4.28
+          },
+          {
+            "period": [
+              "2025-07-22",
+              "2025-10-22"
+            ],
+            "picked": "('直近5日', 60, 1.0)",
+            "excess_total_pct": -2.22
+          },
+          {
+            "period": [
+              "2025-10-23",
+              "2026-01-27"
+            ],
+            "picked": "('直近5日', 85, 5.0)",
+            "excess_total_pct": 8.16
+          },
+          {
+            "period": [
+              "2026-01-28",
+              "2026-04-30"
+            ],
+            "picked": "('直近5日', 85, 5.0)",
+            "excess_total_pct": -2.25
+          },
+          {
+            "period": [
+              "2026-05-01",
+              "2026-06-29"
+            ],
+            "picked": "('直近5日', 85, 2.0)",
+            "excess_total_pct": 5.04
+          }
+        ]
+      },
+      {
+        "name": "スクリーニングLONG（除外の有無もスコア下限×ATR倍率と一緒に毎回選ぶ）",
+        "excess": {
+          "days": 291,
+          "active_days": 245,
+          "mean_daily_pct": 0.0535,
+          "annual_pct": 13.1,
+          "ir_annual": 0.96,
+          "total_pct": 15.56,
+          "max_drawdown_pct": -8.44
+        },
+        "raw": {
+          "days": 291,
+          "active_days": null,
+          "mean_daily_pct": 0.1639,
+          "annual_pct": 40.16,
+          "ir_annual": 2.21,
+          "total_pct": 47.7,
+          "max_drawdown_pct": -10.78
+        },
+        "test": {
+          "mean_daily_pct": 0.0535,
+          "ci95_daily_pct": [
+            -0.0383,
+            0.1587
+          ],
+          "p_value": 0.155,
+          "p_holm": 1.0,
+          "q_bh": 0.4342
+        },
+        "folds": [
+          {
+            "period": [
+              "2025-04-18",
+              "2025-07-18"
+            ],
+            "picked": "('なし', 0, 1.0)",
+            "excess_total_pct": -3.86
+          },
+          {
+            "period": [
+              "2025-07-22",
+              "2025-10-22"
+            ],
+            "picked": "('なし', 0, 1.0)",
+            "excess_total_pct": -1.46
+          },
+          {
+            "period": [
+              "2025-10-23",
+              "2026-01-27"
+            ],
+            "picked": "('当日', 85, 2.0)",
+            "excess_total_pct": 17.55
+          },
+          {
+            "period": [
+              "2026-01-28",
+              "2026-04-30"
+            ],
+            "picked": "('当日', 85, 2.0)",
+            "excess_total_pct": -1.7
+          },
+          {
+            "period": [
+              "2026-05-01",
+              "2026-06-29"
+            ],
+            "picked": "('当日', 85, 2.0)",
+            "excess_total_pct": 5.04
+          }
+        ]
+      },
+      {
+        "name": "スクリーニングSHORT（ATR倍率を毎回選ぶ）",
+        "excess": {
+          "days": 291,
+          "active_days": 291,
+          "mean_daily_pct": 0.1021,
+          "annual_pct": 25.01,
+          "ir_annual": 1.27,
+          "total_pct": 29.7,
+          "max_drawdown_pct": -20.87
+        },
+        "raw": {
+          "days": 291,
+          "active_days": null,
+          "mean_daily_pct": -0.0305,
+          "annual_pct": -7.48,
+          "ir_annual": -0.27,
+          "total_pct": -8.88,
+          "max_drawdown_pct": -31.52
+        },
+        "test": {
+          "mean_daily_pct": 0.1021,
+          "ci95_daily_pct": [
+            -0.0377,
+            0.2295
+          ],
+          "p_value": 0.0695,
+          "p_holm": 1.0,
+          "q_bh": 0.3012
+        },
+        "folds": [
+          {
+            "period": [
+              "2025-04-18",
+              "2025-07-18"
+            ],
+            "picked": "1.0",
+            "excess_total_pct": 8.25
+          },
+          {
+            "period": [
+              "2025-07-22",
+              "2025-10-22"
+            ],
+            "picked": "1.0",
+            "excess_total_pct": 15.67
+          },
+          {
+            "period": [
+              "2025-10-23",
+              "2026-01-27"
+            ],
+            "picked": "1.0",
+            "excess_total_pct": -4.55
+          },
+          {
+            "period": [
+              "2026-01-28",
+              "2026-04-30"
+            ],
+            "picked": "1.0",
+            "excess_total_pct": 6.05
+          },
+          {
+            "period": [
+              "2026-05-01",
+              "2026-06-29"
+            ],
+            "picked": "5.0",
+            "excess_total_pct": 4.28
+          }
+        ]
+      },
+      {
+        "name": "酒田五法：N字（買い）（ATR倍率を毎回選ぶ）",
+        "excess": {
+          "days": 291,
+          "active_days": 291,
+          "mean_daily_pct": 0.0086,
+          "annual_pct": 2.12,
+          "ir_annual": 0.33,
+          "total_pct": 2.51,
+          "max_drawdown_pct": -5.72
+        },
+        "raw": {
+          "days": 291,
+          "active_days": null,
+          "mean_daily_pct": 0.1412,
+          "annual_pct": 34.6,
+          "ir_annual": 2.02,
+          "total_pct": 41.09,
+          "max_drawdown_pct": -9.87
+        },
+        "test": {
+          "mean_daily_pct": 0.0086,
+          "ci95_daily_pct": [
+            -0.0487,
+            0.0548
+          ],
+          "p_value": 0.4165,
+          "p_holm": 1.0,
+          "q_bh": 0.6269
+        },
+        "folds": [
+          {
+            "period": [
+              "2025-04-18",
+              "2025-07-18"
+            ],
+            "picked": "4.0",
+            "excess_total_pct": -1.82
+          },
+          {
+            "period": [
+              "2025-07-22",
+              "2025-10-22"
+            ],
+            "picked": "3.0",
+            "excess_total_pct": 0.15
+          },
+          {
+            "period": [
+              "2025-10-23",
+              "2026-01-27"
+            ],
+            "picked": "3.5",
+            "excess_total_pct": 3.55
+          },
+          {
+            "period": [
+              "2026-01-28",
+              "2026-04-30"
+            ],
+            "picked": "3.0",
+            "excess_total_pct": 1.56
+          },
+          {
+            "period": [
+              "2026-05-01",
+              "2026-06-29"
+            ],
+            "picked": "3.0",
+            "excess_total_pct": -0.93
+          }
+        ]
+      },
+      {
+        "name": "酒田五法：V字（買い）（ATR倍率を毎回選ぶ）",
+        "excess": {
+          "days": 291,
+          "active_days": 291,
+          "mean_daily_pct": 0.0209,
+          "annual_pct": 5.13,
+          "ir_annual": 0.92,
+          "total_pct": 6.09,
+          "max_drawdown_pct": -3.93
+        },
+        "raw": {
+          "days": 291,
+          "active_days": null,
+          "mean_daily_pct": 0.1535,
+          "annual_pct": 37.61,
+          "ir_annual": 2.03,
+          "total_pct": 44.67,
+          "max_drawdown_pct": -11.48
+        },
+        "test": {
+          "mean_daily_pct": 0.0209,
+          "ci95_daily_pct": [
+            -0.0097,
+            0.0598
+          ],
+          "p_value": 0.1295,
+          "p_holm": 1.0,
+          "q_bh": 0.4342
+        },
+        "folds": [
+          {
+            "period": [
+              "2025-04-18",
+              "2025-07-18"
+            ],
+            "picked": "6.0",
+            "excess_total_pct": -1.07
+          },
+          {
+            "period": [
+              "2025-07-22",
+              "2025-10-22"
+            ],
+            "picked": "6.0",
+            "excess_total_pct": -1.61
+          },
+          {
+            "period": [
+              "2025-10-23",
+              "2026-01-27"
+            ],
+            "picked": "5.0",
+            "excess_total_pct": -0.49
+          },
+          {
+            "period": [
+              "2026-01-28",
+              "2026-04-30"
+            ],
+            "picked": "5.0",
+            "excess_total_pct": 3.75
+          },
+          {
+            "period": [
+              "2026-05-01",
+              "2026-06-29"
+            ],
+            "picked": "5.0",
+            "excess_total_pct": 5.51
+          }
+        ]
+      },
+      {
+        "name": "酒田五法：たすき線（売り）（ATR倍率を毎回選ぶ）",
+        "excess": {
+          "days": 291,
+          "active_days": 285,
+          "mean_daily_pct": -0.0284,
+          "annual_pct": -6.96,
+          "ir_annual": -0.76,
+          "total_pct": -8.27,
+          "max_drawdown_pct": -12.97
+        },
+        "raw": {
+          "days": 291,
+          "active_days": null,
+          "mean_daily_pct": -0.1491,
+          "annual_pct": -36.53,
+          "ir_annual": -2.0,
+          "total_pct": -43.39,
+          "max_drawdown_pct": -44.31
+        },
+        "test": {
+          "mean_daily_pct": -0.0284,
+          "ci95_daily_pct": [
+            -0.0924,
+            0.041
+          ],
+          "p_value": 0.8135,
+          "p_holm": 1.0,
+          "q_bh": 0.9682
+        },
+        "folds": [
+          {
+            "period": [
+              "2025-04-18",
+              "2025-07-18"
+            ],
+            "picked": "1.5",
+            "excess_total_pct": -5.79
+          },
+          {
+            "period": [
+              "2025-07-22",
+              "2025-10-22"
+            ],
+            "picked": "1.5",
+            "excess_total_pct": -4.76
+          },
+          {
+            "period": [
+              "2025-10-23",
+              "2026-01-27"
+            ],
+            "picked": "2.0",
+            "excess_total_pct": 3.8
+          },
+          {
+            "period": [
+              "2026-01-28",
+              "2026-04-30"
+            ],
+            "picked": "2.0",
+            "excess_total_pct": 1.33
+          },
+          {
+            "period": [
+              "2026-05-01",
+              "2026-06-29"
+            ],
+            "picked": "6.0",
+            "excess_total_pct": -2.85
+          }
+        ]
+      },
+      {
+        "name": "酒田五法：たすき線（買い）（ATR倍率を毎回選ぶ）",
+        "excess": {
+          "days": 291,
+          "active_days": 279,
+          "mean_daily_pct": 0.0163,
+          "annual_pct": 3.98,
+          "ir_annual": 0.33,
+          "total_pct": 4.73,
+          "max_drawdown_pct": -15.48
+        },
+        "raw": {
+          "days": 291,
+          "active_days": null,
+          "mean_daily_pct": 0.1242,
+          "annual_pct": 30.44,
+          "ir_annual": 1.41,
+          "total_pct": 36.15,
+          "max_drawdown_pct": -17.94
+        },
+        "test": {
+          "mean_daily_pct": 0.0163,
+          "ci95_daily_pct": [
+            -0.0963,
+            0.1088
+          ],
+          "p_value": 0.434,
+          "p_holm": 1.0,
+          "q_bh": 0.6269
+        },
+        "folds": [
+          {
+            "period": [
+              "2025-04-18",
+              "2025-07-18"
+            ],
+            "picked": "3.0",
+            "excess_total_pct": -3.36
+          },
+          {
+            "period": [
+              "2025-07-22",
+              "2025-10-22"
+            ],
+            "picked": "3.0",
+            "excess_total_pct": 2.19
+          },
+          {
+            "period": [
+              "2025-10-23",
+              "2026-01-27"
+            ],
+            "picked": "3.0",
+            "excess_total_pct": 4.24
+          },
+          {
+            "period": [
+              "2026-01-28",
+              "2026-04-30"
+            ],
+            "picked": "3.0",
+            "excess_total_pct": 8.83
+          },
+          {
+            "period": [
+              "2026-05-01",
+              "2026-06-29"
+            ],
+            "picked": "3.0",
+            "excess_total_pct": -7.18
+          }
+        ]
+      },
+      {
+        "name": "酒田五法：三兵（売り）（ATR倍率を毎回選ぶ）",
+        "excess": {
+          "days": 291,
+          "active_days": 291,
+          "mean_daily_pct": 0.0399,
+          "annual_pct": 9.77,
+          "ir_annual": 1.26,
+          "total_pct": 11.61,
+          "max_drawdown_pct": -5.6
+        },
+        "raw": {
+          "days": 291,
+          "active_days": null,
+          "mean_daily_pct": -0.0927,
+          "annual_pct": -22.71,
+          "ir_annual": -1.54,
+          "total_pct": -26.98,
+          "max_drawdown_pct": -31.2
+        },
+        "test": {
+          "mean_daily_pct": 0.0399,
+          "ci95_daily_pct": [
+            -0.0026,
+            0.0829
+          ],
+          "p_value": 0.035,
+          "p_holm": 0.805,
+          "q_bh": 0.2275
+        },
+        "folds": [
+          {
+            "period": [
+              "2025-04-18",
+              "2025-07-18"
+            ],
+            "picked": "1.0",
+            "excess_total_pct": -1.31
+          },
+          {
+            "period": [
+              "2025-07-22",
+              "2025-10-22"
+            ],
+            "picked": "1.0",
+            "excess_total_pct": 2.55
+          },
+          {
+            "period": [
+              "2025-10-23",
+              "2026-01-27"
+            ],
+            "picked": "6.0",
+            "excess_total_pct": 4.68
+          },
+          {
+            "period": [
+              "2026-01-28",
+              "2026-04-30"
+            ],
+            "picked": "6.0",
+            "excess_total_pct": 2.93
+          },
+          {
+            "period": [
+              "2026-05-01",
+              "2026-06-29"
+            ],
+            "picked": "6.0",
+            "excess_total_pct": 2.76
+          }
+        ]
+      },
+      {
+        "name": "酒田五法：三兵（買い）（ATR倍率を毎回選ぶ）",
+        "excess": {
+          "days": 291,
+          "active_days": 277,
+          "mean_daily_pct": -0.0205,
+          "annual_pct": -5.02,
+          "ir_annual": -0.65,
+          "total_pct": -5.96,
+          "max_drawdown_pct": -10.85
+        },
+        "raw": {
+          "days": 291,
+          "active_days": null,
+          "mean_daily_pct": 0.0931,
+          "annual_pct": 22.8,
+          "ir_annual": 1.51,
+          "total_pct": 27.08,
+          "max_drawdown_pct": -9.94
+        },
+        "test": {
+          "mean_daily_pct": -0.0205,
+          "ci95_daily_pct": [
+            -0.0585,
+            0.0184
+          ],
+          "p_value": 0.8475,
+          "p_holm": 1.0,
+          "q_bh": 0.9682
+        },
+        "folds": [
+          {
+            "period": [
+              "2025-04-18",
+              "2025-07-18"
+            ],
+            "picked": "3.5",
+            "excess_total_pct": -2.15
+          },
+          {
+            "period": [
+              "2025-07-22",
+              "2025-10-22"
+            ],
+            "picked": "2.5",
+            "excess_total_pct": 0.24
+          },
+          {
+            "period": [
+              "2025-10-23",
+              "2026-01-27"
+            ],
+            "picked": "2.5",
+            "excess_total_pct": -3.1
+          },
+          {
+            "period": [
+              "2026-01-28",
+              "2026-04-30"
+            ],
+            "picked": "2.5",
+            "excess_total_pct": -1.35
+          },
+          {
+            "period": [
+              "2026-05-01",
+              "2026-06-29"
+            ],
+            "picked": "3.0",
+            "excess_total_pct": 0.4
+          }
+        ]
+      },
+      {
+        "name": "酒田五法：三山（売り）（ATR倍率を毎回選ぶ）",
+        "excess": {
+          "days": 291,
+          "active_days": 291,
+          "mean_daily_pct": 0.0378,
+          "annual_pct": 9.27,
+          "ir_annual": 1.72,
+          "total_pct": 11.01,
+          "max_drawdown_pct": -3.3
+        },
+        "raw": {
+          "days": 291,
+          "active_days": null,
+          "mean_daily_pct": -0.0947,
+          "annual_pct": -23.21,
+          "ir_annual": -1.65,
+          "total_pct": -27.57,
+          "max_drawdown_pct": -32.66
+        },
+        "test": {
+          "mean_daily_pct": 0.0378,
+          "ci95_daily_pct": [
+            0.0073,
+            0.0729
+          ],
+          "p_value": 0.0185,
+          "p_holm": 0.4625,
+          "q_bh": 0.2275
+        },
+        "folds": [
+          {
+            "period": [
+              "2025-04-18",
+              "2025-07-18"
+            ],
+            "picked": "6.0",
+            "excess_total_pct": 0.97
+          },
+          {
+            "period": [
+              "2025-07-22",
+              "2025-10-22"
+            ],
+            "picked": "6.0",
+            "excess_total_pct": 0.99
+          },
+          {
+            "period": [
+              "2025-10-23",
+              "2026-01-27"
+            ],
+            "picked": "6.0",
+            "excess_total_pct": 1.89
+          },
+          {
+            "period": [
+              "2026-01-28",
+              "2026-04-30"
+            ],
+            "picked": "6.0",
+            "excess_total_pct": 2.46
+          },
+          {
+            "period": [
+              "2026-05-01",
+              "2026-06-29"
+            ],
+            "picked": "6.0",
+            "excess_total_pct": 4.7
+          }
+        ]
+      },
+      {
+        "name": "酒田五法：三川（買い）（ATR倍率を毎回選ぶ）",
+        "excess": {
+          "days": 291,
+          "active_days": 291,
+          "mean_daily_pct": -0.0296,
+          "annual_pct": -7.25,
+          "ir_annual": -1.08,
+          "total_pct": -8.61,
+          "max_drawdown_pct": -13.8
+        },
+        "raw": {
+          "days": 291,
+          "active_days": null,
+          "mean_daily_pct": 0.103,
+          "annual_pct": 25.23,
+          "ir_annual": 1.61,
+          "total_pct": 29.97,
+          "max_drawdown_pct": -10.73
+        },
+        "test": {
+          "mean_daily_pct": -0.0296,
+          "ci95_daily_pct": [
+            -0.0909,
+            0.0201
+          ],
+          "p_value": 0.856,
+          "p_holm": 1.0,
+          "q_bh": 0.9682
+        },
+        "folds": [
+          {
+            "period": [
+              "2025-04-18",
+              "2025-07-18"
+            ],
+            "picked": "4.0",
+            "excess_total_pct": -8.59
+          },
+          {
+            "period": [
+              "2025-07-22",
+              "2025-10-22"
+            ],
+            "picked": "1.5",
+            "excess_total_pct": -4.7
+          },
+          {
+            "period": [
+              "2025-10-23",
+              "2026-01-27"
+            ],
+            "picked": "5.0",
+            "excess_total_pct": 0.3
+          },
+          {
+            "period": [
+              "2026-01-28",
+              "2026-04-30"
+            ],
+            "picked": "5.0",
+            "excess_total_pct": 0.39
+          },
+          {
+            "period": [
+              "2026-05-01",
+              "2026-06-29"
+            ],
+            "picked": "1.8",
+            "excess_total_pct": 3.99
+          }
+        ]
+      },
+      {
+        "name": "酒田五法：三法（売り）（ATR倍率を毎回選ぶ）",
+        "excess": {
+          "days": 291,
+          "active_days": 277,
+          "mean_daily_pct": 0.0561,
+          "annual_pct": 13.75,
+          "ir_annual": 1.35,
+          "total_pct": 16.33,
+          "max_drawdown_pct": -6.78
+        },
+        "raw": {
+          "days": 291,
+          "active_days": null,
+          "mean_daily_pct": -0.0574,
+          "annual_pct": -14.07,
+          "ir_annual": -0.93,
+          "total_pct": -16.71,
+          "max_drawdown_pct": -23.23
+        },
+        "test": {
+          "mean_daily_pct": 0.0561,
+          "ci95_daily_pct": [
+            0.0021,
+            0.1069
+          ],
+          "p_value": 0.016,
+          "p_holm": 0.416,
+          "q_bh": 0.2275
+        },
+        "folds": [
+          {
+            "period": [
+              "2025-04-18",
+              "2025-07-18"
+            ],
+            "picked": "3.0",
+            "excess_total_pct": 0.8
+          },
+          {
+            "period": [
+              "2025-07-22",
+              "2025-10-22"
+            ],
+            "picked": "3.0",
+            "excess_total_pct": 4.92
+          },
+          {
+            "period": [
+              "2025-10-23",
+              "2026-01-27"
+            ],
+            "picked": "3.0",
+            "excess_total_pct": 6.04
+          },
+          {
+            "period": [
+              "2026-01-28",
+              "2026-04-30"
+            ],
+            "picked": "3.0",
+            "excess_total_pct": 2.64
+          },
+          {
+            "period": [
+              "2026-05-01",
+              "2026-06-29"
+            ],
+            "picked": "2.5",
+            "excess_total_pct": 1.93
+          }
+        ]
+      },
+      {
+        "name": "酒田五法：三法（買い）（ATR倍率を毎回選ぶ）",
+        "excess": {
+          "days": 291,
+          "active_days": 274,
+          "mean_daily_pct": 0.0456,
+          "annual_pct": 11.18,
+          "ir_annual": 0.41,
+          "total_pct": 13.28,
+          "max_drawdown_pct": -25.56
+        },
+        "raw": {
+          "days": 291,
+          "active_days": null,
+          "mean_daily_pct": 0.1483,
+          "annual_pct": 36.34,
+          "ir_annual": 1.19,
+          "total_pct": 43.16,
+          "max_drawdown_pct": -15.64
+        },
+        "test": {
+          "mean_daily_pct": 0.0456,
+          "ci95_daily_pct": [
+            -0.0539,
+            0.1515
+          ],
+          "p_value": 0.197,
+          "p_holm": 1.0,
+          "q_bh": 0.4656
+        },
+        "folds": [
+          {
+            "period": [
+              "2025-04-18",
+              "2025-07-18"
+            ],
+            "picked": "1.0",
+            "excess_total_pct": 2.97
+          },
+          {
+            "period": [
+              "2025-07-22",
+              "2025-10-22"
+            ],
+            "picked": "1.0",
+            "excess_total_pct": -2.01
+          },
+          {
+            "period": [
+              "2025-10-23",
+              "2026-01-27"
+            ],
+            "picked": "1.0",
+            "excess_total_pct": 1.74
+          },
+          {
+            "period": [
+              "2026-01-28",
+              "2026-04-30"
+            ],
+            "picked": "3.0",
+            "excess_total_pct": 1.13
+          },
+          {
+            "period": [
+              "2026-05-01",
+              "2026-06-29"
+            ],
+            "picked": "2.0",
+            "excess_total_pct": 9.45
+          }
+        ]
+      },
+      {
+        "name": "酒田五法：三空（売り）（ATR倍率を毎回選ぶ）",
+        "excess": {
+          "days": 291,
+          "active_days": 282,
+          "mean_daily_pct": 0.015,
+          "annual_pct": 3.68,
+          "ir_annual": 0.26,
+          "total_pct": 4.37,
+          "max_drawdown_pct": -20.59
+        },
+        "raw": {
+          "days": 291,
+          "active_days": null,
+          "mean_daily_pct": -0.1042,
+          "annual_pct": -25.52,
+          "ir_annual": -1.2,
+          "total_pct": -30.31,
+          "max_drawdown_pct": -50.36
+        },
+        "test": {
+          "mean_daily_pct": 0.015,
+          "ci95_daily_pct": [
+            -0.1015,
+            0.1738
+          ],
+          "p_value": 0.38,
+          "p_holm": 1.0,
+          "q_bh": 0.6269
+        },
+        "folds": [
+          {
+            "period": [
+              "2025-04-18",
+              "2025-07-18"
+            ],
+            "picked": "1.0",
+            "excess_total_pct": 2.8
+          },
+          {
+            "period": [
+              "2025-07-22",
+              "2025-10-22"
+            ],
+            "picked": "1.0",
+            "excess_total_pct": -5.27
+          },
+          {
+            "period": [
+              "2025-10-23",
+              "2026-01-27"
+            ],
+            "picked": "1.5",
+            "excess_total_pct": -6.84
+          },
+          {
+            "period": [
+              "2026-01-28",
+              "2026-04-30"
+            ],
+            "picked": "1.5",
+            "excess_total_pct": -3.06
+          },
+          {
+            "period": [
+              "2026-05-01",
+              "2026-06-29"
+            ],
+            "picked": "1.5",
+            "excess_total_pct": 16.74
+          }
+        ]
+      },
+      {
+        "name": "酒田五法：三空（買い）（ATR倍率を毎回選ぶ）",
+        "excess": {
+          "days": 291,
+          "active_days": 291,
+          "mean_daily_pct": -0.0169,
+          "annual_pct": -4.14,
+          "ir_annual": -0.36,
+          "total_pct": -4.92,
+          "max_drawdown_pct": -15.57
+        },
+        "raw": {
+          "days": 291,
+          "active_days": null,
+          "mean_daily_pct": 0.1157,
+          "annual_pct": 28.34,
+          "ir_annual": 1.37,
+          "total_pct": 33.66,
+          "max_drawdown_pct": -19.31
+        },
+        "test": {
+          "mean_daily_pct": -0.0169,
+          "ci95_daily_pct": [
+            -0.1051,
+            0.049
+          ],
+          "p_value": 0.689,
+          "p_holm": 1.0,
+          "q_bh": 0.9428
+        },
+        "folds": [
+          {
+            "period": [
+              "2025-04-18",
+              "2025-07-18"
+            ],
+            "picked": "2.0",
+            "excess_total_pct": 2.16
+          },
+          {
+            "period": [
+              "2025-07-22",
+              "2025-10-22"
+            ],
+            "picked": "2.0",
+            "excess_total_pct": 2.86
+          },
+          {
+            "period": [
+              "2025-10-23",
+              "2026-01-27"
+            ],
+            "picked": "2.0",
+            "excess_total_pct": -2.97
+          },
+          {
+            "period": [
+              "2026-01-28",
+              "2026-04-30"
+            ],
+            "picked": "5.0",
+            "excess_total_pct": 2.37
+          },
+          {
+            "period": [
+              "2026-05-01",
+              "2026-06-29"
+            ],
+            "picked": "5.0",
+            "excess_total_pct": -9.33
+          }
+        ]
+      },
+      {
+        "name": "酒田五法：段違い（売り）（ATR倍率を毎回選ぶ）",
+        "excess": {
+          "days": 291,
+          "active_days": 286,
+          "mean_daily_pct": 0.0739,
+          "annual_pct": 18.11,
+          "ir_annual": 1.28,
+          "total_pct": 21.51,
+          "max_drawdown_pct": -6.66
+        },
+        "raw": {
+          "days": 291,
+          "active_days": null,
+          "mean_daily_pct": -0.0507,
+          "annual_pct": -12.42,
+          "ir_annual": -0.6,
+          "total_pct": -14.76,
+          "max_drawdown_pct": -23.51
+        },
+        "test": {
+          "mean_daily_pct": 0.0739,
+          "ci95_daily_pct": [
+            -0.0121,
+            0.1619
+          ],
+          "p_value": 0.048,
+          "p_holm": 1.0,
+          "q_bh": 0.2496
+        },
+        "folds": [
+          {
+            "period": [
+              "2025-04-18",
+              "2025-07-18"
+            ],
+            "picked": "1.0",
+            "excess_total_pct": 8.63
+          },
+          {
+            "period": [
+              "2025-07-22",
+              "2025-10-22"
+            ],
+            "picked": "1.0",
+            "excess_total_pct": -2.96
+          },
+          {
+            "period": [
+              "2025-10-23",
+              "2026-01-27"
+            ],
+            "picked": "1.0",
+            "excess_total_pct": 3.37
+          },
+          {
+            "period": [
+              "2026-01-28",
+              "2026-04-30"
+            ],
+            "picked": "1.0",
+            "excess_total_pct": 2.97
+          },
+          {
+            "period": [
+              "2026-05-01",
+              "2026-06-29"
+            ],
+            "picked": "6.0",
+            "excess_total_pct": 9.49
+          }
+        ]
+      },
+      {
+        "name": "酒田五法：段違い（買い）（ATR倍率を毎回選ぶ）",
+        "excess": {
+          "days": 291,
+          "active_days": 291,
+          "mean_daily_pct": -0.0317,
+          "annual_pct": -7.76,
+          "ir_annual": -1.04,
+          "total_pct": -9.21,
+          "max_drawdown_pct": -11.17
+        },
+        "raw": {
+          "days": 291,
+          "active_days": null,
+          "mean_daily_pct": 0.1009,
+          "annual_pct": 24.73,
+          "ir_annual": 1.31,
+          "total_pct": 29.37,
+          "max_drawdown_pct": -12.74
+        },
+        "test": {
+          "mean_daily_pct": -0.0317,
+          "ci95_daily_pct": [
+            -0.0925,
+            0.0261
+          ],
+          "p_value": 0.8565,
+          "p_holm": 1.0,
+          "q_bh": 0.9682
+        },
+        "folds": [
+          {
+            "period": [
+              "2025-04-18",
+              "2025-07-18"
+            ],
+            "picked": "2.0",
+            "excess_total_pct": -4.41
+          },
+          {
+            "period": [
+              "2025-07-22",
+              "2025-10-22"
+            ],
+            "picked": "2.0",
+            "excess_total_pct": -2.08
+          },
+          {
+            "period": [
+              "2025-10-23",
+              "2026-01-27"
+            ],
+            "picked": "2.0",
+            "excess_total_pct": -1.42
+          },
+          {
+            "period": [
+              "2026-01-28",
+              "2026-04-30"
+            ],
+            "picked": "4.5",
+            "excess_total_pct": 2.28
+          },
+          {
+            "period": [
+              "2026-05-01",
+              "2026-06-29"
+            ],
+            "picked": "6.0",
+            "excess_total_pct": -3.59
+          }
+        ]
+      },
+      {
+        "name": "酒田五法：毛抜き（かい値）（売り）（ATR倍率を毎回選ぶ）",
+        "excess": {
+          "days": 291,
+          "active_days": 291,
+          "mean_daily_pct": 0.0371,
+          "annual_pct": 9.08,
+          "ir_annual": 2.05,
+          "total_pct": 10.79,
+          "max_drawdown_pct": -2.93
+        },
+        "raw": {
+          "days": 291,
+          "active_days": null,
+          "mean_daily_pct": -0.0955,
+          "annual_pct": -23.4,
+          "ir_annual": -1.58,
+          "total_pct": -27.79,
+          "max_drawdown_pct": -34.12
+        },
+        "test": {
+          "mean_daily_pct": 0.0371,
+          "ci95_daily_pct": [
+            0.0098,
+            0.0745
+          ],
+          "p_value": 0.0265,
+          "p_holm": 0.636,
+          "q_bh": 0.2275
+        },
+        "folds": [
+          {
+            "period": [
+              "2025-04-18",
+              "2025-07-18"
+            ],
+            "picked": "3.0",
+            "excess_total_pct": 1.84
+          },
+          {
+            "period": [
+              "2025-07-22",
+              "2025-10-22"
+            ],
+            "picked": "2.5",
+            "excess_total_pct": 0.62
+          },
+          {
+            "period": [
+              "2025-10-23",
+              "2026-01-27"
+            ],
+            "picked": "2.5",
+            "excess_total_pct": 0.82
+          },
+          {
+            "period": [
+              "2026-01-28",
+              "2026-04-30"
+            ],
+            "picked": "2.5",
+            "excess_total_pct": 2.13
+          },
+          {
+            "period": [
+              "2026-05-01",
+              "2026-06-29"
+            ],
+            "picked": "2.5",
+            "excess_total_pct": 5.37
+          }
+        ]
+      },
+      {
+        "name": "酒田五法：毛抜き（かい値）（買い）（ATR倍率を毎回選ぶ）",
+        "excess": {
+          "days": 291,
+          "active_days": 291,
+          "mean_daily_pct": -0.0386,
+          "annual_pct": -9.46,
+          "ir_annual": -1.96,
+          "total_pct": -11.23,
+          "max_drawdown_pct": -13.15
+        },
+        "raw": {
+          "days": 291,
+          "active_days": null,
+          "mean_daily_pct": 0.094,
+          "annual_pct": 23.02,
+          "ir_annual": 1.49,
+          "total_pct": 27.35,
+          "max_drawdown_pct": -10.59
+        },
+        "test": {
+          "mean_daily_pct": -0.0386,
+          "ci95_daily_pct": [
+            -0.0675,
+            -0.0158
+          ],
+          "p_value": 0.996,
+          "p_holm": 1.0,
+          "q_bh": 0.996
+        },
+        "folds": [
+          {
+            "period": [
+              "2025-04-18",
+              "2025-07-18"
+            ],
+            "picked": "5.0",
+            "excess_total_pct": -2.91
+          },
+          {
+            "period": [
+              "2025-07-22",
+              "2025-10-22"
+            ],
+            "picked": "5.0",
+            "excess_total_pct": -1.73
+          },
+          {
+            "period": [
+              "2025-10-23",
+              "2026-01-27"
+            ],
+            "picked": "5.0",
+            "excess_total_pct": -1.3
+          },
+          {
+            "period": [
+              "2026-01-28",
+              "2026-04-30"
+            ],
+            "picked": "5.0",
+            "excess_total_pct": -1.41
+          },
+          {
+            "period": [
+              "2026-05-01",
+              "2026-06-29"
+            ],
+            "picked": "3.0",
+            "excess_total_pct": -3.88
+          }
+        ]
+      },
+      {
+        "name": "出来高急増3倍・株価横ばい（買い）（ATR倍率を毎回選ぶ）",
+        "excess": {
+          "days": 291,
+          "active_days": 277,
+          "mean_daily_pct": -0.0584,
+          "annual_pct": -14.31,
+          "ir_annual": -1.11,
+          "total_pct": -17.0,
+          "max_drawdown_pct": -21.36
+        },
+        "raw": {
+          "days": 291,
+          "active_days": null,
+          "mean_daily_pct": 0.0551,
+          "annual_pct": 13.51,
+          "ir_annual": 1.18,
+          "total_pct": 16.05,
+          "max_drawdown_pct": -6.71
+        },
+        "test": {
+          "mean_daily_pct": -0.0584,
+          "ci95_daily_pct": [
+            -0.1232,
+            0.0028
+          ],
+          "p_value": 0.966,
+          "p_holm": 1.0,
+          "q_bh": 0.996
+        },
+        "folds": [
+          {
+            "period": [
+              "2025-04-18",
+              "2025-07-18"
+            ],
+            "picked": "5.0",
+            "excess_total_pct": -10.17
+          },
+          {
+            "period": [
+              "2025-07-22",
+              "2025-10-22"
+            ],
+            "picked": "1.8",
+            "excess_total_pct": -2.82
+          },
+          {
+            "period": [
+              "2025-10-23",
+              "2026-01-27"
+            ],
+            "picked": "2.0",
+            "excess_total_pct": -3.4
+          },
+          {
+            "period": [
+              "2026-01-28",
+              "2026-04-30"
+            ],
+            "picked": "1.8",
+            "excess_total_pct": -0.69
+          },
+          {
+            "period": [
+              "2026-05-01",
+              "2026-06-29"
+            ],
+            "picked": "3.0",
+            "excess_total_pct": 0.09
+          }
+        ]
+      },
+      {
+        "name": "出来高急増2倍・株価横ばい（買い）（ATR倍率を毎回選ぶ）",
+        "excess": {
+          "days": 291,
+          "active_days": 277,
+          "mean_daily_pct": -0.0622,
+          "annual_pct": -15.24,
+          "ir_annual": -1.81,
+          "total_pct": -18.1,
+          "max_drawdown_pct": -22.95
+        },
+        "raw": {
+          "days": 291,
+          "active_days": null,
+          "mean_daily_pct": 0.0513,
+          "annual_pct": 12.58,
+          "ir_annual": 1.13,
+          "total_pct": 14.94,
+          "max_drawdown_pct": -6.99
+        },
+        "test": {
+          "mean_daily_pct": -0.0622,
+          "ci95_daily_pct": [
+            -0.1134,
+            -0.0088
+          ],
+          "p_value": 0.9925,
+          "p_holm": 1.0,
+          "q_bh": 0.996
+        },
+        "folds": [
+          {
+            "period": [
+              "2025-04-18",
+              "2025-07-18"
+            ],
+            "picked": "4.5",
+            "excess_total_pct": -7.91
+          },
+          {
+            "period": [
+              "2025-07-22",
+              "2025-10-22"
+            ],
+            "picked": "1.5",
+            "excess_total_pct": -8.47
+          },
+          {
+            "period": [
+              "2025-10-23",
+              "2026-01-27"
+            ],
+            "picked": "4.5",
+            "excess_total_pct": -3.24
+          },
+          {
+            "period": [
+              "2026-01-28",
+              "2026-04-30"
+            ],
+            "picked": "3.5",
+            "excess_total_pct": -0.45
+          },
+          {
+            "period": [
+              "2026-05-01",
+              "2026-06-29"
+            ],
+            "picked": "3.5",
+            "excess_total_pct": 1.96
+          }
+        ]
+      },
+      {
+        "name": "本番設定 固定（スコア75点以上・ATR×3.0）",
+        "excess": {
+          "days": 291,
+          "active_days": 224,
+          "mean_daily_pct": 0.0126,
+          "annual_pct": 3.1,
+          "ir_annual": 0.25,
+          "total_pct": 3.68,
+          "max_drawdown_pct": -17.44
+        },
+        "raw": {
+          "days": 291,
+          "active_days": null,
+          "mean_daily_pct": 0.0968,
+          "annual_pct": 23.7,
+          "ir_annual": 1.39,
+          "total_pct": 28.16,
+          "max_drawdown_pct": -20.99
+        },
+        "test": {
+          "mean_daily_pct": 0.0126,
+          "ci95_daily_pct": [
+            -0.0733,
+            0.0885
+          ],
+          "p_value": 0.403,
+          "p_holm": 1.0,
+          "q_bh": 0.6269
+        },
+        "folds": [
+          {
+            "period": [
+              "2025-04-18",
+              "2025-07-18"
+            ],
+            "picked": null,
+            "excess_total_pct": 0.0
+          },
+          {
+            "period": [
+              "2025-07-22",
+              "2025-10-22"
+            ],
+            "picked": "('なし', 75, 3.0)",
+            "excess_total_pct": 4.08
+          },
+          {
+            "period": [
+              "2025-10-23",
+              "2026-01-27"
+            ],
+            "picked": "('なし', 75, 3.0)",
+            "excess_total_pct": 8.41
+          },
+          {
+            "period": [
+              "2026-01-28",
+              "2026-04-30"
+            ],
+            "picked": "('なし', 75, 3.0)",
+            "excess_total_pct": -2.68
+          },
+          {
+            "period": [
+              "2026-05-01",
+              "2026-06-29"
+            ],
+            "picked": "('なし', 75, 3.0)",
+            "excess_total_pct": -6.13
+          }
+        ]
+      },
+      {
+        "name": "本番設定 固定（スコア75点以上・ATR×3.0）＋売りパターン除外（当日）",
+        "excess": {
+          "days": 291,
+          "active_days": 224,
+          "mean_daily_pct": 0.0136,
+          "annual_pct": 3.34,
+          "ir_annual": 0.27,
+          "total_pct": 3.96,
+          "max_drawdown_pct": -17.44
+        },
+        "raw": {
+          "days": 291,
+          "active_days": null,
+          "mean_daily_pct": 0.0977,
+          "annual_pct": 23.95,
+          "ir_annual": 1.4,
+          "total_pct": 28.44,
+          "max_drawdown_pct": -20.99
+        },
+        "test": {
+          "mean_daily_pct": 0.0136,
+          "ci95_daily_pct": [
+            -0.0726,
+            0.0918
+          ],
+          "p_value": 0.396,
+          "p_holm": 1.0,
+          "q_bh": 0.6269
+        },
+        "folds": [
+          {
+            "period": [
+              "2025-04-18",
+              "2025-07-18"
+            ],
+            "picked": null,
+            "excess_total_pct": 0.0
+          },
+          {
+            "period": [
+              "2025-07-22",
+              "2025-10-22"
+            ],
+            "picked": "('当日', 75, 3.0)",
+            "excess_total_pct": 4.08
+          },
+          {
+            "period": [
+              "2025-10-23",
+              "2026-01-27"
+            ],
+            "picked": "('当日', 75, 3.0)",
+            "excess_total_pct": 8.81
+          },
+          {
+            "period": [
+              "2026-01-28",
+              "2026-04-30"
+            ],
+            "picked": "('当日', 75, 3.0)",
+            "excess_total_pct": -2.8
+          },
+          {
+            "period": [
+              "2026-05-01",
+              "2026-06-29"
+            ],
+            "picked": "('当日', 75, 3.0)",
+            "excess_total_pct": -6.13
+          }
+        ]
+      },
+      {
+        "name": "本番設定 固定（スコア75点以上・ATR×3.0）＋売りパターン除外（直近5日）",
+        "excess": {
+          "days": 291,
+          "active_days": 224,
+          "mean_daily_pct": 0.0101,
+          "annual_pct": 2.48,
+          "ir_annual": 0.2,
+          "total_pct": 2.95,
+          "max_drawdown_pct": -17.44
+        },
+        "raw": {
+          "days": 291,
+          "active_days": null,
+          "mean_daily_pct": 0.0943,
+          "annual_pct": 23.09,
+          "ir_annual": 1.37,
+          "total_pct": 27.43,
+          "max_drawdown_pct": -21.13
+        },
+        "test": {
+          "mean_daily_pct": 0.0101,
+          "ci95_daily_pct": [
+            -0.0742,
+            0.0837
+          ],
+          "p_value": 0.422,
+          "p_holm": 1.0,
+          "q_bh": 0.6269
+        },
+        "folds": [
+          {
+            "period": [
+              "2025-04-18",
+              "2025-07-18"
+            ],
+            "picked": null,
+            "excess_total_pct": 0.0
+          },
+          {
+            "period": [
+              "2025-07-22",
+              "2025-10-22"
+            ],
+            "picked": "('直近5日', 75, 3.0)",
+            "excess_total_pct": 3.93
+          },
+          {
+            "period": [
+              "2025-10-23",
+              "2026-01-27"
+            ],
+            "picked": "('直近5日', 75, 3.0)",
+            "excess_total_pct": 8.27
+          },
+          {
+            "period": [
+              "2026-01-28",
+              "2026-04-30"
+            ],
+            "picked": "('直近5日', 75, 3.0)",
+            "excess_total_pct": -3.13
+          },
+          {
+            "period": [
+              "2026-05-01",
+              "2026-06-29"
+            ],
+            "picked": "('直近5日', 75, 3.0)",
+            "excess_total_pct": -6.13
+          }
+        ]
+      }
+    ],
+    "0.3": [
+      {
+        "name": "スクリーニングLONG（スコア下限×ATR倍率を毎回選ぶ）",
+        "excess": {
+          "days": 291,
+          "active_days": 245,
+          "mean_daily_pct": 0.0406,
+          "annual_pct": 9.96,
+          "ir_annual": 0.73,
+          "total_pct": 11.83,
+          "max_drawdown_pct": -8.87
+        },
+        "raw": {
+          "days": 291,
+          "active_days": null,
+          "mean_daily_pct": 0.1511,
+          "annual_pct": 37.02,
+          "ir_annual": 2.04,
+          "total_pct": 43.97,
+          "max_drawdown_pct": -11.0
+        },
+        "test": {
+          "mean_daily_pct": 0.0406,
+          "ci95_daily_pct": [
+            -0.0494,
+            0.1458
+          ],
+          "p_value": 0.202,
+          "p_holm": 1.0,
+          "q_bh": 0.5836
+        },
+        "folds": [
+          {
+            "period": [
+              "2025-04-18",
+              "2025-07-18"
+            ],
+            "picked": "('なし', 0, 1.0)",
+            "excess_total_pct": -4.95
+          },
+          {
+            "period": [
+              "2025-07-22",
+              "2025-10-22"
+            ],
+            "picked": "('なし', 0, 1.0)",
+            "excess_total_pct": -2.91
+          },
+          {
+            "period": [
+              "2025-10-23",
+              "2026-01-27"
+            ],
+            "picked": "('なし', 85, 2.0)",
+            "excess_total_pct": 17.08
+          },
+          {
+            "period": [
+              "2026-01-28",
+              "2026-04-30"
+            ],
+            "picked": "('なし', 85, 2.0)",
+            "excess_total_pct": -2.14
+          },
+          {
+            "period": [
+              "2026-05-01",
+              "2026-06-29"
+            ],
+            "picked": "('なし', 85, 2.0)",
+            "excess_total_pct": 4.74
+          }
+        ]
+      },
+      {
+        "name": "スクリーニングLONG＋売りパターン除外（当日）（スコア下限×ATR倍率を毎回選ぶ）",
+        "excess": {
+          "days": 291,
+          "active_days": 245,
+          "mean_daily_pct": 0.0371,
+          "annual_pct": 9.09,
+          "ir_annual": 0.67,
+          "total_pct": 10.8,
+          "max_drawdown_pct": -9.1
+        },
+        "raw": {
+          "days": 291,
+          "active_days": null,
+          "mean_daily_pct": 0.1476,
+          "annual_pct": 36.15,
+          "ir_annual": 1.99,
+          "total_pct": 42.94,
+          "max_drawdown_pct": -11.0
+        },
+        "test": {
+          "mean_daily_pct": 0.0371,
+          "ci95_daily_pct": [
+            -0.0535,
+            0.1428
+          ],
+          "p_value": 0.225,
+          "p_holm": 1.0,
+          "q_bh": 0.585
+        },
+        "folds": [
+          {
+            "period": [
+              "2025-04-18",
+              "2025-07-18"
+            ],
+            "picked": "('当日', 0, 1.0)",
+            "excess_total_pct": -5.2
+          },
+          {
+            "period": [
+              "2025-07-22",
+              "2025-10-22"
+            ],
+            "picked": "('当日', 0, 1.0)",
+            "excess_total_pct": -3.69
+          },
+          {
+            "period": [
+              "2025-10-23",
+              "2026-01-27"
+            ],
+            "picked": "('当日', 85, 2.0)",
+            "excess_total_pct": 17.08
+          },
+          {
+            "period": [
+              "2026-01-28",
+              "2026-04-30"
+            ],
+            "picked": "('当日', 85, 2.0)",
+            "excess_total_pct": -2.14
+          },
+          {
+            "period": [
+              "2026-05-01",
+              "2026-06-29"
+            ],
+            "picked": "('当日', 85, 2.0)",
+            "excess_total_pct": 4.74
+          }
+        ]
+      },
+      {
+        "name": "スクリーニングLONG＋売りパターン除外（直近5日）（スコア下限×ATR倍率を毎回選ぶ）",
+        "excess": {
+          "days": 291,
+          "active_days": 271,
+          "mean_daily_pct": 0.0046,
+          "annual_pct": 1.13,
+          "ir_annual": 0.12,
+          "total_pct": 1.34,
+          "max_drawdown_pct": -11.23
+        },
+        "raw": {
+          "days": 291,
+          "active_days": null,
+          "mean_daily_pct": 0.1087,
+          "annual_pct": 26.63,
+          "ir_annual": 1.54,
+          "total_pct": 31.63,
+          "max_drawdown_pct": -14.73
+        },
+        "test": {
+          "mean_daily_pct": 0.0046,
+          "ci95_daily_pct": [
+            -0.0672,
+            0.0781
+          ],
+          "p_value": 0.4605,
+          "p_holm": 1.0,
+          "q_bh": 0.7085
+        },
+        "folds": [
+          {
+            "period": [
+              "2025-04-18",
+              "2025-07-18"
+            ],
+            "picked": "('直近5日', 0, 1.0)",
+            "excess_total_pct": -5.36
+          },
+          {
+            "period": [
+              "2025-07-22",
+              "2025-10-22"
+            ],
+            "picked": "('直近5日', 60, 1.0)",
+            "excess_total_pct": -3.75
+          },
+          {
+            "period": [
+              "2025-10-23",
+              "2026-01-27"
+            ],
+            "picked": "('直近5日', 85, 5.0)",
+            "excess_total_pct": 8.05
+          },
+          {
+            "period": [
+              "2026-01-28",
+              "2026-04-30"
+            ],
+            "picked": "('直近5日', 85, 5.0)",
+            "excess_total_pct": -2.33
+          },
+          {
+            "period": [
+              "2026-05-01",
+              "2026-06-29"
+            ],
+            "picked": "('直近5日', 85, 2.0)",
+            "excess_total_pct": 4.74
+          }
+        ]
+      },
+      {
+        "name": "スクリーニングLONG（除外の有無もスコア下限×ATR倍率と一緒に毎回選ぶ）",
+        "excess": {
+          "days": 291,
+          "active_days": 245,
+          "mean_daily_pct": 0.0406,
+          "annual_pct": 9.96,
+          "ir_annual": 0.73,
+          "total_pct": 11.83,
+          "max_drawdown_pct": -8.87
+        },
+        "raw": {
+          "days": 291,
+          "active_days": null,
+          "mean_daily_pct": 0.1511,
+          "annual_pct": 37.02,
+          "ir_annual": 2.04,
+          "total_pct": 43.97,
+          "max_drawdown_pct": -11.0
+        },
+        "test": {
+          "mean_daily_pct": 0.0406,
+          "ci95_daily_pct": [
+            -0.0494,
+            0.1458
+          ],
+          "p_value": 0.202,
+          "p_holm": 1.0,
+          "q_bh": 0.5836
+        },
+        "folds": [
+          {
+            "period": [
+              "2025-04-18",
+              "2025-07-18"
+            ],
+            "picked": "('なし', 0, 1.0)",
+            "excess_total_pct": -4.95
+          },
+          {
+            "period": [
+              "2025-07-22",
+              "2025-10-22"
+            ],
+            "picked": "('なし', 0, 1.0)",
+            "excess_total_pct": -2.91
+          },
+          {
+            "period": [
+              "2025-10-23",
+              "2026-01-27"
+            ],
+            "picked": "('当日', 85, 2.0)",
+            "excess_total_pct": 17.08
+          },
+          {
+            "period": [
+              "2026-01-28",
+              "2026-04-30"
+            ],
+            "picked": "('当日', 85, 2.0)",
+            "excess_total_pct": -2.14
+          },
+          {
+            "period": [
+              "2026-05-01",
+              "2026-06-29"
+            ],
+            "picked": "('当日', 85, 2.0)",
+            "excess_total_pct": 4.74
+          }
+        ]
+      },
+      {
+        "name": "スクリーニングSHORT（ATR倍率を毎回選ぶ）",
+        "excess": {
+          "days": 291,
+          "active_days": 291,
+          "mean_daily_pct": 0.0832,
+          "annual_pct": 20.4,
+          "ir_annual": 1.03,
+          "total_pct": 24.22,
+          "max_drawdown_pct": -22.82
+        },
+        "raw": {
+          "days": 291,
+          "active_days": null,
+          "mean_daily_pct": -0.0493,
+          "annual_pct": -12.09,
+          "ir_annual": -0.43,
+          "total_pct": -14.36,
+          "max_drawdown_pct": -33.63
+        },
+        "test": {
+          "mean_daily_pct": 0.0832,
+          "ci95_daily_pct": [
+            -0.0569,
+            0.2123
+          ],
+          "p_value": 0.112,
+          "p_holm": 1.0,
+          "q_bh": 0.546
+        },
+        "folds": [
+          {
+            "period": [
+              "2025-04-18",
+              "2025-07-18"
+            ],
+            "picked": "1.0",
+            "excess_total_pct": 7.02
+          },
+          {
+            "period": [
+              "2025-07-22",
+              "2025-10-22"
+            ],
+            "picked": "1.0",
+            "excess_total_pct": 14.41
+          },
+          {
+            "period": [
+              "2025-10-23",
+              "2026-01-27"
+            ],
+            "picked": "1.0",
+            "excess_total_pct": -6.01
+          },
+          {
+            "period": [
+              "2026-01-28",
+              "2026-04-30"
+            ],
+            "picked": "1.0",
+            "excess_total_pct": 4.82
+          },
+          {
+            "period": [
+              "2026-05-01",
+              "2026-06-29"
+            ],
+            "picked": "5.0",
+            "excess_total_pct": 3.99
+          }
+        ]
+      },
+      {
+        "name": "酒田五法：N字（買い）（ATR倍率を毎回選ぶ）",
+        "excess": {
+          "days": 291,
+          "active_days": 291,
+          "mean_daily_pct": 0.0035,
+          "annual_pct": 0.86,
+          "ir_annual": 0.14,
+          "total_pct": 1.02,
+          "max_drawdown_pct": -5.74
+        },
+        "raw": {
+          "days": 291,
+          "active_days": null,
+          "mean_daily_pct": 0.1361,
+          "annual_pct": 33.34,
+          "ir_annual": 1.95,
+          "total_pct": 39.6,
+          "max_drawdown_pct": -9.94
+        },
+        "test": {
+          "mean_daily_pct": 0.0035,
+          "ci95_daily_pct": [
+            -0.0559,
+            0.0501
+          ],
+          "p_value": 0.4845,
+          "p_holm": 1.0,
+          "q_bh": 0.7085
+        },
+        "folds": [
+          {
+            "period": [
+              "2025-04-18",
+              "2025-07-18"
+            ],
+            "picked": "4.0",
+            "excess_total_pct": -2.37
+          },
+          {
+            "period": [
+              "2025-07-22",
+              "2025-10-22"
+            ],
+            "picked": "3.5",
+            "excess_total_pct": 0.23
+          },
+          {
+            "period": [
+              "2025-10-23",
+              "2026-01-27"
+            ],
+            "picked": "3.5",
+            "excess_total_pct": 3.2
+          },
+          {
+            "period": [
+              "2026-01-28",
+              "2026-04-30"
+            ],
+            "picked": "3.0",
+            "excess_total_pct": 1.09
+          },
+          {
+            "period": [
+              "2026-05-01",
+              "2026-06-29"
+            ],
+            "picked": "3.0",
+            "excess_total_pct": -1.13
+          }
+        ]
+      },
+      {
+        "name": "酒田五法：V字（買い）（ATR倍率を毎回選ぶ）",
+        "excess": {
+          "days": 291,
+          "active_days": 291,
+          "mean_daily_pct": 0.0191,
+          "annual_pct": 4.68,
+          "ir_annual": 0.84,
+          "total_pct": 5.56,
+          "max_drawdown_pct": -4.09
+        },
+        "raw": {
+          "days": 291,
+          "active_days": null,
+          "mean_daily_pct": 0.1517,
+          "annual_pct": 37.17,
+          "ir_annual": 2.01,
+          "total_pct": 44.14,
+          "max_drawdown_pct": -11.55
+        },
+        "test": {
+          "mean_daily_pct": 0.0191,
+          "ci95_daily_pct": [
+            -0.011,
+            0.0579
+          ],
+          "p_value": 0.147,
+          "p_holm": 1.0,
+          "q_bh": 0.546
+        },
+        "folds": [
+          {
+            "period": [
+              "2025-04-18",
+              "2025-07-18"
+            ],
+            "picked": "6.0",
+            "excess_total_pct": -1.1
+          },
+          {
+            "period": [
+              "2025-07-22",
+              "2025-10-22"
+            ],
+            "picked": "6.0",
+            "excess_total_pct": -1.66
+          },
+          {
+            "period": [
+              "2025-10-23",
+              "2026-01-27"
+            ],
+            "picked": "5.0",
+            "excess_total_pct": -0.6
+          },
+          {
+            "period": [
+              "2026-01-28",
+              "2026-04-30"
+            ],
+            "picked": "5.0",
+            "excess_total_pct": 3.54
+          },
+          {
+            "period": [
+              "2026-05-01",
+              "2026-06-29"
+            ],
+            "picked": "5.0",
+            "excess_total_pct": 5.38
+          }
+        ]
+      },
+      {
+        "name": "酒田五法：たすき線（売り）（ATR倍率を毎回選ぶ）",
+        "excess": {
+          "days": 291,
+          "active_days": 285,
+          "mean_daily_pct": -0.0219,
+          "annual_pct": -5.35,
+          "ir_annual": -0.77,
+          "total_pct": -6.36,
+          "max_drawdown_pct": -7.52
+        },
+        "raw": {
+          "days": 291,
+          "active_days": null,
+          "mean_daily_pct": -0.1425,
+          "annual_pct": -34.92,
+          "ir_annual": -2.03,
+          "total_pct": -41.48,
+          "max_drawdown_pct": -41.98
+        },
+        "test": {
+          "mean_daily_pct": -0.0219,
+          "ci95_daily_pct": [
+            -0.0723,
+            0.0268
+          ],
+          "p_value": 0.835,
+          "p_holm": 1.0,
+          "q_bh": 0.9845
+        },
+        "folds": [
+          {
+            "period": [
+              "2025-04-18",
+              "2025-07-18"
+            ],
+            "picked": "4.5",
+            "excess_total_pct": -3.81
+          },
+          {
+            "period": [
+              "2025-07-22",
+              "2025-10-22"
+            ],
+            "picked": "4.5",
+            "excess_total_pct": -1.22
+          },
+          {
+            "period": [
+              "2025-10-23",
+              "2026-01-27"
+            ],
+            "picked": "5.0",
+            "excess_total_pct": 0.93
+          },
+          {
+            "period": [
+              "2026-01-28",
+              "2026-04-30"
+            ],
+            "picked": "2.0",
+            "excess_total_pct": 0.63
+          },
+          {
+            "period": [
+              "2026-05-01",
+              "2026-06-29"
+            ],
+            "picked": "6.0",
+            "excess_total_pct": -2.89
+          }
+        ]
+      },
+      {
+        "name": "酒田五法：たすき線（買い）（ATR倍率を毎回選ぶ）",
+        "excess": {
+          "days": 291,
+          "active_days": 279,
+          "mean_daily_pct": 0.01,
+          "annual_pct": 2.44,
+          "ir_annual": 0.2,
+          "total_pct": 2.9,
+          "max_drawdown_pct": -15.48
+        },
+        "raw": {
+          "days": 291,
+          "active_days": null,
+          "mean_daily_pct": 0.1179,
+          "annual_pct": 28.9,
+          "ir_annual": 1.34,
+          "total_pct": 34.32,
+          "max_drawdown_pct": -17.94
+        },
+        "test": {
+          "mean_daily_pct": 0.01,
+          "ci95_daily_pct": [
+            -0.1048,
+            0.1032
+          ],
+          "p_value": 0.478,
+          "p_holm": 1.0,
+          "q_bh": 0.7085
+        },
+        "folds": [
+          {
+            "period": [
+              "2025-04-18",
+              "2025-07-18"
+            ],
+            "picked": "3.0",
+            "excess_total_pct": -4.01
+          },
+          {
+            "period": [
+              "2025-07-22",
+              "2025-10-22"
+            ],
+            "picked": "3.0",
+            "excess_total_pct": 1.91
+          },
+          {
+            "period": [
+              "2025-10-23",
+              "2026-01-27"
+            ],
+            "picked": "3.0",
+            "excess_total_pct": 3.91
+          },
+          {
+            "period": [
+              "2026-01-28",
+              "2026-04-30"
+            ],
+            "picked": "3.0",
+            "excess_total_pct": 8.38
+          },
+          {
+            "period": [
+              "2026-05-01",
+              "2026-06-29"
+            ],
+            "picked": "3.0",
+            "excess_total_pct": -7.29
+          }
+        ]
+      },
+      {
+        "name": "酒田五法：三兵（売り）（ATR倍率を毎回選ぶ）",
+        "excess": {
+          "days": 291,
+          "active_days": 291,
+          "mean_daily_pct": 0.0318,
+          "annual_pct": 7.8,
+          "ir_annual": 1.08,
+          "total_pct": 9.26,
+          "max_drawdown_pct": -6.57
+        },
+        "raw": {
+          "days": 291,
+          "active_days": null,
+          "mean_daily_pct": -0.1008,
+          "annual_pct": -24.69,
+          "ir_annual": -1.68,
+          "total_pct": -29.32,
+          "max_drawdown_pct": -33.38
+        },
+        "test": {
+          "mean_daily_pct": 0.0318,
+          "ci95_daily_pct": [
+            -0.0115,
+            0.073
+          ],
+          "p_value": 0.062,
+          "p_holm": 1.0,
+          "q_bh": 0.507
+        },
+        "folds": [
+          {
+            "period": [
+              "2025-04-18",
+              "2025-07-18"
+            ],
+            "picked": "1.0",
+            "excess_total_pct": -3.04
+          },
+          {
+            "period": [
+              "2025-07-22",
+              "2025-10-22"
+            ],
+            "picked": "6.0",
+            "excess_total_pct": 2.33
+          },
+          {
+            "period": [
+              "2025-10-23",
+              "2026-01-27"
+            ],
+            "picked": "6.0",
+            "excess_total_pct": 4.5
+          },
+          {
+            "period": [
+              "2026-01-28",
+              "2026-04-30"
+            ],
+            "picked": "6.0",
+            "excess_total_pct": 2.75
+          },
+          {
+            "period": [
+              "2026-05-01",
+              "2026-06-29"
+            ],
+            "picked": "6.0",
+            "excess_total_pct": 2.73
+          }
+        ]
+      },
+      {
+        "name": "酒田五法：三兵（買い）（ATR倍率を毎回選ぶ）",
+        "excess": {
+          "days": 291,
+          "active_days": 277,
+          "mean_daily_pct": -0.0281,
+          "annual_pct": -6.88,
+          "ir_annual": -0.89,
+          "total_pct": -8.17,
+          "max_drawdown_pct": -12.97
+        },
+        "raw": {
+          "days": 291,
+          "active_days": null,
+          "mean_daily_pct": 0.0855,
+          "annual_pct": 20.94,
+          "ir_annual": 1.39,
+          "total_pct": 24.87,
+          "max_drawdown_pct": -10.07
+        },
+        "test": {
+          "mean_daily_pct": -0.0281,
+          "ci95_daily_pct": [
+            -0.0661,
+            0.0109
+          ],
+          "p_value": 0.9245,
+          "p_holm": 1.0,
+          "q_bh": 0.9845
+        },
+        "folds": [
+          {
+            "period": [
+              "2025-04-18",
+              "2025-07-18"
+            ],
+            "picked": "3.5",
+            "excess_total_pct": -2.8
+          },
+          {
+            "period": [
+              "2025-07-22",
+              "2025-10-22"
+            ],
+            "picked": "2.5",
+            "excess_total_pct": -0.06
+          },
+          {
+            "period": [
+              "2025-10-23",
+              "2026-01-27"
+            ],
+            "picked": "2.5",
+            "excess_total_pct": -3.6
+          },
+          {
+            "period": [
+              "2026-01-28",
+              "2026-04-30"
+            ],
+            "picked": "2.5",
+            "excess_total_pct": -1.83
+          },
+          {
+            "period": [
+              "2026-05-01",
+              "2026-06-29"
+            ],
+            "picked": "3.0",
+            "excess_total_pct": 0.11
+          }
+        ]
+      },
+      {
+        "name": "酒田五法：三山（売り）（ATR倍率を毎回選ぶ）",
+        "excess": {
+          "days": 291,
+          "active_days": 291,
+          "mean_daily_pct": 0.035,
+          "annual_pct": 8.56,
+          "ir_annual": 1.59,
+          "total_pct": 10.17,
+          "max_drawdown_pct": -3.38
+        },
+        "raw": {
+          "days": 291,
+          "active_days": null,
+          "mean_daily_pct": -0.0976,
+          "annual_pct": -23.92,
+          "ir_annual": -1.7,
+          "total_pct": -28.41,
+          "max_drawdown_pct": -33.33
+        },
+        "test": {
+          "mean_daily_pct": 0.035,
+          "ci95_daily_pct": [
+            0.0039,
+            0.0705
+          ],
+          "p_value": 0.0275,
+          "p_holm": 0.6875,
+          "q_bh": 0.3575
+        },
+        "folds": [
+          {
+            "period": [
+              "2025-04-18",
+              "2025-07-18"
+            ],
+            "picked": "6.0",
+            "excess_total_pct": 0.78
+          },
+          {
+            "period": [
+              "2025-07-22",
+              "2025-10-22"
+            ],
+            "picked": "6.0",
+            "excess_total_pct": 0.7
+          },
+          {
+            "period": [
+              "2025-10-23",
+              "2026-01-27"
+            ],
+            "picked": "6.0",
+            "excess_total_pct": 1.75
+          },
+          {
+            "period": [
+              "2026-01-28",
+              "2026-04-30"
+            ],
+            "picked": "6.0",
+            "excess_total_pct": 2.28
+          },
+          {
+            "period": [
+              "2026-05-01",
+              "2026-06-29"
+            ],
+            "picked": "6.0",
+            "excess_total_pct": 4.66
+          }
+        ]
+      },
+      {
+        "name": "酒田五法：三川（買い）（ATR倍率を毎回選ぶ）",
+        "excess": {
+          "days": 291,
+          "active_days": 291,
+          "mean_daily_pct": -0.0648,
+          "annual_pct": -15.89,
+          "ir_annual": -2.64,
+          "total_pct": -18.87,
+          "max_drawdown_pct": -20.27
+        },
+        "raw": {
+          "days": 291,
+          "active_days": null,
+          "mean_daily_pct": 0.0677,
+          "annual_pct": 16.6,
+          "ir_annual": 1.11,
+          "total_pct": 19.71,
+          "max_drawdown_pct": -10.76
+        },
+        "test": {
+          "mean_daily_pct": -0.0648,
+          "ci95_daily_pct": [
+            -0.1306,
+            -0.011
+          ],
+          "p_value": 0.9735,
+          "p_holm": 1.0,
+          "q_bh": 0.9845
+        },
+        "folds": [
+          {
+            "period": [
+              "2025-04-18",
+              "2025-07-18"
+            ],
+            "picked": "4.0",
+            "excess_total_pct": -9.14
+          },
+          {
+            "period": [
+              "2025-07-22",
+              "2025-10-22"
+            ],
+            "picked": "1.5",
+            "excess_total_pct": -5.71
+          },
+          {
+            "period": [
+              "2025-10-23",
+              "2026-01-27"
+            ],
+            "picked": "5.0",
+            "excess_total_pct": 0.09
+          },
+          {
+            "period": [
+              "2026-01-28",
+              "2026-04-30"
+            ],
+            "picked": "5.0",
+            "excess_total_pct": 0.17
+          },
+          {
+            "period": [
+              "2026-05-01",
+              "2026-06-29"
+            ],
+            "picked": "6.0",
+            "excess_total_pct": -4.28
+          }
+        ]
+      },
+      {
+        "name": "酒田五法：三法（売り）（ATR倍率を毎回選ぶ）",
+        "excess": {
+          "days": 291,
+          "active_days": 277,
+          "mean_daily_pct": 0.0496,
+          "annual_pct": 12.16,
+          "ir_annual": 1.19,
+          "total_pct": 14.44,
+          "max_drawdown_pct": -7.04
+        },
+        "raw": {
+          "days": 291,
+          "active_days": null,
+          "mean_daily_pct": -0.0639,
+          "annual_pct": -15.66,
+          "ir_annual": -1.04,
+          "total_pct": -18.6,
+          "max_drawdown_pct": -24.55
+        },
+        "test": {
+          "mean_daily_pct": 0.0496,
+          "ci95_daily_pct": [
+            -0.0048,
+            0.1007
+          ],
+          "p_value": 0.026,
+          "p_holm": 0.676,
+          "q_bh": 0.3575
+        },
+        "folds": [
+          {
+            "period": [
+              "2025-04-18",
+              "2025-07-18"
+            ],
+            "picked": "3.0",
+            "excess_total_pct": 0.45
+          },
+          {
+            "period": [
+              "2025-07-22",
+              "2025-10-22"
+            ],
+            "picked": "3.0",
+            "excess_total_pct": 4.31
+          },
+          {
+            "period": [
+              "2025-10-23",
+              "2026-01-27"
+            ],
+            "picked": "3.0",
+            "excess_total_pct": 5.71
+          },
+          {
+            "period": [
+              "2026-01-28",
+              "2026-04-30"
+            ],
+            "picked": "3.0",
+            "excess_total_pct": 2.31
+          },
+          {
+            "period": [
+              "2026-05-01",
+              "2026-06-29"
+            ],
+            "picked": "2.5",
+            "excess_total_pct": 1.65
+          }
+        ]
+      },
+      {
+        "name": "酒田五法：三法（買い）（ATR倍率を毎回選ぶ）",
+        "excess": {
+          "days": 291,
+          "active_days": 274,
+          "mean_daily_pct": 0.026,
+          "annual_pct": 6.36,
+          "ir_annual": 0.24,
+          "total_pct": 7.55,
+          "max_drawdown_pct": -30.24
+        },
+        "raw": {
+          "days": 291,
+          "active_days": null,
+          "mean_daily_pct": 0.1286,
+          "annual_pct": 31.52,
+          "ir_annual": 1.03,
+          "total_pct": 37.44,
+          "max_drawdown_pct": -16.41
+        },
+        "test": {
+          "mean_daily_pct": 0.026,
+          "ci95_daily_pct": [
+            -0.0757,
+            0.1322
+          ],
+          "p_value": 0.313,
+          "p_holm": 1.0,
+          "q_bh": 0.7085
+        },
+        "folds": [
+          {
+            "period": [
+              "2025-04-18",
+              "2025-07-18"
+            ],
+            "picked": "1.0",
+            "excess_total_pct": 1.24
+          },
+          {
+            "period": [
+              "2025-07-22",
+              "2025-10-22"
+            ],
+            "picked": "1.0",
+            "excess_total_pct": -3.21
+          },
+          {
+            "period": [
+              "2025-10-23",
+              "2026-01-27"
+            ],
+            "picked": "1.0",
+            "excess_total_pct": -0.32
+          },
+          {
+            "period": [
+              "2026-01-28",
+              "2026-04-30"
+            ],
+            "picked": "3.0",
+            "excess_total_pct": 0.74
+          },
+          {
+            "period": [
+              "2026-05-01",
+              "2026-06-29"
+            ],
+            "picked": "2.0",
+            "excess_total_pct": 9.09
+          }
+        ]
+      },
+      {
+        "name": "酒田五法：三空（売り）（ATR倍率を毎回選ぶ）",
+        "excess": {
+          "days": 291,
+          "active_days": 282,
+          "mean_daily_pct": -0.0036,
+          "annual_pct": -0.88,
+          "ir_annual": -0.06,
+          "total_pct": -1.04,
+          "max_drawdown_pct": -24.09
+        },
+        "raw": {
+          "days": 291,
+          "active_days": null,
+          "mean_daily_pct": -0.1228,
+          "annual_pct": -30.08,
+          "ir_annual": -1.42,
+          "total_pct": -35.73,
+          "max_drawdown_pct": -55.5
+        },
+        "test": {
+          "mean_daily_pct": -0.0036,
+          "ci95_daily_pct": [
+            -0.1203,
+            0.1555
+          ],
+          "p_value": 0.4905,
+          "p_holm": 1.0,
+          "q_bh": 0.7085
+        },
+        "folds": [
+          {
+            "period": [
+              "2025-04-18",
+              "2025-07-18"
+            ],
+            "picked": "1.0",
+            "excess_total_pct": 1.69
+          },
+          {
+            "period": [
+              "2025-07-22",
+              "2025-10-22"
+            ],
+            "picked": "1.0",
+            "excess_total_pct": -6.88
+          },
+          {
+            "period": [
+              "2025-10-23",
+              "2026-01-27"
+            ],
+            "picked": "1.5",
+            "excess_total_pct": -8.04
+          },
+          {
+            "period": [
+              "2026-01-28",
+              "2026-04-30"
+            ],
+            "picked": "1.5",
+            "excess_total_pct": -4.05
+          },
+          {
+            "period": [
+              "2026-05-01",
+              "2026-06-29"
+            ],
+            "picked": "1.5",
+            "excess_total_pct": 16.24
+          }
+        ]
+      },
+      {
+        "name": "酒田五法：三空（買い）（ATR倍率を毎回選ぶ）",
+        "excess": {
+          "days": 291,
+          "active_days": 291,
+          "mean_daily_pct": -0.0203,
+          "annual_pct": -4.98,
+          "ir_annual": -0.43,
+          "total_pct": -5.91,
+          "max_drawdown_pct": -15.75
+        },
+        "raw": {
+          "days": 291,
+          "active_days": null,
+          "mean_daily_pct": 0.1123,
+          "annual_pct": 27.51,
+          "ir_annual": 1.33,
+          "total_pct": 32.67,
+          "max_drawdown_pct": -19.5
+        },
+        "test": {
+          "mean_daily_pct": -0.0203,
+          "ci95_daily_pct": [
+            -0.1081,
+            0.0459
+          ],
+          "p_value": 0.7165,
+          "p_holm": 1.0,
+          "q_bh": 0.9805
+        },
+        "folds": [
+          {
+            "period": [
+              "2025-04-18",
+              "2025-07-18"
+            ],
+            "picked": "2.0",
+            "excess_total_pct": 2.12
+          },
+          {
+            "period": [
+              "2025-07-22",
+              "2025-10-22"
+            ],
+            "picked": "2.0",
+            "excess_total_pct": 2.53
+          },
+          {
+            "period": [
+              "2025-10-23",
+              "2026-01-27"
+            ],
+            "picked": "2.0",
+            "excess_total_pct": -3.36
+          },
+          {
+            "period": [
+              "2026-01-28",
+              "2026-04-30"
+            ],
+            "picked": "5.0",
+            "excess_total_pct": 2.15
+          },
+          {
+            "period": [
+              "2026-05-01",
+              "2026-06-29"
+            ],
+            "picked": "5.0",
+            "excess_total_pct": -9.35
+          }
+        ]
+      },
+      {
+        "name": "酒田五法：段違い（売り）（ATR倍率を毎回選ぶ）",
+        "excess": {
+          "days": 291,
+          "active_days": 291,
+          "mean_daily_pct": 0.0442,
+          "annual_pct": 10.82,
+          "ir_annual": 0.88,
+          "total_pct": 12.86,
+          "max_drawdown_pct": -7.4
+        },
+        "raw": {
+          "days": 291,
+          "active_days": null,
+          "mean_daily_pct": -0.0884,
+          "annual_pct": -21.66,
+          "ir_annual": -1.13,
+          "total_pct": -25.72,
+          "max_drawdown_pct": -37.84
+        },
+        "test": {
+          "mean_daily_pct": 0.0442,
+          "ci95_daily_pct": [
+            -0.0256,
+            0.1243
+          ],
+          "p_value": 0.13,
+          "p_holm": 1.0,
+          "q_bh": 0.546
+        },
+        "folds": [
+          {
+            "period": [
+              "2025-04-18",
+              "2025-07-18"
+            ],
+            "picked": "6.0",
+            "excess_total_pct": -0.18
+          },
+          {
+            "period": [
+              "2025-07-22",
+              "2025-10-22"
+            ],
+            "picked": "1.0",
+            "excess_total_pct": -4.5
+          },
+          {
+            "period": [
+              "2025-10-23",
+              "2026-01-27"
+            ],
+            "picked": "1.0",
+            "excess_total_pct": 1.9
+          },
+          {
+            "period": [
+              "2026-01-28",
+              "2026-04-30"
+            ],
+            "picked": "6.0",
+            "excess_total_pct": 6.19
+          },
+          {
+            "period": [
+              "2026-05-01",
+              "2026-06-29"
+            ],
+            "picked": "6.0",
+            "excess_total_pct": 9.45
+          }
+        ]
+      },
+      {
+        "name": "酒田五法：段違い（買い）（ATR倍率を毎回選ぶ）",
+        "excess": {
+          "days": 291,
+          "active_days": 291,
+          "mean_daily_pct": -0.0404,
+          "annual_pct": -9.91,
+          "ir_annual": -1.33,
+          "total_pct": -11.77,
+          "max_drawdown_pct": -13.61
+        },
+        "raw": {
+          "days": 291,
+          "active_days": null,
+          "mean_daily_pct": 0.0921,
+          "annual_pct": 22.57,
+          "ir_annual": 1.2,
+          "total_pct": 26.81,
+          "max_drawdown_pct": -12.76
+        },
+        "test": {
+          "mean_daily_pct": -0.0404,
+          "ci95_daily_pct": [
+            -0.102,
+            0.0188
+          ],
+          "p_value": 0.9015,
+          "p_holm": 1.0,
+          "q_bh": 0.9845
+        },
+        "folds": [
+          {
+            "period": [
+              "2025-04-18",
+              "2025-07-18"
+            ],
+            "picked": "2.0",
+            "excess_total_pct": -5.21
+          },
+          {
+            "period": [
+              "2025-07-22",
+              "2025-10-22"
+            ],
+            "picked": "2.0",
+            "excess_total_pct": -2.66
+          },
+          {
+            "period": [
+              "2025-10-23",
+              "2026-01-27"
+            ],
+            "picked": "2.0",
+            "excess_total_pct": -2.32
+          },
+          {
+            "period": [
+              "2026-01-28",
+              "2026-04-30"
+            ],
+            "picked": "4.5",
+            "excess_total_pct": 2.06
+          },
+          {
+            "period": [
+              "2026-05-01",
+              "2026-06-29"
+            ],
+            "picked": "6.0",
+            "excess_total_pct": -3.64
+          }
+        ]
+      },
+      {
+        "name": "酒田五法：毛抜き（かい値）（売り）（ATR倍率を毎回選ぶ）",
+        "excess": {
+          "days": 291,
+          "active_days": 291,
+          "mean_daily_pct": 0.0255,
+          "annual_pct": 6.24,
+          "ir_annual": 1.6,
+          "total_pct": 7.41,
+          "max_drawdown_pct": -3.11
+        },
+        "raw": {
+          "days": 291,
+          "active_days": null,
+          "mean_daily_pct": -0.1071,
+          "annual_pct": -26.24,
+          "ir_annual": -1.75,
+          "total_pct": -31.17,
+          "max_drawdown_pct": -36.13
+        },
+        "test": {
+          "mean_daily_pct": 0.0255,
+          "ci95_daily_pct": [
+            -0.0009,
+            0.0621
+          ],
+          "p_value": 0.078,
+          "p_holm": 1.0,
+          "q_bh": 0.507
+        },
+        "folds": [
+          {
+            "period": [
+              "2025-04-18",
+              "2025-07-18"
+            ],
+            "picked": "3.0",
+            "excess_total_pct": 1.34
+          },
+          {
+            "period": [
+              "2025-07-22",
+              "2025-10-22"
+            ],
+            "picked": "2.5",
+            "excess_total_pct": 0.01
+          },
+          {
+            "period": [
+              "2025-10-23",
+              "2026-01-27"
+            ],
+            "picked": "2.5",
+            "excess_total_pct": 0.15
+          },
+          {
+            "period": [
+              "2026-01-28",
+              "2026-04-30"
+            ],
+            "picked": "2.5",
+            "excess_total_pct": 1.65
+          },
+          {
+            "period": [
+              "2026-05-01",
+              "2026-06-29"
+            ],
+            "picked": "6.0",
+            "excess_total_pct": 4.27
+          }
+        ]
+      },
+      {
+        "name": "酒田五法：毛抜き（かい値）（買い）（ATR倍率を毎回選ぶ）",
+        "excess": {
+          "days": 291,
+          "active_days": 291,
+          "mean_daily_pct": -0.0496,
+          "annual_pct": -12.16,
+          "ir_annual": -3.0,
+          "total_pct": -14.45,
+          "max_drawdown_pct": -15.42
+        },
+        "raw": {
+          "days": 291,
+          "active_days": null,
+          "mean_daily_pct": 0.0829,
+          "annual_pct": 20.32,
+          "ir_annual": 1.24,
+          "total_pct": 24.13,
+          "max_drawdown_pct": -12.58
+        },
+        "test": {
+          "mean_daily_pct": -0.0496,
+          "ci95_daily_pct": [
+            -0.0945,
+            -0.0203
+          ],
+          "p_value": 0.9845,
+          "p_holm": 1.0,
+          "q_bh": 0.9845
+        },
+        "folds": [
+          {
+            "period": [
+              "2025-04-18",
+              "2025-07-18"
+            ],
+            "picked": "5.0",
+            "excess_total_pct": -3.26
+          },
+          {
+            "period": [
+              "2025-07-22",
+              "2025-10-22"
+            ],
+            "picked": "5.0",
+            "excess_total_pct": -1.89
+          },
+          {
+            "period": [
+              "2025-10-23",
+              "2026-01-27"
+            ],
+            "picked": "5.0",
+            "excess_total_pct": -1.44
+          },
+          {
+            "period": [
+              "2026-01-28",
+              "2026-04-30"
+            ],
+            "picked": "5.0",
+            "excess_total_pct": -1.58
+          },
+          {
+            "period": [
+              "2026-05-01",
+              "2026-06-29"
+            ],
+            "picked": "6.0",
+            "excess_total_pct": -6.27
+          }
+        ]
+      },
+      {
+        "name": "出来高急増3倍・株価横ばい（買い）（ATR倍率を毎回選ぶ）",
+        "excess": {
+          "days": 291,
+          "active_days": 277,
+          "mean_daily_pct": -0.061,
+          "annual_pct": -14.94,
+          "ir_annual": -1.37,
+          "total_pct": -17.74,
+          "max_drawdown_pct": -21.94
+        },
+        "raw": {
+          "days": 291,
+          "active_days": null,
+          "mean_daily_pct": 0.0526,
+          "annual_pct": 12.88,
+          "ir_annual": 1.06,
+          "total_pct": 15.3,
+          "max_drawdown_pct": -7.96
+        },
+        "test": {
+          "mean_daily_pct": -0.061,
+          "ci95_daily_pct": [
+            -0.1257,
+            -0.0037
+          ],
+          "p_value": 0.9695,
+          "p_holm": 1.0,
+          "q_bh": 0.9845
+        },
+        "folds": [
+          {
+            "period": [
+              "2025-04-18",
+              "2025-07-18"
+            ],
+            "picked": "5.0",
+            "excess_total_pct": -10.37
+          },
+          {
+            "period": [
+              "2025-07-22",
+              "2025-10-22"
+            ],
+            "picked": "1.8",
+            "excess_total_pct": -3.3
+          },
+          {
+            "period": [
+              "2025-10-23",
+              "2026-01-27"
+            ],
+            "picked": "2.0",
+            "excess_total_pct": -4.16
+          },
+          {
+            "period": [
+              "2026-01-28",
+              "2026-04-30"
+            ],
+            "picked": "3.5",
+            "excess_total_pct": 0.18
+          },
+          {
+            "period": [
+              "2026-05-01",
+              "2026-06-29"
+            ],
+            "picked": "3.0",
+            "excess_total_pct": -0.1
+          }
+        ]
+      },
+      {
+        "name": "出来高急増2倍・株価横ばい（買い）（ATR倍率を毎回選ぶ）",
+        "excess": {
+          "days": 291,
+          "active_days": 277,
+          "mean_daily_pct": -0.0584,
+          "annual_pct": -14.3,
+          "ir_annual": -1.83,
+          "total_pct": -16.98,
+          "max_drawdown_pct": -21.44
+        },
+        "raw": {
+          "days": 291,
+          "active_days": null,
+          "mean_daily_pct": 0.0552,
+          "annual_pct": 13.52,
+          "ir_annual": 1.19,
+          "total_pct": 16.06,
+          "max_drawdown_pct": -6.96
+        },
+        "test": {
+          "mean_daily_pct": -0.0584,
+          "ci95_daily_pct": [
+            -0.1104,
+            -0.0079
+          ],
+          "p_value": 0.984,
+          "p_holm": 1.0,
+          "q_bh": 0.9845
+        },
+        "folds": [
+          {
+            "period": [
+              "2025-04-18",
+              "2025-07-18"
+            ],
+            "picked": "4.5",
+            "excess_total_pct": -8.27
+          },
+          {
+            "period": [
+              "2025-07-22",
+              "2025-10-22"
+            ],
+            "picked": "3.0",
+            "excess_total_pct": -6.27
+          },
+          {
+            "period": [
+              "2025-10-23",
+              "2026-01-27"
+            ],
+            "picked": "4.5",
+            "excess_total_pct": -3.44
+          },
+          {
+            "period": [
+              "2026-01-28",
+              "2026-04-30"
+            ],
+            "picked": "3.5",
+            "excess_total_pct": -0.79
+          },
+          {
+            "period": [
+              "2026-05-01",
+              "2026-06-29"
+            ],
+            "picked": "3.5",
+            "excess_total_pct": 1.79
+          }
+        ]
+      },
+      {
+        "name": "本番設定 固定（スコア75点以上・ATR×3.0）",
+        "excess": {
+          "days": 291,
+          "active_days": 224,
+          "mean_daily_pct": 0.0074,
+          "annual_pct": 1.81,
+          "ir_annual": 0.15,
+          "total_pct": 2.15,
+          "max_drawdown_pct": -17.9
+        },
+        "raw": {
+          "days": 291,
+          "active_days": null,
+          "mean_daily_pct": 0.0915,
+          "annual_pct": 22.42,
+          "ir_annual": 1.31,
+          "total_pct": 26.63,
+          "max_drawdown_pct": -21.31
+        },
+        "test": {
+          "mean_daily_pct": 0.0074,
+          "ci95_daily_pct": [
+            -0.0794,
+            0.0834
+          ],
+          "p_value": 0.452,
+          "p_holm": 1.0,
+          "q_bh": 0.7085
+        },
+        "folds": [
+          {
+            "period": [
+              "2025-04-18",
+              "2025-07-18"
+            ],
+            "picked": null,
+            "excess_total_pct": 0.0
+          },
+          {
+            "period": [
+              "2025-07-22",
+              "2025-10-22"
+            ],
+            "picked": "('なし', 75, 3.0)",
+            "excess_total_pct": 3.91
+          },
+          {
+            "period": [
+              "2025-10-23",
+              "2026-01-27"
+            ],
+            "picked": "('なし', 75, 3.0)",
+            "excess_total_pct": 8.06
+          },
+          {
+            "period": [
+              "2026-01-28",
+              "2026-04-30"
+            ],
+            "picked": "('なし', 75, 3.0)",
+            "excess_total_pct": -3.04
+          },
+          {
+            "period": [
+              "2026-05-01",
+              "2026-06-29"
+            ],
+            "picked": "('なし', 75, 3.0)",
+            "excess_total_pct": -6.78
+          }
+        ]
+      },
+      {
+        "name": "本番設定 固定（スコア75点以上・ATR×3.0）＋売りパターン除外（当日）",
+        "excess": {
+          "days": 291,
+          "active_days": 224,
+          "mean_daily_pct": 0.0084,
+          "annual_pct": 2.06,
+          "ir_annual": 0.17,
+          "total_pct": 2.44,
+          "max_drawdown_pct": -17.9
+        },
+        "raw": {
+          "days": 291,
+          "active_days": null,
+          "mean_daily_pct": 0.0925,
+          "annual_pct": 22.67,
+          "ir_annual": 1.33,
+          "total_pct": 26.92,
+          "max_drawdown_pct": -21.31
+        },
+        "test": {
+          "mean_daily_pct": 0.0084,
+          "ci95_daily_pct": [
+            -0.0786,
+            0.0867
+          ],
+          "p_value": 0.442,
+          "p_holm": 1.0,
+          "q_bh": 0.7085
+        },
+        "folds": [
+          {
+            "period": [
+              "2025-04-18",
+              "2025-07-18"
+            ],
+            "picked": null,
+            "excess_total_pct": 0.0
+          },
+          {
+            "period": [
+              "2025-07-22",
+              "2025-10-22"
+            ],
+            "picked": "('当日', 75, 3.0)",
+            "excess_total_pct": 3.91
+          },
+          {
+            "period": [
+              "2025-10-23",
+              "2026-01-27"
+            ],
+            "picked": "('当日', 75, 3.0)",
+            "excess_total_pct": 8.47
+          },
+          {
+            "period": [
+              "2026-01-28",
+              "2026-04-30"
+            ],
+            "picked": "('当日', 75, 3.0)",
+            "excess_total_pct": -3.15
+          },
+          {
+            "period": [
+              "2026-05-01",
+              "2026-06-29"
+            ],
+            "picked": "('当日', 75, 3.0)",
+            "excess_total_pct": -6.78
+          }
+        ]
+      },
+      {
+        "name": "本番設定 固定（スコア75点以上・ATR×3.0）＋売りパターン除外（直近5日）",
+        "excess": {
+          "days": 291,
+          "active_days": 224,
+          "mean_daily_pct": 0.0048,
+          "annual_pct": 1.17,
+          "ir_annual": 0.1,
+          "total_pct": 1.39,
+          "max_drawdown_pct": -17.9
+        },
+        "raw": {
+          "days": 291,
+          "active_days": null,
+          "mean_daily_pct": 0.0889,
+          "annual_pct": 21.78,
+          "ir_annual": 1.29,
+          "total_pct": 25.87,
+          "max_drawdown_pct": -21.45
+        },
+        "test": {
+          "mean_daily_pct": 0.0048,
+          "ci95_daily_pct": [
+            -0.0802,
+            0.0789
+          ],
+          "p_value": 0.4735,
+          "p_holm": 1.0,
+          "q_bh": 0.7085
+        },
+        "folds": [
+          {
+            "period": [
+              "2025-04-18",
+              "2025-07-18"
+            ],
+            "picked": null,
+            "excess_total_pct": 0.0
+          },
+          {
+            "period": [
+              "2025-07-22",
+              "2025-10-22"
+            ],
+            "picked": "('直近5日', 75, 3.0)",
+            "excess_total_pct": 3.75
+          },
+          {
+            "period": [
+              "2025-10-23",
+              "2026-01-27"
+            ],
+            "picked": "('直近5日', 75, 3.0)",
+            "excess_total_pct": 7.91
+          },
+          {
+            "period": [
+              "2026-01-28",
+              "2026-04-30"
+            ],
+            "picked": "('直近5日', 75, 3.0)",
+            "excess_total_pct": -3.49
+          },
+          {
+            "period": [
+              "2026-05-01",
+              "2026-06-29"
+            ],
+            "picked": "('直近5日', 75, 3.0)",
+            "excess_total_pct": -6.78
+          }
+        ]
+      }
+    ],
+    "0.5": [
+      {
+        "name": "スクリーニングLONG（スコア下限×ATR倍率を毎回選ぶ）",
+        "excess": {
+          "days": 291,
+          "active_days": 245,
+          "mean_daily_pct": 0.0278,
+          "annual_pct": 6.82,
+          "ir_annual": 0.5,
+          "total_pct": 8.1,
+          "max_drawdown_pct": -10.65
+        },
+        "raw": {
+          "days": 291,
+          "active_days": null,
+          "mean_daily_pct": 0.1383,
+          "annual_pct": 33.87,
+          "ir_annual": 1.87,
+          "total_pct": 40.24,
+          "max_drawdown_pct": -11.22
+        },
+        "test": {
+          "mean_daily_pct": 0.0278,
+          "ci95_daily_pct": [
+            -0.0614,
+            0.1335
+          ],
+          "p_value": 0.282,
+          "p_holm": 1.0,
+          "q_bh": 0.7956
+        },
+        "folds": [
+          {
+            "period": [
+              "2025-04-18",
+              "2025-07-18"
+            ],
+            "picked": "('なし', 0, 1.0)",
+            "excess_total_pct": -6.04
+          },
+          {
+            "period": [
+              "2025-07-22",
+              "2025-10-22"
+            ],
+            "picked": "('なし', 0, 1.0)",
+            "excess_total_pct": -4.35
+          },
+          {
+            "period": [
+              "2025-10-23",
+              "2026-01-27"
+            ],
+            "picked": "('なし', 85, 2.0)",
+            "excess_total_pct": 16.62
+          },
+          {
+            "period": [
+              "2026-01-28",
+              "2026-04-30"
+            ],
+            "picked": "('なし', 85, 2.0)",
+            "excess_total_pct": -2.57
+          },
+          {
+            "period": [
+              "2026-05-01",
+              "2026-06-29"
+            ],
+            "picked": "('なし', 85, 2.0)",
+            "excess_total_pct": 4.44
+          }
+        ]
+      },
+      {
+        "name": "スクリーニングLONG＋売りパターン除外（当日）（スコア下限×ATR倍率を毎回選ぶ）",
+        "excess": {
+          "days": 291,
+          "active_days": 245,
+          "mean_daily_pct": 0.0243,
+          "annual_pct": 5.96,
+          "ir_annual": 0.44,
+          "total_pct": 7.08,
+          "max_drawdown_pct": -11.67
+        },
+        "raw": {
+          "days": 291,
+          "active_days": null,
+          "mean_daily_pct": 0.1348,
+          "annual_pct": 33.02,
+          "ir_annual": 1.82,
+          "total_pct": 39.22,
+          "max_drawdown_pct": -11.22
+        },
+        "test": {
+          "mean_daily_pct": 0.0243,
+          "ci95_daily_pct": [
+            -0.0652,
+            0.1305
+          ],
+          "p_value": 0.306,
+          "p_holm": 1.0,
+          "q_bh": 0.7956
+        },
+        "folds": [
+          {
+            "period": [
+              "2025-04-18",
+              "2025-07-18"
+            ],
+            "picked": "('当日', 0, 1.0)",
+            "excess_total_pct": -6.26
+          },
+          {
+            "period": [
+              "2025-07-22",
+              "2025-10-22"
+            ],
+            "picked": "('当日', 0, 1.0)",
+            "excess_total_pct": -5.14
+          },
+          {
+            "period": [
+              "2025-10-23",
+              "2026-01-27"
+            ],
+            "picked": "('当日', 85, 2.0)",
+            "excess_total_pct": 16.62
+          },
+          {
+            "period": [
+              "2026-01-28",
+              "2026-04-30"
+            ],
+            "picked": "('当日', 85, 2.0)",
+            "excess_total_pct": -2.57
+          },
+          {
+            "period": [
+              "2026-05-01",
+              "2026-06-29"
+            ],
+            "picked": "('当日', 85, 2.0)",
+            "excess_total_pct": 4.44
+          }
+        ]
+      },
+      {
+        "name": "スクリーニングLONG＋売りパターン除外（直近5日）（スコア下限×ATR倍率を毎回選ぶ）",
+        "excess": {
+          "days": 291,
+          "active_days": 271,
+          "mean_daily_pct": -0.006,
+          "annual_pct": -1.48,
+          "ir_annual": -0.15,
+          "total_pct": -1.75,
+          "max_drawdown_pct": -11.72
+        },
+        "raw": {
+          "days": 291,
+          "active_days": null,
+          "mean_daily_pct": 0.0981,
+          "annual_pct": 24.03,
+          "ir_annual": 1.38,
+          "total_pct": 28.54,
+          "max_drawdown_pct": -14.76
+        },
+        "test": {
+          "mean_daily_pct": -0.006,
+          "ci95_daily_pct": [
+            -0.0775,
+            0.0699
+          ],
+          "p_value": 0.5775,
+          "p_holm": 1.0,
+          "q_bh": 0.8573
+        },
+        "folds": [
+          {
+            "period": [
+              "2025-04-18",
+              "2025-07-18"
+            ],
+            "picked": "('直近5日', 0, 1.0)",
+            "excess_total_pct": -6.43
+          },
+          {
+            "period": [
+              "2025-07-22",
+              "2025-10-22"
+            ],
+            "picked": "('直近5日', 60, 1.0)",
+            "excess_total_pct": -5.28
+          },
+          {
+            "period": [
+              "2025-10-23",
+              "2026-01-27"
+            ],
+            "picked": "('直近5日', 85, 5.0)",
+            "excess_total_pct": 7.93
+          },
+          {
+            "period": [
+              "2026-01-28",
+              "2026-04-30"
+            ],
+            "picked": "('直近5日', 85, 5.0)",
+            "excess_total_pct": -2.4
+          },
+          {
+            "period": [
+              "2026-05-01",
+              "2026-06-29"
+            ],
+            "picked": "('直近5日', 85, 2.0)",
+            "excess_total_pct": 4.44
+          }
+        ]
+      },
+      {
+        "name": "スクリーニングLONG（除外の有無もスコア下限×ATR倍率と一緒に毎回選ぶ）",
+        "excess": {
+          "days": 291,
+          "active_days": 245,
+          "mean_daily_pct": 0.0278,
+          "annual_pct": 6.82,
+          "ir_annual": 0.5,
+          "total_pct": 8.1,
+          "max_drawdown_pct": -10.65
+        },
+        "raw": {
+          "days": 291,
+          "active_days": null,
+          "mean_daily_pct": 0.1383,
+          "annual_pct": 33.87,
+          "ir_annual": 1.87,
+          "total_pct": 40.24,
+          "max_drawdown_pct": -11.22
+        },
+        "test": {
+          "mean_daily_pct": 0.0278,
+          "ci95_daily_pct": [
+            -0.0614,
+            0.1335
+          ],
+          "p_value": 0.282,
+          "p_holm": 1.0,
+          "q_bh": 0.7956
+        },
+        "folds": [
+          {
+            "period": [
+              "2025-04-18",
+              "2025-07-18"
+            ],
+            "picked": "('なし', 0, 1.0)",
+            "excess_total_pct": -6.04
+          },
+          {
+            "period": [
+              "2025-07-22",
+              "2025-10-22"
+            ],
+            "picked": "('なし', 0, 1.0)",
+            "excess_total_pct": -4.35
+          },
+          {
+            "period": [
+              "2025-10-23",
+              "2026-01-27"
+            ],
+            "picked": "('当日', 85, 2.0)",
+            "excess_total_pct": 16.62
+          },
+          {
+            "period": [
+              "2026-01-28",
+              "2026-04-30"
+            ],
+            "picked": "('当日', 85, 2.0)",
+            "excess_total_pct": -2.57
+          },
+          {
+            "period": [
+              "2026-05-01",
+              "2026-06-29"
+            ],
+            "picked": "('当日', 85, 2.0)",
+            "excess_total_pct": 4.44
+          }
+        ]
+      },
+      {
+        "name": "スクリーニングSHORT（ATR倍率を毎回選ぶ）",
+        "excess": {
+          "days": 291,
+          "active_days": 291,
+          "mean_daily_pct": 0.0823,
+          "annual_pct": 20.17,
+          "ir_annual": 1.04,
+          "total_pct": 23.96,
+          "max_drawdown_pct": -21.31
+        },
+        "raw": {
+          "days": 291,
+          "active_days": null,
+          "mean_daily_pct": -0.0502,
+          "annual_pct": -12.31,
+          "ir_annual": -0.44,
+          "total_pct": -14.62,
+          "max_drawdown_pct": -30.53
+        },
+        "test": {
+          "mean_daily_pct": 0.0823,
+          "ci95_daily_pct": [
+            -0.0615,
+            0.2052
+          ],
+          "p_value": 0.1145,
+          "p_holm": 1.0,
+          "q_bh": 0.6058
+        },
+        "folds": [
+          {
+            "period": [
+              "2025-04-18",
+              "2025-07-18"
+            ],
+            "picked": "1.0",
+            "excess_total_pct": 5.79
+          },
+          {
+            "period": [
+              "2025-07-22",
+              "2025-10-22"
+            ],
+            "picked": "1.0",
+            "excess_total_pct": 13.15
+          },
+          {
+            "period": [
+              "2025-10-23",
+              "2026-01-27"
+            ],
+            "picked": "1.0",
+            "excess_total_pct": -7.48
+          },
+          {
+            "period": [
+              "2026-01-28",
+              "2026-04-30"
+            ],
+            "picked": "6.0",
+            "excess_total_pct": 8.8
+          },
+          {
+            "period": [
+              "2026-05-01",
+              "2026-06-29"
+            ],
+            "picked": "5.0",
+            "excess_total_pct": 3.7
+          }
+        ]
+      },
+      {
+        "name": "酒田五法：N字（買い）（ATR倍率を毎回選ぶ）",
+        "excess": {
+          "days": 291,
+          "active_days": 291,
+          "mean_daily_pct": -0.0036,
+          "annual_pct": -0.89,
+          "ir_annual": -0.14,
+          "total_pct": -1.06,
+          "max_drawdown_pct": -5.77
+        },
+        "raw": {
+          "days": 291,
+          "active_days": null,
+          "mean_daily_pct": 0.1289,
+          "annual_pct": 31.59,
+          "ir_annual": 1.82,
+          "total_pct": 37.52,
+          "max_drawdown_pct": -11.17
+        },
+        "test": {
+          "mean_daily_pct": -0.0036,
+          "ci95_daily_pct": [
+            -0.063,
+            0.0422
+          ],
+          "p_value": 0.5935,
+          "p_holm": 1.0,
+          "q_bh": 0.8573
+        },
+        "folds": [
+          {
+            "period": [
+              "2025-04-18",
+              "2025-07-18"
+            ],
+            "picked": "3.5",
+            "excess_total_pct": -2.82
+          },
+          {
+            "period": [
+              "2025-07-22",
+              "2025-10-22"
+            ],
+            "picked": "3.5",
+            "excess_total_pct": 0.05
+          },
+          {
+            "period": [
+              "2025-10-23",
+              "2026-01-27"
+            ],
+            "picked": "3.5",
+            "excess_total_pct": 2.86
+          },
+          {
+            "period": [
+              "2026-01-28",
+              "2026-04-30"
+            ],
+            "picked": "3.5",
+            "excess_total_pct": 0.2
+          },
+          {
+            "period": [
+              "2026-05-01",
+              "2026-06-29"
+            ],
+            "picked": "3.0",
+            "excess_total_pct": -1.34
+          }
+        ]
+      },
+      {
+        "name": "酒田五法：V字（買い）（ATR倍率を毎回選ぶ）",
+        "excess": {
+          "days": 291,
+          "active_days": 291,
+          "mean_daily_pct": 0.0173,
+          "annual_pct": 4.24,
+          "ir_annual": 0.76,
+          "total_pct": 5.03,
+          "max_drawdown_pct": -4.26
+        },
+        "raw": {
+          "days": 291,
+          "active_days": null,
+          "mean_daily_pct": 0.1499,
+          "annual_pct": 36.72,
+          "ir_annual": 1.98,
+          "total_pct": 43.61,
+          "max_drawdown_pct": -11.61
+        },
+        "test": {
+          "mean_daily_pct": 0.0173,
+          "ci95_daily_pct": [
+            -0.0125,
+            0.0557
+          ],
+          "p_value": 0.164,
+          "p_holm": 1.0,
+          "q_bh": 0.6091
+        },
+        "folds": [
+          {
+            "period": [
+              "2025-04-18",
+              "2025-07-18"
+            ],
+            "picked": "6.0",
+            "excess_total_pct": -1.13
+          },
+          {
+            "period": [
+              "2025-07-22",
+              "2025-10-22"
+            ],
+            "picked": "6.0",
+            "excess_total_pct": -1.71
+          },
+          {
+            "period": [
+              "2025-10-23",
+              "2026-01-27"
+            ],
+            "picked": "5.0",
+            "excess_total_pct": -0.71
+          },
+          {
+            "period": [
+              "2026-01-28",
+              "2026-04-30"
+            ],
+            "picked": "5.0",
+            "excess_total_pct": 3.32
+          },
+          {
+            "period": [
+              "2026-05-01",
+              "2026-06-29"
+            ],
+            "picked": "5.0",
+            "excess_total_pct": 5.25
+          }
+        ]
+      },
+      {
+        "name": "酒田五法：たすき線（売り）（ATR倍率を毎回選ぶ）",
+        "excess": {
+          "days": 291,
+          "active_days": 285,
+          "mean_daily_pct": -0.027,
+          "annual_pct": -6.62,
+          "ir_annual": -0.95,
+          "total_pct": -7.87,
+          "max_drawdown_pct": -8.59
+        },
+        "raw": {
+          "days": 291,
+          "active_days": null,
+          "mean_daily_pct": -0.1477,
+          "annual_pct": -36.19,
+          "ir_annual": -2.1,
+          "total_pct": -42.99,
+          "max_drawdown_pct": -43.35
+        },
+        "test": {
+          "mean_daily_pct": -0.027,
+          "ci95_daily_pct": [
+            -0.0767,
+            0.0216
+          ],
+          "p_value": 0.8855,
+          "p_holm": 1.0,
+          "q_bh": 0.99
+        },
+        "folds": [
+          {
+            "period": [
+              "2025-04-18",
+              "2025-07-18"
+            ],
+            "picked": "4.5",
+            "excess_total_pct": -4.01
+          },
+          {
+            "period": [
+              "2025-07-22",
+              "2025-10-22"
+            ],
+            "picked": "4.5",
+            "excess_total_pct": -1.65
+          },
+          {
+            "period": [
+              "2025-10-23",
+              "2026-01-27"
+            ],
+            "picked": "5.0",
+            "excess_total_pct": 0.79
+          },
+          {
+            "period": [
+              "2026-01-28",
+              "2026-04-30"
+            ],
+            "picked": "2.0",
+            "excess_total_pct": -0.07
+          },
+          {
+            "period": [
+              "2026-05-01",
+              "2026-06-29"
+            ],
+            "picked": "6.0",
+            "excess_total_pct": -2.93
+          }
+        ]
+      },
+      {
+        "name": "酒田五法：たすき線（買い）（ATR倍率を毎回選ぶ）",
+        "excess": {
+          "days": 291,
+          "active_days": 279,
+          "mean_daily_pct": 0.0037,
+          "annual_pct": 0.9,
+          "ir_annual": 0.07,
+          "total_pct": 1.07,
+          "max_drawdown_pct": -15.49
+        },
+        "raw": {
+          "days": 291,
+          "active_days": null,
+          "mean_daily_pct": 0.1117,
+          "annual_pct": 27.36,
+          "ir_annual": 1.27,
+          "total_pct": 32.49,
+          "max_drawdown_pct": -17.94
+        },
+        "test": {
+          "mean_daily_pct": 0.0037,
+          "ci95_daily_pct": [
+            -0.1127,
+            0.0967
+          ],
+          "p_value": 0.521,
+          "p_holm": 1.0,
+          "q_bh": 0.8573
+        },
+        "folds": [
+          {
+            "period": [
+              "2025-04-18",
+              "2025-07-18"
+            ],
+            "picked": "3.0",
+            "excess_total_pct": -4.67
+          },
+          {
+            "period": [
+              "2025-07-22",
+              "2025-10-22"
+            ],
+            "picked": "3.0",
+            "excess_total_pct": 1.62
+          },
+          {
+            "period": [
+              "2025-10-23",
+              "2026-01-27"
+            ],
+            "picked": "3.0",
+            "excess_total_pct": 3.58
+          },
+          {
+            "period": [
+              "2026-01-28",
+              "2026-04-30"
+            ],
+            "picked": "3.0",
+            "excess_total_pct": 7.93
+          },
+          {
+            "period": [
+              "2026-05-01",
+              "2026-06-29"
+            ],
+            "picked": "3.0",
+            "excess_total_pct": -7.4
+          }
+        ]
+      },
+      {
+        "name": "酒田五法：三兵（売り）（ATR倍率を毎回選ぶ）",
+        "excess": {
+          "days": 291,
+          "active_days": 291,
+          "mean_daily_pct": 0.0385,
+          "annual_pct": 9.43,
+          "ir_annual": 1.53,
+          "total_pct": 11.2,
+          "max_drawdown_pct": -4.05
+        },
+        "raw": {
+          "days": 291,
+          "active_days": null,
+          "mean_daily_pct": -0.0941,
+          "annual_pct": -23.06,
+          "ir_annual": -1.59,
+          "total_pct": -27.39,
+          "max_drawdown_pct": -31.28
+        },
+        "test": {
+          "mean_daily_pct": 0.0385,
+          "ci95_daily_pct": [
+            0.0094,
+            0.0686
+          ],
+          "p_value": 0.0065,
+          "p_holm": 0.169,
+          "q_bh": 0.169
+        },
+        "folds": [
+          {
+            "period": [
+              "2025-04-18",
+              "2025-07-18"
+            ],
+            "picked": "6.0",
+            "excess_total_pct": -0.48
+          },
+          {
+            "period": [
+              "2025-07-22",
+              "2025-10-22"
+            ],
+            "picked": "6.0",
+            "excess_total_pct": 2.1
+          },
+          {
+            "period": [
+              "2025-10-23",
+              "2026-01-27"
+            ],
+            "picked": "6.0",
+            "excess_total_pct": 4.33
+          },
+          {
+            "period": [
+              "2026-01-28",
+              "2026-04-30"
+            ],
+            "picked": "6.0",
+            "excess_total_pct": 2.56
+          },
+          {
+            "period": [
+              "2026-05-01",
+              "2026-06-29"
+            ],
+            "picked": "6.0",
+            "excess_total_pct": 2.69
+          }
+        ]
+      },
+      {
+        "name": "酒田五法：三兵（買い）（ATR倍率を毎回選ぶ）",
+        "excess": {
+          "days": 291,
+          "active_days": 277,
+          "mean_daily_pct": -0.0357,
+          "annual_pct": -8.74,
+          "ir_annual": -1.14,
+          "total_pct": -10.38,
+          "max_drawdown_pct": -15.09
+        },
+        "raw": {
+          "days": 291,
+          "active_days": null,
+          "mean_daily_pct": 0.0779,
+          "annual_pct": 19.08,
+          "ir_annual": 1.26,
+          "total_pct": 22.66,
+          "max_drawdown_pct": -10.2
+        },
+        "test": {
+          "mean_daily_pct": -0.0357,
+          "ci95_daily_pct": [
+            -0.0737,
+            0.0033
+          ],
+          "p_value": 0.9655,
+          "p_holm": 1.0,
+          "q_bh": 0.99
+        },
+        "folds": [
+          {
+            "period": [
+              "2025-04-18",
+              "2025-07-18"
+            ],
+            "picked": "3.5",
+            "excess_total_pct": -3.44
+          },
+          {
+            "period": [
+              "2025-07-22",
+              "2025-10-22"
+            ],
+            "picked": "2.5",
+            "excess_total_pct": -0.36
+          },
+          {
+            "period": [
+              "2025-10-23",
+              "2026-01-27"
+            ],
+            "picked": "2.5",
+            "excess_total_pct": -4.1
+          },
+          {
+            "period": [
+              "2026-01-28",
+              "2026-04-30"
+            ],
+            "picked": "2.5",
+            "excess_total_pct": -2.3
+          },
+          {
+            "period": [
+              "2026-05-01",
+              "2026-06-29"
+            ],
+            "picked": "3.0",
+            "excess_total_pct": -0.18
+          }
+        ]
+      },
+      {
+        "name": "酒田五法：三山（売り）（ATR倍率を毎回選ぶ）",
+        "excess": {
+          "days": 291,
+          "active_days": 291,
+          "mean_daily_pct": 0.0321,
+          "annual_pct": 7.86,
+          "ir_annual": 1.45,
+          "total_pct": 9.33,
+          "max_drawdown_pct": -3.45
+        },
+        "raw": {
+          "days": 291,
+          "active_days": null,
+          "mean_daily_pct": -0.1005,
+          "annual_pct": -24.63,
+          "ir_annual": -1.75,
+          "total_pct": -29.25,
+          "max_drawdown_pct": -34.0
+        },
+        "test": {
+          "mean_daily_pct": 0.0321,
+          "ci95_daily_pct": [
+            0.0006,
+            0.0681
+          ],
+          "p_value": 0.039,
+          "p_holm": 0.975,
+          "q_bh": 0.403
+        },
+        "folds": [
+          {
+            "period": [
+              "2025-04-18",
+              "2025-07-18"
+            ],
+            "picked": "6.0",
+            "excess_total_pct": 0.59
+          },
+          {
+            "period": [
+              "2025-07-22",
+              "2025-10-22"
+            ],
+            "picked": "6.0",
+            "excess_total_pct": 0.42
+          },
+          {
+            "period": [
+              "2025-10-23",
+              "2026-01-27"
+            ],
+            "picked": "6.0",
+            "excess_total_pct": 1.62
+          },
+          {
+            "period": [
+              "2026-01-28",
+              "2026-04-30"
+            ],
+            "picked": "6.0",
+            "excess_total_pct": 2.09
+          },
+          {
+            "period": [
+              "2026-05-01",
+              "2026-06-29"
+            ],
+            "picked": "6.0",
+            "excess_total_pct": 4.61
+          }
+        ]
+      },
+      {
+        "name": "酒田五法：三川（買い）（ATR倍率を毎回選ぶ）",
+        "excess": {
+          "days": 291,
+          "active_days": 291,
+          "mean_daily_pct": -0.0502,
+          "annual_pct": -12.3,
+          "ir_annual": -2.23,
+          "total_pct": -14.61,
+          "max_drawdown_pct": -16.01
+        },
+        "raw": {
+          "days": 291,
+          "active_days": null,
+          "mean_daily_pct": 0.0824,
+          "annual_pct": 20.18,
+          "ir_annual": 1.32,
+          "total_pct": 23.97,
+          "max_drawdown_pct": -10.97
+        },
+        "test": {
+          "mean_daily_pct": -0.0502,
+          "ci95_daily_pct": [
+            -0.1208,
+            0.0009
+          ],
+          "p_value": 0.922,
+          "p_holm": 1.0,
+          "q_bh": 0.99
+        },
+        "folds": [
+          {
+            "period": [
+              "2025-04-18",
+              "2025-07-18"
+            ],
+            "picked": "4.0",
+            "excess_total_pct": -9.69
+          },
+          {
+            "period": [
+              "2025-07-22",
+              "2025-10-22"
+            ],
+            "picked": "6.0",
+            "excess_total_pct": -0.83
+          },
+          {
+            "period": [
+              "2025-10-23",
+              "2026-01-27"
+            ],
+            "picked": "5.0",
+            "excess_total_pct": -0.12
+          },
+          {
+            "period": [
+              "2026-01-28",
+              "2026-04-30"
+            ],
+            "picked": "6.0",
+            "excess_total_pct": 0.35
+          },
+          {
+            "period": [
+              "2026-05-01",
+              "2026-06-29"
+            ],
+            "picked": "6.0",
+            "excess_total_pct": -4.32
+          }
+        ]
+      },
+      {
+        "name": "酒田五法：三法（売り）（ATR倍率を毎回選ぶ）",
+        "excess": {
+          "days": 291,
+          "active_days": 277,
+          "mean_daily_pct": 0.0431,
+          "annual_pct": 10.56,
+          "ir_annual": 1.03,
+          "total_pct": 12.54,
+          "max_drawdown_pct": -7.3
+        },
+        "raw": {
+          "days": 291,
+          "active_days": null,
+          "mean_daily_pct": -0.0704,
+          "annual_pct": -17.26,
+          "ir_annual": -1.15,
+          "total_pct": -20.5,
+          "max_drawdown_pct": -25.87
+        },
+        "test": {
+          "mean_daily_pct": 0.0431,
+          "ci95_daily_pct": [
+            -0.0106,
+            0.0945
+          ],
+          "p_value": 0.0465,
+          "p_holm": 1.0,
+          "q_bh": 0.403
+        },
+        "folds": [
+          {
+            "period": [
+              "2025-04-18",
+              "2025-07-18"
+            ],
+            "picked": "3.0",
+            "excess_total_pct": 0.1
+          },
+          {
+            "period": [
+              "2025-07-22",
+              "2025-10-22"
+            ],
+            "picked": "3.0",
+            "excess_total_pct": 3.71
+          },
+          {
+            "period": [
+              "2025-10-23",
+              "2026-01-27"
+            ],
+            "picked": "3.0",
+            "excess_total_pct": 5.39
+          },
+          {
+            "period": [
+              "2026-01-28",
+              "2026-04-30"
+            ],
+            "picked": "3.0",
+            "excess_total_pct": 1.97
+          },
+          {
+            "period": [
+              "2026-05-01",
+              "2026-06-29"
+            ],
+            "picked": "2.5",
+            "excess_total_pct": 1.38
+          }
+        ]
+      },
+      {
+        "name": "酒田五法：三法（買い）（ATR倍率を毎回選ぶ）",
+        "excess": {
+          "days": 291,
+          "active_days": 274,
+          "mean_daily_pct": 0.0242,
+          "annual_pct": 5.94,
+          "ir_annual": 0.22,
+          "total_pct": 7.05,
+          "max_drawdown_pct": -34.92
+        },
+        "raw": {
+          "days": 291,
+          "active_days": null,
+          "mean_daily_pct": 0.1269,
+          "annual_pct": 31.1,
+          "ir_annual": 1.01,
+          "total_pct": 36.94,
+          "max_drawdown_pct": -17.18
+        },
+        "test": {
+          "mean_daily_pct": 0.0242,
+          "ci95_daily_pct": [
+            -0.0913,
+            0.1426
+          ],
+          "p_value": 0.339,
+          "p_holm": 1.0,
+          "q_bh": 0.8013
+        },
+        "folds": [
+          {
+            "period": [
+              "2025-04-18",
+              "2025-07-18"
+            ],
+            "picked": "1.0",
+            "excess_total_pct": -0.49
+          },
+          {
+            "period": [
+              "2025-07-22",
+              "2025-10-22"
+            ],
+            "picked": "1.0",
+            "excess_total_pct": -4.41
+          },
+          {
+            "period": [
+              "2025-10-23",
+              "2026-01-27"
+            ],
+            "picked": "1.0",
+            "excess_total_pct": -2.37
+          },
+          {
+            "period": [
+              "2026-01-28",
+              "2026-04-30"
+            ],
+            "picked": "2.5",
+            "excess_total_pct": 5.58
+          },
+          {
+            "period": [
+              "2026-05-01",
+              "2026-06-29"
+            ],
+            "picked": "2.0",
+            "excess_total_pct": 8.74
+          }
+        ]
+      },
+      {
+        "name": "酒田五法：三空（売り）（ATR倍率を毎回選ぶ）",
+        "excess": {
+          "days": 291,
+          "active_days": 282,
+          "mean_daily_pct": -0.0213,
+          "annual_pct": -5.21,
+          "ir_annual": -0.38,
+          "total_pct": -6.19,
+          "max_drawdown_pct": -27.74
+        },
+        "raw": {
+          "days": 291,
+          "active_days": null,
+          "mean_daily_pct": -0.1405,
+          "annual_pct": -34.42,
+          "ir_annual": -1.62,
+          "total_pct": -40.88,
+          "max_drawdown_pct": -60.4
+        },
+        "test": {
+          "mean_daily_pct": -0.0213,
+          "ci95_daily_pct": [
+            -0.1383,
+            0.1367
+          ],
+          "p_value": 0.5855,
+          "p_holm": 1.0,
+          "q_bh": 0.8573
+        },
+        "folds": [
+          {
+            "period": [
+              "2025-04-18",
+              "2025-07-18"
+            ],
+            "picked": "1.0",
+            "excess_total_pct": 0.58
+          },
+          {
+            "period": [
+              "2025-07-22",
+              "2025-10-22"
+            ],
+            "picked": "1.0",
+            "excess_total_pct": -8.5
+          },
+          {
+            "period": [
+              "2025-10-23",
+              "2026-01-27"
+            ],
+            "picked": "1.8",
+            "excess_total_pct": -8.43
+          },
+          {
+            "period": [
+              "2026-01-28",
+              "2026-04-30"
+            ],
+            "picked": "1.8",
+            "excess_total_pct": -5.58
+          },
+          {
+            "period": [
+              "2026-05-01",
+              "2026-06-29"
+            ],
+            "picked": "1.5",
+            "excess_total_pct": 15.73
+          }
+        ]
+      },
+      {
+        "name": "酒田五法：三空（買い）（ATR倍率を毎回選ぶ）",
+        "excess": {
+          "days": 291,
+          "active_days": 291,
+          "mean_daily_pct": -0.0237,
+          "annual_pct": -5.81,
+          "ir_annual": -0.5,
+          "total_pct": -6.9,
+          "max_drawdown_pct": -16.47
+        },
+        "raw": {
+          "days": 291,
+          "active_days": null,
+          "mean_daily_pct": 0.1089,
+          "annual_pct": 26.67,
+          "ir_annual": 1.29,
+          "total_pct": 31.68,
+          "max_drawdown_pct": -19.7
+        },
+        "test": {
+          "mean_daily_pct": -0.0237,
+          "ci95_daily_pct": [
+            -0.1112,
+            0.0427
+          ],
+          "p_value": 0.7465,
+          "p_holm": 1.0,
+          "q_bh": 0.99
+        },
+        "folds": [
+          {
+            "period": [
+              "2025-04-18",
+              "2025-07-18"
+            ],
+            "picked": "2.0",
+            "excess_total_pct": 2.08
+          },
+          {
+            "period": [
+              "2025-07-22",
+              "2025-10-22"
+            ],
+            "picked": "2.0",
+            "excess_total_pct": 2.21
+          },
+          {
+            "period": [
+              "2025-10-23",
+              "2026-01-27"
+            ],
+            "picked": "2.0",
+            "excess_total_pct": -3.74
+          },
+          {
+            "period": [
+              "2026-01-28",
+              "2026-04-30"
+            ],
+            "picked": "5.0",
+            "excess_total_pct": 1.93
+          },
+          {
+            "period": [
+              "2026-05-01",
+              "2026-06-29"
+            ],
+            "picked": "5.0",
+            "excess_total_pct": -9.37
+          }
+        ]
+      },
+      {
+        "name": "酒田五法：段違い（売り）（ATR倍率を毎回選ぶ）",
+        "excess": {
+          "days": 291,
+          "active_days": 291,
+          "mean_daily_pct": 0.0413,
+          "annual_pct": 10.13,
+          "ir_annual": 0.85,
+          "total_pct": 12.03,
+          "max_drawdown_pct": -8.45
+        },
+        "raw": {
+          "days": 291,
+          "active_days": null,
+          "mean_daily_pct": -0.0913,
+          "annual_pct": -22.36,
+          "ir_annual": -1.2,
+          "total_pct": -26.55,
+          "max_drawdown_pct": -38.49
+        },
+        "test": {
+          "mean_daily_pct": 0.0413,
+          "ci95_daily_pct": [
+            -0.0336,
+            0.1236
+          ],
+          "p_value": 0.1615,
+          "p_holm": 1.0,
+          "q_bh": 0.6091
+        },
+        "folds": [
+          {
+            "period": [
+              "2025-04-18",
+              "2025-07-18"
+            ],
+            "picked": "6.0",
+            "excess_total_pct": -0.25
+          },
+          {
+            "period": [
+              "2025-07-22",
+              "2025-10-22"
+            ],
+            "picked": "1.0",
+            "excess_total_pct": -6.05
+          },
+          {
+            "period": [
+              "2025-10-23",
+              "2026-01-27"
+            ],
+            "picked": "6.0",
+            "excess_total_pct": 2.97
+          },
+          {
+            "period": [
+              "2026-01-28",
+              "2026-04-30"
+            ],
+            "picked": "6.0",
+            "excess_total_pct": 5.94
+          },
+          {
+            "period": [
+              "2026-05-01",
+              "2026-06-29"
+            ],
+            "picked": "6.0",
+            "excess_total_pct": 9.41
+          }
+        ]
+      },
+      {
+        "name": "酒田五法：段違い（買い）（ATR倍率を毎回選ぶ）",
+        "excess": {
+          "days": 291,
+          "active_days": 291,
+          "mean_daily_pct": -0.0492,
+          "annual_pct": -12.06,
+          "ir_annual": -1.61,
+          "total_pct": -14.33,
+          "max_drawdown_pct": -16.06
+        },
+        "raw": {
+          "days": 291,
+          "active_days": null,
+          "mean_daily_pct": 0.0833,
+          "annual_pct": 20.42,
+          "ir_annual": 1.08,
+          "total_pct": 24.25,
+          "max_drawdown_pct": -12.77
+        },
+        "test": {
+          "mean_daily_pct": -0.0492,
+          "ci95_daily_pct": [
+            -0.1118,
+            0.0117
+          ],
+          "p_value": 0.9305,
+          "p_holm": 1.0,
+          "q_bh": 0.99
+        },
+        "folds": [
+          {
+            "period": [
+              "2025-04-18",
+              "2025-07-18"
+            ],
+            "picked": "2.0",
+            "excess_total_pct": -6.01
+          },
+          {
+            "period": [
+              "2025-07-22",
+              "2025-10-22"
+            ],
+            "picked": "2.0",
+            "excess_total_pct": -3.24
+          },
+          {
+            "period": [
+              "2025-10-23",
+              "2026-01-27"
+            ],
+            "picked": "2.0",
+            "excess_total_pct": -3.22
+          },
+          {
+            "period": [
+              "2026-01-28",
+              "2026-04-30"
+            ],
+            "picked": "4.5",
+            "excess_total_pct": 1.84
+          },
+          {
+            "period": [
+              "2026-05-01",
+              "2026-06-29"
+            ],
+            "picked": "6.0",
+            "excess_total_pct": -3.69
+          }
+        ]
+      },
+      {
+        "name": "酒田五法：毛抜き（かい値）（売り）（ATR倍率を毎回選ぶ）",
+        "excess": {
+          "days": 291,
+          "active_days": 291,
+          "mean_daily_pct": 0.0189,
+          "annual_pct": 4.63,
+          "ir_annual": 1.19,
+          "total_pct": 5.5,
+          "max_drawdown_pct": -3.11
+        },
+        "raw": {
+          "days": 291,
+          "active_days": null,
+          "mean_daily_pct": -0.1137,
+          "annual_pct": -27.85,
+          "ir_annual": -1.89,
+          "total_pct": -33.08,
+          "max_drawdown_pct": -38.6
+        },
+        "test": {
+          "mean_daily_pct": 0.0189,
+          "ci95_daily_pct": [
+            -0.0063,
+            0.054
+          ],
+          "p_value": 0.1165,
+          "p_holm": 1.0,
+          "q_bh": 0.6058
+        },
+        "folds": [
+          {
+            "period": [
+              "2025-04-18",
+              "2025-07-18"
+            ],
+            "picked": "6.0",
+            "excess_total_pct": 0.66
+          },
+          {
+            "period": [
+              "2025-07-22",
+              "2025-10-22"
+            ],
+            "picked": "2.5",
+            "excess_total_pct": -0.6
+          },
+          {
+            "period": [
+              "2025-10-23",
+              "2026-01-27"
+            ],
+            "picked": "2.5",
+            "excess_total_pct": -0.52
+          },
+          {
+            "period": [
+              "2026-01-28",
+              "2026-04-30"
+            ],
+            "picked": "6.0",
+            "excess_total_pct": 1.77
+          },
+          {
+            "period": [
+              "2026-05-01",
+              "2026-06-29"
+            ],
+            "picked": "6.0",
+            "excess_total_pct": 4.19
+          }
+        ]
+      },
+      {
+        "name": "酒田五法：毛抜き（かい値）（買い）（ATR倍率を毎回選ぶ）",
+        "excess": {
+          "days": 291,
+          "active_days": 291,
+          "mean_daily_pct": -0.0672,
+          "annual_pct": -16.46,
+          "ir_annual": -3.86,
+          "total_pct": -19.55,
+          "max_drawdown_pct": -20.0
+        },
+        "raw": {
+          "days": 291,
+          "active_days": null,
+          "mean_daily_pct": 0.0654,
+          "annual_pct": 16.02,
+          "ir_annual": 0.98,
+          "total_pct": 19.03,
+          "max_drawdown_pct": -12.79
+        },
+        "test": {
+          "mean_daily_pct": -0.0672,
+          "ci95_daily_pct": [
+            -0.1258,
+            -0.0275
+          ],
+          "p_value": 0.983,
+          "p_holm": 1.0,
+          "q_bh": 0.99
+        },
+        "folds": [
+          {
+            "period": [
+              "2025-04-18",
+              "2025-07-18"
+            ],
+            "picked": "3.0",
+            "excess_total_pct": -7.8
+          },
+          {
+            "period": [
+              "2025-07-22",
+              "2025-10-22"
+            ],
+            "picked": "5.0",
+            "excess_total_pct": -2.05
+          },
+          {
+            "period": [
+              "2025-10-23",
+              "2026-01-27"
+            ],
+            "picked": "5.0",
+            "excess_total_pct": -1.57
+          },
+          {
+            "period": [
+              "2026-01-28",
+              "2026-04-30"
+            ],
+            "picked": "5.0",
+            "excess_total_pct": -1.75
+          },
+          {
+            "period": [
+              "2026-05-01",
+              "2026-06-29"
+            ],
+            "picked": "6.0",
+            "excess_total_pct": -6.37
+          }
+        ]
+      },
+      {
+        "name": "出来高急増3倍・株価横ばい（買い）（ATR倍率を毎回選ぶ）",
+        "excess": {
+          "days": 291,
+          "active_days": 277,
+          "mean_daily_pct": -0.0676,
+          "annual_pct": -16.56,
+          "ir_annual": -1.51,
+          "total_pct": -19.66,
+          "max_drawdown_pct": -23.69
+        },
+        "raw": {
+          "days": 291,
+          "active_days": null,
+          "mean_daily_pct": 0.046,
+          "annual_pct": 11.26,
+          "ir_annual": 0.92,
+          "total_pct": 13.38,
+          "max_drawdown_pct": -8.32
+        },
+        "test": {
+          "mean_daily_pct": -0.0676,
+          "ci95_daily_pct": [
+            -0.1311,
+            -0.0108
+          ],
+          "p_value": 0.9805,
+          "p_holm": 1.0,
+          "q_bh": 0.99
+        },
+        "folds": [
+          {
+            "period": [
+              "2025-04-18",
+              "2025-07-18"
+            ],
+            "picked": "5.0",
+            "excess_total_pct": -10.57
+          },
+          {
+            "period": [
+              "2025-07-22",
+              "2025-10-22"
+            ],
+            "picked": "1.8",
+            "excess_total_pct": -3.78
+          },
+          {
+            "period": [
+              "2025-10-23",
+              "2026-01-27"
+            ],
+            "picked": "2.0",
+            "excess_total_pct": -4.91
+          },
+          {
+            "period": [
+              "2026-01-28",
+              "2026-04-30"
+            ],
+            "picked": "3.5",
+            "excess_total_pct": -0.13
+          },
+          {
+            "period": [
+              "2026-05-01",
+              "2026-06-29"
+            ],
+            "picked": "3.0",
+            "excess_total_pct": -0.28
+          }
+        ]
+      },
+      {
+        "name": "出来高急増2倍・株価横ばい（買い）（ATR倍率を毎回選ぶ）",
+        "excess": {
+          "days": 291,
+          "active_days": 277,
+          "mean_daily_pct": -0.063,
+          "annual_pct": -15.44,
+          "ir_annual": -1.98,
+          "total_pct": -18.34,
+          "max_drawdown_pct": -22.41
+        },
+        "raw": {
+          "days": 291,
+          "active_days": null,
+          "mean_daily_pct": 0.0505,
+          "annual_pct": 12.38,
+          "ir_annual": 1.09,
+          "total_pct": 14.7,
+          "max_drawdown_pct": -7.01
+        },
+        "test": {
+          "mean_daily_pct": -0.063,
+          "ci95_daily_pct": [
+            -0.1154,
+            -0.0127
+          ],
+          "p_value": 0.99,
+          "p_holm": 1.0,
+          "q_bh": 0.99
+        },
+        "folds": [
+          {
+            "period": [
+              "2025-04-18",
+              "2025-07-18"
+            ],
+            "picked": "4.5",
+            "excess_total_pct": -8.63
+          },
+          {
+            "period": [
+              "2025-07-22",
+              "2025-10-22"
+            ],
+            "picked": "3.0",
+            "excess_total_pct": -6.55
+          },
+          {
+            "period": [
+              "2025-10-23",
+              "2026-01-27"
+            ],
+            "picked": "4.5",
+            "excess_total_pct": -3.63
+          },
+          {
+            "period": [
+              "2026-01-28",
+              "2026-04-30"
+            ],
+            "picked": "3.5",
+            "excess_total_pct": -1.14
+          },
+          {
+            "period": [
+              "2026-05-01",
+              "2026-06-29"
+            ],
+            "picked": "3.5",
+            "excess_total_pct": 1.61
+          }
+        ]
+      },
+      {
+        "name": "本番設定 固定（スコア75点以上・ATR×3.0）",
+        "excess": {
+          "days": 291,
+          "active_days": 224,
+          "mean_daily_pct": 0.0021,
+          "annual_pct": 0.53,
+          "ir_annual": 0.04,
+          "total_pct": 0.62,
+          "max_drawdown_pct": -18.42
+        },
+        "raw": {
+          "days": 291,
+          "active_days": null,
+          "mean_daily_pct": 0.0863,
+          "annual_pct": 21.14,
+          "ir_annual": 1.24,
+          "total_pct": 25.1,
+          "max_drawdown_pct": -21.62
+        },
+        "test": {
+          "mean_daily_pct": 0.0021,
+          "ci95_daily_pct": [
+            -0.0861,
+            0.0784
+          ],
+          "p_value": 0.5025,
+          "p_holm": 1.0,
+          "q_bh": 0.8573
+        },
+        "folds": [
+          {
+            "period": [
+              "2025-04-18",
+              "2025-07-18"
+            ],
+            "picked": null,
+            "excess_total_pct": 0.0
+          },
+          {
+            "period": [
+              "2025-07-22",
+              "2025-10-22"
+            ],
+            "picked": "('なし', 75, 3.0)",
+            "excess_total_pct": 3.74
+          },
+          {
+            "period": [
+              "2025-10-23",
+              "2026-01-27"
+            ],
+            "picked": "('なし', 75, 3.0)",
+            "excess_total_pct": 7.71
+          },
+          {
+            "period": [
+              "2026-01-28",
+              "2026-04-30"
+            ],
+            "picked": "('なし', 75, 3.0)",
+            "excess_total_pct": -3.4
+          },
+          {
+            "period": [
+              "2026-05-01",
+              "2026-06-29"
+            ],
+            "picked": "('なし', 75, 3.0)",
+            "excess_total_pct": -7.43
+          }
+        ]
+      },
+      {
+        "name": "本番設定 固定（スコア75点以上・ATR×3.0）＋売りパターン除外（当日）",
+        "excess": {
+          "days": 291,
+          "active_days": 224,
+          "mean_daily_pct": 0.0032,
+          "annual_pct": 0.78,
+          "ir_annual": 0.06,
+          "total_pct": 0.92,
+          "max_drawdown_pct": -18.42
+        },
+        "raw": {
+          "days": 291,
+          "active_days": null,
+          "mean_daily_pct": 0.0873,
+          "annual_pct": 21.39,
+          "ir_annual": 1.25,
+          "total_pct": 25.4,
+          "max_drawdown_pct": -21.62
+        },
+        "test": {
+          "mean_daily_pct": 0.0032,
+          "ci95_daily_pct": [
+            -0.0849,
+            0.0819
+          ],
+          "p_value": 0.4915,
+          "p_holm": 1.0,
+          "q_bh": 0.8573
+        },
+        "folds": [
+          {
+            "period": [
+              "2025-04-18",
+              "2025-07-18"
+            ],
+            "picked": null,
+            "excess_total_pct": 0.0
+          },
+          {
+            "period": [
+              "2025-07-22",
+              "2025-10-22"
+            ],
+            "picked": "('当日', 75, 3.0)",
+            "excess_total_pct": 3.74
+          },
+          {
+            "period": [
+              "2025-10-23",
+              "2026-01-27"
+            ],
+            "picked": "('当日', 75, 3.0)",
+            "excess_total_pct": 8.13
+          },
+          {
+            "period": [
+              "2026-01-28",
+              "2026-04-30"
+            ],
+            "picked": "('当日', 75, 3.0)",
+            "excess_total_pct": -3.51
+          },
+          {
+            "period": [
+              "2026-05-01",
+              "2026-06-29"
+            ],
+            "picked": "('当日', 75, 3.0)",
+            "excess_total_pct": -7.43
+          }
+        ]
+      },
+      {
+        "name": "本番設定 固定（スコア75点以上・ATR×3.0）＋売りパターン除外（直近5日）",
+        "excess": {
+          "days": 291,
+          "active_days": 224,
+          "mean_daily_pct": -0.0006,
+          "annual_pct": -0.14,
+          "ir_annual": -0.01,
+          "total_pct": -0.17,
+          "max_drawdown_pct": -18.42
+        },
+        "raw": {
+          "days": 291,
+          "active_days": null,
+          "mean_daily_pct": 0.0835,
+          "annual_pct": 20.47,
+          "ir_annual": 1.21,
+          "total_pct": 24.31,
+          "max_drawdown_pct": -21.77
+        },
+        "test": {
+          "mean_daily_pct": -0.0006,
+          "ci95_daily_pct": [
+            -0.0875,
+            0.0742
+          ],
+          "p_value": 0.528,
+          "p_holm": 1.0,
+          "q_bh": 0.8573
+        },
+        "folds": [
+          {
+            "period": [
+              "2025-04-18",
+              "2025-07-18"
+            ],
+            "picked": null,
+            "excess_total_pct": 0.0
+          },
+          {
+            "period": [
+              "2025-07-22",
+              "2025-10-22"
+            ],
+            "picked": "('直近5日', 75, 3.0)",
+            "excess_total_pct": 3.57
+          },
+          {
+            "period": [
+              "2025-10-23",
+              "2026-01-27"
+            ],
+            "picked": "('直近5日', 75, 3.0)",
+            "excess_total_pct": 7.55
+          },
+          {
+            "period": [
+              "2026-01-28",
+              "2026-04-30"
+            ],
+            "picked": "('直近5日', 75, 3.0)",
+            "excess_total_pct": -3.85
+          },
+          {
+            "period": [
+              "2026-05-01",
+              "2026-06-29"
+            ],
+            "picked": "('直近5日', 75, 3.0)",
+            "excess_total_pct": -7.43
+          }
+        ]
+      }
+    ]
+  },
+  "paired": {
+    "0.1": [
+      {
+        "a": "本番設定 固定（スコア75点以上・ATR×3.0）＋売りパターン除外（当日）",
+        "b": "本番設定 固定（スコア75点以上・ATR×3.0）",
+        "diff": {
+          "days": 291,
+          "active_days": null,
+          "mean_daily_pct": 0.001,
+          "annual_pct": 0.24,
+          "ir_annual": 0.89,
+          "total_pct": 0.29,
+          "max_drawdown_pct": -0.18
+        },
+        "test": {
+          "mean_daily_pct": 0.001,
+          "ci95_daily_pct": [
+            -0.0013,
+            0.0041
+          ],
+          "p_value": 0.223
+        },
+        "folds_total_pct": [
+          0.0,
+          0.0,
+          0.4,
+          -0.12,
+          0.0
+        ],
+        "folds_better": 1
+      },
+      {
+        "a": "スクリーニングLONG＋売りパターン除外（当日）（スコア下限×ATR倍率を毎回選ぶ）",
+        "b": "スクリーニングLONG（スコア下限×ATR倍率を毎回選ぶ）",
+        "diff": {
+          "days": 291,
+          "active_days": null,
+          "mean_daily_pct": -0.0036,
+          "annual_pct": -0.87,
+          "ir_annual": -1.53,
+          "total_pct": -1.04,
+          "max_drawdown_pct": -1.28
+        },
+        "test": {
+          "mean_daily_pct": -0.0036,
+          "ci95_daily_pct": [
+            -0.0069,
+            -0.0007
+          ],
+          "p_value": 0.982
+        },
+        "folds_total_pct": [
+          -0.27,
+          -0.77,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "folds_better": 0
+      },
+      {
+        "a": "本番設定 固定（スコア75点以上・ATR×3.0）＋売りパターン除外（直近5日）",
+        "b": "本番設定 固定（スコア75点以上・ATR×3.0）",
+        "diff": {
+          "days": 291,
+          "active_days": null,
+          "mean_daily_pct": -0.0025,
+          "annual_pct": -0.61,
+          "ir_annual": -0.42,
+          "total_pct": -0.73,
+          "max_drawdown_pct": -1.67
+        },
+        "test": {
+          "mean_daily_pct": -0.0025,
+          "ci95_daily_pct": [
+            -0.009,
+            0.0035
+          ],
+          "p_value": 0.7945
+        },
+        "folds_total_pct": [
+          0.0,
+          -0.14,
+          -0.14,
+          -0.45,
+          0.0
+        ],
+        "folds_better": 0
+      },
+      {
+        "a": "スクリーニングLONG＋売りパターン除外（直近5日）（スコア下限×ATR倍率を毎回選ぶ）",
+        "b": "スクリーニングLONG（スコア下限×ATR倍率を毎回選ぶ）",
+        "diff": {
+          "days": 291,
+          "active_days": null,
+          "mean_daily_pct": -0.0382,
+          "annual_pct": -9.36,
+          "ir_annual": -0.93,
+          "total_pct": -11.12,
+          "max_drawdown_pct": -17.67
+        },
+        "test": {
+          "mean_daily_pct": -0.0382,
+          "ci95_daily_pct": [
+            -0.1128,
+            0.0263
+          ],
+          "p_value": 0.853
+        },
+        "folds_total_pct": [
+          -0.42,
+          -0.76,
+          -9.39,
+          -0.55,
+          0.0
+        ],
+        "folds_better": 0
+      },
+      {
+        "a": "スクリーニングLONG（除外の有無もスコア下限×ATR倍率と一緒に毎回選ぶ）",
+        "b": "スクリーニングLONG（スコア下限×ATR倍率を毎回選ぶ）",
+        "diff": {
+          "days": 291,
+          "active_days": null,
+          "mean_daily_pct": 0.0,
+          "annual_pct": 0.0,
+          "ir_annual": null,
+          "total_pct": 0.0,
+          "max_drawdown_pct": 0.0
+        },
+        "test": {
+          "mean_daily_pct": 0.0,
+          "ci95_daily_pct": [
+            0.0,
+            0.0
+          ],
+          "p_value": 1.0
+        },
+        "folds_total_pct": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "folds_better": 0
+      }
+    ],
+    "0.3": [
+      {
+        "a": "本番設定 固定（スコア75点以上・ATR×3.0）＋売りパターン除外（当日）",
+        "b": "本番設定 固定（スコア75点以上・ATR×3.0）",
+        "diff": {
+          "days": 291,
+          "active_days": null,
+          "mean_daily_pct": 0.001,
+          "annual_pct": 0.25,
+          "ir_annual": 0.9,
+          "total_pct": 0.29,
+          "max_drawdown_pct": -0.18
+        },
+        "test": {
+          "mean_daily_pct": 0.001,
+          "ci95_daily_pct": [
+            -0.0013,
+            0.0042
+          ],
+          "p_value": 0.22
+        },
+        "folds_total_pct": [
+          0.0,
+          0.0,
+          0.41,
+          -0.11,
+          0.0
+        ],
+        "folds_better": 1
+      },
+      {
+        "a": "スクリーニングLONG＋売りパターン除外（当日）（スコア下限×ATR倍率を毎回選ぶ）",
+        "b": "スクリーニングLONG（スコア下限×ATR倍率を毎回選ぶ）",
+        "diff": {
+          "days": 291,
+          "active_days": null,
+          "mean_daily_pct": -0.0035,
+          "annual_pct": -0.86,
+          "ir_annual": -1.5,
+          "total_pct": -1.03,
+          "max_drawdown_pct": -1.26
+        },
+        "test": {
+          "mean_daily_pct": -0.0035,
+          "ci95_daily_pct": [
+            -0.0069,
+            -0.0006
+          ],
+          "p_value": 0.978
+        },
+        "folds_total_pct": [
+          -0.25,
+          -0.78,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "folds_better": 0
+      },
+      {
+        "a": "本番設定 固定（スコア75点以上・ATR×3.0）＋売りパターン除外（直近5日）",
+        "b": "本番設定 固定（スコア75点以上・ATR×3.0）",
+        "diff": {
+          "days": 291,
+          "active_days": null,
+          "mean_daily_pct": -0.0026,
+          "annual_pct": -0.64,
+          "ir_annual": -0.43,
+          "total_pct": -0.76,
+          "max_drawdown_pct": -1.7
+        },
+        "test": {
+          "mean_daily_pct": -0.0026,
+          "ci95_daily_pct": [
+            -0.0092,
+            0.0033
+          ],
+          "p_value": 0.8065
+        },
+        "folds_total_pct": [
+          0.0,
+          -0.16,
+          -0.15,
+          -0.45,
+          0.0
+        ],
+        "folds_better": 0
+      },
+      {
+        "a": "スクリーニングLONG＋売りパターン除外（直近5日）（スコア下限×ATR倍率を毎回選ぶ）",
+        "b": "スクリーニングLONG（スコア下限×ATR倍率を毎回選ぶ）",
+        "diff": {
+          "days": 291,
+          "active_days": null,
+          "mean_daily_pct": -0.036,
+          "annual_pct": -8.83,
+          "ir_annual": -0.88,
+          "total_pct": -10.49,
+          "max_drawdown_pct": -17.06
+        },
+        "test": {
+          "mean_daily_pct": -0.036,
+          "ci95_daily_pct": [
+            -0.1099,
+            0.0284
+          ],
+          "p_value": 0.8445
+        },
+        "folds_total_pct": [
+          -0.41,
+          -0.85,
+          -9.04,
+          -0.19,
+          0.0
+        ],
+        "folds_better": 0
+      },
+      {
+        "a": "スクリーニングLONG（除外の有無もスコア下限×ATR倍率と一緒に毎回選ぶ）",
+        "b": "スクリーニングLONG（スコア下限×ATR倍率を毎回選ぶ）",
+        "diff": {
+          "days": 291,
+          "active_days": null,
+          "mean_daily_pct": 0.0,
+          "annual_pct": 0.0,
+          "ir_annual": null,
+          "total_pct": 0.0,
+          "max_drawdown_pct": 0.0
+        },
+        "test": {
+          "mean_daily_pct": 0.0,
+          "ci95_daily_pct": [
+            0.0,
+            0.0
+          ],
+          "p_value": 1.0
+        },
+        "folds_total_pct": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "folds_better": 0
+      }
+    ],
+    "0.5": [
+      {
+        "a": "本番設定 固定（スコア75点以上・ATR×3.0）＋売りパターン除外（当日）",
+        "b": "本番設定 固定（スコア75点以上・ATR×3.0）",
+        "diff": {
+          "days": 291,
+          "active_days": null,
+          "mean_daily_pct": 0.001,
+          "annual_pct": 0.25,
+          "ir_annual": 0.92,
+          "total_pct": 0.3,
+          "max_drawdown_pct": -0.19
+        },
+        "test": {
+          "mean_daily_pct": 0.001,
+          "ci95_daily_pct": [
+            -0.0013,
+            0.0042
+          ],
+          "p_value": 0.219
+        },
+        "folds_total_pct": [
+          0.0,
+          0.0,
+          0.41,
+          -0.11,
+          0.0
+        ],
+        "folds_better": 1
+      },
+      {
+        "a": "スクリーニングLONG＋売りパターン除外（当日）（スコア下限×ATR倍率を毎回選ぶ）",
+        "b": "スクリーニングLONG（スコア下限×ATR倍率を毎回選ぶ）",
+        "diff": {
+          "days": 291,
+          "active_days": null,
+          "mean_daily_pct": -0.0035,
+          "annual_pct": -0.86,
+          "ir_annual": -1.46,
+          "total_pct": -1.02,
+          "max_drawdown_pct": -1.25
+        },
+        "test": {
+          "mean_daily_pct": -0.0035,
+          "ci95_daily_pct": [
+            -0.007,
+            -0.0006
+          ],
+          "p_value": 0.9745
+        },
+        "folds_total_pct": [
+          -0.23,
+          -0.79,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "folds_better": 0
+      },
+      {
+        "a": "本番設定 固定（スコア75点以上・ATR×3.0）＋売りパターン除外（直近5日）",
+        "b": "本番設定 固定（スコア75点以上・ATR×3.0）",
+        "diff": {
+          "days": 291,
+          "active_days": null,
+          "mean_daily_pct": -0.0027,
+          "annual_pct": -0.67,
+          "ir_annual": -0.45,
+          "total_pct": -0.79,
+          "max_drawdown_pct": -1.73
+        },
+        "test": {
+          "mean_daily_pct": -0.0027,
+          "ci95_daily_pct": [
+            -0.0092,
+            0.0032
+          ],
+          "p_value": 0.8145
+        },
+        "folds_total_pct": [
+          0.0,
+          -0.17,
+          -0.17,
+          -0.45,
+          0.0
+        ],
+        "folds_better": 0
+      },
+      {
+        "a": "スクリーニングLONG＋売りパターン除外（直近5日）（スコア下限×ATR倍率を毎回選ぶ）",
+        "b": "スクリーニングLONG（スコア下限×ATR倍率を毎回選ぶ）",
+        "diff": {
+          "days": 291,
+          "active_days": null,
+          "mean_daily_pct": -0.0338,
+          "annual_pct": -8.29,
+          "ir_annual": -0.82,
+          "total_pct": -9.85,
+          "max_drawdown_pct": -16.44
+        },
+        "test": {
+          "mean_daily_pct": -0.0338,
+          "ci95_daily_pct": [
+            -0.1053,
+            0.0299
+          ],
+          "p_value": 0.8315
+        },
+        "folds_total_pct": [
+          -0.4,
+          -0.93,
+          -8.68,
+          0.16,
+          0.0
+        ],
+        "folds_better": 1
+      },
+      {
+        "a": "スクリーニングLONG（除外の有無もスコア下限×ATR倍率と一緒に毎回選ぶ）",
+        "b": "スクリーニングLONG（スコア下限×ATR倍率を毎回選ぶ）",
+        "diff": {
+          "days": 291,
+          "active_days": null,
+          "mean_daily_pct": 0.0,
+          "annual_pct": 0.0,
+          "ir_annual": null,
+          "total_pct": 0.0,
+          "max_drawdown_pct": 0.0
+        },
+        "test": {
+          "mean_daily_pct": 0.0,
+          "ci95_daily_pct": [
+            0.0,
+            0.0
+          ],
+          "p_value": 1.0
+        },
+        "folds_total_pct": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "folds_better": 0
+      }
+    ]
+  },
+  "folds": [
+    [
+      "2025-04-18",
+      "2025-07-18"
+    ],
+    [
+      "2025-07-22",
+      "2025-10-22"
+    ],
+    [
+      "2025-10-23",
+      "2026-01-27"
+    ],
+    [
+      "2026-01-28",
+      "2026-04-30"
+    ],
+    [
+      "2026-05-01",
+      "2026-06-29"
+    ]
+  ],
+  "reality_check": {
+    "n_configs": 473,
+    "p_best": 0.0815,
+    "top": [
+      {
+        "name": "酒田五法：毛抜き（かい値）（売り） ATR×2.0",
+        "t": 3.02,
+        "p_adjusted": 0.0815,
+        "summary": {
+          "days": 417,
+          "active_days": null,
+          "mean_daily_pct": 0.042,
+          "annual_pct": 10.28,
+          "ir_annual": 2.32,
+          "total_pct": 17.5,
+          "max_drawdown_pct": -2.39
+        }
+      },
+      {
+        "name": "酒田五法：毛抜き（かい値）（売り） ATR×2.5",
+        "t": 2.97,
+        "p_adjusted": 0.089,
+        "summary": {
+          "days": 417,
+          "active_days": null,
+          "mean_daily_pct": 0.0383,
+          "annual_pct": 9.38,
+          "ir_annual": 2.28,
+          "total_pct": 15.97,
+          "max_drawdown_pct": -2.93
+        }
+      },
+      {
+        "name": "酒田五法：毛抜き（かい値）（売り） ATR×3.0",
+        "t": 2.84,
+        "p_adjusted": 0.125,
+        "summary": {
+          "days": 417,
+          "active_days": null,
+          "mean_daily_pct": 0.0304,
+          "annual_pct": 7.45,
+          "ir_annual": 2.18,
+          "total_pct": 12.68,
+          "max_drawdown_pct": -2.77
+        }
+      },
+      {
+        "name": "酒田五法：毛抜き（かい値）（売り） ATR×1.8",
+        "t": 2.81,
+        "p_adjusted": 0.1315,
+        "summary": {
+          "days": 417,
+          "active_days": null,
+          "mean_daily_pct": 0.04,
+          "annual_pct": 9.8,
+          "ir_annual": 2.15,
+          "total_pct": 16.68,
+          "max_drawdown_pct": -2.32
+        }
+      },
+      {
+        "name": "酒田五法：毛抜き（かい値）（売り） ATR×1.5",
+        "t": 2.64,
+        "p_adjusted": 0.1845,
+        "summary": {
+          "days": 417,
+          "active_days": null,
+          "mean_daily_pct": 0.0408,
+          "annual_pct": 10.0,
+          "ir_annual": 2.02,
+          "total_pct": 17.02,
+          "max_drawdown_pct": -2.19
+        }
+      },
+      {
+        "name": "酒田五法：毛抜き（かい値）（売り） ATR×6.0",
+        "t": 2.64,
+        "p_adjusted": 0.185,
+        "summary": {
+          "days": 417,
+          "active_days": null,
+          "mean_daily_pct": 0.0282,
+          "annual_pct": 6.92,
+          "ir_annual": 2.02,
+          "total_pct": 11.78,
+          "max_drawdown_pct": -3.11
+        }
+      },
+      {
+        "name": "酒田五法：毛抜き（かい値）（売り） ATR×3.5",
+        "t": 2.62,
+        "p_adjusted": 0.1885,
+        "summary": {
+          "days": 417,
+          "active_days": null,
+          "mean_daily_pct": 0.0287,
+          "annual_pct": 7.03,
+          "ir_annual": 2.01,
+          "total_pct": 11.96,
+          "max_drawdown_pct": -3.11
+        }
+      },
+      {
+        "name": "酒田五法：毛抜き（かい値）（売り） ATR×4.0",
+        "t": 2.57,
+        "p_adjusted": 0.2165,
+        "summary": {
+          "days": 417,
+          "active_days": null,
+          "mean_daily_pct": 0.0291,
+          "annual_pct": 7.14,
+          "ir_annual": 1.97,
+          "total_pct": 12.15,
+          "max_drawdown_pct": -3.11
+        }
+      },
+      {
+        "name": "酒田五法：毛抜き（かい値）（売り） ATR×5.0",
+        "t": 2.55,
+        "p_adjusted": 0.2245,
+        "summary": {
+          "days": 417,
+          "active_days": null,
+          "mean_daily_pct": 0.0287,
+          "annual_pct": 7.03,
+          "ir_annual": 1.96,
+          "total_pct": 11.96,
+          "max_drawdown_pct": -3.1
+        }
+      },
+      {
+        "name": "スクリーニングLONG スコア85・ATR×2.0",
+        "t": 2.51,
+        "p_adjusted": 0.2465,
+        "summary": {
+          "days": 417,
+          "active_days": null,
+          "mean_daily_pct": 0.0985,
+          "annual_pct": 24.13,
+          "ir_annual": 1.92,
+          "total_pct": 41.08,
+          "max_drawdown_pct": -8.05
+        }
+      },
+      {
+        "name": "スクリーニングLONG＋除外（当日） スコア85・ATR×2.0",
+        "t": 2.51,
+        "p_adjusted": 0.2465,
+        "summary": {
+          "days": 417,
+          "active_days": null,
+          "mean_daily_pct": 0.0985,
+          "annual_pct": 24.13,
+          "ir_annual": 1.92,
+          "total_pct": 41.08,
+          "max_drawdown_pct": -8.05
+        }
+      },
+      {
+        "name": "酒田五法：毛抜き（かい値）（売り） ATR×4.5",
+        "t": 2.4,
+        "p_adjusted": 0.3005,
+        "summary": {
+          "days": 417,
+          "active_days": null,
+          "mean_daily_pct": 0.0268,
+          "annual_pct": 6.57,
+          "ir_annual": 1.84,
+          "total_pct": 11.18,
+          "max_drawdown_pct": -3.14
+        }
+      },
+      {
+        "name": "スクリーニングLONG＋除外（当日） スコア85・ATR×3.0",
+        "t": 2.23,
+        "p_adjusted": 0.4005,
+        "summary": {
+          "days": 417,
+          "active_days": null,
+          "mean_daily_pct": 0.0709,
+          "annual_pct": 17.36,
+          "ir_annual": 1.71,
+          "total_pct": 29.55,
+          "max_drawdown_pct": -8.49
+        }
+      },
+      {
+        "name": "スクリーニングLONG スコア85・ATR×3.0",
+        "t": 2.23,
+        "p_adjusted": 0.4005,
+        "summary": {
+          "days": 417,
+          "active_days": null,
+          "mean_daily_pct": 0.0709,
+          "annual_pct": 17.36,
+          "ir_annual": 1.71,
+          "total_pct": 29.55,
+          "max_drawdown_pct": -8.49
+        }
+      },
+      {
+        "name": "スクリーニングSHORT ATR×5.0",
+        "t": 2.19,
+        "p_adjusted": 0.4175,
+        "summary": {
+          "days": 417,
+          "active_days": null,
+          "mean_daily_pct": 0.1086,
+          "annual_pct": 26.61,
+          "ir_annual": 1.68,
+          "total_pct": 45.29,
+          "max_drawdown_pct": -11.17
+        }
+      },
+      {
+        "name": "スクリーニングLONG スコア85・ATR×5.0",
+        "t": 2.19,
+        "p_adjusted": 0.4195,
+        "summary": {
+          "days": 417,
+          "active_days": null,
+          "mean_daily_pct": 0.067,
+          "annual_pct": 16.4,
+          "ir_annual": 1.68,
+          "total_pct": 27.92,
+          "max_drawdown_pct": -11.08
+        }
+      },
+      {
+        "name": "スクリーニングLONG＋除外（当日） スコア85・ATR×5.0",
+        "t": 2.19,
+        "p_adjusted": 0.4195,
+        "summary": {
+          "days": 417,
+          "active_days": null,
+          "mean_daily_pct": 0.067,
+          "annual_pct": 16.4,
+          "ir_annual": 1.68,
+          "total_pct": 27.92,
+          "max_drawdown_pct": -11.08
+        }
+      },
+      {
+        "name": "スクリーニングLONG＋除外（当日） スコア85・ATR×1.8",
+        "t": 2.18,
+        "p_adjusted": 0.4235,
+        "summary": {
+          "days": 417,
+          "active_days": null,
+          "mean_daily_pct": 0.0896,
+          "annual_pct": 21.95,
+          "ir_annual": 1.67,
+          "total_pct": 37.37,
+          "max_drawdown_pct": -10.56
+        }
+      },
+      {
+        "name": "スクリーニングLONG スコア85・ATR×1.8",
+        "t": 2.18,
+        "p_adjusted": 0.4235,
+        "summary": {
+          "days": 417,
+          "active_days": null,
+          "mean_daily_pct": 0.0896,
+          "annual_pct": 21.95,
+          "ir_annual": 1.67,
+          "total_pct": 37.37,
+          "max_drawdown_pct": -10.56
+        }
+      },
+      {
+        "name": "スクリーニングSHORT ATR×1.8",
+        "t": 2.1,
+        "p_adjusted": 0.479,
+        "summary": {
+          "days": 417,
+          "active_days": null,
+          "mean_daily_pct": 0.1232,
+          "annual_pct": 30.17,
+          "ir_annual": 1.61,
+          "total_pct": 51.36,
+          "max_drawdown_pct": -14.66
+        }
+      }
+    ]
+  },
+  "meta": {
+    "code": {
+      "git_commit": "b5015cfa58a56c747cd962f6a9b3cb2ca37302f9",
+      "git_dirty": true,
+      "file_sha256": {
+        "evaluate_strategy.py": "a92f2a6f71426a05",
+        "evaluate_walkforward.py": "5fb09379515e5bfa",
+        "fast_features.py": "c23e99d069ba2226",
+        "sakata.py": "20de59a9d1d2d367",
+        "scoring.py": "a03dfdb0fad7d99f",
+        "universe_filters.py": "18dfc67a76342458",
+        "validation.py": "c844081ff775bf06"
+      }
+    },
+    "data_fingerprint_sha256": "5d497ce1b31bea578678b645e9ff7b60c4f2dbf3b21e58a8e144e1576ad8cfd1",
+    "tickers": 3979,
+    "environment": {
+      "python": "3.11.9",
+      "pandas": "3.0.5",
+      "numpy": "2.4.6",
+      "platform": "Windows-10-10.0.26300-SP0"
+    },
+    "params": {
+      "train_min_days": 126,
+      "test_len_days": 63,
+      "min_entries_train": 30,
+      "costs_pct_round_trip": [
+        0.1,
+        0.3,
+        0.5
+      ],
+      "n_boot": 2000,
+      "mean_block_days": 20,
+      "seed": 20261111,
+      "atr_grid": [
+        1.0,
+        1.5,
+        1.8,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0,
+        6.0
+      ],
+      "long_score_thresholds": [
+        0,
+        60,
+        65,
+        70,
+        75,
+        80,
+        85,
+        90
+      ],
+      "long_top_n": 5,
+      "short_top_n": 10,
+      "prod": {
+        "threshold": 75,
+        "atr": 3.0
+      },
+      "exclude_bearish_lookback": {
+        "なし": 0,
+        "当日": 1,
+        "直近5日": 5
+      },
+      "selection_metric": "train excess IR"
+    }
+  },
+  "period": [
+    "2024-10-10",
+    "2026-06-29"
+  ],
+  "oos_period": [
+    "2025-04-18",
+    "2026-06-29"
+  ],
+  "tickers": 3926
+}

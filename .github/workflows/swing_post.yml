@@ -1,0 +1,72 @@
+name: Kurosuke Swing Posting
+
+# 【2026-11-11追加】スイング3型（swing_live.py が収集時に判定）を Discord の専用チャンネルに投稿する。
+# 本番の投稿（post_signals.yml）とは別。収集（collect_data.yml）が終わったら、その直後に投稿する
+# （寄り付き前に届けばよいので、07:45 JST まで待たない）。
+# 収集は本命・予備の2回起動することがあるため、投稿済みの判定日を data/_last_swing_posted_date.txt に残して二重投稿を防ぐ。
+on:
+  workflow_run:
+    workflows: ["Kurosuke Data Collection"]
+    types: [completed]
+  workflow_dispatch:
+    inputs:
+      force:
+        description: '投稿済みの判定日でも投稿する'
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+concurrency:
+  group: kurosuke-swing-posting
+  cancel-in-progress: false
+
+jobs:
+  post:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      github.event.workflow_run.event == 'schedule'
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+
+    - name: Post swing candidates
+      env:
+        DISCORD_WEBHOOK_URL_SWING_TEST: ${{ secrets.DISCORD_WEBHOOK_URL_SWING_TEST }}
+        DISCORD_WEBHOOK_URL_SWING_PROD: ${{ secrets.DISCORD_WEBHOOK_URL_SWING_PROD }}
+      run: python swing_poster.py ${{ inputs.force && '--force' || '' }}
+
+    - name: Commit posted marker
+      run: |
+        if [ ! -f data/_last_swing_posted_date.txt ]; then
+          echo "投稿しなかったためマーカーなし"
+          exit 0
+        fi
+        git add data/_last_swing_posted_date.txt
+        if git diff --cached --quiet; then
+          echo "投稿済みマーカーに変更なし"
+          exit 0
+        fi
+        git config user.name "kurosuke-bot"
+        git config user.email "kurosuke-bot@users.noreply.github.com"
+        git add data/_last_swing_posted_date.txt
+        git commit -m "chore: record swing posting ($(date -u +'%Y-%m-%d %H:%M UTC'))"
+        for attempt in 1 2 3 4 5; do
+          if git push; then exit 0; fi
+          sleep $((10 * attempt))
+          git fetch origin main && git rebase origin/main || { git rebase --abort; exit 1; }
+        done
+        exit 1
