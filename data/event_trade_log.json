@@ -39,10 +39,10 @@
   "entry_date": "2026-09-15",
   "entry_price": 2200.0,
   "held_days": 0,
-  "last_processed": "2026-11-10",
-  "stop": 2341.36,
-  "last_price": 2583.0,
-  "last_price_date": "2026-11-10"
+  "last_processed": "2026-11-11",
+  "stop": 2384.01,
+  "last_price": 2635.0,
+  "last_price_date": "2026-11-11"
  },
  {
   "series": "DIVIDEND_HIKE",
@@ -260,10 +260,10 @@
   "entry_date": "2026-10-05",
   "entry_price": 2980.0,
   "held_days": 0,
-  "last_processed": "2026-11-10",
+  "last_processed": "2026-11-11",
   "stop": 3019.82,
-  "last_price": 3220.0,
-  "last_price_date": "2026-11-10"
+  "last_price": 3235.0,
+  "last_price_date": "2026-11-11"
  },
  {
   "series": "DIVIDEND_HIKE",
@@ -302,10 +302,10 @@
   "entry_date": "2026-10-06",
   "entry_price": 1663.0,
   "held_days": 0,
-  "last_processed": "2026-11-10",
+  "last_processed": "2026-11-11",
   "stop": 1858.62,
-  "last_price": 1946.0,
-  "last_price_date": "2026-11-10"
+  "last_price": 1939.0,
+  "last_price_date": "2026-11-11"
  },
  {
   "series": "DIVIDEND_HIKE",
@@ -410,10 +410,10 @@
   "entry_date": "2026-10-09",
   "entry_price": 3886.0,
   "held_days": 0,
-  "last_processed": "2026-11-10",
+  "last_processed": "2026-11-11",
   "stop": 4430.65,
-  "last_price": 4711.0,
-  "last_price_date": "2026-11-10"
+  "last_price": 4731.0,
+  "last_price_date": "2026-11-11"
  },
  {
   "series": "DIVIDEND_HIKE",
@@ -494,10 +494,10 @@
   "entry_date": "2026-10-13",
   "entry_price": 2335.0,
   "held_days": 0,
-  "last_processed": "2026-11-10",
+  "last_processed": "2026-11-11",
   "stop": 2341.17,
-  "last_price": 2459.0,
-  "last_price_date": "2026-11-10"
+  "last_price": 2466.0,
+  "last_price_date": "2026-11-11"
  },
  {
   "series": "DIVIDEND_HIKE",
@@ -674,10 +674,10 @@
   "entry_date": "2026-10-27",
   "entry_price": 2655.0,
   "held_days": 0,
-  "last_processed": "2026-11-10",
+  "last_processed": "2026-11-11",
   "stop": 2493.77,
-  "last_price": 2712.0,
-  "last_price_date": "2026-11-10"
+  "last_price": 2756.0,
+  "last_price_date": "2026-11-11"
  },
  {
   "series": "DIVIDEND_HIKE",
@@ -788,10 +788,10 @@
   "entry_date": "2026-10-29",
   "entry_price": 1192.0,
   "held_days": 0,
-  "last_processed": "2026-11-10",
+  "last_processed": "2026-11-11",
   "stop": 1075.12,
-  "last_price": 1192.0,
-  "last_price_date": "2026-11-10"
+  "last_price": 1211.0,
+  "last_price_date": "2026-11-11"
  },
  {
   "series": "DIVIDEND_HIKE",
@@ -806,10 +806,10 @@
   "entry_date": "2026-10-29",
   "entry_price": 2445.0,
   "held_days": 0,
-  "last_processed": "2026-11-10",
+  "last_processed": "2026-11-11",
   "stop": 2280.65,
-  "last_price": 2499.5,
-  "last_price_date": "2026-11-10"
+  "last_price": 2490.0,
+  "last_price_date": "2026-11-11"
  },
  {
   "series": "DIVIDEND_HIKE",
@@ -824,10 +824,10 @@
   "entry_date": "2026-10-29",
   "entry_price": 2049.0,
   "held_days": 0,
-  "last_processed": "2026-11-10",
-  "stop": 1949.34,
-  "last_price": 2172.0,
-  "last_price_date": "2026-11-10"
+  "last_processed": "2026-11-11",
+  "stop": 1952.74,
+  "last_price": 2164.0,
+  "last_price_date": "2026-11-11"
  },
  {
   "series": "DIVIDEND_HIKE",
@@ -974,10 +974,10 @@
   "entry_date": "2026-10-30",
   "entry_price": 4590.0,
   "held_days": 0,
-  "last_processed": "2026-11-10",
+  "last_processed": "2026-11-11",
   "stop": 3859.87,
-  "last_price": 4230.0,
-  "last_price_date": "2026-11-10"
+  "last_price": 4270.0,
+  "last_price_date": "2026-11-11"
  },
  {
   "series": "DIVIDEND_HIKE",
@@ -992,10 +992,10 @@
   "entry_date": "2026-10-30",
   "entry_price": 3650.0,
   "held_days": 0,
-  "last_processed": "2026-11-10",
+  "last_processed": "2026-11-11",
   "stop": 3428.53,
-  "last_price": 3590.0,
-  "last_price_date": "2026-11-10"
+  "last_price": 3650.0,
+  "last_price_date": "2026-11-11"
  },
  {
   "series": "DIVIDEND_HIKE",
@@ -1088,10 +1088,10 @@
   "entry_date": "2026-11-02",
   "entry_price": 1100.0,
   "held_days": 0,
-  "last_processed": "2026-11-10",
+  "last_processed": "2026-11-11",
   "stop": 960.98,
-  "last_price": 1107.0,
-  "last_price_date": "2026-11-10"
+  "last_price": 1110.0,
+  "last_price_date": "2026-11-11"
  },
  {
   "series": "DIVIDEND_HIKE",
@@ -1124,10 +1124,10 @@
   "entry_date": "2026-11-02",
   "entry_price": 3000.0,
   "held_days": 0,
-  "last_processed": "2026-11-10",
+  "last_processed": "2026-11-11",
   "stop": 2993.07,
-  "last_price": 3205.0,
-  "last_price_date": "2026-11-10"
+  "last_price": 3195.0,
+  "last_price_date": "2026-11-11"
  },
  {
   "series": "DIVIDEND_HIKE",
@@ -1166,10 +1166,10 @@
   "entry_date": "2026-11-02",
   "entry_price": 2960.0,
   "held_days": 0,
-  "last_processed": "2026-11-10",
+  "last_processed": "2026-11-11",
   "stop": 2850.58,
-  "last_price": 3000.0,
-  "last_price_date": "2026-11-10"
+  "last_price": 2996.0,
+  "last_price_date": "2026-11-11"
  },
  {
   "series": "DIVIDEND_HIKE",
@@ -1208,10 +1208,10 @@
   "entry_date": "2026-11-02",
   "entry_price": 3748.0,
   "held_days": 0,
-  "last_processed": "2026-11-10",
+  "last_processed": "2026-11-11",
   "stop": 3668.89,
-  "last_price": 3899.0,
-  "last_price_date": "2026-11-10"
+  "last_price": 3969.0,
+  "last_price_date": "2026-11-11"
  },
  {
   "series": "DIVIDEND_HIKE",
@@ -1274,10 +1274,10 @@
   "entry_date": "2026-11-02",
   "entry_price": 3010.0,
   "held_days": 0,
-  "last_processed": "2026-11-10",
+  "last_processed": "2026-11-11",
   "stop": 2879.35,
-  "last_price": 3035.0,
-  "last_price_date": "2026-11-10"
+  "last_price": 3030.0,
+  "last_price_date": "2026-11-11"
  },
  {
   "series": "DIVIDEND_HIKE",
@@ -1310,10 +1310,10 @@
   "entry_date": "2026-11-04",
   "entry_price": 1704.5,
   "held_days": 0,
-  "last_processed": "2026-11-10",
+  "last_processed": "2026-11-11",
   "stop": 1573.16,
-  "last_price": 1715.5,
-  "last_price_date": "2026-11-10"
+  "last_price": 1751.5,
+  "last_price_date": "2026-11-11"
  },
  {
   "series": "DIVIDEND_HIKE",
@@ -1376,10 +1376,10 @@
   "entry_date": "2026-11-04",
   "entry_price": 1999.0,
   "held_days": 0,
-  "last_processed": "2026-11-10",
+  "last_processed": "2026-11-11",
   "stop": 1909.07,
-  "last_price": 2111.0,
-  "last_price_date": "2026-11-10"
+  "last_price": 2105.0,
+  "last_price_date": "2026-11-11"
  },
  {
   "series": "DIVIDEND_HIKE",
@@ -1412,10 +1412,10 @@
   "entry_date": "2026-11-05",
   "entry_price": 1802.0,
   "held_days": 0,
-  "last_processed": "2026-11-10",
+  "last_processed": "2026-11-11",
   "stop": 1658.76,
-  "last_price": 1824.0,
-  "last_price_date": "2026-11-10"
+  "last_price": 1800.0,
+  "last_price_date": "2026-11-11"
  },
  {
   "series": "DIVIDEND_HIKE",
@@ -1526,10 +1526,10 @@
   "entry_date": "2026-11-06",
   "entry_price": 2180.5,
   "held_days": 0,
-  "last_processed": "2026-11-10",
-  "stop": 2154.94,
-  "last_price": 2376.0,
-  "last_price_date": "2026-11-10"
+  "last_processed": "2026-11-11",
+  "stop": 2194.12,
+  "last_price": 2408.5,
+  "last_price_date": "2026-11-11"
  },
  {
   "series": "DIVIDEND_HIKE",
@@ -1544,10 +1544,10 @@
   "entry_date": "2026-11-06",
   "entry_price": 2501.0,
   "held_days": 0,
-  "last_processed": "2026-11-10",
+  "last_processed": "2026-11-11",
   "stop": 2379.58,
-  "last_price": 2508.0,
-  "last_price_date": "2026-11-10"
+  "last_price": 2521.0,
+  "last_price_date": "2026-11-11"
  },
  {
   "series": "DIVIDEND_HIKE",
@@ -1562,10 +1562,10 @@
   "entry_date": "2026-11-06",
   "entry_price": 1761.0,
   "held_days": 0,
-  "last_processed": "2026-11-10",
-  "stop": 1682.05,
-  "last_price": 1800.0,
-  "last_price_date": "2026-11-10"
+  "last_processed": "2026-11-11",
+  "stop": 1717.83,
+  "last_price": 1831.0,
+  "last_price_date": "2026-11-11"
  },
  {
   "series": "DIVIDEND_HIKE",
@@ -1634,10 +1634,10 @@
   "entry_date": "2026-11-06",
   "entry_price": 22220.0,
   "held_days": 0,
-  "last_processed": "2026-11-10",
-  "stop": 21543.87,
-  "last_price": 23035.0,
-  "last_price_date": "2026-11-10"
+  "last_processed": "2026-11-11",
+  "stop": 21626.45,
+  "last_price": 23100.0,
+  "last_price_date": "2026-11-11"
  },
  {
   "series": "DIVIDEND_HIKE",
@@ -1652,10 +1652,10 @@
   "entry_date": "2026-11-06",
   "entry_price": 1185.0,
   "held_days": 0,
-  "last_processed": "2026-11-10",
-  "stop": 1198.79,
-  "last_price": 1308.0,
-  "last_price_date": "2026-11-10"
+  "last_processed": "2026-11-11",
+  "stop": 1214.86,
+  "last_price": 1321.0,
+  "last_price_date": "2026-11-11"
  },
  {
   "series": "DIVIDEND_HIKE",
@@ -1688,10 +1688,10 @@
   "entry_date": "2026-11-09",
   "entry_price": 2273.0,
   "held_days": 0,
-  "last_processed": "2026-11-10",
-  "stop": 2132.15,
-  "last_price": 2453.0,
-  "last_price_date": "2026-11-10"
+  "last_processed": "2026-11-11",
+  "stop": 2182.09,
+  "last_price": 2490.0,
+  "last_price_date": "2026-11-11"
  },
  {
   "series": "DIVIDEND_HIKE",
@@ -1706,10 +1706,10 @@
   "entry_date": "2026-11-09",
   "entry_price": 2183.0,
   "held_days": 0,
-  "last_processed": "2026-11-10",
-  "stop": 2002.45,
-  "last_price": 2427.0,
-  "last_price_date": "2026-11-10"
+  "last_processed": "2026-11-11",
+  "stop": 2019.8,
+  "last_price": 2425.0,
+  "last_price_date": "2026-11-11"
  },
  {
   "series": "DIVIDEND_HIKE",
@@ -1724,10 +1724,10 @@
   "entry_date": "2026-11-09",
   "entry_price": 1733.0,
   "held_days": 0,
-  "last_processed": "2026-11-10",
-  "stop": 1617.91,
-  "last_price": 1797.5,
-  "last_price_date": "2026-11-10"
+  "last_processed": "2026-11-11",
+  "stop": 1627.22,
+  "last_price": 1799.0,
+  "last_price_date": "2026-11-11"
  },
  {
   "series": "DIVIDEND_HIKE",
@@ -1778,10 +1778,10 @@
   "entry_date": "2026-11-09",
   "entry_price": 1107.5,
   "held_days": 0,
-  "last_processed": "2026-11-10",
-  "stop": 1013.07,
-  "last_price": 1157.0,
-  "last_price_date": "2026-11-10"
+  "last_processed": "2026-11-11",
+  "stop": 1044.18,
+  "last_price": 1183.0,
+  "last_price_date": "2026-11-11"
  },
  {
   "series": "DIVIDEND_HIKE",
@@ -1796,10 +1796,10 @@
   "entry_date": "2026-11-09",
   "entry_price": 2361.5,
   "held_days": 0,
-  "last_processed": "2026-11-10",
-  "stop": 2137.31,
-  "last_price": 2455.5,
-  "last_price_date": "2026-11-10"
+  "last_processed": "2026-11-11",
+  "stop": 2188.25,
+  "last_price": 2492.0,
+  "last_price_date": "2026-11-11"
  },
  {
   "series": "DIVIDEND_HIKE",
@@ -1814,10 +1814,10 @@
   "entry_date": "2026-11-09",
   "entry_price": 1351.0,
   "held_days": 0,
-  "last_processed": "2026-11-10",
-  "stop": 1295.06,
-  "last_price": 1395.0,
-  "last_price_date": "2026-11-10"
+  "last_processed": "2026-11-11",
+  "stop": 1309.77,
+  "last_price": 1406.0,
+  "last_price_date": "2026-11-11"
  },
  {
   "series": "DIVIDEND_HIKE",
@@ -1832,10 +1832,10 @@
   "entry_date": "2026-11-09",
   "entry_price": 3248.0,
   "held_days": 0,
-  "last_processed": "2026-11-10",
+  "last_processed": "2026-11-11",
   "stop": 3077.0,
-  "last_price": 3216.0,
-  "last_price_date": "2026-11-10"
+  "last_price": 3217.0,
+  "last_price_date": "2026-11-11"
  },
  {
   "series": "DIVIDEND_HIKE",
@@ -1886,10 +1886,10 @@
   "entry_date": "2026-11-10",
   "entry_price": 3389.0,
   "held_days": 0,
-  "last_processed": "2026-11-10",
+  "last_processed": "2026-11-11",
   "stop": 3167.93,
-  "last_price": 3360.0,
-  "last_price_date": "2026-11-10"
+  "last_price": 3364.0,
+  "last_price_date": "2026-11-11"
  },
  {
   "series": "DIVIDEND_HIKE",
@@ -1976,10 +1976,10 @@
   "entry_date": "2026-11-10",
   "entry_price": 4330.0,
   "held_days": 0,
-  "last_processed": "2026-11-10",
+  "last_processed": "2026-11-11",
   "stop": 3702.51,
-  "last_price": 4275.0,
-  "last_price_date": "2026-11-10"
+  "last_price": 4240.0,
+  "last_price_date": "2026-11-11"
  },
  {
   "series": "DIVIDEND_HIKE",
@@ -1994,10 +1994,10 @@
   "entry_date": "2026-11-10",
   "entry_price": 2548.5,
   "held_days": 0,
-  "last_processed": "2026-11-10",
-  "stop": 2307.16,
-  "last_price": 2638.0,
-  "last_price_date": "2026-11-10"
+  "last_processed": "2026-11-11",
+  "stop": 2346.32,
+  "last_price": 2668.0,
+  "last_price_date": "2026-11-11"
  },
  {
   "series": "DIVIDEND_HIKE",
@@ -2012,9 +2012,253 @@
   "entry_date": "2026-11-10",
   "entry_price": 2525.5,
   "held_days": 0,
-  "last_processed": "2026-11-10",
-  "stop": 2210.37,
-  "last_price": 2547.5,
-  "last_price_date": "2026-11-10"
+  "last_processed": "2026-11-11",
+  "stop": 2249.45,
+  "last_price": 2575.5,
+  "last_price_date": "2026-11-11"
+ },
+ {
+  "series": "DIVIDEND_HIKE",
+  "ticker": "1885.T",
+  "name": "東亜建",
+  "signal_date": "2026-11-10",
+  "reason": "業績予想の修正並びに剰余金の配当（中間配当）及び 期末配当予想の修正（増配）に関するお知らせ",
+  "disclosure_url": "https://webapi.yanoshin.jp/rd.php?https://www.release.tdnet.info/inbs/140120261106567091.pdf",
+  "atr_at_signal": 88.197,
+  "market_level_at_signal": 1.0249333266264526,
+  "state": "pending_entry"
+ },
+ {
+  "series": "DIVIDEND_HIKE",
+  "ticker": "2331.T",
+  "name": "ＡＬＳＯＫ",
+  "signal_date": "2026-11-10",
+  "reason": "通期業績予想の修正（上方修正）ならびに中間配当（増配）および期末配当予想の修正（増配）に関するお知らせ",
+  "disclosure_url": "https://webapi.yanoshin.jp/rd.php?https://www.release.tdnet.info/inbs/140120261108568383.pdf",
+  "atr_at_signal": 36.9154,
+  "market_level_at_signal": 1.0249333266264526,
+  "state": "pending_entry"
+ },
+ {
+  "series": "DIVIDEND_HIKE",
+  "ticker": "7003.T",
+  "name": "三井Ｅ＆Ｓ",
+  "signal_date": "2026-11-10",
+  "reason": "2027年度３月期期末配当予想の修正（増配）に関するお知らせ",
+  "disclosure_url": "https://webapi.yanoshin.jp/rd.php?https://www.release.tdnet.info/inbs/140120261110570399.pdf",
+  "atr_at_signal": 197.9144,
+  "market_level_at_signal": 1.0249333266264526,
+  "state": "pending_entry"
+ },
+ {
+  "series": "DIVIDEND_HIKE",
+  "ticker": "7337.T",
+  "name": "ひろぎんＨＤ",
+  "signal_date": "2026-11-10",
+  "reason": "2027年 3月期（通期）業績予想の修正並びに剰余金の配当（中間配当）の決定及び期末配当予想の修正（増配）に関するお知らせ",
+  "disclosure_url": "https://webapi.yanoshin.jp/rd.php?https://www.release.tdnet.info/inbs/140120261110570768.pdf",
+  "atr_at_signal": 79.677,
+  "market_level_at_signal": 1.0249333266264526,
+  "state": "open",
+  "entry_date": "2026-11-11",
+  "entry_price": 2182.0,
+  "held_days": 0,
+  "last_processed": "2026-11-11",
+  "stop": 1942.97,
+  "last_price": 2157.0,
+  "last_price_date": "2026-11-11"
+ },
+ {
+  "series": "DIVIDEND_HIKE",
+  "ticker": "3569.T",
+  "name": "セーレン",
+  "signal_date": "2026-11-10",
+  "reason": "剰余金の配当（中間配当・増配）の決定 及び期末配当予想の修正（増配）に関するお知らせ",
+  "disclosure_url": "https://webapi.yanoshin.jp/rd.php?https://www.release.tdnet.info/inbs/140120261106568073.pdf",
+  "atr_at_signal": 102.4188,
+  "market_level_at_signal": 1.0249333266264526,
+  "state": "pending_entry"
+ },
+ {
+  "series": "DIVIDEND_HIKE",
+  "ticker": "2531.T",
+  "name": "宝ＨＬＤ",
+  "signal_date": "2026-11-10",
+  "reason": "2027年３月期の連結業績予想ならびに配当予想の修正（増配）に関するお知らせ",
+  "disclosure_url": "https://webapi.yanoshin.jp/rd.php?https://www.release.tdnet.info/inbs/140120261109570092.pdf",
+  "atr_at_signal": 196.1122,
+  "market_level_at_signal": 1.0249333266264526,
+  "state": "pending_entry"
+ },
+ {
+  "series": "DIVIDEND_HIKE",
+  "ticker": "5831.T",
+  "name": "しずおかＦＧ",
+  "signal_date": "2026-11-10",
+  "reason": "通期連結業績予想の修正、期末配当予想の修正（増配）および自己株式取得に係る事項の決定に関するお知らせ",
+  "disclosure_url": "https://webapi.yanoshin.jp/rd.php?https://www.release.tdnet.info/inbs/140120261106568212.pdf",
+  "atr_at_signal": 127.3872,
+  "market_level_at_signal": 1.0249333266264526,
+  "state": "pending_entry"
+ },
+ {
+  "series": "DIVIDEND_HIKE",
+  "ticker": "6016.T",
+  "name": "ジャパンエンジン",
+  "signal_date": "2026-11-10",
+  "reason": "通期業績予想の上方修正及び剰余金の配当（中間）並びに期末配当予想の修正（増配）に関するお知らせ",
+  "disclosure_url": "https://webapi.yanoshin.jp/rd.php?https://www.release.tdnet.info/inbs/140120261110570308.pdf",
+  "atr_at_signal": 756.8864,
+  "market_level_at_signal": 1.0249333266264526,
+  "state": "pending_entry"
+ },
+ {
+  "series": "DIVIDEND_HIKE",
+  "ticker": "6418.T",
+  "name": "日金銭",
+  "signal_date": "2026-11-10",
+  "reason": "2027年３月期第２四半期（中間期）連結業績予想と実績値との差異及び通期連結業績予想の修正並びに配当予想の修正（増配）に関するお知らせ",
+  "disclosure_url": "https://webapi.yanoshin.jp/rd.php?https://www.release.tdnet.info/inbs/140120261109570046.pdf",
+  "atr_at_signal": 39.1045,
+  "market_level_at_signal": 1.0249333266264526,
+  "state": "pending_entry"
+ },
+ {
+  "series": "DIVIDEND_HIKE",
+  "ticker": "7867.T",
+  "name": "タカラトミー",
+  "signal_date": "2026-11-10",
+  "reason": "剰余金の配当（増配）および期末配当予想の修正に関するお知らせ",
+  "disclosure_url": "https://webapi.yanoshin.jp/rd.php?https://www.release.tdnet.info/inbs/140120261110570860.pdf",
+  "atr_at_signal": 197.6539,
+  "market_level_at_signal": 1.0249333266264526,
+  "state": "open",
+  "entry_date": "2026-11-11",
+  "entry_price": 5401.0,
+  "held_days": 0,
+  "last_processed": "2026-11-11",
+  "stop": 4847.25,
+  "last_price": 5475.0,
+  "last_price_date": "2026-11-11"
+ },
+ {
+  "series": "DIVIDEND_HIKE",
+  "ticker": "8154.T",
+  "name": "加賀電子",
+  "signal_date": "2026-11-10",
+  "reason": "2027年３月期通期業績予想の修正（上方修正）および配当予想の修正（増配）に関するお知らせ",
+  "disclosure_url": "https://webapi.yanoshin.jp/rd.php?https://www.release.tdnet.info/inbs/140120261110571273.pdf",
+  "atr_at_signal": 205.7848,
+  "market_level_at_signal": 1.0249333266264526,
+  "state": "pending_entry"
+ },
+ {
+  "series": "DIVIDEND_HIKE",
+  "ticker": "8354.T",
+  "name": "ふくおか",
+  "signal_date": "2026-11-10",
+  "reason": "通期業績予想の修正及び期末配当予想の修正（増配）に関するお知らせ",
+  "disclosure_url": "https://webapi.yanoshin.jp/rd.php?https://www.release.tdnet.info/inbs/140120261109570118.pdf",
+  "atr_at_signal": 270.8382,
+  "market_level_at_signal": 1.0249333266264526,
+  "state": "open",
+  "entry_date": "2026-11-11",
+  "entry_price": 7100.0,
+  "held_days": 0,
+  "last_processed": "2026-11-11",
+  "stop": 6385.88,
+  "last_price": 7198.0,
+  "last_price_date": "2026-11-11"
+ },
+ {
+  "series": "DIVIDEND_HIKE",
+  "ticker": "8830.T",
+  "name": "住友不",
+  "signal_date": "2026-11-10",
+  "reason": "通期業績予想の上方修正、剰余金の配当（中間配当）の実施 および期末配当予想の修正（増配）に関するお知らせ",
+  "disclosure_url": "https://webapi.yanoshin.jp/rd.php?https://www.release.tdnet.info/inbs/140120261110571358.pdf",
+  "atr_at_signal": 120.4921,
+  "market_level_at_signal": 1.0249333266264526,
+  "state": "pending_entry"
+ },
+ {
+  "series": "DIVIDEND_HIKE",
+  "ticker": "9880.T",
+  "name": "イノテック",
+  "signal_date": "2026-11-10",
+  "reason": "業績予想および配当予想の修正（増配、記念配当）に関するお知らせ",
+  "disclosure_url": "https://webapi.yanoshin.jp/rd.php?https://www.release.tdnet.info/inbs/140120261110571146.pdf",
+  "atr_at_signal": 201.1697,
+  "market_level_at_signal": 1.0249333266264526,
+  "state": "open",
+  "entry_date": "2026-11-11",
+  "entry_price": 3285.0,
+  "held_days": 0,
+  "last_processed": "2026-11-11",
+  "stop": 2681.49,
+  "last_price": 3240.0,
+  "last_price_date": "2026-11-11"
+ },
+ {
+  "series": "DIVIDEND_HIKE",
+  "ticker": "1960.T",
+  "name": "サンテック",
+  "signal_date": "2026-11-10",
+  "reason": "業績予想の修正及び配当予想の修正（増配）に関するお知らせ",
+  "disclosure_url": "https://webapi.yanoshin.jp/rd.php?https://www.release.tdnet.info/inbs/140120261030561021.pdf",
+  "atr_at_signal": 72.9182,
+  "market_level_at_signal": 1.0249333266264526,
+  "state": "pending_entry"
+ },
+ {
+  "series": "DIVIDEND_HIKE",
+  "ticker": "3443.T",
+  "name": "川田ＴＥＣＨ",
+  "signal_date": "2026-11-10",
+  "reason": "剰余金の配当（中間配当の実施）及び期末配当予想の修正（増配）に関するお知らせ",
+  "disclosure_url": "https://webapi.yanoshin.jp/rd.php?https://www.release.tdnet.info/inbs/140120261109569577.pdf",
+  "atr_at_signal": 38.3268,
+  "market_level_at_signal": 1.0249333266264526,
+  "state": "pending_entry"
+ },
+ {
+  "series": "DIVIDEND_HIKE",
+  "ticker": "7389.T",
+  "name": "あいちＦＧ",
+  "signal_date": "2026-11-10",
+  "reason": "業績予想の修正、期末配当予想の修正（増配）および自己株式取得に係る事項の決定に関するお知らせ",
+  "disclosure_url": "https://webapi.yanoshin.jp/rd.php?https://www.release.tdnet.info/inbs/140120261028557901.pdf",
+  "atr_at_signal": 96.9921,
+  "market_level_at_signal": 1.0249333266264526,
+  "state": "open",
+  "entry_date": "2026-11-11",
+  "entry_price": 1723.0,
+  "held_days": 0,
+  "last_processed": "2026-11-11",
+  "stop": 1432.02,
+  "last_price": 1696.0,
+  "last_price_date": "2026-11-11"
+ },
+ {
+  "series": "DIVIDEND_HIKE",
+  "ticker": "4554.T",
+  "name": "富士製薬",
+  "signal_date": "2026-11-10",
+  "reason": "剰余金の配当（増配）に関するお知らせ",
+  "disclosure_url": "https://webapi.yanoshin.jp/rd.php?https://www.release.tdnet.info/inbs/140120261109569431.pdf",
+  "atr_at_signal": 60.9578,
+  "market_level_at_signal": 1.0249333266264526,
+  "state": "pending_entry"
+ },
+ {
+  "series": "DIVIDEND_HIKE",
+  "ticker": "7189.T",
+  "name": "西日本ＦＨ",
+  "signal_date": "2026-11-10",
+  "reason": "通期業績予想の修正および期末配当予想の修正（増配）に関するお知らせ",
+  "disclosure_url": "https://webapi.yanoshin.jp/rd.php?https://www.release.tdnet.info/inbs/140120261110570722.pdf",
+  "atr_at_signal": 187.2499,
+  "market_level_at_signal": 1.0249333266264526,
+  "state": "pending_entry"
  }
 ]
