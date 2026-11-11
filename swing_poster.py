@@ -26,6 +26,7 @@ from util import json_default
 SCAN_PATH = os.getenv('SWING_SCAN_PATH') or 'data/swing_scan.json'
 MAX_AGE_HOURS = float(os.getenv('SWING_MAX_AGE_HOURS', '20'))
 MARKER_PATH = os.getenv('SWING_POSTED_MARKER') or 'data/_last_swing_posted_date.txt'  # 同じ判定日の二重投稿を防ぐ
+TITLE_PREFIX = os.getenv('SWING_POST_TITLE_PREFIX', '')  # swing_test_run.py の試し投稿で【テスト投稿】を付ける
 COLOR = {sw.PULLBACK: 0x3498DB, sw.BREAKOUT: 0xE67E22, sw.REVISION: 0x9B59B6, 'EXIT': 0xE74C3C, 'INFO': 0x95A5A6}
 MAX_EMBEDS_PER_POST = 5  # poster.py と同じ理由（Discordの実際の上限は公開値より厳しい）
 MAX_CHARS_PER_POST = 4000
@@ -71,7 +72,7 @@ def build_embeds(scan):
     reg = scan['regime']
     reg_text = (f"{'☀ 良好' if reg['ok'] else '☂ 悪化'}（市場平均が75日線から {_pct(reg.get('index_vs_ma75_pct'), 2)}）")
     embeds.append({
-        'title': f"📈 スイング候補（{scan['date']}の引けで判定）",
+        'title': f"{TITLE_PREFIX}📈 スイング候補（{scan['date']}の引けで判定）",
         'description': (f"地合い：{reg_text}\n"
                         '数日〜1か月で利益を狙う3つの型です。本番のロングシグナルとは別枠で、仮想売買の成績を記録しています。\n'
                         '※過去2年の検証では、3型とも市場平均に対する優位性は統計的に確認できていません（検証中）。'
