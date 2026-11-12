@@ -36,12 +36,16 @@ TDNET_LOOKBACK_DAYS = 5
 COST_PCT = 0.3  # 成績の記録に使う往復コスト（検証の厳しめの値）
 MIN_ROWS = 140
 
-# 型ごとの運用ルール（保有期間の上限・ストップ・地合いフィルター）。evaluate_swing.py の結果で決めた値。
+# 型ごとの運用ルール（保有期間の上限・ストップ・地合いフィルター）。
+# 【2026-11-12】地合いフィルターは外す（False）。evaluate_swing.py の検証で、3型とも同じ手仕舞いのまま地合いフィルターを
+# 外したほうが1回あたりの「市場との差」が同じか良かった（例：10日・25日線割れの検証期間で ①+0.21%→+0.31%、
+# ②−0.27%→−0.11%、③+0.87%→+1.00%）。地合いが悪い日は投稿に注意書きを出すだけにする。
 LIVE_RULES = {
-    sw.PULLBACK: (10, 'ma25', True),
-    sw.BREAKOUT: (10, 'ma25', True),
-    sw.REVISION: (10, 'ma25', True),
+    sw.PULLBACK: (10, 'ma25', False),
+    sw.BREAKOUT: (10, 'ma25', False),
+    sw.REVISION: (10, 'ma25', False),
 }
+CLOSE_CONFIRMED_JST = (15, 45)  # 東証の大引け（15:30）＋余裕。これより前に取った「今日の足」は場中の値なので使わない
 
 
 # ---------------------------------------------------------------------------
@@ -210,11 +214,32 @@ def performance(log):
 # 1日1回の処理
 # ---------------------------------------------------------------------------
 
+def drop_unclosed_bars(histories, now_jst):
+    """
+    【2026-11-12追加】収集が遅れて東証の取引時間中（9:00〜15:30）に株価を取ると、Yahoo Finance は「今日の足」を
+    場中の値で返す（2026-11-12 朝、収集が07:01／08:43 JST開始に遅れ、場中の値で判定してしまった）。
+    大引け（＋余裕）より前に取得した今日の足は除き、前営業日の引けで判定する。戻り値：(histories, 除いた銘柄数)
+    """
+    if (now_jst.hour, now_jst.minute) >= CLOSE_CONFIRMED_JST:
+        return histories, 0
+    today = pd.Timestamp(now_jst.date())
+    out, n = {}, 0
+    for t, df in histories.items():
+        if df is not None and len(df) and pd.Timestamp(df.index[-1]).normalize() == today:
+            df = df.iloc[:-1]
+            n += 1
+        out[t] = df
+    return out, n
+
+
 def run(histories, names=None, today_utc=None, tdnet_items=None, fetch_missing=True):
     """戻り値：data/swing_scan.json と同じ内容の dict。"""
     names = names or {}
     today_utc = today_utc or datetime.now(timezone.utc)
     today_jst = today_utc.astimezone(JST)
+    histories, dropped = drop_unclosed_bars(histories, today_jst)
+    if dropped:
+        print(f'[swing] 場中に取得した今日（{today_jst:%Y-%m-%d}）の足を{dropped}銘柄で除外しました（引け前の値のため）')
     index_df = ev.market_index(histories)
     if index_df.empty:
         raise RuntimeError('市場平均を計算できる日足がありません')
@@ -253,6 +278,7 @@ def run(histories, names=None, today_utc=None, tdnet_items=None, fetch_missing=T
     need = {p['ticker'] for p in log if p['state'] != 'closed'}
     missing = sorted(t for t in need if t not in histories)
     extra = ev.fetch_missing_histories(missing) if (fetch_missing and missing) else {}
+    extra, _ = drop_unclosed_bars(extra, today_jst)
     closed_today = []
     for p in log:
         if p['state'] == 'closed':
