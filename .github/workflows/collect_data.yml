@@ -97,6 +97,8 @@ jobs:
       env:
         MAX_TICKERS: ${{ github.event.inputs.max_tickers }}
         TIME_BUDGET_MINUTES: ${{ github.event.inputs.time_budget_minutes || '230' }}
+        # 【2026-11-12追加】スイング3型の「決算またぎ注意」用に、J-Quantsの決算発表予定を取る（earnings_calendar.py）
+        JQUANTS_API_KEY: ${{ secrets.JQUANTS_API_KEY }}
       run: python collector.py
 
     # 【2026-09-24追加】500万円スタートの資金台帳（capital_tracker.py）を日次で更新する。
@@ -134,7 +136,7 @@ jobs:
         fi
         # 【2026-10-08追加】ロマン枠（監視のみ）の毎日の一覧（tracking.record_roman_watchlist）
         # 【2026-11-11追加】スイング3型（swing_live.py）の判定結果と仮想売買の記録
-        for f in data/event_trade_log.json data/event_state.json data/capital_ledger.json data/roman_watchlist.json data/swing_scan.json data/swing_trade_log.json; do
+        for f in data/event_trade_log.json data/event_state.json data/capital_ledger.json data/roman_watchlist.json data/swing_scan.json data/swing_trade_log.json data/earnings_calendar.json; do
           if [ -f "$f" ]; then
             git add "$f"
           fi

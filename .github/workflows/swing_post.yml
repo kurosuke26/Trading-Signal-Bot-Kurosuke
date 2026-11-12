@@ -60,6 +60,7 @@ jobs:
       env:
         DISCORD_WEBHOOK_URL_SWING_TEST: ${{ secrets.DISCORD_WEBHOOK_URL_SWING_TEST }}
         DISCORD_WEBHOOK_URL_SWING_PROD: ${{ secrets.DISCORD_WEBHOOK_URL_SWING_PROD }}
+        JQUANTS_API_KEY: ${{ secrets.JQUANTS_API_KEY }}
       run: python swing_test_run.py ${{ inputs.as_of && format('--as-of {0}', inputs.as_of) || '' }} ${{ inputs.ignore_regime && '--ignore-regime' || '' }}
 
     - name: Post swing candidates

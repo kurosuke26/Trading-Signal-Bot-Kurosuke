@@ -8,7 +8,10 @@ collector.py が日足を取り終えたあとに run(histories, names) を1回�
 （Discord の別チャンネル。DISCORD_WEBHOOK_URL_SWING_PROD／_TEST）。
 
 - 判定：その日の引けまでの日足（Yahoo Finance・collector.py が取得したもの）だけで、検証と同じ関数で判定
-- 型③の上方修正：TDnet の開示タイトルに「上方修正」を含み「下方修正」を含まないもの（修正率は確かめられない）
+- 型③の上方修正：TDnet の業績予想の修正の開示。【2026-11-12変更】XBRL・PDFの数字（disclosure_numbers.py）で
+  会社予想が +5%以上 上がったものだけにする（検証と同じ）。数字が読めない開示は、タイトルに「上方修正」とあるものだけ
+  「修正率は確認できず」として残す
+- 決算発表の予定（earnings_calendar.py・J-Quants）：候補・保有中の銘柄が次の営業日に決算発表なら「決算またぎ注意」
 - 取引できない銘柄の除外：event_strategies.tradeable_flags（検証の universe_filters に準拠）
 - 地合い：event_strategies.market_index（前日に取引可能だった銘柄の等金額指数）が75日線より上か
 - 仮想売買：シグナル翌営業日の始値で約定。手仕舞いは swing_strategies.walk_position（検証と同じ）。
@@ -25,6 +28,8 @@ import numpy as np
 import pandas as pd
 import requests
 
+import disclosure_numbers as dn
+import earnings_calendar as ec
 import event_strategies as ev
 import swing_strategies as sw
 from util import drop_unclosed_bars, json_default
@@ -57,6 +62,14 @@ def is_upward_revision(title):
     return '上方修正' in t and '下方修正' not in t
 
 
+def is_revision_candidate(title):
+    """業績予想の修正の開示（タイトルで下方修正と分かるものは除く）。上方か下方かは数字で確かめる。"""
+    t = title or ''
+    if '下方修正' in t:
+        return False
+    return '上方修正' in t or (('業績予想' in t or '業績見通し' in t or '通期予想' in t) and '修正' in t)
+
+
 def fetch_tdnet_upward_revisions(today_jst, lookback_days=TDNET_LOOKBACK_DAYS, session=None):
     """直近 lookback_days 日の開示から上方修正を返す。[{ticker, name, title, disc_date, disc_time, url}]。取得失敗の日は飛ばす。"""
     session = session or requests.Session()
@@ -73,7 +86,7 @@ def fetch_tdnet_upward_revisions(today_jst, lookback_days=TDNET_LOOKBACK_DAYS, s
             continue
         for it in items:
             t = it.get('Tdnet') or {}
-            if not is_upward_revision(t.get('title')):
+            if not is_revision_candidate(t.get('title')):
                 continue
             ticker = ev.tdnet_code_to_ticker(t.get('company_code'))
             if not ticker:
@@ -81,7 +94,8 @@ def fetch_tdnet_upward_revisions(today_jst, lookback_days=TDNET_LOOKBACK_DAYS, s
             pub = str(t.get('pubdate') or '')
             out.append({'ticker': ticker, 'name': t.get('company_name'), 'title': t.get('title'),
                         'disc_date': pub[:10] or d.strftime('%Y-%m-%d'), 'disc_time': pub[11:16],
-                        'url': t.get('document_url')})
+                        'url': t.get('document_url'), 'url_xbrl': t.get('url_xbrl'),
+                        'title_up': is_upward_revision(t.get('title'))})
     return out, failed
 
 
@@ -122,7 +136,10 @@ def scan(histories, names, revisions, last_date):
                     'vol_ratio': _f(row['vol_ratio'], 2), 'atr': _f(row['atr'], 2),
                     'rank': float(rk) if np.isfinite(rk) else -1e9}
             if kind == sw.REVISION:
-                item['disclosures'] = [{'title': r['title'], 'url': r['url'], 'disc_date': r['disc_date']} for r in revs]
+                # その日が反応日になる開示だけ（古い開示は関係ない）
+                item['disclosures'] = [{k: r.get(k) for k in ('title', 'url', 'url_xbrl', 'disc_date', 'title_up')}
+                                       for r in revs
+                                       if sw.reaction_dates(dates, [(r['disc_date'], r['disc_time'])]) == {last_date}]
             found[kind].append(item)
     for kind in found:
         found[kind].sort(key=lambda x: (-x['rank'], x['ticker']))
@@ -132,6 +149,30 @@ def scan(histories, names, revisions, last_date):
 # ---------------------------------------------------------------------------
 # 仮想売買
 # ---------------------------------------------------------------------------
+
+def verify_revisions(items, min_pct=sw.REVISION_MIN_PCT, reader=None):
+    """
+    型③の候補の開示の数字を読み、+min_pct%以上の上方修正だけ残す。数字が読めないものはタイトルに「上方修正」が
+    あるときだけ残す（item['revision'] に結果を入れる）。数字を読むのはシグナルが出た銘柄だけ（通信を減らすため）。
+    """
+    reader = reader or dn.revision_numbers
+    kept = []
+    for item in items:
+        best, title_up = None, False
+        for d in item.get('disclosures') or []:
+            title_up = title_up or bool(d.get('title_up'))
+            r = reader(d)
+            if r and (best is None or r['change_pct'] > best['change_pct']):
+                best = dict(r, title=d.get('title'), url=d.get('url'))
+        if best is not None:
+            if best['change_pct'] >= min_pct:
+                item['revision'] = best
+                kept.append(item)
+        elif title_up:
+            item['revision'] = {'item': None, 'change_pct': None, 'source': None}
+            kept.append(item)
+    return kept
+
 
 def _load_json(path, default):
     if not os.path.exists(path):
@@ -236,6 +277,22 @@ def run(histories, names=None, today_utc=None, tdnet_items=None, fetch_missing=T
     if tdnet_items is None:
         tdnet_items, tdnet_failed = fetch_tdnet_upward_revisions(today_jst)
     found = scan(histories, names, tdnet_items, last_date)
+    n_rev_hits = len(found[sw.REVISION])
+    found[sw.REVISION] = verify_revisions(found[sw.REVISION])
+    if n_rev_hits:
+        print(f'[swing] 型③：株価の条件を満たした{n_rev_hits}件のうち、修正の数字で確かめて{len(found[sw.REVISION])}件を残しました')
+
+    # 決算発表の予定（次の営業日）
+    try:
+        cal, cal_fetched = ec.update()
+    except Exception as e:  # noqa: BLE001
+        print(f'[swing] 決算発表予定の処理でエラー（表示なしで続行）: {e}', file=sys.stderr)
+        cal, cal_fetched = {}, False
+    earn_date, earn_map = ec.next_announcements(cal, last_date)
+    for kind in found:
+        for item in found[kind]:
+            if item['ticker'] in earn_map:
+                item['earnings_date'] = earn_date
 
     log = _load_json(SWING_LOG_PATH, [])
     holding = {(p['kind'], p['ticker']) for p in log if p['state'] != 'closed'}
@@ -271,13 +328,16 @@ def run(histories, names=None, today_utc=None, tdnet_items=None, fetch_missing=T
         if df is None or df.empty:
             continue
         update_position(p, df, index_df)
+        p['earnings_date'] = earn_date if (p['state'] != 'closed' and p['ticker'] in earn_map) else None
         if p['state'] == 'closed' and p.get('exit_date') == last_date:
             closed_today.append(p)
     _save_json(SWING_LOG_PATH, log)
 
     scan_out = {
         'generated_at_utc': today_utc.isoformat(), 'date': last_date, 'regime': regime,
-        'tdnet': {'upward_revisions': len(tdnet_items), 'failed_days': tdnet_failed},
+        'tdnet': {'revision_disclosures': len(tdnet_items), 'failed_days': tdnet_failed},
+        'earnings': {'date': earn_date, 'count': len(earn_map), 'fetched': cal_fetched,
+                     'holding': [p for p in log if p['state'] != 'closed' and p.get('earnings_date')]},
         'signals': signals,
         'exits_next_open': [p for p in log if p['state'] == 'exit_next_open'],
         'exits_tomorrow_close': [p for p in log if p['state'] == 'open' and p.get('last_day_tomorrow')],

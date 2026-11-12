@@ -20,12 +20,14 @@ import sys
 import tempfile
 
 TMP = tempfile.mkdtemp(prefix='swing_test_')
-for src, name in (('data/swing_trade_log.json', 'swing_trade_log.json'),):
+for src, name in (('data/swing_trade_log.json', 'swing_trade_log.json'),
+                  ('data/earnings_calendar.json', 'earnings_calendar.json')):
     if os.path.exists(src):
         shutil.copy(src, os.path.join(TMP, name))
 os.environ['SWING_LOG_PATH'] = os.path.join(TMP, 'swing_trade_log.json')
 os.environ['SWING_SCAN_PATH'] = os.path.join(TMP, 'swing_scan.json')
 os.environ['SWING_POSTED_MARKER'] = os.path.join(TMP, 'posted.txt')
+os.environ['EARNINGS_CALENDAR_PATH'] = os.path.join(TMP, 'earnings_calendar.json')
 os.environ['SWING_POST_TITLE_PREFIX'] = '【テスト投稿】'
 
 import pandas as pd  # noqa: E402

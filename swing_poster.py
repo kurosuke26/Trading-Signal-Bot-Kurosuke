@@ -60,9 +60,16 @@ def _signal_line(kind, x):
                 f"（{_pct((x['close'] / x['ma25'] - 1) * 100 if x['ma25'] else None)}）")
     else:
         body = f"反応日 {_pct(x['ret1_pct'])}｜出来高 {x['vol_ratio']:.1f}倍｜25日線 {_yen(x['ma25'])}"
+        rv = x.get('revision') or {}
+        if rv.get('change_pct') is not None:
+            body += f"\n　{rv['item']}の会社予想 {_pct(rv['change_pct'])}（{rv['source']}で確認）"
+        else:
+            body += '\n　修正率：確認できず（タイトルに「上方修正」）'
         d = (x.get('disclosures') or [])[:1]
         if d:
             body += f"\n　└ [{d[0]['title'][:40]}]({d[0]['url']})" if d[0].get('url') else f"\n　└ {d[0]['title'][:40]}"
+    if x.get('earnings_date'):
+        body += f"\n　📅 {x['earnings_date']} に決算発表予定（決算またぎ注意）"
     note = '（保有中のため記録には追加しない）' if x.get('already_holding') else ''
     return f"{head}{note}\n{body}"
 
@@ -102,6 +109,10 @@ def build_embeds(scan):
     for p in scan.get('exits_tomorrow_close', []):
         lines.append(f"🟡 **{_code(p['ticker'])} {p['name']}**（{sw.TYPE_LABEL[p['kind']][:1]}）明日の引けで手仕舞い"
                      f"（{p['hold']}営業日目）｜含み {_pct(p.get('unrealized_pct'))}")
+    earn = scan.get('earnings') or {}
+    for p in earn.get('holding', []):
+        lines.append(f"📅 **{_code(p['ticker'])} {p['name']}**（{sw.TYPE_LABEL[p['kind']][:1]}）{p['earnings_date']} に決算発表予定"
+                     f"（{'約定待ち' if p['state'] == 'pending_entry' else '保有中'}・決算またぎ注意）")
     for p in scan.get('closed_today', []):
         lines.append(f"✅ **{_code(p['ticker'])} {p['name']}**（{sw.TYPE_LABEL[p['kind']][:1]}）本日決済 "
                      f"{_pct(p.get('return_pct'))}（市場との差 {_pct(p.get('excess_pct'))}）")
