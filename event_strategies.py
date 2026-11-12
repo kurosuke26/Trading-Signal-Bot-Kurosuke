@@ -44,7 +44,7 @@ import numpy as np
 import pandas as pd
 import requests
 
-from util import price_adjust_factor
+from util import drop_unclosed_bars, price_adjust_factor
 
 JST = timezone(timedelta(hours=9))
 EVENT_TRADE_LOG_PATH = os.getenv('EVENT_TRADE_LOG_PATH') or 'data/event_trade_log.json'
@@ -326,6 +326,7 @@ def run(histories, today_utc=None, tdnet_items=None, fetch_missing=True):
     need = {x['ticker'] for x in new_hikes} | {p['ticker'] for p in log if p['state'] != 'closed'}
     missing = sorted(t for t in need if t not in histories)
     extra = fetch_missing_histories(missing) if fetch_missing else {}
+    extra, _ = drop_unclosed_bars(extra, today_jst)  # 【2026-11-12追加】引け前の今日の足は使わない
     all_hist = {**histories, **extra}
     index_df = market_index(histories)
 

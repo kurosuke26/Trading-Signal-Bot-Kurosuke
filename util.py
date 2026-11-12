@@ -116,3 +116,27 @@ def pace_to_target(index, total, phase_start_time, target_seconds,
     remaining = target_elapsed - actual_elapsed
     if remaining > 0:
         sleep_fn(remaining)
+
+# 東証の大引け（15:30）＋余裕。これより前に取得した「今日の足」は場中の値なので判定に使わない
+CLOSE_CONFIRMED_JST = (15, 45)
+
+
+def drop_unclosed_bars(histories, now_jst):
+    """
+    【2026-11-12追加】収集が遅れて東証の取引時間中（9:00〜15:30）に株価を取ると、Yahoo Finance は「今日の足」を
+    場中の値で返す（2026-11-12 朝、GitHub Actions の予約実行が遅れて収集が07:01／08:43 JST開始になり、
+    場中の値で判定してしまった）。大引け（＋余裕）より前に取得した今日の足は除き、前営業日の引けで判定する。
+    histories: {銘柄: 日付indexのDataFrame}、now_jst: 取得した時刻（JSTのdatetime）。
+    戻り値：(除いた後の histories, 除いた銘柄数)。15:45以降・休日は何もしない。
+    """
+    import pandas as pd
+    if (now_jst.hour, now_jst.minute) >= CLOSE_CONFIRMED_JST:
+        return histories, 0
+    today = pd.Timestamp(now_jst.date())
+    out, n = {}, 0
+    for t, df in (histories or {}).items():
+        if df is not None and len(df) and pd.Timestamp(df.index[-1]).tz_localize(None).normalize() == today:
+            df = df.iloc[:-1]
+            n += 1
+        out[t] = df
+    return out, n

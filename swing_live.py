@@ -27,7 +27,7 @@ import requests
 
 import event_strategies as ev
 import swing_strategies as sw
-from util import json_default
+from util import drop_unclosed_bars, json_default
 
 JST = timezone(timedelta(hours=9))
 SWING_LOG_PATH = os.getenv('SWING_LOG_PATH') or 'data/swing_trade_log.json'
@@ -213,24 +213,6 @@ def performance(log):
 # ---------------------------------------------------------------------------
 # 1日1回の処理
 # ---------------------------------------------------------------------------
-
-def drop_unclosed_bars(histories, now_jst):
-    """
-    【2026-11-12追加】収集が遅れて東証の取引時間中（9:00〜15:30）に株価を取ると、Yahoo Finance は「今日の足」を
-    場中の値で返す（2026-11-12 朝、収集が07:01／08:43 JST開始に遅れ、場中の値で判定してしまった）。
-    大引け（＋余裕）より前に取得した今日の足は除き、前営業日の引けで判定する。戻り値：(histories, 除いた銘柄数)
-    """
-    if (now_jst.hour, now_jst.minute) >= CLOSE_CONFIRMED_JST:
-        return histories, 0
-    today = pd.Timestamp(now_jst.date())
-    out, n = {}, 0
-    for t, df in histories.items():
-        if df is not None and len(df) and pd.Timestamp(df.index[-1]).normalize() == today:
-            df = df.iloc[:-1]
-            n += 1
-        out[t] = df
-    return out, n
-
 
 def run(histories, names=None, today_utc=None, tdnet_items=None, fetch_missing=True):
     """戻り値：data/swing_scan.json と同じ内容の dict。"""

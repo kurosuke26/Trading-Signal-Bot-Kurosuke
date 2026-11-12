@@ -91,7 +91,7 @@ from sakata import detect_all_patterns, sakata_score
 from scoring import composite_score
 from universe import get_all_tse_tickers, FALLBACK_TICKERS
 from fundamentals_jquants import build_fundamental_snapshot
-from util import env_int, env_float, json_default, pace_to_target, safe_num
+from util import drop_unclosed_bars, env_int, env_float, json_default, pace_to_target, safe_num
 from tracking import (load_trade_log, save_trade_log, open_new_positions,
                        update_open_positions, compute_performance_stats, rule_constants)
 
@@ -774,6 +774,10 @@ def collect():
     hist_window = scaled_window_minutes(HISTORY_WINDOW_MINUTES, len(ok_tickers))
     print(f"\n--- 株価履歴取得（テクニカル・酒田五法用、ペーシングあり、目標配分 {hist_window:.1f}分） ---")
     histories, hist_failed = fetch_price_histories(ok_tickers, window_minutes=hist_window)
+    # 【2026-11-12追加】収集が遅れて取引時間中に株価を取った場合、引け前の「今日の足」を除いて前営業日の引けで判定する
+    histories, n_unclosed = drop_unclosed_bars(histories, datetime.now(JST))
+    if n_unclosed:
+        print(f"[history] 取引時間中に取得したため、引け前の今日の足を{n_unclosed}銘柄で除外しました（前営業日の引けで判定します）")
 
     if not fundamentals:
         print("全銘柄のファンダメンタルズ取得に失敗しました。空の結果を保存して終了します。")
