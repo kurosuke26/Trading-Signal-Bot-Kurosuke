@@ -1,14 +1,53 @@
 {
- "generated_at_utc": "2026-11-12T01:20:16.970622+00:00",
+ "generated_at_utc": "2026-11-13T01:19:18.913805+00:00",
  "date": "2026-11-12",
  "regime": {
   "date": "2026-11-12",
   "ok": false,
-  "index_vs_ma75_pct": -2.32
+  "index_vs_ma75_pct": -2.33
  },
  "tdnet": {
-  "upward_revisions": 11,
+  "revision_disclosures": 327,
   "failed_days": 0
+ },
+ "earnings": {
+  "date": "2026-11-13",
+  "count": 498,
+  "fetched": true,
+  "holding": [
+   {
+    "kind": "REVISION",
+    "ticker": "6237.T",
+    "name": "イワキポンプ",
+    "signal_date": "2026-11-12",
+    "hold": 10,
+    "stop": "ma25",
+    "state": "pending_entry",
+    "signal": {
+     "ticker": "6237.T",
+     "name": "イワキポンプ",
+     "close": 3985.0,
+     "ma25": 3940.4,
+     "ma75": 4227.7,
+     "rsi": 52.5,
+     "ret1_pct": 2.84,
+     "ret5_pct": 5.15,
+     "ret120_pct": 31.7,
+     "vol_ratio": 2.04,
+     "atr": 177.79,
+     "revision": {
+      "item": "営業利益",
+      "change_pct": 23.9,
+      "source": "XBRL",
+      "title": "2027年３月期第２四半期業績予想の修正及び通期業績予想の修正並びに期末配当予想の修正（増配）に関するお知らせ",
+      "url": "https://webapi.yanoshin.jp/rd.php?https://www.release.tdnet.info/inbs/140120261111573476.pdf"
+     },
+     "earnings_date": "2026-11-13",
+     "already_holding": false
+    },
+    "earnings_date": "2026-11-13"
+   }
+  ]
  },
  "signals": {
   "PULLBACK": {
@@ -16,84 +55,84 @@
    "rule": {
     "hold": 10,
     "stop": "ma25",
-    "regime": true
+    "regime": false
    },
-   "skipped_by_regime": true,
-   "total_hits": 6,
+   "skipped_by_regime": false,
+   "total_hits": 5,
    "top": [
     {
-     "ticker": "8070.T",
-     "name": "東京産業",
-     "close": 1067.0,
-     "ma25": 1086.6,
-     "ma75": 978.1,
-     "rsi": 48.0,
-     "ret1_pct": 0.66,
-     "ret5_pct": -10.93,
-     "ret120_pct": 38.1,
-     "vol_ratio": 0.04,
-     "atr": 45.82,
-     "rank": 0.3807681951739339,
+     "ticker": "2767.T",
+     "name": "円谷フィールズホールディングス",
+     "close": 2441.0,
+     "ma25": 2458.2,
+     "ma75": 2399.2,
+     "rsi": 49.4,
+     "ret1_pct": 2.69,
+     "ret5_pct": -3.97,
+     "ret120_pct": 71.3,
+     "vol_ratio": 1.05,
+     "atr": 80.34,
+     "rank": 0.7131471140917978,
      "already_holding": false
     },
     {
-     "ticker": "9619.T",
-     "name": "イチネンホールディングス",
-     "close": 2658.0,
-     "ma25": 2700.0,
-     "ma75": 2625.1,
-     "rsi": 47.3,
-     "ret1_pct": 0.61,
-     "ret5_pct": -4.39,
-     "ret120_pct": 26.2,
-     "vol_ratio": 0.11,
-     "atr": 64.41,
-     "rank": 0.26248468737664665,
+     "ticker": "4848.T",
+     "name": "フルキャストホールディングス",
+     "close": 1830.0,
+     "ma25": 1841.6,
+     "ma75": 1820.0,
+     "rsi": 48.7,
+     "ret1_pct": 0.83,
+     "ret5_pct": -4.89,
+     "ret120_pct": 22.3,
+     "vol_ratio": 1.03,
+     "atr": 41.71,
+     "rank": 0.22259971581824667,
      "already_holding": false
     },
     {
      "ticker": "7476.T",
      "name": "アズワン",
-     "close": 2496.0,
-     "ma25": 2547.7,
-     "ma75": 2470.8,
-     "rsi": 46.9,
-     "ret1_pct": 0.48,
-     "ret5_pct": -3.89,
-     "ret120_pct": 21.0,
-     "vol_ratio": 0.08,
-     "atr": 66.56,
-     "rank": 0.2098474202502032,
-     "already_holding": false
-    },
-    {
-     "ticker": "8876.T",
-     "name": "リログループ",
-     "close": 2368.0,
-     "ma25": 2432.9,
-     "ma75": 2240.0,
-     "rsi": 46.9,
-     "ret1_pct": 0.36,
-     "ret5_pct": -4.61,
-     "ret120_pct": 20.0,
-     "vol_ratio": 0.09,
-     "atr": 53.9,
-     "rank": 0.2004113612079499,
-     "already_holding": false
-    },
-    {
-     "ticker": "4922.T",
-     "name": "コーセーホールディングス",
-     "close": 5835.0,
-     "ma25": 5863.6,
-     "ma75": 5759.1,
+     "close": 2518.0,
+     "ma25": 2548.5,
+     "ma75": 2471.1,
      "rsi": 49.0,
-     "ret1_pct": 2.49,
-     "ret5_pct": -7.29,
-     "ret120_pct": 11.0,
-     "vol_ratio": 0.27,
-     "atr": 196.38,
-     "rank": 0.11042379900107124,
+     "ret1_pct": 1.37,
+     "ret5_pct": -3.04,
+     "ret120_pct": 22.1,
+     "vol_ratio": 0.6,
+     "atr": 66.85,
+     "rank": 0.2205111394992032,
+     "already_holding": false
+    },
+    {
+     "ticker": "2433.T",
+     "name": "博報堂ＤＹホールディングス",
+     "close": 1378.5,
+     "ma25": 1390.4,
+     "ma75": 1324.0,
+     "rsi": 49.6,
+     "ret1_pct": 3.8,
+     "ret5_pct": -8.44,
+     "ret120_pct": 16.4,
+     "vol_ratio": 0.95,
+     "atr": 53.97,
+     "rank": 0.1641824280357045,
+     "already_holding": false
+    },
+    {
+     "ticker": "3092.T",
+     "name": "ＺＯＺＯ",
+     "close": 1158.0,
+     "ma25": 1180.7,
+     "ma75": 1138.8,
+     "rsi": 48.6,
+     "ret1_pct": 0.52,
+     "ret5_pct": -4.22,
+     "ret120_pct": 12.8,
+     "vol_ratio": 0.52,
+     "atr": 33.36,
+     "rank": 0.1278620447440768,
      "already_holding": false
     }
    ]
@@ -103,35 +142,653 @@
    "rule": {
     "hold": 10,
     "stop": "ma25",
-    "regime": true
+    "regime": false
    },
-   "skipped_by_regime": true,
-   "total_hits": 0,
-   "top": []
+   "skipped_by_regime": false,
+   "total_hits": 9,
+   "top": [
+    {
+     "ticker": "2820.T",
+     "name": "やまみ",
+     "close": 7630.0,
+     "ma25": 6744.4,
+     "ma75": 6168.7,
+     "rsi": 69.6,
+     "ret1_pct": 12.7,
+     "ret5_pct": 13.2,
+     "ret120_pct": 81.3,
+     "vol_ratio": 12.68,
+     "atr": 329.09,
+     "rank": 12.678454485920104,
+     "already_holding": false
+    },
+    {
+     "ticker": "9042.T",
+     "name": "阪急阪神ホールディングス",
+     "close": 4924.0,
+     "ma25": 4600.1,
+     "ma75": 4599.6,
+     "rsi": 61.0,
+     "ret1_pct": 4.32,
+     "ret5_pct": 0.08,
+     "ret120_pct": 0.7,
+     "vol_ratio": 4.91,
+     "atr": 135.84,
+     "rank": 4.906936275218968,
+     "already_holding": false
+    },
+    {
+     "ticker": "4071.T",
+     "name": "プラスアルファ・コンサルティング",
+     "close": 2387.0,
+     "ma25": 2257.0,
+     "ma75": 2168.0,
+     "rsi": 64.2,
+     "ret1_pct": 3.11,
+     "ret5_pct": 1.57,
+     "ret120_pct": 2.2,
+     "vol_ratio": 3.83,
+     "atr": 75.0,
+     "rank": 3.8281843713860897,
+     "already_holding": false
+    },
+    {
+     "ticker": "9204.T",
+     "name": "スカイマーク",
+     "close": 491.0,
+     "ma25": 433.5,
+     "ma75": 424.4,
+     "rsi": 75.1,
+     "ret1_pct": 3.59,
+     "ret5_pct": 8.63,
+     "ret120_pct": 49.7,
+     "vol_ratio": 3.49,
+     "atr": 13.64,
+     "rank": 3.4872611464968153,
+     "already_holding": false
+    },
+    {
+     "ticker": "9684.T",
+     "name": "スクウェア・エニックス・ホールディングス",
+     "close": 3461.0,
+     "ma25": 3019.0,
+     "ma75": 2910.6,
+     "rsi": 70.8,
+     "ret1_pct": 9.25,
+     "ret5_pct": 8.33,
+     "ret120_pct": 25.2,
+     "vol_ratio": 3.39,
+     "atr": 123.94,
+     "rank": 3.3853495116629926,
+     "already_holding": false
+    }
+   ]
   },
   "REVISION": {
    "label": "③ 上方修正後の継続",
    "rule": {
     "hold": 10,
     "stop": "ma25",
-    "regime": true
+    "regime": false
    },
-   "skipped_by_regime": true,
-   "total_hits": 0,
-   "top": []
+   "skipped_by_regime": false,
+   "total_hits": 5,
+   "top": [
+    {
+     "ticker": "5142.T",
+     "name": "アキレス",
+     "close": 2213.0,
+     "ma25": 1855.5,
+     "ma75": 1780.4,
+     "rsi": 69.4,
+     "ret1_pct": 22.06,
+     "ret5_pct": 28.44,
+     "ret120_pct": 79.8,
+     "vol_ratio": 9.14,
+     "atr": 115.04,
+     "rank": 0.22062879205736352,
+     "disclosures": [
+      {
+       "title": "通期業績予想の上方修正及び配当予想の修正(増配)に関するお知らせ",
+       "url": "https://webapi.yanoshin.jp/rd.php?https://www.release.tdnet.info/inbs/140120261111574051.pdf",
+       "url_xbrl": null,
+       "disc_date": "2026-11-12",
+       "title_up": true
+      }
+     ],
+     "revision": {
+      "item": null,
+      "change_pct": null,
+      "source": null
+     },
+     "already_holding": false
+    },
+    {
+     "ticker": "4027.T",
+     "name": "テイカ",
+     "close": 2662.0,
+     "ma25": 2247.6,
+     "ma75": 2292.3,
+     "rsi": 73.2,
+     "ret1_pct": 21.39,
+     "ret5_pct": 24.39,
+     "ret120_pct": 36.0,
+     "vol_ratio": 11.5,
+     "atr": 124.52,
+     "rank": 0.21386228910168725,
+     "disclosures": [
+      {
+       "title": "2027年３月期第２四半期（中間期）連結業績予想値と実績値との差異及び通期連結業績予想の上方修正、期末配当予想の修正（増配）に関するお知らせ",
+       "url": "https://webapi.yanoshin.jp/rd.php?https://www.release.tdnet.info/inbs/140120261110572320.pdf",
+       "url_xbrl": null,
+       "disc_date": "2026-11-11",
+       "title_up": true
+      }
+     ],
+     "revision": {
+      "item": null,
+      "change_pct": null,
+      "source": null
+     },
+     "already_holding": false
+    },
+    {
+     "ticker": "1926.T",
+     "name": "ライト工業",
+     "close": 1016.0,
+     "ma25": 944.2,
+     "ma75": 945.0,
+     "rsi": 65.6,
+     "ret1_pct": 10.31,
+     "ret5_pct": 9.25,
+     "ret120_pct": -0.1,
+     "vol_ratio": 3.51,
+     "atr": 26.36,
+     "rank": 0.10314875135722046,
+     "disclosures": [
+      {
+       "title": "通期業績予想および配当予想の修正（増配）に関するお知らせ",
+       "url": "https://webapi.yanoshin.jp/rd.php?https://www.release.tdnet.info/inbs/140120261110572057.pdf",
+       "url_xbrl": "https://webapi.yanoshin.jp/rd.php?https://www.release.tdnet.info/inbs/091220261110572057.zip",
+       "disc_date": "2026-11-11",
+       "title_up": false
+      }
+     ],
+     "revision": {
+      "item": "営業利益",
+      "change_pct": 5.2,
+      "source": "XBRL",
+      "title": "通期業績予想および配当予想の修正（増配）に関するお知らせ",
+      "url": "https://webapi.yanoshin.jp/rd.php?https://www.release.tdnet.info/inbs/140120261110572057.pdf"
+     },
+     "already_holding": false
+    },
+    {
+     "ticker": "6237.T",
+     "name": "イワキポンプ",
+     "close": 3985.0,
+     "ma25": 3940.4,
+     "ma75": 4227.7,
+     "rsi": 52.5,
+     "ret1_pct": 2.84,
+     "ret5_pct": 5.15,
+     "ret120_pct": 31.7,
+     "vol_ratio": 2.04,
+     "atr": 177.79,
+     "rank": 0.028387096774193488,
+     "disclosures": [
+      {
+       "title": "2027年３月期第２四半期業績予想の修正及び通期業績予想の修正並びに期末配当予想の修正（増配）に関するお知らせ",
+       "url": "https://webapi.yanoshin.jp/rd.php?https://www.release.tdnet.info/inbs/140120261111573476.pdf",
+       "url_xbrl": "https://webapi.yanoshin.jp/rd.php?https://www.release.tdnet.info/inbs/091220261111573476.zip",
+       "disc_date": "2026-11-11",
+       "title_up": false
+      }
+     ],
+     "revision": {
+      "item": "営業利益",
+      "change_pct": 23.9,
+      "source": "XBRL",
+      "title": "2027年３月期第２四半期業績予想の修正及び通期業績予想の修正並びに期末配当予想の修正（増配）に関するお知らせ",
+      "url": "https://webapi.yanoshin.jp/rd.php?https://www.release.tdnet.info/inbs/140120261111573476.pdf"
+     },
+     "earnings_date": "2026-11-13",
+     "already_holding": false
+    },
+    {
+     "ticker": "3968.T",
+     "name": "セグエグループ",
+     "close": 818.0,
+     "ma25": 806.5,
+     "ma75": 690.1,
+     "rsi": 56.4,
+     "ret1_pct": 2.51,
+     "ret5_pct": 5.82,
+     "ret120_pct": 46.7,
+     "vol_ratio": 2.08,
+     "atr": 46.32,
+     "rank": 0.02506265664160412,
+     "disclosures": [
+      {
+       "title": "通期連結業績予想の修正（上方修正）及び期末配当予想の修正（増配）に関するお知らせ",
+       "url": "https://webapi.yanoshin.jp/rd.php?https://www.release.tdnet.info/inbs/140120261111573465.pdf",
+       "url_xbrl": null,
+       "disc_date": "2026-11-12",
+       "title_up": true
+      }
+     ],
+     "revision": {
+      "item": null,
+      "change_pct": null,
+      "source": null
+     },
+     "already_holding": false
+    }
+   ]
   }
  },
  "exits_next_open": [],
  "exits_tomorrow_close": [],
  "closed_today": [],
  "open_positions": [],
- "pending_entry": [],
+ "pending_entry": [
+  {
+   "kind": "PULLBACK",
+   "ticker": "2767.T",
+   "name": "円谷フィールズホールディングス",
+   "signal_date": "2026-11-12",
+   "hold": 10,
+   "stop": "ma25",
+   "state": "pending_entry",
+   "signal": {
+    "ticker": "2767.T",
+    "name": "円谷フィールズホールディングス",
+    "close": 2441.0,
+    "ma25": 2458.2,
+    "ma75": 2399.2,
+    "rsi": 49.4,
+    "ret1_pct": 2.69,
+    "ret5_pct": -3.97,
+    "ret120_pct": 71.3,
+    "vol_ratio": 1.05,
+    "atr": 80.34,
+    "already_holding": false
+   },
+   "earnings_date": null
+  },
+  {
+   "kind": "PULLBACK",
+   "ticker": "4848.T",
+   "name": "フルキャストホールディングス",
+   "signal_date": "2026-11-12",
+   "hold": 10,
+   "stop": "ma25",
+   "state": "pending_entry",
+   "signal": {
+    "ticker": "4848.T",
+    "name": "フルキャストホールディングス",
+    "close": 1830.0,
+    "ma25": 1841.6,
+    "ma75": 1820.0,
+    "rsi": 48.7,
+    "ret1_pct": 0.83,
+    "ret5_pct": -4.89,
+    "ret120_pct": 22.3,
+    "vol_ratio": 1.03,
+    "atr": 41.71,
+    "already_holding": false
+   },
+   "earnings_date": null
+  },
+  {
+   "kind": "PULLBACK",
+   "ticker": "7476.T",
+   "name": "アズワン",
+   "signal_date": "2026-11-12",
+   "hold": 10,
+   "stop": "ma25",
+   "state": "pending_entry",
+   "signal": {
+    "ticker": "7476.T",
+    "name": "アズワン",
+    "close": 2518.0,
+    "ma25": 2548.5,
+    "ma75": 2471.1,
+    "rsi": 49.0,
+    "ret1_pct": 1.37,
+    "ret5_pct": -3.04,
+    "ret120_pct": 22.1,
+    "vol_ratio": 0.6,
+    "atr": 66.85,
+    "already_holding": false
+   },
+   "earnings_date": null
+  },
+  {
+   "kind": "PULLBACK",
+   "ticker": "2433.T",
+   "name": "博報堂ＤＹホールディングス",
+   "signal_date": "2026-11-12",
+   "hold": 10,
+   "stop": "ma25",
+   "state": "pending_entry",
+   "signal": {
+    "ticker": "2433.T",
+    "name": "博報堂ＤＹホールディングス",
+    "close": 1378.5,
+    "ma25": 1390.4,
+    "ma75": 1324.0,
+    "rsi": 49.6,
+    "ret1_pct": 3.8,
+    "ret5_pct": -8.44,
+    "ret120_pct": 16.4,
+    "vol_ratio": 0.95,
+    "atr": 53.97,
+    "already_holding": false
+   },
+   "earnings_date": null
+  },
+  {
+   "kind": "PULLBACK",
+   "ticker": "3092.T",
+   "name": "ＺＯＺＯ",
+   "signal_date": "2026-11-12",
+   "hold": 10,
+   "stop": "ma25",
+   "state": "pending_entry",
+   "signal": {
+    "ticker": "3092.T",
+    "name": "ＺＯＺＯ",
+    "close": 1158.0,
+    "ma25": 1180.7,
+    "ma75": 1138.8,
+    "rsi": 48.6,
+    "ret1_pct": 0.52,
+    "ret5_pct": -4.22,
+    "ret120_pct": 12.8,
+    "vol_ratio": 0.52,
+    "atr": 33.36,
+    "already_holding": false
+   },
+   "earnings_date": null
+  },
+  {
+   "kind": "BREAKOUT",
+   "ticker": "2820.T",
+   "name": "やまみ",
+   "signal_date": "2026-11-12",
+   "hold": 10,
+   "stop": "ma25",
+   "state": "pending_entry",
+   "signal": {
+    "ticker": "2820.T",
+    "name": "やまみ",
+    "close": 7630.0,
+    "ma25": 6744.4,
+    "ma75": 6168.7,
+    "rsi": 69.6,
+    "ret1_pct": 12.7,
+    "ret5_pct": 13.2,
+    "ret120_pct": 81.3,
+    "vol_ratio": 12.68,
+    "atr": 329.09,
+    "already_holding": false
+   },
+   "earnings_date": null
+  },
+  {
+   "kind": "BREAKOUT",
+   "ticker": "9042.T",
+   "name": "阪急阪神ホールディングス",
+   "signal_date": "2026-11-12",
+   "hold": 10,
+   "stop": "ma25",
+   "state": "pending_entry",
+   "signal": {
+    "ticker": "9042.T",
+    "name": "阪急阪神ホールディングス",
+    "close": 4924.0,
+    "ma25": 4600.1,
+    "ma75": 4599.6,
+    "rsi": 61.0,
+    "ret1_pct": 4.32,
+    "ret5_pct": 0.08,
+    "ret120_pct": 0.7,
+    "vol_ratio": 4.91,
+    "atr": 135.84,
+    "already_holding": false
+   },
+   "earnings_date": null
+  },
+  {
+   "kind": "BREAKOUT",
+   "ticker": "4071.T",
+   "name": "プラスアルファ・コンサルティング",
+   "signal_date": "2026-11-12",
+   "hold": 10,
+   "stop": "ma25",
+   "state": "pending_entry",
+   "signal": {
+    "ticker": "4071.T",
+    "name": "プラスアルファ・コンサルティング",
+    "close": 2387.0,
+    "ma25": 2257.0,
+    "ma75": 2168.0,
+    "rsi": 64.2,
+    "ret1_pct": 3.11,
+    "ret5_pct": 1.57,
+    "ret120_pct": 2.2,
+    "vol_ratio": 3.83,
+    "atr": 75.0,
+    "already_holding": false
+   },
+   "earnings_date": null
+  },
+  {
+   "kind": "BREAKOUT",
+   "ticker": "9204.T",
+   "name": "スカイマーク",
+   "signal_date": "2026-11-12",
+   "hold": 10,
+   "stop": "ma25",
+   "state": "pending_entry",
+   "signal": {
+    "ticker": "9204.T",
+    "name": "スカイマーク",
+    "close": 491.0,
+    "ma25": 433.5,
+    "ma75": 424.4,
+    "rsi": 75.1,
+    "ret1_pct": 3.59,
+    "ret5_pct": 8.63,
+    "ret120_pct": 49.7,
+    "vol_ratio": 3.49,
+    "atr": 13.64,
+    "already_holding": false
+   },
+   "earnings_date": null
+  },
+  {
+   "kind": "BREAKOUT",
+   "ticker": "9684.T",
+   "name": "スクウェア・エニックス・ホールディングス",
+   "signal_date": "2026-11-12",
+   "hold": 10,
+   "stop": "ma25",
+   "state": "pending_entry",
+   "signal": {
+    "ticker": "9684.T",
+    "name": "スクウェア・エニックス・ホールディングス",
+    "close": 3461.0,
+    "ma25": 3019.0,
+    "ma75": 2910.6,
+    "rsi": 70.8,
+    "ret1_pct": 9.25,
+    "ret5_pct": 8.33,
+    "ret120_pct": 25.2,
+    "vol_ratio": 3.39,
+    "atr": 123.94,
+    "already_holding": false
+   },
+   "earnings_date": null
+  },
+  {
+   "kind": "REVISION",
+   "ticker": "5142.T",
+   "name": "アキレス",
+   "signal_date": "2026-11-12",
+   "hold": 10,
+   "stop": "ma25",
+   "state": "pending_entry",
+   "signal": {
+    "ticker": "5142.T",
+    "name": "アキレス",
+    "close": 2213.0,
+    "ma25": 1855.5,
+    "ma75": 1780.4,
+    "rsi": 69.4,
+    "ret1_pct": 22.06,
+    "ret5_pct": 28.44,
+    "ret120_pct": 79.8,
+    "vol_ratio": 9.14,
+    "atr": 115.04,
+    "revision": {
+     "item": null,
+     "change_pct": null,
+     "source": null
+    },
+    "already_holding": false
+   },
+   "earnings_date": null
+  },
+  {
+   "kind": "REVISION",
+   "ticker": "4027.T",
+   "name": "テイカ",
+   "signal_date": "2026-11-12",
+   "hold": 10,
+   "stop": "ma25",
+   "state": "pending_entry",
+   "signal": {
+    "ticker": "4027.T",
+    "name": "テイカ",
+    "close": 2662.0,
+    "ma25": 2247.6,
+    "ma75": 2292.3,
+    "rsi": 73.2,
+    "ret1_pct": 21.39,
+    "ret5_pct": 24.39,
+    "ret120_pct": 36.0,
+    "vol_ratio": 11.5,
+    "atr": 124.52,
+    "revision": {
+     "item": null,
+     "change_pct": null,
+     "source": null
+    },
+    "already_holding": false
+   },
+   "earnings_date": null
+  },
+  {
+   "kind": "REVISION",
+   "ticker": "1926.T",
+   "name": "ライト工業",
+   "signal_date": "2026-11-12",
+   "hold": 10,
+   "stop": "ma25",
+   "state": "pending_entry",
+   "signal": {
+    "ticker": "1926.T",
+    "name": "ライト工業",
+    "close": 1016.0,
+    "ma25": 944.2,
+    "ma75": 945.0,
+    "rsi": 65.6,
+    "ret1_pct": 10.31,
+    "ret5_pct": 9.25,
+    "ret120_pct": -0.1,
+    "vol_ratio": 3.51,
+    "atr": 26.36,
+    "revision": {
+     "item": "営業利益",
+     "change_pct": 5.2,
+     "source": "XBRL",
+     "title": "通期業績予想および配当予想の修正（増配）に関するお知らせ",
+     "url": "https://webapi.yanoshin.jp/rd.php?https://www.release.tdnet.info/inbs/140120261110572057.pdf"
+    },
+    "already_holding": false
+   },
+   "earnings_date": null
+  },
+  {
+   "kind": "REVISION",
+   "ticker": "6237.T",
+   "name": "イワキポンプ",
+   "signal_date": "2026-11-12",
+   "hold": 10,
+   "stop": "ma25",
+   "state": "pending_entry",
+   "signal": {
+    "ticker": "6237.T",
+    "name": "イワキポンプ",
+    "close": 3985.0,
+    "ma25": 3940.4,
+    "ma75": 4227.7,
+    "rsi": 52.5,
+    "ret1_pct": 2.84,
+    "ret5_pct": 5.15,
+    "ret120_pct": 31.7,
+    "vol_ratio": 2.04,
+    "atr": 177.79,
+    "revision": {
+     "item": "営業利益",
+     "change_pct": 23.9,
+     "source": "XBRL",
+     "title": "2027年３月期第２四半期業績予想の修正及び通期業績予想の修正並びに期末配当予想の修正（増配）に関するお知らせ",
+     "url": "https://webapi.yanoshin.jp/rd.php?https://www.release.tdnet.info/inbs/140120261111573476.pdf"
+    },
+    "earnings_date": "2026-11-13",
+    "already_holding": false
+   },
+   "earnings_date": "2026-11-13"
+  },
+  {
+   "kind": "REVISION",
+   "ticker": "3968.T",
+   "name": "セグエグループ",
+   "signal_date": "2026-11-12",
+   "hold": 10,
+   "stop": "ma25",
+   "state": "pending_entry",
+   "signal": {
+    "ticker": "3968.T",
+    "name": "セグエグループ",
+    "close": 818.0,
+    "ma25": 806.5,
+    "ma75": 690.1,
+    "rsi": 56.4,
+    "ret1_pct": 2.51,
+    "ret5_pct": 5.82,
+    "ret120_pct": 46.7,
+    "vol_ratio": 2.08,
+    "atr": 46.32,
+    "revision": {
+     "item": null,
+     "change_pct": null,
+     "source": null
+    },
+    "already_holding": false
+   },
+   "earnings_date": null
+  }
+ ],
  "performance": {
   "PULLBACK": {
    "label": "① 上昇トレンドの押し目買い",
    "closed": 0,
    "open": 0,
-   "pending_entry": 0,
+   "pending_entry": 5,
    "win_rate_pct": null,
    "avg_return_pct": null,
    "payoff_ratio": null,
@@ -141,7 +798,7 @@
    "label": "② 高値ブレイク",
    "closed": 0,
    "open": 0,
-   "pending_entry": 0,
+   "pending_entry": 5,
    "win_rate_pct": null,
    "avg_return_pct": null,
    "payoff_ratio": null,
@@ -151,7 +808,7 @@
    "label": "③ 上方修正後の継続",
    "closed": 0,
    "open": 0,
-   "pending_entry": 0,
+   "pending_entry": 5,
    "win_rate_pct": null,
    "avg_return_pct": null,
    "payoff_ratio": null,

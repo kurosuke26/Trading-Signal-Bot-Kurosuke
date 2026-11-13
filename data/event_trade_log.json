@@ -1292,10 +1292,10 @@
   "entry_date": "2026-11-02",
   "entry_price": 2325.0,
   "held_days": 0,
-  "last_processed": "2026-11-11",
-  "stop": 2209.78,
-  "last_price": 2447.0,
-  "last_price_date": "2026-11-11"
+  "last_processed": "2026-11-12",
+  "stop": 2219.08,
+  "last_price": 2449.0,
+  "last_price_date": "2026-11-12"
  },
  {
   "series": "DIVIDEND_HIKE",
@@ -1850,10 +1850,10 @@
   "entry_date": "2026-11-10",
   "entry_price": 2145.0,
   "held_days": 0,
-  "last_processed": "2026-11-11",
-  "stop": 1958.24,
-  "last_price": 2175.5,
-  "last_price_date": "2026-11-11"
+  "last_processed": "2026-11-12",
+  "stop": 2029.08,
+  "last_price": 2250.0,
+  "last_price_date": "2026-11-12"
  },
  {
   "series": "DIVIDEND_HIKE",
@@ -1868,10 +1868,10 @@
   "entry_date": "2026-11-10",
   "entry_price": 2515.0,
   "held_days": 0,
-  "last_processed": "2026-11-11",
+  "last_processed": "2026-11-12",
   "stop": 2470.15,
-  "last_price": 2778.0,
-  "last_price_date": "2026-11-11"
+  "last_price": 2747.0,
+  "last_price_date": "2026-11-12"
  },
  {
   "series": "DIVIDEND_HIKE",
@@ -2030,10 +2030,10 @@
   "entry_date": "2026-11-11",
   "entry_price": 2338.0,
   "held_days": 0,
-  "last_processed": "2026-11-11",
+  "last_processed": "2026-11-12",
   "stop": 2073.41,
-  "last_price": 2322.0,
-  "last_price_date": "2026-11-11"
+  "last_price": 2342.0,
+  "last_price_date": "2026-11-12"
  },
  {
   "series": "DIVIDEND_HIKE",
@@ -2282,10 +2282,10 @@
   "entry_date": "2026-11-11",
   "entry_price": 1740.0,
   "held_days": 0,
-  "last_processed": "2026-11-11",
-  "stop": 1573.44,
-  "last_price": 1846.0,
-  "last_price_date": "2026-11-11"
+  "last_processed": "2026-11-12",
+  "stop": 1592.7,
+  "last_price": 1858.0,
+  "last_price_date": "2026-11-12"
  },
  {
   "series": "DIVIDEND_HIKE",
@@ -2386,7 +2386,14 @@
   "disclosure_url": "https://webapi.yanoshin.jp/rd.php?https://www.release.tdnet.info/inbs/140120261110572207.pdf",
   "atr_at_signal": 164.1836,
   "market_level_at_signal": 1.0509079096310294,
-  "state": "pending_entry"
+  "state": "open",
+  "entry_date": "2026-11-12",
+  "entry_price": 3105.0,
+  "held_days": 0,
+  "last_processed": "2026-11-12",
+  "stop": 2667.99,
+  "last_price": 3165.0,
+  "last_price_date": "2026-11-12"
  },
  {
   "series": "DIVIDEND_HIKE",
@@ -2397,7 +2404,14 @@
   "disclosure_url": "https://webapi.yanoshin.jp/rd.php?https://www.release.tdnet.info/inbs/140120261111572823.pdf",
   "atr_at_signal": 14.0675,
   "market_level_at_signal": 1.0509079096310294,
-  "state": "pending_entry"
+  "state": "open",
+  "entry_date": "2026-11-12",
+  "entry_price": 518.0,
+  "held_days": 0,
+  "last_processed": "2026-11-12",
+  "stop": 475.8,
+  "last_price": 515.0,
+  "last_price_date": "2026-11-12"
  },
  {
   "series": "DIVIDEND_HIKE",
@@ -2498,7 +2512,14 @@
   "disclosure_url": "https://webapi.yanoshin.jp/rd.php?https://www.release.tdnet.info/inbs/140120261110572057.pdf",
   "atr_at_signal": 20.9468,
   "market_level_at_signal": 1.0509079096310294,
-  "state": "pending_entry"
+  "state": "open",
+  "entry_date": "2026-11-12",
+  "entry_price": 977.0,
+  "held_days": 0,
+  "last_processed": "2026-11-12",
+  "stop": 936.91,
+  "last_price": 1016.0,
+  "last_price_date": "2026-11-12"
  },
  {
   "series": "DIVIDEND_HIKE",
@@ -2545,6 +2566,200 @@
   "disclosure_url": "https://webapi.yanoshin.jp/rd.php?https://www.release.tdnet.info/inbs/140120261110572320.pdf",
   "atr_at_signal": 95.6326,
   "market_level_at_signal": 1.0509079096310294,
+  "state": "open",
+  "entry_date": "2026-11-12",
+  "entry_price": 2493.0,
+  "held_days": 0,
+  "last_processed": "2026-11-12",
+  "stop": 2288.45,
+  "last_price": 2662.0,
+  "last_price_date": "2026-11-12"
+ },
+ {
+  "series": "DIVIDEND_HIKE",
+  "ticker": "3968.T",
+  "name": "セグエ",
+  "signal_date": "2026-11-12",
+  "reason": "通期連結業績予想の修正（上方修正）及び期末配当予想の修正（増配）に関するお知らせ",
+  "disclosure_url": "https://webapi.yanoshin.jp/rd.php?https://www.release.tdnet.info/inbs/140120261111573465.pdf",
+  "atr_at_signal": 46.3239,
+  "market_level_at_signal": 1.0564627793663217,
+  "state": "pending_entry"
+ },
+ {
+  "series": "DIVIDEND_HIKE",
+  "ticker": "8381.T",
+  "name": "山陰合銀",
+  "signal_date": "2026-11-12",
+  "reason": "2027年3月期 通期業績予想の修正及び期末配当予想の修正（増配）に関するお知らせ",
+  "disclosure_url": "https://webapi.yanoshin.jp/rd.php?https://www.release.tdnet.info/inbs/140120261110571944.pdf",
+  "atr_at_signal": 85.1395,
+  "market_level_at_signal": 1.0564627793663217,
+  "state": "pending_entry"
+ },
+ {
+  "series": "DIVIDEND_HIKE",
+  "ticker": "5142.T",
+  "name": "アキレス",
+  "signal_date": "2026-11-12",
+  "reason": "通期業績予想の上方修正及び配当予想の修正(増配)に関するお知らせ",
+  "disclosure_url": "https://webapi.yanoshin.jp/rd.php?https://www.release.tdnet.info/inbs/140120261111574051.pdf",
+  "atr_at_signal": 115.0372,
+  "market_level_at_signal": 1.0564627793663217,
+  "state": "pending_entry"
+ },
+ {
+  "series": "DIVIDEND_HIKE",
+  "ticker": "8345.T",
+  "name": "岩手銀",
+  "signal_date": "2026-11-12",
+  "reason": "「業績予想の修正」並びに「剰余金の配当（中間配当・増配）」および「期末配当予想の修正（増配）」に関するお知らせ",
+  "disclosure_url": "https://webapi.yanoshin.jp/rd.php?https://www.release.tdnet.info/inbs/140120261111573862.pdf",
+  "atr_at_signal": 118.8469,
+  "market_level_at_signal": 1.0564627793663217,
+  "state": "pending_entry"
+ },
+ {
+  "series": "DIVIDEND_HIKE",
+  "ticker": "8101.T",
+  "name": "ＧＳＩクレオス",
+  "signal_date": "2026-11-12",
+  "reason": "配当予想の修正（増配）に関するお知らせ",
+  "disclosure_url": "https://webapi.yanoshin.jp/rd.php?https://www.release.tdnet.info/inbs/140120261111574496.pdf",
+  "atr_at_signal": 48.1992,
+  "market_level_at_signal": 1.0564627793663217,
+  "state": "pending_entry"
+ },
+ {
+  "series": "DIVIDEND_HIKE",
+  "ticker": "8341.T",
+  "name": "七十七銀",
+  "signal_date": "2026-11-12",
+  "reason": "剰余金の配当（増配）および期末配当予想の修正に関するお知らせ",
+  "disclosure_url": "https://webapi.yanoshin.jp/rd.php?https://www.release.tdnet.info/inbs/140120261105565657.pdf",
+  "atr_at_signal": 158.3622,
+  "market_level_at_signal": 1.0564627793663217,
+  "state": "pending_entry"
+ },
+ {
+  "series": "DIVIDEND_HIKE",
+  "ticker": "2982.T",
+  "name": "ＡＤワークスグループ",
+  "signal_date": "2026-11-12",
+  "reason": "配当方針の変更（連結配当性向40％程度）及び期末配当予想の修正（増配）に関するお知らせ",
+  "disclosure_url": "https://webapi.yanoshin.jp/rd.php?https://www.release.tdnet.info/inbs/140120261111574635.pdf",
+  "atr_at_signal": 13.3423,
+  "market_level_at_signal": 1.0564627793663217,
+  "state": "pending_entry"
+ },
+ {
+  "series": "DIVIDEND_HIKE",
+  "ticker": "150A.T",
+  "name": "Ｇ－ＪＳＨ",
+  "signal_date": "2026-11-12",
+  "reason": "2027年３月期の配当予想の修正（増配）に関するお知らせ",
+  "disclosure_url": "https://webapi.yanoshin.jp/rd.php?https://www.release.tdnet.info/inbs/140120261111574073.pdf",
+  "atr_at_signal": 43.5608,
+  "market_level_at_signal": 1.0564627793663217,
+  "state": "pending_entry"
+ },
+ {
+  "series": "DIVIDEND_HIKE",
+  "ticker": "3182.T",
+  "name": "オイシックス",
+  "signal_date": "2026-11-12",
+  "reason": "業績予想の修正及び配当予想の修正（増配）に関するお知らせ",
+  "disclosure_url": "https://webapi.yanoshin.jp/rd.php?https://www.release.tdnet.info/inbs/140120261112575396.pdf",
+  "atr_at_signal": 46.3523,
+  "market_level_at_signal": 1.0564627793663217,
+  "state": "pending_entry"
+ },
+ {
+  "series": "DIVIDEND_HIKE",
+  "ticker": "3465.T",
+  "name": "ケイアイスター不動産",
+  "signal_date": "2026-11-12",
+  "reason": "配当予想の修正(増配）及び記念株主優待実施に関するお知らせ",
+  "disclosure_url": "https://webapi.yanoshin.jp/rd.php?https://www.release.tdnet.info/inbs/140120261112575777.pdf",
+  "atr_at_signal": 99.347,
+  "market_level_at_signal": 1.0564627793663217,
+  "state": "pending_entry"
+ },
+ {
+  "series": "DIVIDEND_HIKE",
+  "ticker": "4377.T",
+  "name": "Ｇ－ワンキャリア",
+  "signal_date": "2026-11-12",
+  "reason": "配当予想の修正（増配）に関するお知らせ",
+  "disclosure_url": "https://webapi.yanoshin.jp/rd.php?https://www.release.tdnet.info/inbs/140120261111574436.pdf",
+  "atr_at_signal": 93.0556,
+  "market_level_at_signal": 1.0564627793663217,
+  "state": "pending_entry"
+ },
+ {
+  "series": "DIVIDEND_HIKE",
+  "ticker": "5991.T",
+  "name": "ニッパツ",
+  "signal_date": "2026-11-12",
+  "reason": "剰余金の配当（中間配当）および期末配当予想の修正（増配）に関するお知らせ",
+  "disclosure_url": "https://webapi.yanoshin.jp/rd.php?https://www.release.tdnet.info/inbs/140120261111574176.pdf",
+  "atr_at_signal": 148.9684,
+  "market_level_at_signal": 1.0564627793663217,
+  "state": "pending_entry"
+ },
+ {
+  "series": "DIVIDEND_HIKE",
+  "ticker": "7803.T",
+  "name": "Ｇ－ブシロード",
+  "signal_date": "2026-11-12",
+  "reason": "通期業績予想の修正及び配当予想の修正（増配）に関するお知らせ",
+  "disclosure_url": "https://webapi.yanoshin.jp/rd.php?https://www.release.tdnet.info/inbs/140120261112575747.pdf",
+  "atr_at_signal": 22.7948,
+  "market_level_at_signal": 1.0564627793663217,
+  "state": "pending_entry"
+ },
+ {
+  "series": "DIVIDEND_HIKE",
+  "ticker": "9076.T",
+  "name": "セイノーＨＤ",
+  "signal_date": "2026-11-12",
+  "reason": "期末配当予想の修正（増配）に関するお知らせ",
+  "disclosure_url": "https://webapi.yanoshin.jp/rd.php?https://www.release.tdnet.info/inbs/140120261110571188.pdf",
+  "atr_at_signal": 50.5606,
+  "market_level_at_signal": 1.0564627793663217,
+  "state": "pending_entry"
+ },
+ {
+  "series": "DIVIDEND_HIKE",
+  "ticker": "4051.T",
+  "name": "ＧＭＯ－ＦＧ",
+  "signal_date": "2026-11-12",
+  "reason": "配当予想の修正（増配）に関するお知らせ",
+  "disclosure_url": "https://webapi.yanoshin.jp/rd.php?https://www.release.tdnet.info/inbs/140120261106568010.pdf",
+  "atr_at_signal": 252.7412,
+  "market_level_at_signal": 1.0564627793663217,
+  "state": "pending_entry"
+ },
+ {
+  "series": "DIVIDEND_HIKE",
+  "ticker": "8511.T",
+  "name": "日証金",
+  "signal_date": "2026-11-12",
+  "reason": "剰余金の配当（中間配当）および期末配当予想の修正（増配）に関するお知らせ",
+  "disclosure_url": "https://webapi.yanoshin.jp/rd.php?https://www.release.tdnet.info/inbs/140120261112575886.pdf",
+  "atr_at_signal": 56.3281,
+  "market_level_at_signal": 1.0564627793663217,
+  "state": "pending_entry"
+ },
+ {
+  "series": "DIVIDEND_HIKE",
+  "ticker": "4526.T",
+  "name": "理研ビタミン",
+  "signal_date": "2026-11-12",
+  "reason": "配当方針の変更および配当予想の修正（増配）に関するお知らせ",
+  "disclosure_url": "https://webapi.yanoshin.jp/rd.php?https://www.release.tdnet.info/inbs/140120261110570786.pdf",
+  "atr_at_signal": 86.1812,
+  "market_level_at_signal": 1.0564627793663217,
   "state": "pending_entry"
  }
 ]
