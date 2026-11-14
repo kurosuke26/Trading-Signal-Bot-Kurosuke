@@ -6,7 +6,7 @@
   "signal_date": "2026-11-12",
   "hold": 10,
   "stop": "ma25",
-  "state": "pending_entry",
+  "state": "open",
   "signal": {
    "ticker": "2767.T",
    "name": "円谷フィールズホールディングス",
@@ -21,7 +21,15 @@
    "atr": 80.34,
    "already_holding": false
   },
-  "earnings_date": null
+  "earnings_date": null,
+  "entry_date": "2026-11-13",
+  "entry_price": 2418.0,
+  "last_date": "2026-11-13",
+  "last_price": 2464.0,
+  "held_days": 1,
+  "stop_level": 2460.0,
+  "unrealized_pct": 1.9,
+  "last_day_tomorrow": false
  },
  {
   "kind": "PULLBACK",
@@ -30,7 +38,7 @@
   "signal_date": "2026-11-12",
   "hold": 10,
   "stop": "ma25",
-  "state": "pending_entry",
+  "state": "open",
   "signal": {
    "ticker": "4848.T",
    "name": "フルキャストホールディングス",
@@ -45,7 +53,15 @@
    "atr": 41.71,
    "already_holding": false
   },
-  "earnings_date": null
+  "earnings_date": null,
+  "entry_date": "2026-11-13",
+  "entry_price": 1835.0,
+  "last_date": "2026-11-13",
+  "last_price": 1851.0,
+  "held_days": 1,
+  "stop_level": 1844.7,
+  "unrealized_pct": 0.87,
+  "last_day_tomorrow": false
  },
  {
   "kind": "PULLBACK",
@@ -54,7 +70,7 @@
   "signal_date": "2026-11-12",
   "hold": 10,
   "stop": "ma25",
-  "state": "pending_entry",
+  "state": "exit_next_open",
   "signal": {
    "ticker": "7476.T",
    "name": "アズワン",
@@ -69,7 +85,13 @@
    "atr": 66.85,
    "already_holding": false
   },
-  "earnings_date": null
+  "earnings_date": null,
+  "entry_date": "2026-11-13",
+  "entry_price": 2512.0,
+  "last_date": "2026-11-13",
+  "last_price": 2550.0,
+  "held_days": 1,
+  "unrealized_pct": 1.51
  },
  {
   "kind": "PULLBACK",
@@ -78,7 +100,7 @@
   "signal_date": "2026-11-12",
   "hold": 10,
   "stop": "ma25",
-  "state": "pending_entry",
+  "state": "open",
   "signal": {
    "ticker": "2433.T",
    "name": "博報堂ＤＹホールディングス",
@@ -93,7 +115,15 @@
    "atr": 53.97,
    "already_holding": false
   },
-  "earnings_date": null
+  "earnings_date": null,
+  "entry_date": "2026-11-13",
+  "entry_price": 1370.5,
+  "last_date": "2026-11-13",
+  "last_price": 1430.0,
+  "held_days": 1,
+  "stop_level": 1396.1,
+  "unrealized_pct": 4.34,
+  "last_day_tomorrow": false
  },
  {
   "kind": "PULLBACK",
@@ -102,7 +132,7 @@
   "signal_date": "2026-11-12",
   "hold": 10,
   "stop": "ma25",
-  "state": "pending_entry",
+  "state": "exit_next_open",
   "signal": {
    "ticker": "3092.T",
    "name": "ＺＯＺＯ",
@@ -117,7 +147,13 @@
    "atr": 33.36,
    "already_holding": false
   },
-  "earnings_date": null
+  "earnings_date": null,
+  "entry_date": "2026-11-13",
+  "entry_price": 1147.0,
+  "last_date": "2026-11-13",
+  "last_price": 1175.5,
+  "held_days": 1,
+  "unrealized_pct": 2.48
  },
  {
   "kind": "BREAKOUT",
@@ -126,7 +162,7 @@
   "signal_date": "2026-11-12",
   "hold": 10,
   "stop": "ma25",
-  "state": "pending_entry",
+  "state": "open",
   "signal": {
    "ticker": "2820.T",
    "name": "やまみ",
@@ -141,7 +177,15 @@
    "atr": 329.09,
    "already_holding": false
   },
-  "earnings_date": null
+  "earnings_date": null,
+  "entry_date": "2026-11-13",
+  "entry_price": 7780.0,
+  "last_date": "2026-11-13",
+  "last_price": 8050.0,
+  "held_days": 1,
+  "stop_level": 6796.0,
+  "unrealized_pct": 3.47,
+  "last_day_tomorrow": false
  },
  {
   "kind": "BREAKOUT",
@@ -150,7 +194,7 @@
   "signal_date": "2026-11-12",
   "hold": 10,
   "stop": "ma25",
-  "state": "pending_entry",
+  "state": "open",
   "signal": {
    "ticker": "9042.T",
    "name": "阪急阪神ホールディングス",
@@ -165,7 +209,15 @@
    "atr": 135.84,
    "already_holding": false
   },
-  "earnings_date": null
+  "earnings_date": null,
+  "entry_date": "2026-11-13",
+  "entry_price": 4912.0,
+  "last_date": "2026-11-13",
+  "last_price": 4944.0,
+  "held_days": 1,
+  "stop_level": 4618.1,
+  "unrealized_pct": 0.65,
+  "last_day_tomorrow": false
  },
  {
   "kind": "BREAKOUT",
@@ -174,7 +226,7 @@
   "signal_date": "2026-11-12",
   "hold": 10,
   "stop": "ma25",
-  "state": "pending_entry",
+  "state": "open",
   "signal": {
    "ticker": "4071.T",
    "name": "プラスアルファ・コンサルティング",
@@ -189,7 +241,15 @@
    "atr": 75.0,
    "already_holding": false
   },
-  "earnings_date": null
+  "earnings_date": null,
+  "entry_date": "2026-11-13",
+  "entry_price": 2449.0,
+  "last_date": "2026-11-13",
+  "last_price": 2501.0,
+  "held_days": 1,
+  "stop_level": 2272.7,
+  "unrealized_pct": 2.12,
+  "last_day_tomorrow": false
  },
  {
   "kind": "BREAKOUT",
@@ -198,7 +258,7 @@
   "signal_date": "2026-11-12",
   "hold": 10,
   "stop": "ma25",
-  "state": "pending_entry",
+  "state": "open",
   "signal": {
    "ticker": "9204.T",
    "name": "スカイマーク",
@@ -213,7 +273,15 @@
    "atr": 13.64,
    "already_holding": false
   },
-  "earnings_date": null
+  "earnings_date": null,
+  "entry_date": "2026-11-13",
+  "entry_price": 488.0,
+  "last_date": "2026-11-13",
+  "last_price": 490.0,
+  "held_days": 1,
+  "stop_level": 436.1,
+  "unrealized_pct": 0.41,
+  "last_day_tomorrow": false
  },
  {
   "kind": "BREAKOUT",
@@ -222,7 +290,7 @@
   "signal_date": "2026-11-12",
   "hold": 10,
   "stop": "ma25",
-  "state": "pending_entry",
+  "state": "open",
   "signal": {
    "ticker": "9684.T",
    "name": "スクウェア・エニックス・ホールディングス",
@@ -237,7 +305,15 @@
    "atr": 123.94,
    "already_holding": false
   },
-  "earnings_date": null
+  "earnings_date": null,
+  "entry_date": "2026-11-13",
+  "entry_price": 3500.0,
+  "last_date": "2026-11-13",
+  "last_price": 3550.0,
+  "held_days": 1,
+  "stop_level": 3049.4,
+  "unrealized_pct": 1.43,
+  "last_day_tomorrow": false
  },
  {
   "kind": "REVISION",
@@ -246,7 +322,7 @@
   "signal_date": "2026-11-12",
   "hold": 10,
   "stop": "ma25",
-  "state": "pending_entry",
+  "state": "open",
   "signal": {
    "ticker": "5142.T",
    "name": "アキレス",
@@ -266,7 +342,15 @@
    },
    "already_holding": false
   },
-  "earnings_date": null
+  "earnings_date": null,
+  "entry_date": "2026-11-13",
+  "entry_price": 2013.0,
+  "last_date": "2026-11-13",
+  "last_price": 2023.0,
+  "held_days": 1,
+  "stop_level": 1859.4,
+  "unrealized_pct": 0.5,
+  "last_day_tomorrow": false
  },
  {
   "kind": "REVISION",
@@ -275,7 +359,7 @@
   "signal_date": "2026-11-12",
   "hold": 10,
   "stop": "ma25",
-  "state": "pending_entry",
+  "state": "open",
   "signal": {
    "ticker": "4027.T",
    "name": "テイカ",
@@ -295,7 +379,15 @@
    },
    "already_holding": false
   },
-  "earnings_date": null
+  "earnings_date": null,
+  "entry_date": "2026-11-13",
+  "entry_price": 2678.0,
+  "last_date": "2026-11-13",
+  "last_price": 2490.0,
+  "held_days": 1,
+  "stop_level": 2254.8,
+  "unrealized_pct": -7.02,
+  "last_day_tomorrow": false
  },
  {
   "kind": "REVISION",
@@ -304,7 +396,7 @@
   "signal_date": "2026-11-12",
   "hold": 10,
   "stop": "ma25",
-  "state": "pending_entry",
+  "state": "open",
   "signal": {
    "ticker": "1926.T",
    "name": "ライト工業",
@@ -326,7 +418,15 @@
    },
    "already_holding": false
   },
-  "earnings_date": null
+  "earnings_date": null,
+  "entry_date": "2026-11-13",
+  "entry_price": 1039.0,
+  "last_date": "2026-11-13",
+  "last_price": 1040.0,
+  "held_days": 1,
+  "stop_level": 948.0,
+  "unrealized_pct": 0.1,
+  "last_day_tomorrow": false
  },
  {
   "kind": "REVISION",
@@ -335,7 +435,7 @@
   "signal_date": "2026-11-12",
   "hold": 10,
   "stop": "ma25",
-  "state": "pending_entry",
+  "state": "exit_next_open",
   "signal": {
    "ticker": "6237.T",
    "name": "イワキポンプ",
@@ -358,7 +458,13 @@
    "earnings_date": "2026-11-13",
    "already_holding": false
   },
-  "earnings_date": "2026-11-13"
+  "earnings_date": null,
+  "entry_date": "2026-11-13",
+  "entry_price": 3990.0,
+  "last_date": "2026-11-13",
+  "last_price": 3895.0,
+  "held_days": 1,
+  "unrealized_pct": -2.38
  },
  {
   "kind": "REVISION",
@@ -367,7 +473,7 @@
   "signal_date": "2026-11-12",
   "hold": 10,
   "stop": "ma25",
-  "state": "pending_entry",
+  "state": "open",
   "signal": {
    "ticker": "3968.T",
    "name": "セグエグループ",
@@ -384,6 +490,251 @@
     "item": null,
     "change_pct": null,
     "source": null
+   },
+   "already_holding": false
+  },
+  "earnings_date": null,
+  "entry_date": "2026-11-13",
+  "entry_price": 863.0,
+  "last_date": "2026-11-13",
+  "last_price": 903.0,
+  "held_days": 1,
+  "stop_level": 812.4,
+  "unrealized_pct": 4.63,
+  "last_day_tomorrow": false
+ },
+ {
+  "kind": "PULLBACK",
+  "ticker": "2531.T",
+  "name": "宝ホールディングス",
+  "signal_date": "2026-11-13",
+  "hold": 10,
+  "stop": "ma25",
+  "state": "pending_entry",
+  "signal": {
+   "ticker": "2531.T",
+   "name": "宝ホールディングス",
+   "close": 2795.0,
+   "ma25": 2843.2,
+   "ma75": 2477.9,
+   "rsi": 49.2,
+   "ret1_pct": 0.96,
+   "ret5_pct": -9.84,
+   "ret120_pct": 45.5,
+   "vol_ratio": 1.33,
+   "atr": 185.75,
+   "already_holding": false
+  },
+  "earnings_date": null
+ },
+ {
+  "kind": "BREAKOUT",
+  "ticker": "3864.T",
+  "name": "三菱製紙",
+  "signal_date": "2026-11-13",
+  "hold": 10,
+  "stop": "ma25",
+  "state": "pending_entry",
+  "signal": {
+   "ticker": "3864.T",
+   "name": "三菱製紙",
+   "close": 1277.0,
+   "ma25": 1216.5,
+   "ma75": 1188.1,
+   "rsi": 62.8,
+   "ret1_pct": 5.8,
+   "ret5_pct": 12.81,
+   "ret120_pct": 24.2,
+   "vol_ratio": 6.3,
+   "atr": 39.03,
+   "already_holding": false
+  },
+  "earnings_date": null
+ },
+ {
+  "kind": "BREAKOUT",
+  "ticker": "3182.T",
+  "name": "オイシックス",
+  "signal_date": "2026-11-13",
+  "hold": 10,
+  "stop": "ma25",
+  "state": "pending_entry",
+  "signal": {
+   "ticker": "3182.T",
+   "name": "オイシックス",
+   "close": 1866.0,
+   "ma25": 1661.2,
+   "ma75": 1657.3,
+   "rsi": 70.4,
+   "ret1_pct": 14.34,
+   "ret5_pct": 14.13,
+   "ret120_pct": 30.1,
+   "vol_ratio": 6.13,
+   "atr": 60.9,
+   "already_holding": false
+  },
+  "earnings_date": null
+ },
+ {
+  "kind": "BREAKOUT",
+  "ticker": "3397.T",
+  "name": "トリドールホールディングス",
+  "signal_date": "2026-11-13",
+  "hold": 10,
+  "stop": "ma25",
+  "state": "pending_entry",
+  "signal": {
+   "ticker": "3397.T",
+   "name": "トリドールホールディングス",
+   "close": 5379.0,
+   "ma25": 4692.6,
+   "ma75": 4411.8,
+   "rsi": 73.0,
+   "ret1_pct": 8.29,
+   "ret5_pct": 11.71,
+   "ret120_pct": 38.1,
+   "vol_ratio": 4.39,
+   "atr": 150.14,
+   "already_holding": false
+  },
+  "earnings_date": null
+ },
+ {
+  "kind": "BREAKOUT",
+  "ticker": "7860.T",
+  "name": "エイベックス",
+  "signal_date": "2026-11-13",
+  "hold": 10,
+  "stop": "ma25",
+  "state": "pending_entry",
+  "signal": {
+   "ticker": "7860.T",
+   "name": "エイベックス",
+   "close": 1334.0,
+   "ma25": 1245.0,
+   "ma75": 1244.0,
+   "rsi": 67.7,
+   "ret1_pct": 7.23,
+   "ret5_pct": 9.34,
+   "ret120_pct": 13.4,
+   "vol_ratio": 3.36,
+   "atr": 29.84,
+   "already_holding": false
+  },
+  "earnings_date": null
+ },
+ {
+  "kind": "BREAKOUT",
+  "ticker": "2120.T",
+  "name": "ＬＩＦＵＬＬ",
+  "signal_date": "2026-11-13",
+  "hold": 10,
+  "stop": "ma25",
+  "state": "pending_entry",
+  "signal": {
+   "ticker": "2120.T",
+   "name": "ＬＩＦＵＬＬ",
+   "close": 269.0,
+   "ma25": 246.7,
+   "ma75": 229.1,
+   "rsi": 69.8,
+   "ret1_pct": 6.75,
+   "ret5_pct": 11.62,
+   "ret120_pct": 47.0,
+   "vol_ratio": 2.99,
+   "atr": 9.88,
+   "already_holding": false
+  },
+  "earnings_date": null
+ },
+ {
+  "kind": "REVISION",
+  "ticker": "3182.T",
+  "name": "オイシックス",
+  "signal_date": "2026-11-13",
+  "hold": 10,
+  "stop": "ma25",
+  "state": "pending_entry",
+  "signal": {
+   "ticker": "3182.T",
+   "name": "オイシックス",
+   "close": 1866.0,
+   "ma25": 1661.2,
+   "ma75": 1657.3,
+   "rsi": 70.4,
+   "ret1_pct": 14.34,
+   "ret5_pct": 14.13,
+   "ret120_pct": 30.1,
+   "vol_ratio": 6.13,
+   "atr": 60.9,
+   "revision": {
+    "item": "営業利益",
+    "change_pct": 13.6,
+    "source": "XBRL",
+    "title": "業績予想の修正及び配当予想の修正（増配）に関するお知らせ",
+    "url": "https://webapi.yanoshin.jp/rd.php?https://www.release.tdnet.info/inbs/140120261112575396.pdf"
+   },
+   "already_holding": false
+  },
+  "earnings_date": null
+ },
+ {
+  "kind": "REVISION",
+  "ticker": "6482.T",
+  "name": "ＹＵＳＨＩＮ",
+  "signal_date": "2026-11-13",
+  "hold": 10,
+  "stop": "ma25",
+  "state": "pending_entry",
+  "signal": {
+   "ticker": "6482.T",
+   "name": "ＹＵＳＨＩＮ",
+   "close": 717.0,
+   "ma25": 655.6,
+   "ma75": 686.4,
+   "rsi": 65.7,
+   "ret1_pct": 12.74,
+   "ret5_pct": 19.5,
+   "ret120_pct": 2.7,
+   "vol_ratio": 3.3,
+   "atr": 22.77,
+   "revision": {
+    "item": "営業利益",
+    "change_pct": 69.2,
+    "source": "PDF",
+    "title": "業績予想の修正、剰余金の配当（中間配当）の決定及び期末配当予想の修正に関するお知らせ",
+    "url": "https://webapi.yanoshin.jp/rd.php?https://www.release.tdnet.info/inbs/140120261111574161.pdf"
+   },
+   "already_holding": false
+  },
+  "earnings_date": null
+ },
+ {
+  "kind": "REVISION",
+  "ticker": "8511.T",
+  "name": "日本証券金融",
+  "signal_date": "2026-11-13",
+  "hold": 10,
+  "stop": "ma25",
+  "state": "pending_entry",
+  "signal": {
+   "ticker": "8511.T",
+   "name": "日本証券金融",
+   "close": 2309.0,
+   "ma25": 2139.9,
+   "ma75": 2322.0,
+   "rsi": 61.5,
+   "ret1_pct": 8.71,
+   "ret5_pct": 14.82,
+   "ret120_pct": 2.8,
+   "vol_ratio": 2.66,
+   "atr": 67.93,
+   "revision": {
+    "item": "営業利益",
+    "change_pct": 20.3,
+    "source": "XBRL",
+    "title": "通期連結業績予想の修正に関するお知らせ",
+    "url": "https://webapi.yanoshin.jp/rd.php?https://www.release.tdnet.info/inbs/140120261112575854.pdf"
    },
    "already_holding": false
   },
