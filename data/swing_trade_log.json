@@ -739,5 +739,67 @@
    "already_holding": false
   },
   "earnings_date": null
+ },
+ {
+  "kind": "REVISION",
+  "ticker": "1802.T",
+  "name": "大林組",
+  "signal_date": "2026-11-13",
+  "hold": 10,
+  "stop": "ma25",
+  "state": "pending_entry",
+  "signal": {
+   "ticker": "1802.T",
+   "name": "大林組",
+   "close": 3386.0,
+   "ma25": 2982.6,
+   "ma75": 3003.1,
+   "rsi": 72.0,
+   "ret1_pct": 6.11,
+   "ret5_pct": 15.33,
+   "ret120_pct": 4.7,
+   "vol_ratio": 1.64,
+   "atr": 98.64,
+   "revision": {
+    "item": "営業利益",
+    "change_pct": 14.8,
+    "source": "XBRL",
+    "title": "通期業績予想の修正に関するお知らせ",
+    "url": "https://webapi.yanoshin.jp/rd.php?https://www.release.tdnet.info/inbs/140120261112576600.pdf"
+   },
+   "already_holding": false
+  },
+  "earnings_date": null
+ },
+ {
+  "kind": "REVISION",
+  "ticker": "1969.T",
+  "name": "高砂熱学工業",
+  "signal_date": "2026-11-13",
+  "hold": 10,
+  "stop": "ma25",
+  "state": "pending_entry",
+  "signal": {
+   "ticker": "1969.T",
+   "name": "高砂熱学工業",
+   "close": 4224.0,
+   "ma25": 4061.0,
+   "ma75": 4257.2,
+   "rsi": 56.4,
+   "ret1_pct": 5.84,
+   "ret5_pct": 18.75,
+   "ret120_pct": 2.3,
+   "vol_ratio": 3.35,
+   "atr": 153.45,
+   "revision": {
+    "item": "営業利益",
+    "change_pct": 21.2,
+    "source": "XBRL",
+    "title": "業績予想の修正に関するお知らせ",
+    "url": "https://webapi.yanoshin.jp/rd.php?https://www.release.tdnet.info/inbs/140120261111574002.pdf"
+   },
+   "already_holding": false
+  },
+  "earnings_date": null
  }
 ]

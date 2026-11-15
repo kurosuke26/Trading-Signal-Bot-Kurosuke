@@ -1,13 +1,13 @@
 {
- "generated_at_utc": "2026-11-14T00:50:19.512648+00:00",
+ "generated_at_utc": "2026-11-15T23:48:59.994074+00:00",
  "date": "2026-11-13",
  "regime": {
   "date": "2026-11-13",
   "ok": false,
-  "index_vs_ma75_pct": -2.28
+  "index_vs_ma75_pct": -2.3
  },
  "tdnet": {
-  "revision_disclosures": 262,
+  "revision_disclosures": 273,
   "failed_days": 0
  },
  "earnings": {
@@ -40,7 +40,7 @@
      "vol_ratio": 1.33,
      "atr": 185.75,
      "rank": 0.4545927660681759,
-     "already_holding": false
+     "already_holding": true
     }
    ]
   },
@@ -67,7 +67,7 @@
      "vol_ratio": 6.3,
      "atr": 39.03,
      "rank": 6.297741752560126,
-     "already_holding": false
+     "already_holding": true
     },
     {
      "ticker": "3182.T",
@@ -82,7 +82,7 @@
      "vol_ratio": 6.13,
      "atr": 60.9,
      "rank": 6.133618286563836,
-     "already_holding": false
+     "already_holding": true
     },
     {
      "ticker": "3397.T",
@@ -97,7 +97,7 @@
      "vol_ratio": 4.39,
      "atr": 150.14,
      "rank": 4.385510996119017,
-     "already_holding": false
+     "already_holding": true
     },
     {
      "ticker": "7860.T",
@@ -112,7 +112,7 @@
      "vol_ratio": 3.36,
      "atr": 29.84,
      "rank": 3.3604354956904072,
-     "already_holding": false
+     "already_holding": true
     },
     {
      "ticker": "2120.T",
@@ -127,7 +127,7 @@
      "vol_ratio": 2.99,
      "atr": 9.88,
      "rank": 2.9933860974490893,
-     "already_holding": false
+     "already_holding": true
     }
    ]
   },
@@ -139,7 +139,7 @@
     "regime": false
    },
    "skipped_by_regime": false,
-   "total_hits": 3,
+   "total_hits": 6,
    "top": [
     {
      "ticker": "3182.T",
@@ -170,7 +170,7 @@
       "title": "業績予想の修正及び配当予想の修正（増配）に関するお知らせ",
       "url": "https://webapi.yanoshin.jp/rd.php?https://www.release.tdnet.info/inbs/140120261112575396.pdf"
      },
-     "already_holding": false
+     "already_holding": true
     },
     {
      "ticker": "6482.T",
@@ -201,7 +201,7 @@
       "title": "業績予想の修正、剰余金の配当（中間配当）の決定及び期末配当予想の修正に関するお知らせ",
       "url": "https://webapi.yanoshin.jp/rd.php?https://www.release.tdnet.info/inbs/140120261111574161.pdf"
      },
-     "already_holding": false
+     "already_holding": true
     },
     {
      "ticker": "8511.T",
@@ -231,6 +231,68 @@
       "source": "XBRL",
       "title": "通期連結業績予想の修正に関するお知らせ",
       "url": "https://webapi.yanoshin.jp/rd.php?https://www.release.tdnet.info/inbs/140120261112575854.pdf"
+     },
+     "already_holding": true
+    },
+    {
+     "ticker": "1802.T",
+     "name": "大林組",
+     "close": 3386.0,
+     "ma25": 2982.6,
+     "ma75": 3003.1,
+     "rsi": 72.0,
+     "ret1_pct": 6.11,
+     "ret5_pct": 15.33,
+     "ret120_pct": 4.7,
+     "vol_ratio": 1.64,
+     "atr": 98.64,
+     "rank": 0.06110937010341577,
+     "disclosures": [
+      {
+       "title": "通期業績予想の修正に関するお知らせ",
+       "url": "https://webapi.yanoshin.jp/rd.php?https://www.release.tdnet.info/inbs/140120261112576600.pdf",
+       "url_xbrl": "https://webapi.yanoshin.jp/rd.php?https://www.release.tdnet.info/inbs/091220261112576600.zip",
+       "disc_date": "2026-11-13",
+       "title_up": false
+      }
+     ],
+     "revision": {
+      "item": "営業利益",
+      "change_pct": 14.8,
+      "source": "XBRL",
+      "title": "通期業績予想の修正に関するお知らせ",
+      "url": "https://webapi.yanoshin.jp/rd.php?https://www.release.tdnet.info/inbs/140120261112576600.pdf"
+     },
+     "already_holding": false
+    },
+    {
+     "ticker": "1969.T",
+     "name": "高砂熱学工業",
+     "close": 4224.0,
+     "ma25": 4061.0,
+     "ma75": 4257.2,
+     "rsi": 56.4,
+     "ret1_pct": 5.84,
+     "ret5_pct": 18.75,
+     "ret120_pct": 2.3,
+     "vol_ratio": 3.35,
+     "atr": 153.45,
+     "rank": 0.058381358055625165,
+     "disclosures": [
+      {
+       "title": "業績予想の修正に関するお知らせ",
+       "url": "https://webapi.yanoshin.jp/rd.php?https://www.release.tdnet.info/inbs/140120261111574002.pdf",
+       "url_xbrl": "https://webapi.yanoshin.jp/rd.php?https://www.release.tdnet.info/inbs/091220261111574002.zip",
+       "disc_date": "2026-11-13",
+       "title_up": false
+      }
+     ],
+     "revision": {
+      "item": "営業利益",
+      "change_pct": 21.2,
+      "source": "XBRL",
+      "title": "業績予想の修正に関するお知らせ",
+      "url": "https://webapi.yanoshin.jp/rd.php?https://www.release.tdnet.info/inbs/140120261111574002.pdf"
      },
      "already_holding": false
     }
@@ -984,6 +1046,68 @@
     "already_holding": false
    },
    "earnings_date": null
+  },
+  {
+   "kind": "REVISION",
+   "ticker": "1802.T",
+   "name": "大林組",
+   "signal_date": "2026-11-13",
+   "hold": 10,
+   "stop": "ma25",
+   "state": "pending_entry",
+   "signal": {
+    "ticker": "1802.T",
+    "name": "大林組",
+    "close": 3386.0,
+    "ma25": 2982.6,
+    "ma75": 3003.1,
+    "rsi": 72.0,
+    "ret1_pct": 6.11,
+    "ret5_pct": 15.33,
+    "ret120_pct": 4.7,
+    "vol_ratio": 1.64,
+    "atr": 98.64,
+    "revision": {
+     "item": "営業利益",
+     "change_pct": 14.8,
+     "source": "XBRL",
+     "title": "通期業績予想の修正に関するお知らせ",
+     "url": "https://webapi.yanoshin.jp/rd.php?https://www.release.tdnet.info/inbs/140120261112576600.pdf"
+    },
+    "already_holding": false
+   },
+   "earnings_date": null
+  },
+  {
+   "kind": "REVISION",
+   "ticker": "1969.T",
+   "name": "高砂熱学工業",
+   "signal_date": "2026-11-13",
+   "hold": 10,
+   "stop": "ma25",
+   "state": "pending_entry",
+   "signal": {
+    "ticker": "1969.T",
+    "name": "高砂熱学工業",
+    "close": 4224.0,
+    "ma25": 4061.0,
+    "ma75": 4257.2,
+    "rsi": 56.4,
+    "ret1_pct": 5.84,
+    "ret5_pct": 18.75,
+    "ret120_pct": 2.3,
+    "vol_ratio": 3.35,
+    "atr": 153.45,
+    "revision": {
+     "item": "営業利益",
+     "change_pct": 21.2,
+     "source": "XBRL",
+     "title": "業績予想の修正に関するお知らせ",
+     "url": "https://webapi.yanoshin.jp/rd.php?https://www.release.tdnet.info/inbs/140120261111574002.pdf"
+    },
+    "already_holding": false
+   },
+   "earnings_date": null
   }
  ],
  "performance": {
@@ -1011,7 +1135,7 @@
    "label": "③ 上方修正後の継続",
    "closed": 0,
    "open": 5,
-   "pending_entry": 3,
+   "pending_entry": 5,
    "win_rate_pct": null,
    "avg_return_pct": null,
    "payoff_ratio": null,
