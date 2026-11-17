@@ -1,18 +1,18 @@
 {
- "generated_at_utc": "2026-11-15T23:48:59.994074+00:00",
- "date": "2026-11-13",
+ "generated_at_utc": "2026-11-17T03:07:47.261329+00:00",
+ "date": "2026-11-16",
  "regime": {
-  "date": "2026-11-13",
+  "date": "2026-11-16",
   "ok": false,
-  "index_vs_ma75_pct": -2.3
+  "index_vs_ma75_pct": -3.24
  },
  "tdnet": {
-  "revision_disclosures": 273,
+  "revision_disclosures": 14,
   "failed_days": 0
  },
  "earnings": {
-  "date": "2026-11-16",
-  "count": 35,
+  "date": null,
+  "count": 0,
   "fetched": true,
   "holding": []
  },
@@ -25,22 +25,37 @@
     "regime": false
    },
    "skipped_by_regime": false,
-   "total_hits": 1,
+   "total_hits": 2,
    "top": [
     {
-     "ticker": "2531.T",
-     "name": "宝ホールディングス",
-     "close": 2795.0,
-     "ma25": 2843.2,
-     "ma75": 2477.9,
-     "rsi": 49.2,
-     "ret1_pct": 0.96,
-     "ret5_pct": -9.84,
-     "ret120_pct": 45.5,
-     "vol_ratio": 1.33,
-     "atr": 185.75,
-     "rank": 0.4545927660681759,
-     "already_holding": true
+     "ticker": "2607.T",
+     "name": "不二製油",
+     "close": 4431.0,
+     "ma25": 4512.8,
+     "ma75": 4403.3,
+     "rsi": 48.8,
+     "ret1_pct": 3.65,
+     "ret5_pct": -4.46,
+     "ret120_pct": 24.3,
+     "vol_ratio": 0.96,
+     "atr": 178.52,
+     "rank": 0.24260970977801088,
+     "already_holding": false
+    },
+    {
+     "ticker": "2897.T",
+     "name": "日清食品ホールディングス",
+     "close": 2995.0,
+     "ma25": 3025.4,
+     "ma75": 2952.6,
+     "rsi": 49.5,
+     "ret1_pct": 0.76,
+     "ret5_pct": -5.4,
+     "ret120_pct": 13.4,
+     "vol_ratio": 0.96,
+     "atr": 91.39,
+     "rank": 0.1335953974299977,
+     "already_holding": false
     }
    ]
   },
@@ -52,82 +67,82 @@
     "regime": false
    },
    "skipped_by_regime": false,
-   "total_hits": 11,
+   "total_hits": 16,
    "top": [
     {
-     "ticker": "3864.T",
-     "name": "三菱製紙",
-     "close": 1277.0,
-     "ma25": 1216.5,
-     "ma75": 1188.1,
-     "rsi": 62.8,
-     "ret1_pct": 5.8,
-     "ret5_pct": 12.81,
-     "ret120_pct": 24.2,
-     "vol_ratio": 6.3,
-     "atr": 39.03,
-     "rank": 6.297741752560126,
-     "already_holding": true
+     "ticker": "6167.T",
+     "name": "冨士ダイス",
+     "close": 1130.0,
+     "ma25": 1016.8,
+     "ma75": 1011.9,
+     "rsi": 67.5,
+     "ret1_pct": 15.31,
+     "ret5_pct": 19.2,
+     "ret120_pct": 15.5,
+     "vol_ratio": 7.18,
+     "atr": 39.94,
+     "rank": 7.180587045774864,
+     "already_holding": false
     },
     {
-     "ticker": "3182.T",
-     "name": "オイシックス",
-     "close": 1866.0,
-     "ma25": 1661.2,
-     "ma75": 1657.3,
-     "rsi": 70.4,
-     "ret1_pct": 14.34,
-     "ret5_pct": 14.13,
-     "ret120_pct": 30.1,
-     "vol_ratio": 6.13,
-     "atr": 60.9,
-     "rank": 6.133618286563836,
-     "already_holding": true
+     "ticker": "6238.T",
+     "name": "フリュー",
+     "close": 1660.0,
+     "ma25": 1472.8,
+     "ma75": 1431.2,
+     "rsi": 69.3,
+     "ret1_pct": 10.3,
+     "ret5_pct": 15.04,
+     "ret120_pct": 33.0,
+     "vol_ratio": 5.79,
+     "atr": 57.66,
+     "rank": 5.79199319173079,
+     "already_holding": false
     },
     {
-     "ticker": "3397.T",
-     "name": "トリドールホールディングス",
-     "close": 5379.0,
-     "ma25": 4692.6,
-     "ma75": 4411.8,
-     "rsi": 73.0,
-     "ret1_pct": 8.29,
-     "ret5_pct": 11.71,
-     "ret120_pct": 38.1,
-     "vol_ratio": 4.39,
-     "atr": 150.14,
-     "rank": 4.385510996119017,
-     "already_holding": true
+     "ticker": "2429.T",
+     "name": "ワールドホールディングス",
+     "close": 3080.0,
+     "ma25": 2830.8,
+     "ma75": 2804.2,
+     "rsi": 66.8,
+     "ret1_pct": 9.3,
+     "ret5_pct": 13.49,
+     "ret120_pct": 29.2,
+     "vol_ratio": 4.43,
+     "atr": 85.15,
+     "rank": 4.433982452386047,
+     "already_holding": false
     },
     {
-     "ticker": "7860.T",
-     "name": "エイベックス",
-     "close": 1334.0,
-     "ma25": 1245.0,
-     "ma75": 1244.0,
-     "rsi": 67.7,
-     "ret1_pct": 7.23,
-     "ret5_pct": 9.34,
-     "ret120_pct": 13.4,
-     "vol_ratio": 3.36,
-     "atr": 29.84,
-     "rank": 3.3604354956904072,
-     "already_holding": true
+     "ticker": "4180.T",
+     "name": "Ａｐｐｉｅｒ　Ｇｒｏｕｐ",
+     "close": 1642.0,
+     "ma25": 1431.4,
+     "ma75": 1329.9,
+     "rsi": 66.0,
+     "ret1_pct": 13.16,
+     "ret5_pct": 13.24,
+     "ret120_pct": 72.8,
+     "vol_ratio": 3.58,
+     "atr": 83.31,
+     "rank": 3.578913606268185,
+     "already_holding": false
     },
     {
-     "ticker": "2120.T",
-     "name": "ＬＩＦＵＬＬ",
-     "close": 269.0,
-     "ma25": 246.7,
-     "ma75": 229.1,
-     "rsi": 69.8,
-     "ret1_pct": 6.75,
-     "ret5_pct": 11.62,
-     "ret120_pct": 47.0,
-     "vol_ratio": 2.99,
-     "atr": 9.88,
-     "rank": 2.9933860974490893,
-     "already_holding": true
+     "ticker": "4919.T",
+     "name": "ミルボン",
+     "close": 3695.0,
+     "ma25": 3388.8,
+     "ma75": 3220.3,
+     "rsi": 69.0,
+     "ret1_pct": 11.3,
+     "ret5_pct": 9.0,
+     "ret120_pct": 41.0,
+     "vol_ratio": 3.05,
+     "atr": 96.32,
+     "rank": 3.0467193625088362,
+     "already_holding": false
     }
    ]
   },
@@ -139,167 +154,76 @@
     "regime": false
    },
    "skipped_by_regime": false,
-   "total_hits": 6,
-   "top": [
-    {
-     "ticker": "3182.T",
-     "name": "オイシックス",
-     "close": 1866.0,
-     "ma25": 1661.2,
-     "ma75": 1657.3,
-     "rsi": 70.4,
-     "ret1_pct": 14.34,
-     "ret5_pct": 14.13,
-     "ret120_pct": 30.1,
-     "vol_ratio": 6.13,
-     "atr": 60.9,
-     "rank": 0.1433823529411764,
-     "disclosures": [
-      {
-       "title": "業績予想の修正及び配当予想の修正（増配）に関するお知らせ",
-       "url": "https://webapi.yanoshin.jp/rd.php?https://www.release.tdnet.info/inbs/140120261112575396.pdf",
-       "url_xbrl": "https://webapi.yanoshin.jp/rd.php?https://www.release.tdnet.info/inbs/091220261112575396.zip",
-       "disc_date": "2026-11-12",
-       "title_up": false
-      }
-     ],
-     "revision": {
-      "item": "営業利益",
-      "change_pct": 13.6,
-      "source": "XBRL",
-      "title": "業績予想の修正及び配当予想の修正（増配）に関するお知らせ",
-      "url": "https://webapi.yanoshin.jp/rd.php?https://www.release.tdnet.info/inbs/140120261112575396.pdf"
-     },
-     "already_holding": true
-    },
-    {
-     "ticker": "6482.T",
-     "name": "ＹＵＳＨＩＮ",
-     "close": 717.0,
-     "ma25": 655.6,
-     "ma75": 686.4,
-     "rsi": 65.7,
-     "ret1_pct": 12.74,
-     "ret5_pct": 19.5,
-     "ret120_pct": 2.7,
-     "vol_ratio": 3.3,
-     "atr": 22.77,
-     "rank": 0.12735849056603765,
-     "disclosures": [
-      {
-       "title": "業績予想の修正、剰余金の配当（中間配当）の決定及び期末配当予想の修正に関するお知らせ",
-       "url": "https://webapi.yanoshin.jp/rd.php?https://www.release.tdnet.info/inbs/140120261111574161.pdf",
-       "url_xbrl": null,
-       "disc_date": "2026-11-12",
-       "title_up": false
-      }
-     ],
-     "revision": {
-      "item": "営業利益",
-      "change_pct": 69.2,
-      "source": "PDF",
-      "title": "業績予想の修正、剰余金の配当（中間配当）の決定及び期末配当予想の修正に関するお知らせ",
-      "url": "https://webapi.yanoshin.jp/rd.php?https://www.release.tdnet.info/inbs/140120261111574161.pdf"
-     },
-     "already_holding": true
-    },
-    {
-     "ticker": "8511.T",
-     "name": "日本証券金融",
-     "close": 2309.0,
-     "ma25": 2139.9,
-     "ma75": 2322.0,
-     "rsi": 61.5,
-     "ret1_pct": 8.71,
-     "ret5_pct": 14.82,
-     "ret120_pct": 2.8,
-     "vol_ratio": 2.66,
-     "atr": 67.93,
-     "rank": 0.08709981167608283,
-     "disclosures": [
-      {
-       "title": "通期連結業績予想の修正に関するお知らせ",
-       "url": "https://webapi.yanoshin.jp/rd.php?https://www.release.tdnet.info/inbs/140120261112575854.pdf",
-       "url_xbrl": "https://webapi.yanoshin.jp/rd.php?https://www.release.tdnet.info/inbs/091220261112575854.zip",
-       "disc_date": "2026-11-12",
-       "title_up": false
-      }
-     ],
-     "revision": {
-      "item": "営業利益",
-      "change_pct": 20.3,
-      "source": "XBRL",
-      "title": "通期連結業績予想の修正に関するお知らせ",
-      "url": "https://webapi.yanoshin.jp/rd.php?https://www.release.tdnet.info/inbs/140120261112575854.pdf"
-     },
-     "already_holding": true
-    },
-    {
-     "ticker": "1802.T",
-     "name": "大林組",
-     "close": 3386.0,
-     "ma25": 2982.6,
-     "ma75": 3003.1,
-     "rsi": 72.0,
-     "ret1_pct": 6.11,
-     "ret5_pct": 15.33,
-     "ret120_pct": 4.7,
-     "vol_ratio": 1.64,
-     "atr": 98.64,
-     "rank": 0.06110937010341577,
-     "disclosures": [
-      {
-       "title": "通期業績予想の修正に関するお知らせ",
-       "url": "https://webapi.yanoshin.jp/rd.php?https://www.release.tdnet.info/inbs/140120261112576600.pdf",
-       "url_xbrl": "https://webapi.yanoshin.jp/rd.php?https://www.release.tdnet.info/inbs/091220261112576600.zip",
-       "disc_date": "2026-11-13",
-       "title_up": false
-      }
-     ],
-     "revision": {
-      "item": "営業利益",
-      "change_pct": 14.8,
-      "source": "XBRL",
-      "title": "通期業績予想の修正に関するお知らせ",
-      "url": "https://webapi.yanoshin.jp/rd.php?https://www.release.tdnet.info/inbs/140120261112576600.pdf"
-     },
-     "already_holding": false
-    },
-    {
-     "ticker": "1969.T",
-     "name": "高砂熱学工業",
-     "close": 4224.0,
-     "ma25": 4061.0,
-     "ma75": 4257.2,
-     "rsi": 56.4,
-     "ret1_pct": 5.84,
-     "ret5_pct": 18.75,
-     "ret120_pct": 2.3,
-     "vol_ratio": 3.35,
-     "atr": 153.45,
-     "rank": 0.058381358055625165,
-     "disclosures": [
-      {
-       "title": "業績予想の修正に関するお知らせ",
-       "url": "https://webapi.yanoshin.jp/rd.php?https://www.release.tdnet.info/inbs/140120261111574002.pdf",
-       "url_xbrl": "https://webapi.yanoshin.jp/rd.php?https://www.release.tdnet.info/inbs/091220261111574002.zip",
-       "disc_date": "2026-11-13",
-       "title_up": false
-      }
-     ],
-     "revision": {
-      "item": "営業利益",
-      "change_pct": 21.2,
-      "source": "XBRL",
-      "title": "業績予想の修正に関するお知らせ",
-      "url": "https://webapi.yanoshin.jp/rd.php?https://www.release.tdnet.info/inbs/140120261111574002.pdf"
-     },
-     "already_holding": false
-    }
-   ]
+   "total_hits": 0,
+   "top": []
   }
  },
  "exits_next_open": [
+  {
+   "kind": "PULLBACK",
+   "ticker": "4848.T",
+   "name": "フルキャストホールディングス",
+   "signal_date": "2026-11-12",
+   "hold": 10,
+   "stop": "ma25",
+   "state": "exit_next_open",
+   "signal": {
+    "ticker": "4848.T",
+    "name": "フルキャストホールディングス",
+    "close": 1830.0,
+    "ma25": 1841.6,
+    "ma75": 1820.0,
+    "rsi": 48.7,
+    "ret1_pct": 0.83,
+    "ret5_pct": -4.89,
+    "ret120_pct": 22.3,
+    "vol_ratio": 1.03,
+    "atr": 41.71,
+    "already_holding": false
+   },
+   "earnings_date": null,
+   "entry_date": "2026-11-13",
+   "entry_price": 1835.0,
+   "last_date": "2026-11-16",
+   "last_price": 1835.0,
+   "held_days": 2,
+   "stop_level": 1844.7,
+   "unrealized_pct": 0.0,
+   "last_day_tomorrow": false
+  },
+  {
+   "kind": "PULLBACK",
+   "ticker": "2531.T",
+   "name": "宝ホールディングス",
+   "signal_date": "2026-11-13",
+   "hold": 10,
+   "stop": "ma25",
+   "state": "exit_next_open",
+   "signal": {
+    "ticker": "2531.T",
+    "name": "宝ホールディングス",
+    "close": 2795.0,
+    "ma25": 2843.2,
+    "ma75": 2477.9,
+    "rsi": 49.2,
+    "ret1_pct": 0.96,
+    "ret5_pct": -9.84,
+    "ret120_pct": 45.5,
+    "vol_ratio": 1.33,
+    "atr": 185.75,
+    "already_holding": false
+   },
+   "earnings_date": null,
+   "entry_date": "2026-11-16",
+   "entry_price": 2797.0,
+   "last_date": "2026-11-16",
+   "last_price": 2750.0,
+   "held_days": 1,
+   "unrealized_pct": -1.68
+  }
+ ],
+ "exits_tomorrow_close": [],
+ "closed_today": [
   {
    "kind": "PULLBACK",
    "ticker": "7476.T",
@@ -307,7 +231,7 @@
    "signal_date": "2026-11-12",
    "hold": 10,
    "stop": "ma25",
-   "state": "exit_next_open",
+   "state": "closed",
    "signal": {
     "ticker": "7476.T",
     "name": "アズワン",
@@ -325,10 +249,16 @@
    "earnings_date": null,
    "entry_date": "2026-11-13",
    "entry_price": 2512.0,
-   "last_date": "2026-11-13",
-   "last_price": 2550.0,
-   "held_days": 1,
-   "unrealized_pct": 1.51
+   "last_date": "2026-11-16",
+   "last_price": 2572.0,
+   "held_days": 2,
+   "unrealized_pct": 1.51,
+   "exit_date": "2026-11-16",
+   "exit_price": 2570.0,
+   "exit_reason": "終値が25日線割れの基準を下回った→翌営業日の始値",
+   "return_pct": 2.01,
+   "market_return_pct": -0.88,
+   "excess_pct": 2.89
   },
   {
    "kind": "PULLBACK",
@@ -337,7 +267,7 @@
    "signal_date": "2026-11-12",
    "hold": 10,
    "stop": "ma25",
-   "state": "exit_next_open",
+   "state": "closed",
    "signal": {
     "ticker": "3092.T",
     "name": "ＺＯＺＯ",
@@ -355,10 +285,16 @@
    "earnings_date": null,
    "entry_date": "2026-11-13",
    "entry_price": 1147.0,
-   "last_date": "2026-11-13",
-   "last_price": 1175.5,
-   "held_days": 1,
-   "unrealized_pct": 2.48
+   "last_date": "2026-11-16",
+   "last_price": 1204.0,
+   "held_days": 2,
+   "unrealized_pct": 2.48,
+   "exit_date": "2026-11-16",
+   "exit_price": 1191.5,
+   "exit_reason": "終値が25日線割れの基準を下回った→翌営業日の始値",
+   "return_pct": 3.58,
+   "market_return_pct": -0.88,
+   "excess_pct": 4.46
   },
   {
    "kind": "REVISION",
@@ -367,7 +303,7 @@
    "signal_date": "2026-11-12",
    "hold": 10,
    "stop": "ma25",
-   "state": "exit_next_open",
+   "state": "closed",
    "signal": {
     "ticker": "6237.T",
     "name": "イワキポンプ",
@@ -393,14 +329,18 @@
    "earnings_date": null,
    "entry_date": "2026-11-13",
    "entry_price": 3990.0,
-   "last_date": "2026-11-13",
-   "last_price": 3895.0,
-   "held_days": 1,
-   "unrealized_pct": -2.38
+   "last_date": "2026-11-16",
+   "last_price": 3865.0,
+   "held_days": 2,
+   "unrealized_pct": -2.38,
+   "exit_date": "2026-11-16",
+   "exit_price": 4225.0,
+   "exit_reason": "終値が25日線割れの基準を下回った→翌営業日の始値",
+   "return_pct": 5.59,
+   "market_return_pct": -0.88,
+   "excess_pct": 6.47
   }
  ],
- "exits_tomorrow_close": [],
- "closed_today": [],
  "open_positions": [
   {
    "kind": "PULLBACK",
@@ -427,43 +367,11 @@
    "earnings_date": null,
    "entry_date": "2026-11-13",
    "entry_price": 2418.0,
-   "last_date": "2026-11-13",
-   "last_price": 2464.0,
-   "held_days": 1,
-   "stop_level": 2460.0,
-   "unrealized_pct": 1.9,
-   "last_day_tomorrow": false
-  },
-  {
-   "kind": "PULLBACK",
-   "ticker": "4848.T",
-   "name": "フルキャストホールディングス",
-   "signal_date": "2026-11-12",
-   "hold": 10,
-   "stop": "ma25",
-   "state": "open",
-   "signal": {
-    "ticker": "4848.T",
-    "name": "フルキャストホールディングス",
-    "close": 1830.0,
-    "ma25": 1841.6,
-    "ma75": 1820.0,
-    "rsi": 48.7,
-    "ret1_pct": 0.83,
-    "ret5_pct": -4.89,
-    "ret120_pct": 22.3,
-    "vol_ratio": 1.03,
-    "atr": 41.71,
-    "already_holding": false
-   },
-   "earnings_date": null,
-   "entry_date": "2026-11-13",
-   "entry_price": 1835.0,
-   "last_date": "2026-11-13",
-   "last_price": 1851.0,
-   "held_days": 1,
-   "stop_level": 1844.7,
-   "unrealized_pct": 0.87,
+   "last_date": "2026-11-16",
+   "last_price": 2505.0,
+   "held_days": 2,
+   "stop_level": 2464.5,
+   "unrealized_pct": 3.6,
    "last_day_tomorrow": false
   },
   {
@@ -491,11 +399,11 @@
    "earnings_date": null,
    "entry_date": "2026-11-13",
    "entry_price": 1370.5,
-   "last_date": "2026-11-13",
-   "last_price": 1430.0,
-   "held_days": 1,
-   "stop_level": 1396.1,
-   "unrealized_pct": 4.34,
+   "last_date": "2026-11-16",
+   "last_price": 1459.0,
+   "held_days": 2,
+   "stop_level": 1402.6,
+   "unrealized_pct": 6.46,
    "last_day_tomorrow": false
   },
   {
@@ -523,11 +431,11 @@
    "earnings_date": null,
    "entry_date": "2026-11-13",
    "entry_price": 7780.0,
-   "last_date": "2026-11-13",
-   "last_price": 8050.0,
-   "held_days": 1,
-   "stop_level": 6796.0,
-   "unrealized_pct": 3.47,
+   "last_date": "2026-11-16",
+   "last_price": 8070.0,
+   "held_days": 2,
+   "stop_level": 6850.8,
+   "unrealized_pct": 3.73,
    "last_day_tomorrow": false
   },
   {
@@ -555,11 +463,11 @@
    "earnings_date": null,
    "entry_date": "2026-11-13",
    "entry_price": 4912.0,
-   "last_date": "2026-11-13",
-   "last_price": 4944.0,
-   "held_days": 1,
-   "stop_level": 4618.1,
-   "unrealized_pct": 0.65,
+   "last_date": "2026-11-16",
+   "last_price": 5036.0,
+   "held_days": 2,
+   "stop_level": 4640.5,
+   "unrealized_pct": 2.52,
    "last_day_tomorrow": false
   },
   {
@@ -587,11 +495,11 @@
    "earnings_date": null,
    "entry_date": "2026-11-13",
    "entry_price": 2449.0,
-   "last_date": "2026-11-13",
-   "last_price": 2501.0,
-   "held_days": 1,
-   "stop_level": 2272.7,
-   "unrealized_pct": 2.12,
+   "last_date": "2026-11-16",
+   "last_price": 2446.0,
+   "held_days": 2,
+   "stop_level": 2285.4,
+   "unrealized_pct": -0.12,
    "last_day_tomorrow": false
   },
   {
@@ -619,11 +527,11 @@
    "earnings_date": null,
    "entry_date": "2026-11-13",
    "entry_price": 488.0,
-   "last_date": "2026-11-13",
-   "last_price": 490.0,
-   "held_days": 1,
-   "stop_level": 436.1,
-   "unrealized_pct": 0.41,
+   "last_date": "2026-11-16",
+   "last_price": 507.0,
+   "held_days": 2,
+   "stop_level": 439.4,
+   "unrealized_pct": 3.89,
    "last_day_tomorrow": false
   },
   {
@@ -651,11 +559,11 @@
    "earnings_date": null,
    "entry_date": "2026-11-13",
    "entry_price": 3500.0,
-   "last_date": "2026-11-13",
-   "last_price": 3550.0,
-   "held_days": 1,
-   "stop_level": 3049.4,
-   "unrealized_pct": 1.43,
+   "last_date": "2026-11-16",
+   "last_price": 3566.0,
+   "held_days": 2,
+   "stop_level": 3080.2,
+   "unrealized_pct": 1.89,
    "last_day_tomorrow": false
   },
   {
@@ -688,11 +596,11 @@
    "earnings_date": null,
    "entry_date": "2026-11-13",
    "entry_price": 2013.0,
-   "last_date": "2026-11-13",
-   "last_price": 2023.0,
-   "held_days": 1,
-   "stop_level": 1859.4,
-   "unrealized_pct": 0.5,
+   "last_date": "2026-11-16",
+   "last_price": 1885.0,
+   "held_days": 2,
+   "stop_level": 1857.3,
+   "unrealized_pct": -6.36,
    "last_day_tomorrow": false
   },
   {
@@ -725,11 +633,11 @@
    "earnings_date": null,
    "entry_date": "2026-11-13",
    "entry_price": 2678.0,
-   "last_date": "2026-11-13",
-   "last_price": 2490.0,
-   "held_days": 1,
-   "stop_level": 2254.8,
-   "unrealized_pct": -7.02,
+   "last_date": "2026-11-16",
+   "last_price": 2412.0,
+   "held_days": 2,
+   "stop_level": 2261.3,
+   "unrealized_pct": -9.93,
    "last_day_tomorrow": false
   },
   {
@@ -764,11 +672,11 @@
    "earnings_date": null,
    "entry_date": "2026-11-13",
    "entry_price": 1039.0,
-   "last_date": "2026-11-13",
-   "last_price": 1040.0,
-   "held_days": 1,
-   "stop_level": 948.0,
-   "unrealized_pct": 0.1,
+   "last_date": "2026-11-16",
+   "last_price": 1026.0,
+   "held_days": 2,
+   "stop_level": 951.7,
+   "unrealized_pct": -1.25,
    "last_day_tomorrow": false
   },
   {
@@ -801,38 +709,12 @@
    "earnings_date": null,
    "entry_date": "2026-11-13",
    "entry_price": 863.0,
-   "last_date": "2026-11-13",
-   "last_price": 903.0,
-   "held_days": 1,
-   "stop_level": 812.4,
-   "unrealized_pct": 4.63,
+   "last_date": "2026-11-16",
+   "last_price": 888.0,
+   "held_days": 2,
+   "stop_level": 816.7,
+   "unrealized_pct": 2.9,
    "last_day_tomorrow": false
-  }
- ],
- "pending_entry": [
-  {
-   "kind": "PULLBACK",
-   "ticker": "2531.T",
-   "name": "宝ホールディングス",
-   "signal_date": "2026-11-13",
-   "hold": 10,
-   "stop": "ma25",
-   "state": "pending_entry",
-   "signal": {
-    "ticker": "2531.T",
-    "name": "宝ホールディングス",
-    "close": 2795.0,
-    "ma25": 2843.2,
-    "ma75": 2477.9,
-    "rsi": 49.2,
-    "ret1_pct": 0.96,
-    "ret5_pct": -9.84,
-    "ret120_pct": 45.5,
-    "vol_ratio": 1.33,
-    "atr": 185.75,
-    "already_holding": false
-   },
-   "earnings_date": null
   },
   {
    "kind": "BREAKOUT",
@@ -841,7 +723,7 @@
    "signal_date": "2026-11-13",
    "hold": 10,
    "stop": "ma25",
-   "state": "pending_entry",
+   "state": "open",
    "signal": {
     "ticker": "3864.T",
     "name": "三菱製紙",
@@ -856,7 +738,15 @@
     "atr": 39.03,
     "already_holding": false
    },
-   "earnings_date": null
+   "earnings_date": null,
+   "entry_date": "2026-11-16",
+   "entry_price": 1270.0,
+   "last_date": "2026-11-16",
+   "last_price": 1269.0,
+   "held_days": 1,
+   "stop_level": 1218.2,
+   "unrealized_pct": -0.08,
+   "last_day_tomorrow": false
   },
   {
    "kind": "BREAKOUT",
@@ -865,7 +755,7 @@
    "signal_date": "2026-11-13",
    "hold": 10,
    "stop": "ma25",
-   "state": "pending_entry",
+   "state": "open",
    "signal": {
     "ticker": "3182.T",
     "name": "オイシックス",
@@ -880,7 +770,15 @@
     "atr": 60.9,
     "already_holding": false
    },
-   "earnings_date": null
+   "earnings_date": null,
+   "entry_date": "2026-11-16",
+   "entry_price": 1865.0,
+   "last_date": "2026-11-16",
+   "last_price": 1910.0,
+   "held_days": 1,
+   "stop_level": 1672.5,
+   "unrealized_pct": 2.41,
+   "last_day_tomorrow": false
   },
   {
    "kind": "BREAKOUT",
@@ -889,7 +787,7 @@
    "signal_date": "2026-11-13",
    "hold": 10,
    "stop": "ma25",
-   "state": "pending_entry",
+   "state": "open",
    "signal": {
     "ticker": "3397.T",
     "name": "トリドールホールディングス",
@@ -904,7 +802,15 @@
     "atr": 150.14,
     "already_holding": false
    },
-   "earnings_date": null
+   "earnings_date": null,
+   "entry_date": "2026-11-16",
+   "entry_price": 5326.0,
+   "last_date": "2026-11-16",
+   "last_price": 5679.0,
+   "held_days": 1,
+   "stop_level": 4751.1,
+   "unrealized_pct": 6.63,
+   "last_day_tomorrow": false
   },
   {
    "kind": "BREAKOUT",
@@ -913,7 +819,7 @@
    "signal_date": "2026-11-13",
    "hold": 10,
    "stop": "ma25",
-   "state": "pending_entry",
+   "state": "open",
    "signal": {
     "ticker": "7860.T",
     "name": "エイベックス",
@@ -928,7 +834,15 @@
     "atr": 29.84,
     "already_holding": false
    },
-   "earnings_date": null
+   "earnings_date": null,
+   "entry_date": "2026-11-16",
+   "entry_price": 1334.0,
+   "last_date": "2026-11-16",
+   "last_price": 1385.0,
+   "held_days": 1,
+   "stop_level": 1251.4,
+   "unrealized_pct": 3.82,
+   "last_day_tomorrow": false
   },
   {
    "kind": "BREAKOUT",
@@ -937,7 +851,7 @@
    "signal_date": "2026-11-13",
    "hold": 10,
    "stop": "ma25",
-   "state": "pending_entry",
+   "state": "open",
    "signal": {
     "ticker": "2120.T",
     "name": "ＬＩＦＵＬＬ",
@@ -952,7 +866,15 @@
     "atr": 9.88,
     "already_holding": false
    },
-   "earnings_date": null
+   "earnings_date": null,
+   "entry_date": "2026-11-16",
+   "entry_price": 268.0,
+   "last_date": "2026-11-16",
+   "last_price": 262.0,
+   "held_days": 1,
+   "stop_level": 247.9,
+   "unrealized_pct": -2.24,
+   "last_day_tomorrow": false
   },
   {
    "kind": "REVISION",
@@ -961,7 +883,7 @@
    "signal_date": "2026-11-13",
    "hold": 10,
    "stop": "ma25",
-   "state": "pending_entry",
+   "state": "open",
    "signal": {
     "ticker": "3182.T",
     "name": "オイシックス",
@@ -983,7 +905,15 @@
     },
     "already_holding": false
    },
-   "earnings_date": null
+   "earnings_date": null,
+   "entry_date": "2026-11-16",
+   "entry_price": 1865.0,
+   "last_date": "2026-11-16",
+   "last_price": 1910.0,
+   "held_days": 1,
+   "stop_level": 1672.5,
+   "unrealized_pct": 2.41,
+   "last_day_tomorrow": false
   },
   {
    "kind": "REVISION",
@@ -992,7 +922,7 @@
    "signal_date": "2026-11-13",
    "hold": 10,
    "stop": "ma25",
-   "state": "pending_entry",
+   "state": "open",
    "signal": {
     "ticker": "6482.T",
     "name": "ＹＵＳＨＩＮ",
@@ -1014,7 +944,15 @@
     },
     "already_holding": false
    },
-   "earnings_date": null
+   "earnings_date": null,
+   "entry_date": "2026-11-16",
+   "entry_price": 710.0,
+   "last_date": "2026-11-16",
+   "last_price": 710.0,
+   "held_days": 1,
+   "stop_level": 657.2,
+   "unrealized_pct": 0.0,
+   "last_day_tomorrow": false
   },
   {
    "kind": "REVISION",
@@ -1023,7 +961,7 @@
    "signal_date": "2026-11-13",
    "hold": 10,
    "stop": "ma25",
-   "state": "pending_entry",
+   "state": "open",
    "signal": {
     "ticker": "8511.T",
     "name": "日本証券金融",
@@ -1045,7 +983,15 @@
     },
     "already_holding": false
    },
-   "earnings_date": null
+   "earnings_date": null,
+   "entry_date": "2026-11-16",
+   "entry_price": 2318.0,
+   "last_date": "2026-11-16",
+   "last_price": 2335.0,
+   "held_days": 1,
+   "stop_level": 2144.6,
+   "unrealized_pct": 0.73,
+   "last_day_tomorrow": false
   },
   {
    "kind": "REVISION",
@@ -1054,7 +1000,7 @@
    "signal_date": "2026-11-13",
    "hold": 10,
    "stop": "ma25",
-   "state": "pending_entry",
+   "state": "open",
    "signal": {
     "ticker": "1802.T",
     "name": "大林組",
@@ -1076,7 +1022,15 @@
     },
     "already_holding": false
    },
-   "earnings_date": null
+   "earnings_date": null,
+   "entry_date": "2026-11-16",
+   "entry_price": 3445.0,
+   "last_date": "2026-11-16",
+   "last_price": 3453.0,
+   "held_days": 1,
+   "stop_level": 3006.8,
+   "unrealized_pct": 0.23,
+   "last_day_tomorrow": false
   },
   {
    "kind": "REVISION",
@@ -1085,7 +1039,7 @@
    "signal_date": "2026-11-13",
    "hold": 10,
    "stop": "ma25",
-   "state": "pending_entry",
+   "state": "open",
    "signal": {
     "ticker": "1969.T",
     "name": "高砂熱学工業",
@@ -1107,24 +1061,202 @@
     },
     "already_holding": false
    },
+   "earnings_date": null,
+   "entry_date": "2026-11-16",
+   "entry_price": 4346.0,
+   "last_date": "2026-11-16",
+   "last_price": 4262.0,
+   "held_days": 1,
+   "stop_level": 4055.0,
+   "unrealized_pct": -1.93,
+   "last_day_tomorrow": false
+  }
+ ],
+ "pending_entry": [
+  {
+   "kind": "PULLBACK",
+   "ticker": "2607.T",
+   "name": "不二製油",
+   "signal_date": "2026-11-16",
+   "hold": 10,
+   "stop": "ma25",
+   "state": "pending_entry",
+   "signal": {
+    "ticker": "2607.T",
+    "name": "不二製油",
+    "close": 4431.0,
+    "ma25": 4512.8,
+    "ma75": 4403.3,
+    "rsi": 48.8,
+    "ret1_pct": 3.65,
+    "ret5_pct": -4.46,
+    "ret120_pct": 24.3,
+    "vol_ratio": 0.96,
+    "atr": 178.52,
+    "already_holding": false
+   },
+   "earnings_date": null
+  },
+  {
+   "kind": "PULLBACK",
+   "ticker": "2897.T",
+   "name": "日清食品ホールディングス",
+   "signal_date": "2026-11-16",
+   "hold": 10,
+   "stop": "ma25",
+   "state": "pending_entry",
+   "signal": {
+    "ticker": "2897.T",
+    "name": "日清食品ホールディングス",
+    "close": 2995.0,
+    "ma25": 3025.4,
+    "ma75": 2952.6,
+    "rsi": 49.5,
+    "ret1_pct": 0.76,
+    "ret5_pct": -5.4,
+    "ret120_pct": 13.4,
+    "vol_ratio": 0.96,
+    "atr": 91.39,
+    "already_holding": false
+   },
+   "earnings_date": null
+  },
+  {
+   "kind": "BREAKOUT",
+   "ticker": "6167.T",
+   "name": "冨士ダイス",
+   "signal_date": "2026-11-16",
+   "hold": 10,
+   "stop": "ma25",
+   "state": "pending_entry",
+   "signal": {
+    "ticker": "6167.T",
+    "name": "冨士ダイス",
+    "close": 1130.0,
+    "ma25": 1016.8,
+    "ma75": 1011.9,
+    "rsi": 67.5,
+    "ret1_pct": 15.31,
+    "ret5_pct": 19.2,
+    "ret120_pct": 15.5,
+    "vol_ratio": 7.18,
+    "atr": 39.94,
+    "already_holding": false
+   },
+   "earnings_date": null
+  },
+  {
+   "kind": "BREAKOUT",
+   "ticker": "6238.T",
+   "name": "フリュー",
+   "signal_date": "2026-11-16",
+   "hold": 10,
+   "stop": "ma25",
+   "state": "pending_entry",
+   "signal": {
+    "ticker": "6238.T",
+    "name": "フリュー",
+    "close": 1660.0,
+    "ma25": 1472.8,
+    "ma75": 1431.2,
+    "rsi": 69.3,
+    "ret1_pct": 10.3,
+    "ret5_pct": 15.04,
+    "ret120_pct": 33.0,
+    "vol_ratio": 5.79,
+    "atr": 57.66,
+    "already_holding": false
+   },
+   "earnings_date": null
+  },
+  {
+   "kind": "BREAKOUT",
+   "ticker": "2429.T",
+   "name": "ワールドホールディングス",
+   "signal_date": "2026-11-16",
+   "hold": 10,
+   "stop": "ma25",
+   "state": "pending_entry",
+   "signal": {
+    "ticker": "2429.T",
+    "name": "ワールドホールディングス",
+    "close": 3080.0,
+    "ma25": 2830.8,
+    "ma75": 2804.2,
+    "rsi": 66.8,
+    "ret1_pct": 9.3,
+    "ret5_pct": 13.49,
+    "ret120_pct": 29.2,
+    "vol_ratio": 4.43,
+    "atr": 85.15,
+    "already_holding": false
+   },
+   "earnings_date": null
+  },
+  {
+   "kind": "BREAKOUT",
+   "ticker": "4180.T",
+   "name": "Ａｐｐｉｅｒ　Ｇｒｏｕｐ",
+   "signal_date": "2026-11-16",
+   "hold": 10,
+   "stop": "ma25",
+   "state": "pending_entry",
+   "signal": {
+    "ticker": "4180.T",
+    "name": "Ａｐｐｉｅｒ　Ｇｒｏｕｐ",
+    "close": 1642.0,
+    "ma25": 1431.4,
+    "ma75": 1329.9,
+    "rsi": 66.0,
+    "ret1_pct": 13.16,
+    "ret5_pct": 13.24,
+    "ret120_pct": 72.8,
+    "vol_ratio": 3.58,
+    "atr": 83.31,
+    "already_holding": false
+   },
+   "earnings_date": null
+  },
+  {
+   "kind": "BREAKOUT",
+   "ticker": "4919.T",
+   "name": "ミルボン",
+   "signal_date": "2026-11-16",
+   "hold": 10,
+   "stop": "ma25",
+   "state": "pending_entry",
+   "signal": {
+    "ticker": "4919.T",
+    "name": "ミルボン",
+    "close": 3695.0,
+    "ma25": 3388.8,
+    "ma75": 3220.3,
+    "rsi": 69.0,
+    "ret1_pct": 11.3,
+    "ret5_pct": 9.0,
+    "ret120_pct": 41.0,
+    "vol_ratio": 3.05,
+    "atr": 96.32,
+    "already_holding": false
+   },
    "earnings_date": null
   }
  ],
  "performance": {
   "PULLBACK": {
    "label": "① 上昇トレンドの押し目買い",
-   "closed": 0,
-   "open": 5,
-   "pending_entry": 1,
-   "win_rate_pct": null,
-   "avg_return_pct": null,
+   "closed": 2,
+   "open": 4,
+   "pending_entry": 2,
+   "win_rate_pct": 100.0,
+   "avg_return_pct": 2.8,
    "payoff_ratio": null,
-   "avg_excess_pct": null
+   "avg_excess_pct": 3.68
   },
   "BREAKOUT": {
    "label": "② 高値ブレイク",
    "closed": 0,
-   "open": 5,
+   "open": 10,
    "pending_entry": 5,
    "win_rate_pct": null,
    "avg_return_pct": null,
@@ -1133,13 +1265,13 @@
   },
   "REVISION": {
    "label": "③ 上方修正後の継続",
-   "closed": 0,
-   "open": 5,
-   "pending_entry": 5,
-   "win_rate_pct": null,
-   "avg_return_pct": null,
+   "closed": 1,
+   "open": 9,
+   "pending_entry": 0,
+   "win_rate_pct": 100.0,
+   "avg_return_pct": 5.59,
    "payoff_ratio": null,
-   "avg_excess_pct": null
+   "avg_excess_pct": 6.47
   }
  }
 }
