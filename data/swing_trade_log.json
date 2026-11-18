@@ -24,11 +24,11 @@
   "earnings_date": null,
   "entry_date": "2026-11-13",
   "entry_price": 2418.0,
-  "last_date": "2026-11-16",
-  "last_price": 2505.0,
-  "held_days": 2,
-  "stop_level": 2464.5,
-  "unrealized_pct": 3.6,
+  "last_date": "2026-11-17",
+  "last_price": 2533.0,
+  "held_days": 3,
+  "stop_level": 2468.3,
+  "unrealized_pct": 4.76,
   "last_day_tomorrow": false
  },
  {
@@ -38,7 +38,7 @@
   "signal_date": "2026-11-12",
   "hold": 10,
   "stop": "ma25",
-  "state": "exit_next_open",
+  "state": "closed",
   "signal": {
    "ticker": "4848.T",
    "name": "フルキャストホールディングス",
@@ -56,12 +56,18 @@
   "earnings_date": null,
   "entry_date": "2026-11-13",
   "entry_price": 1835.0,
-  "last_date": "2026-11-16",
-  "last_price": 1835.0,
-  "held_days": 2,
+  "last_date": "2026-11-17",
+  "last_price": 1845.0,
+  "held_days": 3,
   "stop_level": 1844.7,
   "unrealized_pct": 0.0,
-  "last_day_tomorrow": false
+  "last_day_tomorrow": false,
+  "exit_date": "2026-11-17",
+  "exit_price": 1844.0,
+  "exit_reason": "終値が25日線割れの基準を下回った→翌営業日の始値",
+  "return_pct": 0.19,
+  "market_return_pct": -2.31,
+  "excess_pct": 2.5
  },
  {
   "kind": "PULLBACK",
@@ -124,11 +130,11 @@
   "earnings_date": null,
   "entry_date": "2026-11-13",
   "entry_price": 1370.5,
-  "last_date": "2026-11-16",
-  "last_price": 1459.0,
-  "held_days": 2,
-  "stop_level": 1402.6,
-  "unrealized_pct": 6.46,
+  "last_date": "2026-11-17",
+  "last_price": 1455.5,
+  "held_days": 3,
+  "stop_level": 1408.5,
+  "unrealized_pct": 6.2,
   "last_day_tomorrow": false
  },
  {
@@ -192,11 +198,11 @@
   "earnings_date": null,
   "entry_date": "2026-11-13",
   "entry_price": 7780.0,
-  "last_date": "2026-11-16",
-  "last_price": 8070.0,
-  "held_days": 2,
-  "stop_level": 6850.8,
-  "unrealized_pct": 3.73,
+  "last_date": "2026-11-17",
+  "last_price": 8290.0,
+  "held_days": 3,
+  "stop_level": 6914.8,
+  "unrealized_pct": 6.56,
   "last_day_tomorrow": false
  },
  {
@@ -224,11 +230,11 @@
   "earnings_date": null,
   "entry_date": "2026-11-13",
   "entry_price": 4912.0,
-  "last_date": "2026-11-16",
-  "last_price": 5036.0,
-  "held_days": 2,
-  "stop_level": 4640.5,
-  "unrealized_pct": 2.52,
+  "last_date": "2026-11-17",
+  "last_price": 4960.0,
+  "held_days": 3,
+  "stop_level": 4656.0,
+  "unrealized_pct": 0.98,
   "last_day_tomorrow": false
  },
  {
@@ -256,11 +262,11 @@
   "earnings_date": null,
   "entry_date": "2026-11-13",
   "entry_price": 2449.0,
-  "last_date": "2026-11-16",
-  "last_price": 2446.0,
-  "held_days": 2,
-  "stop_level": 2285.4,
-  "unrealized_pct": -0.12,
+  "last_date": "2026-11-17",
+  "last_price": 2360.0,
+  "held_days": 3,
+  "stop_level": 2292.6,
+  "unrealized_pct": -3.63,
   "last_day_tomorrow": false
  },
  {
@@ -288,11 +294,11 @@
   "earnings_date": null,
   "entry_date": "2026-11-13",
   "entry_price": 488.0,
-  "last_date": "2026-11-16",
-  "last_price": 507.0,
-  "held_days": 2,
-  "stop_level": 439.4,
-  "unrealized_pct": 3.89,
+  "last_date": "2026-11-17",
+  "last_price": 502.0,
+  "held_days": 3,
+  "stop_level": 442.6,
+  "unrealized_pct": 2.87,
   "last_day_tomorrow": false
  },
  {
@@ -320,11 +326,11 @@
   "earnings_date": null,
   "entry_date": "2026-11-13",
   "entry_price": 3500.0,
-  "last_date": "2026-11-16",
-  "last_price": 3566.0,
-  "held_days": 2,
-  "stop_level": 3080.2,
-  "unrealized_pct": 1.89,
+  "last_date": "2026-11-17",
+  "last_price": 3587.0,
+  "held_days": 3,
+  "stop_level": 3109.6,
+  "unrealized_pct": 2.49,
   "last_day_tomorrow": false
  },
  {
@@ -334,7 +340,7 @@
   "signal_date": "2026-11-12",
   "hold": 10,
   "stop": "ma25",
-  "state": "open",
+  "state": "exit_next_open",
   "signal": {
    "ticker": "5142.T",
    "name": "アキレス",
@@ -357,11 +363,11 @@
   "earnings_date": null,
   "entry_date": "2026-11-13",
   "entry_price": 2013.0,
-  "last_date": "2026-11-16",
-  "last_price": 1885.0,
-  "held_days": 2,
+  "last_date": "2026-11-17",
+  "last_price": 1777.0,
+  "held_days": 3,
   "stop_level": 1857.3,
-  "unrealized_pct": -6.36,
+  "unrealized_pct": -11.72,
   "last_day_tomorrow": false
  },
  {
@@ -394,11 +400,11 @@
   "earnings_date": null,
   "entry_date": "2026-11-13",
   "entry_price": 2678.0,
-  "last_date": "2026-11-16",
-  "last_price": 2412.0,
-  "held_days": 2,
-  "stop_level": 2261.3,
-  "unrealized_pct": -9.93,
+  "last_date": "2026-11-17",
+  "last_price": 2438.0,
+  "held_days": 3,
+  "stop_level": 2267.7,
+  "unrealized_pct": -8.96,
   "last_day_tomorrow": false
  },
  {
@@ -433,11 +439,11 @@
   "earnings_date": null,
   "entry_date": "2026-11-13",
   "entry_price": 1039.0,
-  "last_date": "2026-11-16",
-  "last_price": 1026.0,
-  "held_days": 2,
-  "stop_level": 951.7,
-  "unrealized_pct": -1.25,
+  "last_date": "2026-11-17",
+  "last_price": 996.0,
+  "held_days": 3,
+  "stop_level": 954.2,
+  "unrealized_pct": -4.14,
   "last_day_tomorrow": false
  },
  {
@@ -514,11 +520,11 @@
   "earnings_date": null,
   "entry_date": "2026-11-13",
   "entry_price": 863.0,
-  "last_date": "2026-11-16",
-  "last_price": 888.0,
-  "held_days": 2,
-  "stop_level": 816.7,
-  "unrealized_pct": 2.9,
+  "last_date": "2026-11-17",
+  "last_price": 849.0,
+  "held_days": 3,
+  "stop_level": 817.6,
+  "unrealized_pct": -1.62,
   "last_day_tomorrow": false
  },
  {
@@ -528,7 +534,7 @@
   "signal_date": "2026-11-13",
   "hold": 10,
   "stop": "ma25",
-  "state": "exit_next_open",
+  "state": "closed",
   "signal": {
    "ticker": "2531.T",
    "name": "宝ホールディングス",
@@ -546,10 +552,16 @@
   "earnings_date": null,
   "entry_date": "2026-11-16",
   "entry_price": 2797.0,
-  "last_date": "2026-11-16",
-  "last_price": 2750.0,
-  "held_days": 1,
-  "unrealized_pct": -1.68
+  "last_date": "2026-11-17",
+  "last_price": 2721.0,
+  "held_days": 2,
+  "unrealized_pct": -1.68,
+  "exit_date": "2026-11-17",
+  "exit_price": 2722.5,
+  "exit_reason": "終値が25日線割れの基準を下回った→翌営業日の始値",
+  "return_pct": -2.96,
+  "market_return_pct": -2.38,
+  "excess_pct": -0.58
  },
  {
   "kind": "BREAKOUT",
@@ -576,11 +588,11 @@
   "earnings_date": null,
   "entry_date": "2026-11-16",
   "entry_price": 1270.0,
-  "last_date": "2026-11-16",
-  "last_price": 1269.0,
-  "held_days": 1,
+  "last_date": "2026-11-17",
+  "last_price": 1244.0,
+  "held_days": 2,
   "stop_level": 1218.2,
-  "unrealized_pct": -0.08,
+  "unrealized_pct": -2.05,
   "last_day_tomorrow": false
  },
  {
@@ -608,11 +620,11 @@
   "earnings_date": null,
   "entry_date": "2026-11-16",
   "entry_price": 1865.0,
-  "last_date": "2026-11-16",
-  "last_price": 1910.0,
-  "held_days": 1,
-  "stop_level": 1672.5,
-  "unrealized_pct": 2.41,
+  "last_date": "2026-11-17",
+  "last_price": 1863.0,
+  "held_days": 2,
+  "stop_level": 1680.3,
+  "unrealized_pct": -0.11,
   "last_day_tomorrow": false
  },
  {
@@ -640,11 +652,11 @@
   "earnings_date": null,
   "entry_date": "2026-11-16",
   "entry_price": 5326.0,
-  "last_date": "2026-11-16",
-  "last_price": 5679.0,
-  "held_days": 1,
-  "stop_level": 4751.1,
-  "unrealized_pct": 6.63,
+  "last_date": "2026-11-17",
+  "last_price": 5588.0,
+  "held_days": 2,
+  "stop_level": 4804.0,
+  "unrealized_pct": 4.92,
   "last_day_tomorrow": false
  },
  {
@@ -672,11 +684,11 @@
   "earnings_date": null,
   "entry_date": "2026-11-16",
   "entry_price": 1334.0,
-  "last_date": "2026-11-16",
-  "last_price": 1385.0,
-  "held_days": 1,
-  "stop_level": 1251.4,
-  "unrealized_pct": 3.82,
+  "last_date": "2026-11-17",
+  "last_price": 1405.0,
+  "held_days": 2,
+  "stop_level": 1258.6,
+  "unrealized_pct": 5.32,
   "last_day_tomorrow": false
  },
  {
@@ -704,11 +716,11 @@
   "earnings_date": null,
   "entry_date": "2026-11-16",
   "entry_price": 268.0,
-  "last_date": "2026-11-16",
-  "last_price": 262.0,
-  "held_days": 1,
-  "stop_level": 247.9,
-  "unrealized_pct": -2.24,
+  "last_date": "2026-11-17",
+  "last_price": 265.0,
+  "held_days": 2,
+  "stop_level": 248.9,
+  "unrealized_pct": -1.12,
   "last_day_tomorrow": false
  },
  {
@@ -743,11 +755,11 @@
   "earnings_date": null,
   "entry_date": "2026-11-16",
   "entry_price": 1865.0,
-  "last_date": "2026-11-16",
-  "last_price": 1910.0,
-  "held_days": 1,
-  "stop_level": 1672.5,
-  "unrealized_pct": 2.41,
+  "last_date": "2026-11-17",
+  "last_price": 1863.0,
+  "held_days": 2,
+  "stop_level": 1680.3,
+  "unrealized_pct": -0.11,
   "last_day_tomorrow": false
  },
  {
@@ -782,11 +794,11 @@
   "earnings_date": null,
   "entry_date": "2026-11-16",
   "entry_price": 710.0,
-  "last_date": "2026-11-16",
-  "last_price": 710.0,
-  "held_days": 1,
-  "stop_level": 657.2,
-  "unrealized_pct": 0.0,
+  "last_date": "2026-11-17",
+  "last_price": 691.0,
+  "held_days": 2,
+  "stop_level": 656.9,
+  "unrealized_pct": -2.68,
   "last_day_tomorrow": false
  },
  {
@@ -821,11 +833,11 @@
   "earnings_date": null,
   "entry_date": "2026-11-16",
   "entry_price": 2318.0,
-  "last_date": "2026-11-16",
-  "last_price": 2335.0,
-  "held_days": 1,
-  "stop_level": 2144.6,
-  "unrealized_pct": 0.73,
+  "last_date": "2026-11-17",
+  "last_price": 2259.0,
+  "held_days": 2,
+  "stop_level": 2145.7,
+  "unrealized_pct": -2.55,
   "last_day_tomorrow": false
  },
  {
@@ -860,11 +872,11 @@
   "earnings_date": null,
   "entry_date": "2026-11-16",
   "entry_price": 3445.0,
-  "last_date": "2026-11-16",
-  "last_price": 3453.0,
-  "held_days": 1,
-  "stop_level": 3006.8,
-  "unrealized_pct": 0.23,
+  "last_date": "2026-11-17",
+  "last_price": 3389.0,
+  "held_days": 2,
+  "stop_level": 3028.3,
+  "unrealized_pct": -1.63,
   "last_day_tomorrow": false
  },
  {
@@ -899,11 +911,11 @@
   "earnings_date": null,
   "entry_date": "2026-11-16",
   "entry_price": 4346.0,
-  "last_date": "2026-11-16",
-  "last_price": 4262.0,
-  "held_days": 1,
-  "stop_level": 4055.0,
-  "unrealized_pct": -1.93,
+  "last_date": "2026-11-17",
+  "last_price": 4055.0,
+  "held_days": 2,
+  "stop_level": 4042.4,
+  "unrealized_pct": -6.7,
   "last_day_tomorrow": false
  },
  {
@@ -913,7 +925,7 @@
   "signal_date": "2026-11-16",
   "hold": 10,
   "stop": "ma25",
-  "state": "pending_entry",
+  "state": "exit_next_open",
   "signal": {
    "ticker": "2607.T",
    "name": "不二製油",
@@ -928,7 +940,13 @@
    "atr": 178.52,
    "already_holding": false
   },
-  "earnings_date": null
+  "earnings_date": null,
+  "entry_date": "2026-11-17",
+  "entry_price": 4482.0,
+  "last_date": "2026-11-17",
+  "last_price": 4442.0,
+  "held_days": 1,
+  "unrealized_pct": -0.89
  },
  {
   "kind": "PULLBACK",
@@ -937,7 +955,7 @@
   "signal_date": "2026-11-16",
   "hold": 10,
   "stop": "ma25",
-  "state": "pending_entry",
+  "state": "exit_next_open",
   "signal": {
    "ticker": "2897.T",
    "name": "日清食品ホールディングス",
@@ -952,7 +970,13 @@
    "atr": 91.39,
    "already_holding": false
   },
-  "earnings_date": null
+  "earnings_date": null,
+  "entry_date": "2026-11-17",
+  "entry_price": 2994.5,
+  "last_date": "2026-11-17",
+  "last_price": 2991.5,
+  "held_days": 1,
+  "unrealized_pct": -0.1
  },
  {
   "kind": "BREAKOUT",
@@ -961,7 +985,7 @@
   "signal_date": "2026-11-16",
   "hold": 10,
   "stop": "ma25",
-  "state": "pending_entry",
+  "state": "open",
   "signal": {
    "ticker": "6167.T",
    "name": "冨士ダイス",
@@ -976,7 +1000,15 @@
    "atr": 39.94,
    "already_holding": false
   },
-  "earnings_date": null
+  "earnings_date": null,
+  "entry_date": "2026-11-17",
+  "entry_price": 1145.0,
+  "last_date": "2026-11-17",
+  "last_price": 1106.0,
+  "held_days": 1,
+  "stop_level": 1020.5,
+  "unrealized_pct": -3.41,
+  "last_day_tomorrow": false
  },
  {
   "kind": "BREAKOUT",
@@ -985,7 +1017,7 @@
   "signal_date": "2026-11-16",
   "hold": 10,
   "stop": "ma25",
-  "state": "pending_entry",
+  "state": "open",
   "signal": {
    "ticker": "6238.T",
    "name": "フリュー",
@@ -1000,7 +1032,15 @@
    "atr": 57.66,
    "already_holding": false
   },
-  "earnings_date": null
+  "earnings_date": null,
+  "entry_date": "2026-11-17",
+  "entry_price": 1665.0,
+  "last_date": "2026-11-17",
+  "last_price": 1688.0,
+  "held_days": 1,
+  "stop_level": 1483.0,
+  "unrealized_pct": 1.38,
+  "last_day_tomorrow": false
  },
  {
   "kind": "BREAKOUT",
@@ -1009,7 +1049,7 @@
   "signal_date": "2026-11-16",
   "hold": 10,
   "stop": "ma25",
-  "state": "pending_entry",
+  "state": "open",
   "signal": {
    "ticker": "2429.T",
    "name": "ワールドホールディングス",
@@ -1024,7 +1064,15 @@
    "atr": 85.15,
    "already_holding": false
   },
-  "earnings_date": null
+  "earnings_date": null,
+  "entry_date": "2026-11-17",
+  "entry_price": 3055.0,
+  "last_date": "2026-11-17",
+  "last_price": 3005.0,
+  "held_days": 1,
+  "stop_level": 2837.0,
+  "unrealized_pct": -1.64,
+  "last_day_tomorrow": false
  },
  {
   "kind": "BREAKOUT",
@@ -1033,7 +1081,7 @@
   "signal_date": "2026-11-16",
   "hold": 10,
   "stop": "ma25",
-  "state": "pending_entry",
+  "state": "open",
   "signal": {
    "ticker": "4180.T",
    "name": "Ａｐｐｉｅｒ　Ｇｒｏｕｐ",
@@ -1048,7 +1096,15 @@
    "atr": 83.31,
    "already_holding": false
   },
-  "earnings_date": null
+  "earnings_date": null,
+  "entry_date": "2026-11-17",
+  "entry_price": 1592.0,
+  "last_date": "2026-11-17",
+  "last_price": 1496.0,
+  "held_days": 1,
+  "stop_level": 1436.5,
+  "unrealized_pct": -6.03,
+  "last_day_tomorrow": false
  },
  {
   "kind": "BREAKOUT",
@@ -1057,7 +1113,7 @@
   "signal_date": "2026-11-16",
   "hold": 10,
   "stop": "ma25",
-  "state": "pending_entry",
+  "state": "open",
   "signal": {
    "ticker": "4919.T",
    "name": "ミルボン",
@@ -1070,6 +1126,86 @@
    "ret120_pct": 41.0,
    "vol_ratio": 3.05,
    "atr": 96.32,
+   "already_holding": false
+  },
+  "earnings_date": null,
+  "entry_date": "2026-11-17",
+  "entry_price": 3745.0,
+  "last_date": "2026-11-17",
+  "last_price": 3795.0,
+  "held_days": 1,
+  "stop_level": 3408.0,
+  "unrealized_pct": 1.34,
+  "last_day_tomorrow": false
+ },
+ {
+  "kind": "BREAKOUT",
+  "ticker": "3053.T",
+  "name": "ペッパーフードサービス",
+  "signal_date": "2026-11-17",
+  "hold": 10,
+  "stop": "ma25",
+  "state": "pending_entry",
+  "signal": {
+   "ticker": "3053.T",
+   "name": "ペッパーフードサービス",
+   "close": 224.0,
+   "ma25": 207.6,
+   "ma75": 202.3,
+   "rsi": 69.6,
+   "ret1_pct": 4.19,
+   "ret5_pct": 6.67,
+   "ret120_pct": 14.9,
+   "vol_ratio": 4.16,
+   "atr": 5.01,
+   "already_holding": false
+  },
+  "earnings_date": null
+ },
+ {
+  "kind": "BREAKOUT",
+  "ticker": "7630.T",
+  "name": "壱番屋",
+  "signal_date": "2026-11-17",
+  "hold": 10,
+  "stop": "ma25",
+  "state": "pending_entry",
+  "signal": {
+   "ticker": "7630.T",
+   "name": "壱番屋",
+   "close": 1195.0,
+   "ma25": 1063.2,
+   "ma75": 1029.9,
+   "rsi": 74.4,
+   "ret1_pct": 8.05,
+   "ret5_pct": 13.92,
+   "ret120_pct": 35.1,
+   "vol_ratio": 3.43,
+   "atr": 29.8,
+   "already_holding": false
+  },
+  "earnings_date": null
+ },
+ {
+  "kind": "BREAKOUT",
+  "ticker": "8179.T",
+  "name": "ロイヤルホールディングス",
+  "signal_date": "2026-11-17",
+  "hold": 10,
+  "stop": "ma25",
+  "state": "pending_entry",
+  "signal": {
+   "ticker": "8179.T",
+   "name": "ロイヤルホールディングス",
+   "close": 1616.0,
+   "ma25": 1429.1,
+   "ma75": 1363.4,
+   "rsi": 78.5,
+   "ret1_pct": 3.0,
+   "ret5_pct": 6.39,
+   "ret120_pct": 20.9,
+   "vol_ratio": 2.77,
+   "atr": 37.86,
    "already_holding": false
   },
   "earnings_date": null
