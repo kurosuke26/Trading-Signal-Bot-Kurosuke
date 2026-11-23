@@ -1,5 +1,5 @@
 {
- "generated_at_utc": "2026-11-21T01:38:44.569808+00:00",
+ "generated_at_utc": "2026-11-23T00:29:28.127132+00:00",
  "date": "2026-11-20",
  "regime": {
   "date": "2026-11-20",
@@ -7,7 +7,7 @@
   "index_vs_ma75_pct": -8.68
  },
  "tdnet": {
-  "revision_disclosures": 15,
+  "revision_disclosures": 4,
   "failed_days": 0
  },
  "earnings": {
@@ -40,7 +40,7 @@
      "vol_ratio": 1.43,
      "atr": 139.07,
      "rank": 0.20456921659327576,
-     "already_holding": false
+     "already_holding": true
     },
     {
      "ticker": "8630.T",
@@ -55,7 +55,7 @@
      "vol_ratio": 1.65,
      "atr": 189.5,
      "rank": 0.19614310414729452,
-     "already_holding": false
+     "already_holding": true
     }
    ]
   },
@@ -339,82 +339,7 @@
   }
  ],
  "exits_tomorrow_close": [],
- "closed_today": [
-  {
-   "kind": "BREAKOUT",
-   "ticker": "4180.T",
-   "name": "Ａｐｐｉｅｒ　Ｇｒｏｕｐ",
-   "signal_date": "2026-11-16",
-   "hold": 10,
-   "stop": "ma25",
-   "state": "closed",
-   "signal": {
-    "ticker": "4180.T",
-    "name": "Ａｐｐｉｅｒ　Ｇｒｏｕｐ",
-    "close": 1642.0,
-    "ma25": 1431.4,
-    "ma75": 1329.9,
-    "rsi": 66.0,
-    "ret1_pct": 13.16,
-    "ret5_pct": 13.24,
-    "ret120_pct": 72.8,
-    "vol_ratio": 3.58,
-    "atr": 83.31,
-    "already_holding": false
-   },
-   "earnings_date": null,
-   "entry_date": "2026-11-17",
-   "entry_price": 1592.0,
-   "last_date": "2026-11-20",
-   "last_price": 1371.0,
-   "held_days": 4,
-   "stop_level": 1437.8,
-   "unrealized_pct": -12.12,
-   "last_day_tomorrow": false,
-   "exit_date": "2026-11-20",
-   "exit_price": 1369.0,
-   "exit_reason": "終値が25日線割れの基準を下回った→翌営業日の始値",
-   "return_pct": -14.31,
-   "market_return_pct": -5.75,
-   "excess_pct": -8.56
-  },
-  {
-   "kind": "PULLBACK",
-   "ticker": "9308.T",
-   "name": "乾汽船",
-   "signal_date": "2026-11-18",
-   "hold": 10,
-   "stop": "ma25",
-   "state": "closed",
-   "signal": {
-    "ticker": "9308.T",
-    "name": "乾汽船",
-    "close": 2180.0,
-    "ma25": 2226.8,
-    "ma75": 2166.4,
-    "rsi": 47.7,
-    "ret1_pct": 0.79,
-    "ret5_pct": -8.71,
-    "ret120_pct": 41.3,
-    "vol_ratio": 0.22,
-    "atr": 113.45,
-    "already_holding": false
-   },
-   "earnings_date": null,
-   "entry_date": "2026-11-19",
-   "entry_price": 2133.0,
-   "last_date": "2026-11-20",
-   "last_price": 2050.0,
-   "held_days": 2,
-   "unrealized_pct": 0.0,
-   "exit_date": "2026-11-20",
-   "exit_price": 2083.0,
-   "exit_reason": "終値が25日線割れの基準を下回った→翌営業日の始値",
-   "return_pct": -2.64,
-   "market_return_pct": -3.73,
-   "excess_pct": 1.09
-  }
- ],
+ "closed_today": [],
  "open_positions": [
   {
    "kind": "BREAKOUT",
