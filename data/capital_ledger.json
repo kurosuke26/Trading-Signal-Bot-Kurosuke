@@ -6,7 +6,7 @@
     "LONG"
   ],
   "start_date": "2026-09-24",
-  "cash": 1894619.375693474,
+  "cash": 2317363.995493474,
   "open_positions": {
     "1762.T|LONG|2026-10-23": {
       "ticker": "1762.T",
@@ -16,10 +16,10 @@
       "entry_price": 4135.0,
       "invested": 483913.0,
       "shares": 117.0285,
-      "last_price_date": "2026-11-24",
-      "last_price": 4310.0,
-      "unrealized": 20480.0,
-      "unrealized_pct": 4.23,
+      "last_price_date": "2026-11-25",
+      "last_price": 4480.0,
+      "unrealized": 40375.0,
+      "unrealized_pct": 8.34,
       "caution": false
     },
     "1870.T|LONG|2026-10-23": {
@@ -30,24 +30,10 @@
       "entry_price": 2098.0,
       "invested": 483913.0,
       "shares": 230.6543,
-      "last_price_date": "2026-11-24",
-      "last_price": 2071.0,
-      "unrealized": -6228.0,
-      "unrealized_pct": -1.29,
-      "caution": false
-    },
-    "7537.T|LONG|2026-11-04": {
-      "ticker": "7537.T",
-      "name": "丸文",
-      "signal": "LONG",
-      "entry_date": "2026-11-04",
-      "entry_price": 2200.0,
-      "invested": 479411.0,
-      "shares": 217.9143,
-      "last_price_date": "2026-11-24",
-      "last_price": 1922.0,
-      "unrealized": -60580.0,
-      "unrealized_pct": -12.64,
+      "last_price_date": "2026-11-25",
+      "last_price": 2123.0,
+      "unrealized": 5766.0,
+      "unrealized_pct": 1.19,
       "caution": false
     },
     "5480.T|LONG|2026-11-05": {
@@ -58,10 +44,10 @@
       "entry_price": 5460.0,
       "invested": 477141.0,
       "shares": 87.3885,
-      "last_price_date": "2026-11-24",
-      "last_price": 5250.0,
-      "unrealized": -18352.0,
-      "unrealized_pct": -3.85,
+      "last_price_date": "2026-11-25",
+      "last_price": 5340.0,
+      "unrealized": -10487.0,
+      "unrealized_pct": -2.2,
       "caution": false
     },
     "8877.T|LONG|2026-11-05": {
@@ -72,10 +58,10 @@
       "entry_price": 5080.0,
       "invested": 477141.0,
       "shares": 93.9255,
-      "last_price_date": "2026-11-24",
-      "last_price": 5050.0,
-      "unrealized": -2818.0,
-      "unrealized_pct": -0.59,
+      "last_price_date": "2026-11-25",
+      "last_price": 5040.0,
+      "unrealized": -3757.0,
+      "unrealized_pct": -0.79,
       "caution": false
     },
     "1826.T|LONG|2026-11-09": {
@@ -86,10 +72,10 @@
       "entry_price": 1068.0,
       "invested": 476504.0,
       "shares": 446.1651,
-      "last_price_date": "2026-11-24",
-      "last_price": 1054.0,
-      "unrealized": -6246.0,
-      "unrealized_pct": -1.31,
+      "last_price_date": "2026-11-25",
+      "last_price": 1059.0,
+      "unrealized": -4015.0,
+      "unrealized_pct": -0.84,
       "caution": false
     }
   },
@@ -261,6 +247,18 @@
       "invested": 480963.0,
       "pnl": 7599.0,
       "return_pct": 1.58
+    },
+    {
+      "ticker": "7537.T",
+      "name": "丸文",
+      "signal": "LONG",
+      "entry_date": "2026-11-04",
+      "entry_price": 2200.0,
+      "close_date": "2026-11-25",
+      "close_price": 1940.0,
+      "invested": 479411.0,
+      "pnl": -56666.0,
+      "return_pct": -11.82
     }
   ],
   "skipped_entries": [
@@ -321,6 +319,6 @@
     "5013.T|LONG|2026-11-17",
     "7126.T|LONG|2026-11-17"
   ],
-  "last_synced_at": "2026-11-25",
+  "last_synced_at": "2026-11-26",
   "period_year": 2026
 }
