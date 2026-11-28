@@ -192,7 +192,7 @@
   "signal_date": "2026-11-12",
   "hold": 10,
   "stop": "ma25",
-  "state": "open",
+  "state": "closed",
   "signal": {
    "ticker": "2820.T",
    "name": "やまみ",
@@ -210,12 +210,18 @@
   "earnings_date": null,
   "entry_date": "2026-11-13",
   "entry_price": 7780.0,
-  "last_date": "2026-11-26",
-  "last_price": 7770.0,
-  "held_days": 9,
+  "last_date": "2026-11-27",
+  "last_price": 7860.0,
+  "held_days": 10,
   "stop_level": 7190.0,
   "unrealized_pct": -0.13,
-  "last_day_tomorrow": true
+  "last_day_tomorrow": true,
+  "exit_date": "2026-11-27",
+  "exit_price": 7860.0,
+  "exit_reason": "保有10営業日目の引け",
+  "return_pct": 0.73,
+  "market_return_pct": -3.63,
+  "excess_pct": 4.36
  },
  {
   "kind": "BREAKOUT",
@@ -300,7 +306,7 @@
   "signal_date": "2026-11-12",
   "hold": 10,
   "stop": "ma25",
-  "state": "open",
+  "state": "closed",
   "signal": {
    "ticker": "9204.T",
    "name": "スカイマーク",
@@ -318,12 +324,18 @@
   "earnings_date": null,
   "entry_date": "2026-11-13",
   "entry_price": 488.0,
-  "last_date": "2026-11-26",
-  "last_price": 586.0,
-  "held_days": 9,
+  "last_date": "2026-11-27",
+  "last_price": 569.0,
+  "held_days": 10,
   "stop_level": 471.9,
   "unrealized_pct": 20.08,
-  "last_day_tomorrow": true
+  "last_day_tomorrow": true,
+  "exit_date": "2026-11-27",
+  "exit_price": 569.0,
+  "exit_reason": "保有10営業日目の引け",
+  "return_pct": 16.3,
+  "market_return_pct": -3.63,
+  "excess_pct": 19.93
  },
  {
   "kind": "BREAKOUT",
@@ -332,7 +344,7 @@
   "signal_date": "2026-11-12",
   "hold": 10,
   "stop": "ma25",
-  "state": "open",
+  "state": "closed",
   "signal": {
    "ticker": "9684.T",
    "name": "スクウェア・エニックス・ホールディングス",
@@ -350,12 +362,18 @@
   "earnings_date": null,
   "entry_date": "2026-11-13",
   "entry_price": 3500.0,
-  "last_date": "2026-11-26",
-  "last_price": 3704.0,
-  "held_days": 9,
+  "last_date": "2026-11-27",
+  "last_price": 3610.0,
+  "held_days": 10,
   "stop_level": 3270.6,
   "unrealized_pct": 5.83,
-  "last_day_tomorrow": true
+  "last_day_tomorrow": true,
+  "exit_date": "2026-11-27",
+  "exit_price": 3610.0,
+  "exit_reason": "保有10営業日目の引け",
+  "return_pct": 2.84,
+  "market_return_pct": -3.63,
+  "excess_pct": 6.47
  },
  {
   "kind": "REVISION",
@@ -407,7 +425,7 @@
   "signal_date": "2026-11-12",
   "hold": 10,
   "stop": "ma25",
-  "state": "open",
+  "state": "closed",
   "signal": {
    "ticker": "4027.T",
    "name": "テイカ",
@@ -430,12 +448,18 @@
   "earnings_date": null,
   "entry_date": "2026-11-13",
   "entry_price": 2678.0,
-  "last_date": "2026-11-26",
-  "last_price": 2374.0,
-  "held_days": 9,
+  "last_date": "2026-11-27",
+  "last_price": 2411.0,
+  "held_days": 10,
   "stop_level": 2298.2,
   "unrealized_pct": -11.35,
-  "last_day_tomorrow": true
+  "last_day_tomorrow": true,
+  "exit_date": "2026-11-27",
+  "exit_price": 2411.0,
+  "exit_reason": "保有10営業日目の引け",
+  "return_pct": -10.27,
+  "market_return_pct": -3.63,
+  "excess_pct": -6.64
  },
  {
   "kind": "REVISION",
@@ -444,7 +468,7 @@
   "signal_date": "2026-11-12",
   "hold": 10,
   "stop": "ma25",
-  "state": "open",
+  "state": "closed",
   "signal": {
    "ticker": "1926.T",
    "name": "ライト工業",
@@ -469,12 +493,18 @@
   "earnings_date": null,
   "entry_date": "2026-11-13",
   "entry_price": 1039.0,
-  "last_date": "2026-11-26",
-  "last_price": 998.0,
-  "held_days": 9,
+  "last_date": "2026-11-27",
+  "last_price": 1015.0,
+  "held_days": 10,
   "stop_level": 958.9,
   "unrealized_pct": -3.95,
-  "last_day_tomorrow": true
+  "last_day_tomorrow": true,
+  "exit_date": "2026-11-27",
+  "exit_price": 1015.0,
+  "exit_reason": "保有10営業日目の引け",
+  "return_pct": -2.61,
+  "market_return_pct": -3.63,
+  "excess_pct": 1.02
  },
  {
   "kind": "REVISION",
@@ -606,7 +636,7 @@
   "signal_date": "2026-11-13",
   "hold": 10,
   "stop": "ma25",
-  "state": "exit_next_open",
+  "state": "closed",
   "signal": {
    "ticker": "3864.T",
    "name": "三菱製紙",
@@ -624,12 +654,18 @@
   "earnings_date": null,
   "entry_date": "2026-11-16",
   "entry_price": 1270.0,
-  "last_date": "2026-11-26",
-  "last_price": 1215.0,
-  "held_days": 8,
+  "last_date": "2026-11-27",
+  "last_price": 1223.0,
+  "held_days": 9,
   "stop_level": 1219.4,
   "unrealized_pct": -4.33,
-  "last_day_tomorrow": false
+  "last_day_tomorrow": false,
+  "exit_date": "2026-11-27",
+  "exit_price": 1215.0,
+  "exit_reason": "終値が25日線割れの基準を下回った→翌営業日の始値",
+  "return_pct": -4.63,
+  "market_return_pct": -3.7,
+  "excess_pct": -0.93
  },
  {
   "kind": "BREAKOUT",
@@ -656,12 +692,12 @@
   "earnings_date": null,
   "entry_date": "2026-11-16",
   "entry_price": 1865.0,
-  "last_date": "2026-11-26",
-  "last_price": 1763.0,
-  "held_days": 8,
-  "stop_level": 1706.2,
-  "unrealized_pct": -5.47,
-  "last_day_tomorrow": false
+  "last_date": "2026-11-27",
+  "last_price": 1736.0,
+  "held_days": 9,
+  "stop_level": 1708.8,
+  "unrealized_pct": -6.92,
+  "last_day_tomorrow": true
  },
  {
   "kind": "BREAKOUT",
@@ -688,12 +724,12 @@
   "earnings_date": null,
   "entry_date": "2026-11-16",
   "entry_price": 5326.0,
-  "last_date": "2026-11-26",
-  "last_price": 5415.0,
-  "held_days": 8,
-  "stop_level": 5048.7,
-  "unrealized_pct": 1.67,
-  "last_day_tomorrow": false
+  "last_date": "2026-11-27",
+  "last_price": 5330.0,
+  "held_days": 9,
+  "stop_level": 5080.3,
+  "unrealized_pct": 0.08,
+  "last_day_tomorrow": true
  },
  {
   "kind": "BREAKOUT",
@@ -720,12 +756,12 @@
   "earnings_date": null,
   "entry_date": "2026-11-16",
   "entry_price": 1334.0,
-  "last_date": "2026-11-26",
-  "last_price": 1454.0,
-  "held_days": 8,
-  "stop_level": 1300.5,
-  "unrealized_pct": 9.0,
-  "last_day_tomorrow": false
+  "last_date": "2026-11-27",
+  "last_price": 1426.0,
+  "held_days": 9,
+  "stop_level": 1307.0,
+  "unrealized_pct": 6.9,
+  "last_day_tomorrow": true
  },
  {
   "kind": "BREAKOUT",
@@ -797,12 +833,12 @@
   "earnings_date": null,
   "entry_date": "2026-11-16",
   "entry_price": 1865.0,
-  "last_date": "2026-11-26",
-  "last_price": 1763.0,
-  "held_days": 8,
-  "stop_level": 1706.2,
-  "unrealized_pct": -5.47,
-  "last_day_tomorrow": false
+  "last_date": "2026-11-27",
+  "last_price": 1736.0,
+  "held_days": 9,
+  "stop_level": 1708.8,
+  "unrealized_pct": -6.92,
+  "last_day_tomorrow": true
  },
  {
   "kind": "REVISION",
@@ -926,12 +962,12 @@
   "earnings_date": null,
   "entry_date": "2026-11-16",
   "entry_price": 3445.0,
-  "last_date": "2026-11-26",
-  "last_price": 3232.0,
-  "held_days": 8,
-  "stop_level": 3124.3,
-  "unrealized_pct": -6.18,
-  "last_day_tomorrow": false
+  "last_date": "2026-11-27",
+  "last_price": 3309.0,
+  "held_days": 9,
+  "stop_level": 3140.5,
+  "unrealized_pct": -3.95,
+  "last_day_tomorrow": true
  },
  {
   "kind": "REVISION",
@@ -1075,11 +1111,11 @@
   "earnings_date": null,
   "entry_date": "2026-11-17",
   "entry_price": 1145.0,
-  "last_date": "2026-11-26",
-  "last_price": 1117.0,
-  "held_days": 7,
-  "stop_level": 1039.3,
-  "unrealized_pct": -2.45,
+  "last_date": "2026-11-27",
+  "last_price": 1161.0,
+  "held_days": 8,
+  "stop_level": 1044.3,
+  "unrealized_pct": 1.4,
   "last_day_tomorrow": false
  },
  {
@@ -1107,11 +1143,11 @@
   "earnings_date": null,
   "entry_date": "2026-11-17",
   "entry_price": 1665.0,
-  "last_date": "2026-11-26",
-  "last_price": 1914.0,
-  "held_days": 7,
-  "stop_level": 1558.7,
-  "unrealized_pct": 14.95,
+  "last_date": "2026-11-27",
+  "last_price": 1859.0,
+  "held_days": 8,
+  "stop_level": 1572.8,
+  "unrealized_pct": 11.65,
   "last_day_tomorrow": false
  },
  {
@@ -1139,11 +1175,11 @@
   "earnings_date": null,
   "entry_date": "2026-11-17",
   "entry_price": 3055.0,
-  "last_date": "2026-11-26",
-  "last_price": 2919.0,
-  "held_days": 7,
-  "stop_level": 2843.2,
-  "unrealized_pct": -4.45,
+  "last_date": "2026-11-27",
+  "last_price": 2972.0,
+  "held_days": 8,
+  "stop_level": 2847.5,
+  "unrealized_pct": -2.72,
   "last_day_tomorrow": false
  },
  {
@@ -1209,11 +1245,11 @@
   "earnings_date": null,
   "entry_date": "2026-11-17",
   "entry_price": 3745.0,
-  "last_date": "2026-11-26",
-  "last_price": 3860.0,
-  "held_days": 7,
-  "stop_level": 3501.6,
-  "unrealized_pct": 3.07,
+  "last_date": "2026-11-27",
+  "last_price": 3880.0,
+  "held_days": 8,
+  "stop_level": 3520.6,
+  "unrealized_pct": 3.6,
   "last_day_tomorrow": false
  },
  {
@@ -1241,11 +1277,11 @@
   "earnings_date": null,
   "entry_date": "2026-11-18",
   "entry_price": 228.0,
-  "last_date": "2026-11-26",
-  "last_price": 218.0,
-  "held_days": 6,
-  "stop_level": 213.8,
-  "unrealized_pct": -4.39,
+  "last_date": "2026-11-27",
+  "last_price": 219.0,
+  "held_days": 7,
+  "stop_level": 214.4,
+  "unrealized_pct": -3.95,
   "last_day_tomorrow": false
  },
  {
@@ -1273,11 +1309,11 @@
   "earnings_date": null,
   "entry_date": "2026-11-18",
   "entry_price": 1135.0,
-  "last_date": "2026-11-26",
-  "last_price": 1224.0,
-  "held_days": 6,
-  "stop_level": 1104.9,
-  "unrealized_pct": 7.84,
+  "last_date": "2026-11-27",
+  "last_price": 1217.0,
+  "held_days": 7,
+  "stop_level": 1111.1,
+  "unrealized_pct": 7.22,
   "last_day_tomorrow": false
  },
  {
@@ -1305,11 +1341,11 @@
   "earnings_date": null,
   "entry_date": "2026-11-18",
   "entry_price": 1611.0,
-  "last_date": "2026-11-26",
-  "last_price": 1689.0,
-  "held_days": 6,
-  "stop_level": 1505.2,
-  "unrealized_pct": 4.84,
+  "last_date": "2026-11-27",
+  "last_price": 1677.0,
+  "held_days": 7,
+  "stop_level": 1517.0,
+  "unrealized_pct": 4.1,
   "last_day_tomorrow": false
  },
  {
@@ -1411,11 +1447,11 @@
   "earnings_date": null,
   "entry_date": "2026-11-19",
   "entry_price": 4669.0,
-  "last_date": "2026-11-26",
-  "last_price": 4727.0,
-  "held_days": 5,
-  "stop_level": 4431.3,
-  "unrealized_pct": 1.24,
+  "last_date": "2026-11-27",
+  "last_price": 4691.0,
+  "held_days": 6,
+  "stop_level": 4444.1,
+  "unrealized_pct": 0.47,
   "last_day_tomorrow": false
  },
  {
@@ -1450,11 +1486,11 @@
   "earnings_date": null,
   "entry_date": "2026-11-19",
   "entry_price": 5110.0,
-  "last_date": "2026-11-26",
-  "last_price": 5660.0,
-  "held_days": 5,
-  "stop_level": 4631.6,
-  "unrealized_pct": 10.76,
+  "last_date": "2026-11-27",
+  "last_price": 5920.0,
+  "held_days": 6,
+  "stop_level": 4695.2,
+  "unrealized_pct": 15.85,
   "last_day_tomorrow": false
  },
  {
@@ -1664,11 +1700,11 @@
   "earnings_date": null,
   "entry_date": "2026-11-24",
   "entry_price": 5110.0,
-  "last_date": "2026-11-26",
-  "last_price": 5353.0,
-  "held_days": 3,
-  "stop_level": 5214.4,
-  "unrealized_pct": 4.76,
+  "last_date": "2026-11-27",
+  "last_price": 5388.0,
+  "held_days": 4,
+  "stop_level": 5224.2,
+  "unrealized_pct": 5.44,
   "last_day_tomorrow": false
  },
  {
@@ -1696,11 +1732,11 @@
   "earnings_date": null,
   "entry_date": "2026-11-24",
   "entry_price": 7050.0,
-  "last_date": "2026-11-26",
-  "last_price": 7147.0,
-  "held_days": 3,
-  "stop_level": 7096.4,
-  "unrealized_pct": 1.38,
+  "last_date": "2026-11-27",
+  "last_price": 7212.0,
+  "held_days": 4,
+  "stop_level": 7107.7,
+  "unrealized_pct": 2.3,
   "last_day_tomorrow": false
  },
  {
@@ -1728,11 +1764,11 @@
   "earnings_date": null,
   "entry_date": "2026-11-25",
   "entry_price": 2555.0,
-  "last_date": "2026-11-26",
-  "last_price": 2910.0,
-  "held_days": 2,
-  "stop_level": 2626.8,
-  "unrealized_pct": 13.89,
+  "last_date": "2026-11-27",
+  "last_price": 3005.0,
+  "held_days": 3,
+  "stop_level": 2646.6,
+  "unrealized_pct": 17.61,
   "last_day_tomorrow": false
  },
  {
@@ -1778,7 +1814,7 @@
   "signal_date": "2026-11-24",
   "hold": 10,
   "stop": "ma25",
-  "state": "exit_next_open",
+  "state": "closed",
   "signal": {
    "ticker": "141A.T",
    "name": "トライアルホールディングス",
@@ -1796,12 +1832,18 @@
   "earnings_date": null,
   "entry_date": "2026-11-25",
   "entry_price": 3890.0,
-  "last_date": "2026-11-26",
-  "last_price": 3925.0,
-  "held_days": 2,
+  "last_date": "2026-11-27",
+  "last_price": 3930.0,
+  "held_days": 3,
   "stop_level": 3943.6,
   "unrealized_pct": 0.9,
-  "last_day_tomorrow": false
+  "last_day_tomorrow": false,
+  "exit_date": "2026-11-27",
+  "exit_price": 3950.0,
+  "exit_reason": "終値が25日線割れの基準を下回った→翌営業日の始値",
+  "return_pct": 1.24,
+  "market_return_pct": 1.85,
+  "excess_pct": -0.61
  },
  {
   "kind": "PULLBACK",
@@ -1882,7 +1924,7 @@
   "signal_date": "2026-11-25",
   "hold": 10,
   "stop": "ma25",
-  "state": "exit_next_open",
+  "state": "closed",
   "signal": {
    "ticker": "2121.T",
    "name": "ＭＩＸＩ",
@@ -1900,10 +1942,16 @@
   "earnings_date": null,
   "entry_date": "2026-11-26",
   "entry_price": 3950.0,
-  "last_date": "2026-11-26",
-  "last_price": 3930.0,
-  "held_days": 1,
-  "unrealized_pct": -0.51
+  "last_date": "2026-11-27",
+  "last_price": 3940.0,
+  "held_days": 2,
+  "unrealized_pct": -0.51,
+  "exit_date": "2026-11-27",
+  "exit_price": 3950.0,
+  "exit_reason": "終値が25日線割れの基準を下回った→翌営業日の始値",
+  "return_pct": -0.3,
+  "market_return_pct": 2.04,
+  "excess_pct": -2.34
  },
  {
   "kind": "PULLBACK",
@@ -1912,7 +1960,7 @@
   "signal_date": "2026-11-25",
   "hold": 10,
   "stop": "ma25",
-  "state": "exit_next_open",
+  "state": "closed",
   "signal": {
    "ticker": "7366.T",
    "name": "ＬＩＴＡＬＩＣＯ",
@@ -1930,10 +1978,16 @@
   "earnings_date": null,
   "entry_date": "2026-11-26",
   "entry_price": 2017.0,
-  "last_date": "2026-11-26",
-  "last_price": 1998.0,
-  "held_days": 1,
-  "unrealized_pct": -0.94
+  "last_date": "2026-11-27",
+  "last_price": 2001.0,
+  "held_days": 2,
+  "unrealized_pct": -0.94,
+  "exit_date": "2026-11-27",
+  "exit_price": 1978.0,
+  "exit_reason": "終値が25日線割れの基準を下回った→翌営業日の始値",
+  "return_pct": -2.23,
+  "market_return_pct": 2.04,
+  "excess_pct": -4.27
  },
  {
   "kind": "PULLBACK",
@@ -1942,7 +1996,7 @@
   "signal_date": "2026-11-25",
   "hold": 10,
   "stop": "ma25",
-  "state": "exit_next_open",
+  "state": "closed",
   "signal": {
    "ticker": "4324.T",
    "name": "電通グループ",
@@ -1960,10 +2014,16 @@
   "earnings_date": null,
   "entry_date": "2026-11-26",
   "entry_price": 3730.0,
-  "last_date": "2026-11-26",
-  "last_price": 3703.0,
-  "held_days": 1,
-  "unrealized_pct": -0.72
+  "last_date": "2026-11-27",
+  "last_price": 3615.0,
+  "held_days": 2,
+  "unrealized_pct": -0.72,
+  "exit_date": "2026-11-27",
+  "exit_price": 3633.0,
+  "exit_reason": "終値が25日線割れの基準を下回った→翌営業日の始値",
+  "return_pct": -2.9,
+  "market_return_pct": 2.04,
+  "excess_pct": -4.94
  },
  {
   "kind": "PULLBACK",
@@ -1972,7 +2032,7 @@
   "signal_date": "2026-11-25",
   "hold": 10,
   "stop": "ma25",
-  "state": "exit_next_open",
+  "state": "closed",
   "signal": {
    "ticker": "9069.T",
    "name": "センコーグループホールディングス",
@@ -1990,10 +2050,16 @@
   "earnings_date": null,
   "entry_date": "2026-11-26",
   "entry_price": 2349.0,
-  "last_date": "2026-11-26",
-  "last_price": 2302.5,
-  "held_days": 1,
-  "unrealized_pct": -1.98
+  "last_date": "2026-11-27",
+  "last_price": 2298.0,
+  "held_days": 2,
+  "unrealized_pct": -1.98,
+  "exit_date": "2026-11-27",
+  "exit_price": 2303.0,
+  "exit_reason": "終値が25日線割れの基準を下回った→翌営業日の始値",
+  "return_pct": -2.26,
+  "market_return_pct": 2.04,
+  "excess_pct": -4.3
  },
  {
   "kind": "BREAKOUT",
@@ -2020,11 +2086,11 @@
   "earnings_date": null,
   "entry_date": "2026-11-26",
   "entry_price": 3905.0,
-  "last_date": "2026-11-26",
-  "last_price": 3945.0,
-  "held_days": 1,
-  "stop_level": 3651.2,
-  "unrealized_pct": 1.02,
+  "last_date": "2026-11-27",
+  "last_price": 4120.0,
+  "held_days": 2,
+  "stop_level": 3670.6,
+  "unrealized_pct": 5.51,
   "last_day_tomorrow": false
  },
  {
@@ -2034,7 +2100,7 @@
   "signal_date": "2026-11-26",
   "hold": 10,
   "stop": "ma25",
-  "state": "pending_entry",
+  "state": "exit_next_open",
   "signal": {
    "ticker": "5136.T",
    "name": "ｔｒｉｐｌａ",
@@ -2049,7 +2115,13 @@
    "atr": 128.89,
    "already_holding": false
   },
-  "earnings_date": null
+  "earnings_date": null,
+  "entry_date": "2026-11-27",
+  "entry_price": 2514.0,
+  "last_date": "2026-11-27",
+  "last_price": 2541.0,
+  "held_days": 1,
+  "unrealized_pct": 1.07
  },
  {
   "kind": "PULLBACK",
@@ -2058,7 +2130,7 @@
   "signal_date": "2026-11-26",
   "hold": 10,
   "stop": "ma25",
-  "state": "pending_entry",
+  "state": "exit_next_open",
   "signal": {
    "ticker": "6460.T",
    "name": "セガサミーホールディングス",
@@ -2073,7 +2145,13 @@
    "atr": 119.23,
    "already_holding": false
   },
-  "earnings_date": null
+  "earnings_date": null,
+  "entry_date": "2026-11-27",
+  "entry_price": 3412.0,
+  "last_date": "2026-11-27",
+  "last_price": 3299.0,
+  "held_days": 1,
+  "unrealized_pct": -3.31
  },
  {
   "kind": "PULLBACK",
@@ -2082,7 +2160,7 @@
   "signal_date": "2026-11-26",
   "hold": 10,
   "stop": "ma25",
-  "state": "pending_entry",
+  "state": "exit_next_open",
   "signal": {
    "ticker": "2120.T",
    "name": "ＬＩＦＵＬＬ",
@@ -2097,7 +2175,13 @@
    "atr": 10.89,
    "already_holding": false
   },
-  "earnings_date": null
+  "earnings_date": null,
+  "entry_date": "2026-11-27",
+  "entry_price": 250.0,
+  "last_date": "2026-11-27",
+  "last_price": 250.0,
+  "held_days": 1,
+  "unrealized_pct": 0.0
  },
  {
   "kind": "PULLBACK",
@@ -2106,7 +2190,7 @@
   "signal_date": "2026-11-26",
   "hold": 10,
   "stop": "ma25",
-  "state": "pending_entry",
+  "state": "open",
   "signal": {
    "ticker": "6557.T",
    "name": "ＡＩＡＩグループ",
@@ -2121,7 +2205,15 @@
    "atr": 38.11,
    "already_holding": false
   },
-  "earnings_date": null
+  "earnings_date": null,
+  "entry_date": "2026-11-27",
+  "entry_price": 770.0,
+  "last_date": "2026-11-27",
+  "last_price": 816.0,
+  "held_days": 1,
+  "stop_level": 789.9,
+  "unrealized_pct": 5.97,
+  "last_day_tomorrow": false
  },
  {
   "kind": "PULLBACK",
@@ -2130,7 +2222,7 @@
   "signal_date": "2026-11-26",
   "hold": 10,
   "stop": "ma25",
-  "state": "pending_entry",
+  "state": "open",
   "signal": {
    "ticker": "4410.T",
    "name": "ハリマ化成グループ",
@@ -2145,7 +2237,15 @@
    "atr": 57.98,
    "already_holding": false
   },
-  "earnings_date": null
+  "earnings_date": null,
+  "entry_date": "2026-11-27",
+  "entry_price": 1243.0,
+  "last_date": "2026-11-27",
+  "last_price": 1284.0,
+  "held_days": 1,
+  "stop_level": 1257.0,
+  "unrealized_pct": 3.3,
+  "last_day_tomorrow": false
  },
  {
   "kind": "BREAKOUT",
@@ -2154,7 +2254,7 @@
   "signal_date": "2026-11-26",
   "hold": 10,
   "stop": "ma25",
-  "state": "pending_entry",
+  "state": "open",
   "signal": {
    "ticker": "3678.T",
    "name": "メディアドゥ",
@@ -2169,7 +2269,15 @@
    "atr": 51.29,
    "already_holding": false
   },
-  "earnings_date": null
+  "earnings_date": null,
+  "entry_date": "2026-11-27",
+  "entry_price": 1400.0,
+  "last_date": "2026-11-27",
+  "last_price": 1388.0,
+  "held_days": 1,
+  "stop_level": 1262.7,
+  "unrealized_pct": -0.86,
+  "last_day_tomorrow": false
  },
  {
   "kind": "REVISION",
@@ -2178,7 +2286,7 @@
   "signal_date": "2026-11-26",
   "hold": 10,
   "stop": "ma25",
-  "state": "pending_entry",
+  "state": "open",
   "signal": {
    "ticker": "3678.T",
    "name": "メディアドゥ",
@@ -2198,6 +2306,14 @@
    },
    "already_holding": false
   },
-  "earnings_date": null
+  "earnings_date": null,
+  "entry_date": "2026-11-27",
+  "entry_price": 1400.0,
+  "last_date": "2026-11-27",
+  "last_price": 1388.0,
+  "held_days": 1,
+  "stop_level": 1262.7,
+  "unrealized_pct": -0.86,
+  "last_day_tomorrow": false
  }
 ]

@@ -6,7 +6,7 @@
     "LONG"
   ],
   "start_date": "2026-09-24",
-  "cash": 2317363.995493474,
+  "cash": 1845766.3959441266,
   "open_positions": {
     "1762.T|LONG|2026-10-23": {
       "ticker": "1762.T",
@@ -16,10 +16,10 @@
       "entry_price": 4135.0,
       "invested": 483913.0,
       "shares": 117.0285,
-      "last_price_date": "2026-11-26",
-      "last_price": 4535.0,
-      "unrealized": 46811.0,
-      "unrealized_pct": 9.67,
+      "last_price_date": "2026-11-27",
+      "last_price": 4610.0,
+      "unrealized": 55589.0,
+      "unrealized_pct": 11.49,
       "caution": false
     },
     "1870.T|LONG|2026-10-23": {
@@ -30,10 +30,10 @@
       "entry_price": 2098.0,
       "invested": 483913.0,
       "shares": 230.6543,
-      "last_price_date": "2026-11-26",
-      "last_price": 2170.0,
-      "unrealized": 16607.0,
-      "unrealized_pct": 3.43,
+      "last_price_date": "2026-11-27",
+      "last_price": 2205.0,
+      "unrealized": 24680.0,
+      "unrealized_pct": 5.1,
       "caution": false
     },
     "5480.T|LONG|2026-11-05": {
@@ -44,10 +44,10 @@
       "entry_price": 5460.0,
       "invested": 477141.0,
       "shares": 87.3885,
-      "last_price_date": "2026-11-26",
-      "last_price": 5360.0,
-      "unrealized": -8739.0,
-      "unrealized_pct": -1.83,
+      "last_price_date": "2026-11-27",
+      "last_price": 5370.0,
+      "unrealized": -7865.0,
+      "unrealized_pct": -1.65,
       "caution": false
     },
     "8877.T|LONG|2026-11-05": {
@@ -58,10 +58,10 @@
       "entry_price": 5080.0,
       "invested": 477141.0,
       "shares": 93.9255,
-      "last_price_date": "2026-11-26",
-      "last_price": 5060.0,
-      "unrealized": -1879.0,
-      "unrealized_pct": -0.39,
+      "last_price_date": "2026-11-27",
+      "last_price": 5010.0,
+      "unrealized": -6575.0,
+      "unrealized_pct": -1.38,
       "caution": false
     },
     "1826.T|LONG|2026-11-09": {
@@ -72,10 +72,24 @@
       "entry_price": 1068.0,
       "invested": 476504.0,
       "shares": 446.1651,
-      "last_price_date": "2026-11-26",
-      "last_price": 1067.0,
-      "unrealized": -446.0,
-      "unrealized_pct": -0.09,
+      "last_price_date": "2026-11-27",
+      "last_price": 1063.0,
+      "unrealized": -2231.0,
+      "unrealized_pct": -0.47,
+      "caution": false
+    },
+    "4635.T|LONG|2026-11-27": {
+      "ticker": "4635.T",
+      "name": "東京インキ",
+      "signal": "LONG",
+      "entry_date": "2026-11-27",
+      "entry_price": 2510.0,
+      "invested": 471598.0,
+      "shares": 187.8875,
+      "last_price_date": "2026-11-27",
+      "last_price": 2594.0,
+      "unrealized": 15783.0,
+      "unrealized_pct": 3.35,
       "caution": false
     }
   },
@@ -319,6 +333,6 @@
     "5013.T|LONG|2026-11-17",
     "7126.T|LONG|2026-11-17"
   ],
-  "last_synced_at": "2026-11-27",
+  "last_synced_at": "2026-11-28",
   "period_year": 2026
 }
